@@ -1,0 +1,35 @@
+<?php 
+if(!isset($abs_theme_stately_setting)) {
+	$abs_theme_stately_setting = ( !is_null(setting_get('abs_theme_stately_setting')) ? setting_get('abs_theme_stately_setting') : kv_get('setting')["abs_theme_stately_setting"] );
+}
+$header['title'] = '404 Not Found' . ' - ' . $conf['sitename'];
+$header['mobile_title'] = $abs_theme_stately_setting['page']['about']['title'];
+$message_color = 'danger';
+$message_icon = 'la-exclamation-circle';
+?>
+
+<!--{hook stately_masthead.htm}-->
+<!--{hook message_start.htm}-->
+<div class="container">
+	<div class="card-message card text-center my-4 mx-auto" data-msg_code="-1">
+		<div class="card-body">
+			<span class="badge rounded-pill bg-label-<?= $message_color ?> fs-xlarge mb-4">
+				<i class="las <?= $message_icon ?> fs-1"></i>
+			</span>
+			<div class="lead">
+				<!--{hook message_message_before.htm}-->
+                <h1>
+                    404 Not Found
+                </h1>
+                <p>您所查看的页面不存在。</p>
+                <button type="button" onclick="history.back()" class="btn btn-primary">返回上一页</button>
+                <a type="button" href="./" class="btn btn-outline-primary">返回首页</a>
+				<!--{hook message_message_after.htm}-->
+			</div>
+			<!--{hook message_title_after.htm}-->
+		</div>
+	</div>
+	<!--{hook message_end.htm}-->
+</div>
+<!--{hook stately_mastfoot.htm}-->
+<!--{hook message_js.htm}-->

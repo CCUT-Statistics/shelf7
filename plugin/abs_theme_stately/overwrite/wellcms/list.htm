@@ -1,0 +1,21 @@
+<?php include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/view/htm/header.inc.htm');?>
+
+<!--{hook stately_wellcms_hero_forum.htm}-->
+
+<!--{hook website_list_start.htm}-->
+
+<?php
+switch ($abs_theme_stately_setting['wellcms_ui_style']['forum']['layout']) { case 'classic_1col': ?>
+<!--{hook stately_layout_wellcms_forum__classic_1col.htm}-->
+<?php break; default: ?>
+<!--{hook stately_layout_wellcms_forum__classic_2col.htm}-->
+<?php break; } /* end switch */ ?>
+
+<!--{hook website_list_end.htm}-->
+
+<?php include _include(APP_PATH . 'plugin/abs_theme_stately/overwrite/view/htm/footer.inc.htm');?>
+
+<script>
+    $('#nav li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+</script>
+<!--{hook website_list_js.htm}-->

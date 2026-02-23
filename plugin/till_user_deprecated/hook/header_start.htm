@@ -1,0 +1,12 @@
+
+
+<?php 
+global $user;
+if ($user && boolval($user['deprecated']) == true) {
+    $uid = 0;
+    $_SESSION['uid'] = $uid;
+    user_token_clear();
+    message(-1, jump(lang("user_is_deprecated"), url('user-logout'), 5));
+}
+?>
+

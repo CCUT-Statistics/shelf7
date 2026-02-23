@@ -1,0 +1,52 @@
+<li class="thread gx-3 <?= 'col-lg-' . $stately_threadlist_cols_count; ?> <?= $_thread['top_class'];?>" data-href="<?= url('thread-'.$_thread['tid']);?>" data-tid="<?= $_thread['tid'];?>">
+    <article class="mb-3 style-graphic-list-overhang_v1-left">
+        <div class="row g-0">
+            <?php if(!is_null($_post_message_image)): ?>
+            <div class="col-4 col-md-3 mr-n4 profile-img21">
+                <a href="<?= url('thread-'.$_thread['tid']);?>" class="d-flex align-items-center h-100 py-3">
+                    <img loading="lazy" decoding="async" class="card-img shadow-sm" src="<?= $_post_message_image ?>">
+                </a>
+            </div>
+            <?php endif; ?>
+            <div class="col">
+                <div class="card <?= !is_null($_post_message_image) ? 'pl-5' : '' ?> card-body h-100 d-flex flex-wrap flex-column">
+                    <h3 class="card-title h5">
+                        <!--{hook stately_threadlist_checkbox.htm}-->
+                        <!--{hook stately_threadlist_subject.htm}-->
+                    </h3>
+                    <?php if($fid == 0): ?>
+                    <a href="<?= url('forum-'.$_thread['fid']);?>" class="small">
+                        <i class="las la-comment"></i>
+                        <?= $_thread['forumname'] ?>
+                    </a>
+                    <?php endif; ?>
+                    <div class="card-text">
+                        <?= $_post_message_excerpt ?>
+                    </div>
+                    <div class="d-flex align-items-end flex-grow-1 mt-3">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <a href="<?php echo url('user-'.$_thread['uid']);?>" class="v_avatar v_avatar-post">
+                                <img loading="lazy" decoding="async" src="<?= $_thread['user_avatar_url'];?>" class="rounded-circle">
+                                <!--{hook thread_list_inc_avatar_after.htm}-->
+                            </a>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-1">
+                            <div class="me-2">
+                                <h5 class="mb-0 h6"><a href="<?= url('user-'.$_thread['uid']);?>">
+                                        <!--{hook stately_threadlist_username.htm}-->
+                                    </a></h5>
+                                <time class="small text-muted">
+                                    <?= $_thread['create_date_fmt'];?>
+                                </time>
+                            </div>
+                            <div class="card-actions">
+                                <!--{hook stately_threadlist_views_count.htm}-->
+                                <!--{hook stately_threadlist_posts_count_with_lastuid.htm}-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</li>

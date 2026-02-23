@@ -1,0 +1,109 @@
+<div class="row" data-style="classic_v3">
+    <div class="col-12 main">
+        <?php if($abs_theme_stately_setting['ui_tweek']['global']['breadcrumb_position'] === 'default'): ?>
+        <!--{hook stately_breadcrumb.htm}-->
+        <?php endif; ?>
+        <div class="card mb-3 card-thread">
+            <?php if ($abs_theme_stately_setting['ui_tweek']['thread']['show_fab']) { ?>
+            <!--{hook stately_fab_thread.htm}-->
+            <?php } ?>
+            <div class="card-body">
+                <div class="media">
+                    <div class="media-body">
+                        <!--{hook thread_subject_before.htm}-->
+                        <h1 id="the_thread_subject" class="h4 subject break-all font-weight-bold ">
+                            <!--{hook thread_subject_start.htm}-->
+                            <?= $thread['subject']; ?>
+                            <!--{hook thread_subject_end.htm}-->
+                        </h1>
+                        <!--{hook thread_subject_after.htm}-->
+                        <div class="d-flex justify-content-between small mt-1">
+                            <div>
+                                <a href="<?= url('user-'.$thread['uid']); ?>" tabindex="-1" class="v_avatar v_avatar-thread">
+                                    <!--{hook thread_user_avatar_before.htm}-->
+                                    <img loading="lazy" decoding="async" class="avatar-1 mr-1" src="<?= $thread['user_avatar_url']; ?>">
+                                    <!--{hook thread_user_avatar_after.htm}-->
+                                </a>
+                                <!--{hook thread_username_before.htm}-->
+                                <span class="username <?= $thread_username_extra_class ?>">
+                                    <a href="<?= url('user-'.$thread['uid']);?>">
+                                        <?= $thread['username'];?>
+                                    </a>
+                                </span>
+                                <!--{hook thread_username_after.htm}-->
+                                <time datetime="<?= $thread['create_date'] ?>" class="date text-muted ml-2">
+                                    <?= $thread['create_date_fmt'];?>
+                                </time>
+                                <!--{hook thread_views_after.htm}-->
+                            </div>
+                            <div>
+                                <!--{hook stately_thread_btn_update.htm}-->
+                                <!--{hook stately_thread_btn_delete.htm}-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider text-end">
+                    <div class="divider-text">
+                        <span class="text-muted" data-bs-toggle="tooltip" title="<?= lang('thread_views');?>">
+                            <i class="las la-eye"></i>
+                            <?= $thread['views'];?>
+                        </span>
+                        <spam class="text-muted ml-2" data-bs-toggle="tooltip" title="<?= lang('thread_reply');?>">
+                            <i class="las la-comment-dots"></i>
+                            <?= $thread['posts'];?>
+                            </span>
+                    </div>
+                </div>
+                <div id="the_thread_message" class="message break-all" isfirst="1">
+                    <!--{hook stately_thread_message.htm}-->
+                </div>
+                <!--{hook stately_thread_plugin_slot.htm}-->
+            </div>
+        </div>
+        <!---->
+        <!--{hook thread_postlist_before.htm}-->
+
+<?php if ( in_array(intval($gid),array(1),true) || ( boolval($abs_theme_stately_setting['global']['thread']['show_postlist']) ) ): ?>
+
+        <div class="card card-postlist">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <b>
+                            <?= lang('new_post');?>
+                        </b> (<span
+                              class="posts">
+                            <?= $thread['posts'];?>
+                        </span>)
+                    </div>
+                    <!--{hook thread_post_list_title_middle.htm}-->
+                    <div>
+                        <!--{hook thread_post_list_title_right.htm}-->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled postlist">
+                    <?php include _include(APP_PATH.'view/htm/post_list.inc.htm'); ?>
+                    <!--{hook stately_thread_newpost_form.htm}-->
+                </ul>
+            </div>
+        </div>
+
+<?php endif; ?>
+
+        <!--{hook thread_postlist_after.htm}-->
+        <div class="d-none threadlist"><input type="checkbox" name="modtid" value="<?= $thread['tid']; ?>"
+                   checked /></div>
+        <?php include _include(APP_PATH.'view/htm/thread_list_mod.inc.htm');?>
+        <?php if($pagination) { ?>
+        <nav>
+            <ul class="pagination mt-4 mb-5 justify-content-center flex-wrap">
+                <?= $pagination; ?>
+            </ul>
+        </nav>
+        <?php }?>
+        <!--{hook thread_page_after.htm}-->
+    </div>
+</div>

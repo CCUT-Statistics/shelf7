@@ -1,0 +1,62 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+
+<!--{hook user_index_start.htm}-->
+
+<div class="main_box">
+  <div class="main_left">
+      <div class="user">
+        <div class="comment bg">
+          <div class="user_info">
+            <div class="u_img">
+              <img alt="<?php echo lang('modify_avatar');?>" src="<?php echo $_user['avatar_url'];?>">
+            </div>
+            <div class="user_info_post">
+              <div class="user_name">
+                <span class="nike"><a href="<?php echo url("user-$_user[uid]");?>"><?php echo $_user['username'];?></a></span>
+                <!--{hook user_profile_username_after.htm}-->
+                <div class="member_icon">
+                  <div class="level_box" style="margin-left: 10px;">
+                    <div class="fasee">
+                      <?php if($_user['gid'] > 100 && $_user['gid'] < 108) { ?>
+                      <img class="fasdf" src="<?php echo './plugin/cf_theme_modern/img/gid_'.$_user['gid'].'.png';?>" alt="<?php echo $_user['groupname'];?>">
+                      <?php } else { ?>
+                      <img class="fasdf" src="<?php echo './plugin/cf_theme_modern/img/gid_'.$_user['gid'].'.png';?>" alt="<?php echo $_user['groupname'];?>">
+                      <?php } ?>
+                      <span class="level_icon1"><?php echo $_user['groupname'];?></span>
+                    </div>
+                  </div>
+                </div>
+                <!--{hook user_profile_groupname_after.htm}-->
+              </div>
+              <!--{hook user_info_post_after.htm}-->
+            </div>
+          </div>
+        </div>
+        <div class="comment mypost">
+          <div class="comm_title">
+            <!--{hook user_common_user_nav_slot_before.htm}-->
+            <slot name="user_nav" />
+            <!--{hook user_common_user_nav_slot_after.htm}-->
+          </div>
+          <div class="postList">
+            <!--{hook user_common_body_slot_before.htm}-->
+            <slot name="user_body" />
+            <!--{hook user_common_body_slot_after.htm}-->
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="main_right">
+    <div class="main_right_top module_box"><a class="button" href="<?php echo url('thread-create-'.$fid);?>">
+      <i class="icon fas fa-edit Button-icon"></i><?php echo lang('thread_create_new');?></a>
+    </div>
+    <!--{hook main_right_forum.htm}-->
+	<!--{hook main_right_image.htm}-->
+  </div>
+</div>
+
+<!--{hook user_index_end.htm}-->
+
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+
+<!--{hook user_index_js.htm}-->

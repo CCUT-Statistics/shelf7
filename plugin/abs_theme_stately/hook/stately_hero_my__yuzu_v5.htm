@@ -1,0 +1,62 @@
+<div class="col-lg-3">
+    <section class="card mb-3" id="my_profile" data-style="yuzu_v5">
+
+        <section class="user-profile-inner">
+            <div class="p-3">
+                <div class="user-profile-info d-flex flex-column align-items-center">
+                    <figure class="user-profile-photo">
+                        <div class="v_avatar v_avatar-user">
+                            <!--{hook my_common_avatar_before.htm}-->
+                            <img loading="lazy" decoding="async" src="<?= $user['avatar_url'];?>" alt="user image" class="user-profile-img" loading="lazy">
+                            <!--{hook my_common_avatar_after.htm}-->
+                        </div>
+                    </figure>
+                    <section class="text-center mx-3">
+
+                        <h1 class="h4 ">
+                            <!--{hook my_common_username_before.htm}-->
+                            <?= $user['username'];?>
+                            <!--{hook my_common_username_after.htm}-->
+                        </h1>
+                        <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-center gap-2">
+                            <?php if($abs_theme_stately_setting['ui_tweek']['user']['show_usergroup_on_hero']): ?>
+                            <li>
+                                <span class="badge bg-primary"><?= $user['groupname'];?></span>
+                            </li>
+                            <?php endif; ?>
+                            <?php if($abs_theme_stately_setting['ui_tweek']['user']['show_uid_on_hero']): ?>
+                            <li>
+                                <span class="badge bg-label-secondary">UID: <?= $user['uid'];?></span>
+                            </li>
+                            <?php endif; ?>
+
+                        </ul>
+                        <?php if(isset($user['signature'])): ?>
+                        <div class="mt-2">
+                            <i class="la la-pen text-info"></i>
+                            <?= !empty($user['signature']) ?htmlspecialchars_decode($user['signature']) : htmlspecialchars_decode($abs_theme_stately_setting['ui_tweek']['user']['default_signature_self']) ?>
+                        </div>
+                        <?php endif; ?>
+
+                    </section>
+                </div>
+            </div>
+
+            <div class="card-footer bg-body p-3">
+                <!--{hook stately_hero_my_stats_yuzu_side.htm}-->
+            </div>
+
+        </section>
+    </section>
+    <div class="card d-none d-lg-block " id="my_aside" data-style="modern_v3">
+        <nav class="list-group list-group-flush text-center" id="my_nav">
+            <!--{hook my_common_my_before.htm}-->
+            <a href="<?php echo url('my');?>" class="list-group-item list-group-item-action" data-active="menu-my">个人资料</a>
+            <!--{hook my_common_my_after.htm}-->
+
+            <!--{hook my_common_my_thread_before.htm}-->
+            <a href="<?php echo url('my-thread');?>" class="list-group-item list-group-item-action" data-active="menu-my-thread">论坛帖子</a>
+            <!--{hook my_common_my_thread_after.htm}-->
+        </nav>
+    </div>
+</div>

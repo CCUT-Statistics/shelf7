@@ -1,0 +1,11 @@
+{
+    "name": "XIUNO头像挂件",
+    "brief": "1、每个页面都有显示<br> 2、使用有问题请到官网反馈<br> 3、XIUNO爱好者官方网站<a href='https://xiu.no'  target='_blank'><span style='color:red;'><b>https://xiu.no</b></span></a><br>4、更多精品插件点<a href='https://xiu.no'  target='_blank'>这里</a> ",
+    "version": "1.1",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,61 @@
+			<?php
+			$_randthreadlist = thread_find_by_fid($thread['fid'],rand(1,10), 4);
+						
+			// 过滤没有权限访问的主题 / filter no permission thread
+			thread_list_access_filter($_randthreadlist, $gid);
+
+		?>
+	<div class="card">
+			<div class="card-body">
+			<span>猜你喜欢</span>
+				<ul class="roww" style="padding:0;">
+		<hr/>
+		
+		<?php foreach($_randthreadlist as $_thread) { ?>
+				<li class="col-lg-6" style="line-height: 28px;">
+				    <img class="locion" src="plugin/xn_love/r.png" style="margin-bottom: 1px;" width="15px">
+						<a class="love" href="<?php echo url("thread-$_thread[tid]");?>">
+							<?php echo $_thread['subject'];?>
+						</a>
+						
+					</li>
+		<?php 
+		}
+		?>
+		</ul>
+		</div>
+	</div>
+	<style> 
+
+@media(max-width:576px) {
+	.love {
+ width: 78%;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+padding-right: 5px;
+display: inline-block;
+}
+	.locion {
+	margin-bottom: 20px !important;
+		}
+}
+.roww {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-top: 10px;
+}
+.love {
+ width: 78%;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+padding-right: 5px;
+display: inline-block;
+}
+	.locion {
+	margin-bottom: 20px !important;
+		}
+</style> 

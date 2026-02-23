@@ -1,0 +1,315 @@
+<div id="stately_contextmenu" class="dropdown-menu">
+    <style scoped>
+        #stately_contextmenu {
+            max-height: 75vh;
+            overflow: auto;
+            z-index: 1100;
+            user-select: none;
+        }
+
+        #stately_contextmenu .dropdown-item {
+            cursor: default;
+        }
+    </style>
+    <div class="card-header p-0">
+        <ul class="list-inline d-flex m-0" role="toolbar">
+            <li><button type="button" onclick="window.history.forward();" class="btn btn-link" title="返回" data-bs-toggle="tooltip"><i class="las la-arrow-left"></i></button></li>
+            <li><button type="button" onclick="window.history.back();" class="btn btn-link" title="前进" data-bs-toggle="tooltip"><i class="las la-arrow-right"></i></button></li>
+            <li><button type="button" onclick="location.reload();" class="btn btn-link" title="刷新" data-bs-toggle="tooltip"><i class="las la-redo-alt"></i></button></li>
+            <li><a type="button" href="." class="btn btn-link" title="回到主页" data-bs-toggle="tooltip"><i class="las la-home"></i></a></li>
+        </ul>
+    </div>
+    <div class="card-body p-0">
+        <li class="dropdown-divider"></li>
+        <section id="selectText">
+            <ul class="list-unstyled inner">
+                <li class="dropdown-header"><span class="text">文本操作</span></li>
+                <li><a role="option" class="dropdown-item" id="copyText"><i class="la la-copy"></i> <span class="text">复制文本</span></a></li>
+                <li><a role="option" class="dropdown-item" onclick="window.open(xn.url('search-' + window.getSelection().toString()))"><i class="la la-search"></i> <span class="text">站内搜索</span></a></li>
+
+                <!--{hook stately_contextmenu__selectText.htm}-->
+            </ul>
+        </section>
+        <section id="selectLink">
+            <ul class="list-unstyled inner">
+                <li class="dropdown-header"><span class="text">超链接操作</span></li>
+                <li><a role="option" class="dropdown-item" id="copyLinkText"><i class="la la-copy"></i> <span class="text">复制链接文字</span></a></li>
+                <li><a role="option" class="dropdown-item" id="copyLinkHref"><i class="la la-copy"></i> <span class="text">复制链接地址</span></a></li>
+                <li><a role="option" class="dropdown-item" id="openLinkHref_top"><i class="las la-external-link-square-alt"></i> <span class="text">打开链接</span></a></li>
+                <li><a role="option" class="dropdown-item" id="openLinkHref_blank"><i class="las la-external-link-alt"></i> <span class="text">新窗口打开链接</span></a></li>
+
+                <!--{hook stately_contextmenu__selectLink.htm}-->
+            </ul>
+
+        </section>
+        <section id="selectIamge">
+            <ul class="list-unstyled inner">
+                <li class="dropdown-header"><span class="text">图片操作</span></li>
+                <li><a role="option" class="dropdown-item" id="copyImgItself"><i class="la la-copy"></i> <span class="text">复制图片</span></a></li>
+                <li><a role="option" class="dropdown-item" id="copyImgSrc"><i class="la la-copy"></i> <span class="text">复制图片地址</span></a></li>
+
+                <!--{hook stately_contextmenu__selectIamge.htm}-->
+            </ul>
+        </section>
+        <section id="selectInput">
+            <ul class="list-unstyled inner">
+                <li class="dropdown-header"><span class="text">文本操作</span></li>
+                <li><a role="option" class="dropdown-item" id="selectAllToInput"><i class="las la-expand"></i> <span class="text">全选</span></a></li>
+                <li><a role="option" class="dropdown-item" id="cutToInput"><i class="las la-cut"></i> <span class="text">剪切</span></a></li>
+                <li><a role="option" class="dropdown-item" id="copyToInput"><i class="la la-copy"></i> <span class="text">复制</span></a></li>
+                <li><a role="option" class="dropdown-item" id="pasteToInput"><i class="las la-clipboard"></i> <span class="text">粘贴</span></a></li>
+
+                <!--{hook stately_contextmenu__selectIamge.htm}-->
+            </ul>
+        </section>
+        <section id="normal">
+            <ul class="list-unstyled inner">
+                <li><a role="option" class="dropdown-item" onclick="window.print()"><i class="la la-print"></i> <span class="text">打印</span></a></li>
+                <li><a role="option" class="dropdown-item" onclick="addToFavorites()"><i class="la la-star"></i> <span class="text">收藏页面</span></a></li>
+                <li><a role="option" class="dropdown-item" onclick="window.opener=null;window.open('about:blank','_top').close()"><i class="las la-times-circle"></i> <span class="text">关闭页面</span></a></li>
+
+                <!--{hook stately_contextmenu__normal.htm}-->
+            </ul>
+        </section>
+        <aside id="final_note">
+            <li class="dropdown-divider optgroup-1div"></li>
+            <p class="small text-secondary m-0 text-center">按住<kbd>Ctrl</kbd>可打开浏览器菜单</p>
+        </aside>
+    </div>
+</div>
+
+<script id="stately_contextmenu_js">
+    if (typeof copyToClipboard === 'undefined') {
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(function () {
+                    if (typeof $.toast !== 'undefined') {
+                        $.toast({ title: '复制成功!', content: ':)', type: 'success' });
+                    } else {
+                        alert('复制成功!');
+                    }
+                })
+                .catch(function () {
+                    if (typeof $.toast !== 'undefined') {
+                        $.toast({ title: '复制失败', content: '请按Ctrl+C或Command+C复制', type: 'warning' });
+                    } else {
+                        alert('复制失败。请按Ctrl+C或Command+C复制。');
+                    }
+                });
+        }
+    }
+    if (typeof addToFavorites === 'undefined') {
+        function addToFavorites() {
+            if (window.sidebar && window.sidebar.addPanel) { // Firefox
+                window.sidebar.addPanel(document.title, window.location.href, "");
+            } else if (window.external && window.external.AddFavorite) { // IE & Opera
+                window.external.AddFavorite(window.location.href, document.title);
+            } else { // other
+                if (typeof $.toast !== 'undefined') { $.toast({ title: '收藏', content: '请按下Ctrl+D或Command+D键添加收藏。', type: 'info' }); } else { alert("您的浏览器不支持此操作，请按下Ctrl+D或Command+D键添加收藏。"); }
+            }
+        }
+    }
+    /* 绑定右键菜单事件 */
+    document.addEventListener('contextmenu', function (e) {
+
+        let RegexMobile = /(Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Nokia|Windows Phone|webOS|Symbian|webOS|hpwos|Palm|Samsung|SonyEricsson|LG|htc|Motorola|Docomo|sharp|softbank|mobile|mobilephone|smartphone|cellphone|windows ce|iemobile|up.browser|up.link|mmp|symbianos|windows mobile|pocket pc|mobileexplorer|palmos|series60|series40|series30|series20|series10|windows ce|palm|opera mini|windows mobile|ie mobile)/i;  
+
+        const isPC = !RegexMobile.test(navigator.userAgent);
+
+        if (isPC && document.getElementById('stately_contextmenu') && !e.ctrlKey) {
+            e.preventDefault();
+            var customContextMenu = document.getElementById('stately_contextmenu');
+            // 获取鼠标相对于可视窗口的坐标
+            var posX = e.clientX;
+            var posY = e.clientY;
+            // 获取页面滚动的距离
+            var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+            var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            // 将滚动的距离添加到菜单的位置上
+            var menuX = posX + scrollX;
+            var menuY = posY + scrollY;
+            customContextMenu.style.left = menuX + 'px';
+            customContextMenu.style.top = menuY + 'px';
+            customContextMenu.style.display = 'block';
+            // 在菜单显示之后进行位置调整
+            setTimeout(function () {
+                // 获取窗口的宽度和高度
+                var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+                // 获取菜单的宽度和高度
+                var menuWidth = customContextMenu.offsetWidth;
+                var menuHeight = customContextMenu.offsetHeight;
+                // 检查菜单是否超出窗口的右侧
+                if (menuX + menuWidth > windowWidth + scrollX - 20) {
+                    customContextMenu.style.left = (windowWidth + scrollX - menuWidth - 20) + 'px';
+                }
+                // 检查菜单是否超出窗口的底部
+                if (menuY + menuHeight > windowHeight + scrollY - 20) {
+                    customContextMenu.style.top = (windowHeight + scrollY - menuHeight - 20) + 'px';
+                }
+            }, 0);
+            document.querySelectorAll('#stately_contextmenu section:not(.show)').forEach(function (element) {
+                element.style.display = 'none';
+            });
+            document.querySelector('#stately_contextmenu section#normal').style.display = 'block';
+
+            var selectedText = window.getSelection().toString();
+            if (selectedText !== '') {
+                /** ========== 选择文字操作 ========== **/
+
+                document.querySelectorAll('#stately_contextmenu section:not(.show)').forEach(function (element) {
+                    element.style.display = 'none';
+                });
+                document.querySelector('#stately_contextmenu section#selectText').style.display = 'block';
+
+                document.getElementById('copyText').addEventListener('click', function (event) {
+                    event.preventDefault();
+                    navigator.clipboard.writeText(selectedText)
+                        .then(function () {
+                            if (typeof $.toast !== 'undefined') {
+                                $.toast({ title: '复制成功!', content: ':)', type: 'success' });
+                            } else {
+                                alert('复制成功');
+                            }
+                        })
+                        .catch(function () {
+                            if (typeof $.toast !== 'undefined') {
+                                $.toast({ title: '复制失败', content: ':(', type: 'warning' });
+                            } else {
+                                alert('复制失败');
+                            }
+                        });
+                    //copyToClipboard(selectedText);
+                })
+
+                // <!--{hook stately_contextmenu__selectText_js.htm}-->
+
+            } else {
+
+                if (e.target.tagName === 'IMG') {
+                    /** ========== 图片操作 ========== **/
+
+                    document.querySelectorAll('#stately_contextmenu section:not(.show)').forEach(function (element) {
+                        element.style.display = 'none';
+                    });
+                    document.querySelector('#stately_contextmenu section#selectIamge').style.display = 'block';
+
+                    document.querySelector('#copyImgItself').addEventListener('click', function () {
+                        console.info("正在尝试复制图片");
+                        const n = imageToBlob(e.target.src),
+                            t = new ClipboardItem({
+                                "image/png": n
+                            });
+                        navigator.clipboard.write([t]);
+                    });
+                    document.querySelector('#copyImgSrc').addEventListener('click', function () {
+                        var clickedLink = e.target;
+                        if (clickedLink) {
+                            var linkHref = clickedLink.getAttribute('src');
+                            var tempTextarea = document.createElement('textarea');
+                            tempTextarea.value = linkHref;
+                            document.body.appendChild(tempTextarea);
+                            tempTextarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(tempTextarea);
+                            clickedLink = null;
+                        }
+
+                        // <!--{hook stately_contextmenu__selectIamge_js.htm}-->
+                    });
+                } else if (e.target.tagName === 'A') {
+                    /** ========== 超链接操作 ========== **/
+                    document.querySelectorAll('#stately_contextmenu section:not(.show)').forEach(function (element) {
+                        element.style.display = 'none';
+                    });
+                    document.querySelector('#stately_contextmenu section#selectLink').style.display = 'block';
+
+                    var clickedLink = e.target;
+                    document.querySelector('#copyLinkText').addEventListener('click', function () {
+                        if (clickedLink) {
+                            var linkText = clickedLink.innerText;
+                            linkText = linkText.replace(/\s/g, '');
+                            var tempTextarea = document.createElement('textarea');
+                            tempTextarea.value = linkText;
+                            document.body.appendChild(tempTextarea);
+                            tempTextarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(tempTextarea);
+                            clickedLink = null;
+                        }
+                    });
+                    document.querySelector('#copyLinkHref').addEventListener('click', function () {
+                        if (clickedLink) {
+                            var linkHref = clickedLink.getAttribute('href');
+                            var tempTextarea = document.createElement('textarea');
+                            tempTextarea.value = linkHref;
+                            document.body.appendChild(tempTextarea);
+                            tempTextarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(tempTextarea);
+                            clickedLink = null;
+                        }
+                    });
+                    document.querySelector('#openLinkHref_top').addEventListener('click', function () {
+                        if (clickedLink) {
+                            clickedLink.click();
+                            clickedLink = null;
+                        }
+                    });
+                    document.querySelector('#openLinkHref_blank').addEventListener('click', function () {
+                        if (clickedLink) {
+                            var linkHref = clickedLink.getAttribute('href');
+                            window.open(linkHref, "_blank");
+                            clickedLink = null;
+                        }
+                    });
+
+                    // <!--{hook stately_contextmenu__selectLink_js.htm}-->
+
+                } else if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    /** ========== 表单输入操作 ========== **/
+                    document.querySelectorAll('#stately_contextmenu section:not(.show)').forEach(function (element) {
+                        element.style.display = 'none';
+                    });
+                    document.querySelector('#stately_contextmenu section#selectInput').style.display = 'block';
+
+                    document.querySelector('#selectAllToInput').addEventListener('click', function (event) {
+                        e.target.select();
+                    });
+
+                    document.querySelector('#cutToInput').addEventListener('click', function (event) {
+                        e.target.select();
+                    });
+
+                    document.querySelector('#copyToInput').addEventListener('click', function (event) {
+                        //选中文字就有了
+                    });
+
+                    document.querySelector('#pasteToInput').addEventListener('click', function (event) {
+                        //这样做可能有风险
+                        clipboardData = navigator.clipboard.readText().then(function (text) { e.target.value = text });
+                    });
+                }
+            }
+        }
+    });
+    /* 点击页面其他位置时隐藏右键菜单 */
+    document.addEventListener('click', function () {
+        if (document.getElementById('stately_contextmenu')) {
+            var customContextMenu = document.getElementById('stately_contextmenu');
+            customContextMenu.style.display = 'none';
+            document.querySelectorAll('#stately_contextmenu section:not(.show)').forEach(function (element) {
+                element.style.display = 'none';
+            });
+        }
+    });
+    document.addEventListener('scroll', function () {
+        if (document.getElementById('stately_contextmenu')) {
+            var customContextMenu = document.getElementById('stately_contextmenu');
+            customContextMenu.style.display = 'none';
+            document.querySelectorAll('#stately_contextmenu section:not(.show)').forEach(function (element) {
+                element.style.display = 'none';
+            });
+        }
+    });
+</script>

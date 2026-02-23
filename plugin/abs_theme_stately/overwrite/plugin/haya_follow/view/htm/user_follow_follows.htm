@@ -1,0 +1,28 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/haya_follow/view/htm/user_follow.template.htm">
+	<slot name="user_body">
+		<ul class="list-unstyled row m-0">
+			<?php if (!empty($haya_follow_follows)) { foreach ($haya_follow_follows as $haya_follow_user) { ?>
+			<!--{hook haya_follow_user_item.htm}-->
+			<?php }} else { ?>
+			<li class="d-block haya-follower-empty">
+				<div class="empty p-3 text-center">
+					<span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+						<i class="las la-user fs-1"></i>
+					</span>
+					<p> Ta还没有关注的用户 </p>
+				</div>
+			</li>
+			<?php } ?>
+		</ul>
+		<?php if($haya_follow_pagination) { ?>
+		<nav>
+			<ul class="pagination justify-content-center">
+				<?php echo $haya_follow_pagination; ?>
+			</ul>
+		</nav>
+		<?php } ?>
+	</slot>
+</template>
+<script>
+	$('a[data-active="user-follow-follows"]').addClass('active');
+</script>

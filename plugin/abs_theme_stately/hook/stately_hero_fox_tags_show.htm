@@ -1,0 +1,9 @@
+<?php switch($abs_theme_stately_setting['ui_style']['forum']['style_forum_info']): ?>
+<?php case 'top_v2': case 'top_v3': ?>
+<!--{hook stately_layout_fox_tags_show_info__top_v2.htm}-->
+<?php break; case 'top_compact': ?>
+<!--{hook stately_layout_fox_tags_show_info__top_compact.htm}-->
+<?php break; case 'side_classic': /* @see stately_layout_foruminfo__side_classic.htm */ ?>
+<?php break; default: ?>
+<!--{hook stately_layout_fox_tags_show_info__top_v1.htm}-->
+<?php break; endswitch; ?>

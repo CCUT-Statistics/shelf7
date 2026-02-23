@@ -1,0 +1,1 @@
+'view_reply_chain' => '查看所有回复',

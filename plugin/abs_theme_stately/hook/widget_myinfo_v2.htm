@@ -1,0 +1,108 @@
+<div class="card mb-3 card-userinfo" data-style="v2">
+    <div class="card-header p-2 border-bottom">
+        <div class="d-flex flex-wrap align-items-center">
+            <a href="<?= url('my') ?>" class="v_avatar v_avatar-user">
+                <!--{hook my_common_avatar_before.htm}-->
+                <img loading="lazy" decoding="async" src="<?= $user['avatar_url'] ?>" class="user-profile-img d-block mx-auto w-px-40">
+                <!--{hook my_common_avatar_after.htm}-->
+            </a> 
+            <div class="mb-0 ml-2">
+            <?php if (function_exists('vip__isvip') && vip__isvip($user['vip_end']) && function_exists('vip_read')) { $vip_info = vip_read($uid); /* 如果是VIP */ ?> 
+                <a href="<?= url('my'); ?>" class="h5 text-danger isvip"> 
+                    <?= $user['username'] ?> 
+                    <small class="fw-semibold d-inline-block isvip">
+                        <span class="badge bg-label-warning">VIP Lv.<?= $vip_info['level'] ?></span>
+                    </small>
+            </a> 
+            <?php unset($vip_info); } else { /* 普通用户 */ ?> 
+                <a href="<?= url('my'); ?>" class="h5"> 
+                    <?= $user['username'] ?> </a> 
+            <?php } /* endif */ ?>
+            <div class="">
+                <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_uid']): ?>
+                <span class="badge badge-pill bg-label-primary jb-blue">UID:
+                    <?= $uid ?>
+                </span>
+                <?php endif; ?>
+                <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_usergroup']): ?>
+                <span class="badge badge-pill bg-label-info jb-cyan">
+                    <?= $user['groupname'] ?>
+                </span>
+                <?php endif; ?>
+            </div>
+            </div>
+        </div>
+        
+    </div> 
+
+    <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_credits']): ?>
+    <div class="card-body p-2 border-bottom">
+        <div class="row row-cols-2 my-1 g-0">
+            <div class="col" title="<?= $credits2_name ?>" data-bs-toggle="tooltip">
+                <span class="mr-1 badge badge-center rounded-pil bg-label-warning"><i class="la la-coins"></i></span>
+                <?= $user['golds'] ?>
+            </div>
+            <div class="col" title="<?= $credits3_name ?>" data-bs-toggle="tooltip">
+                <span class="mr-1 badge badge-center rounded-pil bg-label-info"><i class="la la-money-bill-alt"></i></span>
+                <?= $user['rmbs']*0.01 ?>
+            </div>
+        </div>
+        <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_progress']): ?>
+        <!--{hook widget_my_info_progress.htm}-->
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
+
+
+    <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_stats']): ?> 
+    <div class="card-body p-0">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <a href="<?= url('my-thread') ?>" class="text-body">
+                    <span><i class="la la-comments"></i> <?= lang('threads');?></span> 
+                    <data class="badge bg-label-secondary"><?= $user['threads'];?></data>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a href="<?= url('my-post') ?>" class="text-body">
+                    <span><i class="la la-comment"></i> <?= lang('posts');?></span> 
+                    <data class="badge bg-label-secondary"><?= $user['posts'];?></data>
+                </a>
+            </li>
+            <?php if(isset($user['digests'])): ?>
+            <li class="list-group-item">
+                <a href="<?= url('my-digest') ?>" class="text-body">
+                    <span><i class="la la-diamond"></i> <?= lang('digests');?></span> 
+                    <data class="badge bg-label-secondary"><?= $user['digests'];?></data>
+                </a>
+            </li>
+            <?php endif; ?>
+            <?php if(isset($user['favorites'])): ?>
+            <li class="list-group-item">
+                <a href="<?= url('my-favorite') ?>" class="text-body">
+                    <span><i class="la la-star"></i> <?= lang('haya_favorite_count');?></span> 
+                    <data class="badge bg-label-secondary"><?= $user['favorites'];?></data>
+                </a>
+            </li>
+            <?php endif; ?>
+            <?php if(isset($user['follows'])): ?>
+            <li class="list-group-item">
+                <a href="<?= url('my-follow-follows') ?>" class="text-body">
+                    <span><i class="la la-user-plus"></i> 关注</span> 
+                    <data class="badge bg-label-secondary"><?= $user['follows'];?></data>
+                </a>
+            </li>
+            <?php endif; ?>
+            <?php if(isset($user['followeds'])): ?>
+            <li class="list-group-item">
+                <a href="<?= url('my-follow-fans') ?>" class="text-body">
+                    <span><i class="la la-users"></i> 粉丝</span> 
+                    <data class="badge bg-label-secondary"><?= $user['followeds'];?></data>
+                </a>
+            </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+    <?php endif; ?>
+</div>

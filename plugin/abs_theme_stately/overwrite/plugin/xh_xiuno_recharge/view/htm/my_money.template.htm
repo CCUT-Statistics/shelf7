@@ -1,0 +1,10 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.common.template.htm">
+	<slot name="my_nav">
+		<ul class="nav nav-pills">
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('my-recharge')?>" data-active="my-recharge">在线充值</a>
+			</li>
+			<!--{hook my_recharge_nav.htm}-->
+		</ul>
+	</slot>
+</template>

@@ -1,0 +1,11 @@
+{
+    "name": "云库论坛定制主题",
+    "brief": "<span class='badge badge-danger'><a href='https://cloudatabases.com' class='text-warning' target='_blank'>云库论坛定制主题</a></span><br>无与伦比的美丽。<br><a href='https://cloudatabases.com/thread-54.htm' target='_blank'>主题插件介绍</a>、<a href='https://cloudatabases.com/thread-53.htm' target='_blank'>主题设置介绍</a>",
+    "version": "1.2.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

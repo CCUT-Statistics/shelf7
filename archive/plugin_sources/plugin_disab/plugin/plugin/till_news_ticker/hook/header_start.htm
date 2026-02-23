@@ -1,0 +1,40 @@
+<?php $till_news_ticker_setting = setting_get('till_news_ticker_setting'); 
+
+$till_news_ticker_links = $till_news_ticker_setting['links'];
+
+function ticker_magic_keyframes($ticker_count){
+    if (!is_null(cache_get('till_news_ticker_css_ticker_magic_keyframes'))) {
+        $result = cache_get('till_news_ticker_css_ticker_magic_keyframes');
+    } else {
+$result = "@keyframes TickerMagic {";
+for ($i = 0; $i <= $ticker_count-1; $i++) {
+    $height_increment = 1.5;
+    $height_times = $i > 0 ? -1 * $i : abs($i);
+    $height = $height_increment * $height_times;
+    $persantage = round(($i/$ticker_count)*100);
+    $persantage_next = round((($i+1)/$ticker_count)*100);
+    $persantage_last = $persantage_next - 1;
+
+    if ($i != 0) {
+        $result .= $persantage."%,".$persantage_last."%{margin-top:".$height."em} /* ".($i+1)." */".PHP_EOL;
+    } else {
+        $result .= "0%,100%,".$persantage_last."%{margin-top:".$height."em} /* 1 */".PHP_EOL;
+    }
+}
+$result .= "}";
+cache_set('till_news_ticker_css_ticker_magic_keyframes',$result,1440);
+}
+return $result;
+}
+
+function ticker_magic_duration ($ticker_count, $single_time = 5){
+    if (!is_null(cache_get('till_news_ticker_css_ticker_magic_duration'))) {
+        $result = cache_get('till_news_ticker_css_ticker_magic_duration');
+    } else {
+    $result = ".tickerv-wrap ol {animation-duration:".($single_time*$ticker_count)."s}";
+    cache_set('till_news_ticker_css_ticker_magic_duration',$result,1440);
+    }
+    return $result;
+}
+
+?>

@@ -1,0 +1,70 @@
+<div class="card-body" id="chat">
+    <div class="main">
+        <div class="m-message">
+          <ul>
+          <?php
+          if($noticelist) {
+              foreach(array_reverse($noticelist) as &$notice) { 
+            ?>
+            <li>
+              <p class="time">
+                <span><?php echo $notice['create_date_fmt'];?></span>
+              </p>
+              <div class="main <?php if($to_uid != $notice['fromuid']) echo "self";?>">
+                <img loading="lazy" decoding="async" class="avatar" src="<?php echo $notice['from_user_avatar_url']?>" alt>
+                <div class="text"><?php echo $notice['message']?></div>
+              </div>
+            </li>
+            <?php } } ?>
+          </ul>
+        </div>
+
+        <div class="m-text">
+            <form action="<?php echo url("user-pm-".$to_uid);?>" method="post" id="private_message_form">
+                <input type="hidden" name="sid" value="<?php echo session_id();?>" />
+                <textarea placeholder="<?php echo lang('pm_content');?>" name="cf_message" class="form-control" ></textarea>
+                <button type="submit" class="btn btn-primary" data-loading-text="<?php echo lang('sending');?>..." ><?php echo lang('send');?></button>
+                    
+                
+            </form>
+            <p class="form-text mb-0">
+                <?php
+                if(false){
+                    
+                }
+                ?>
+                <?php
+                if($gid!=1){
+                    echo '<span class="badge bg-label-warning" data-toggle="tooltip" title="' . lang('remaining_pm_times') . ':' .(intval($pm_times) - intval($user_pm_times)). ', ' . 
+                    lang('credits_required'). ':' . $pm_credits . '"><i class="las la-comments-dollar"></i> '.$pm_credits . '</span>';
+                }
+                ?>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script ajax-eval="true">
+var jform = $('#private_message_form');
+var jsubmit = jform.find('button[type="submit"]');
+
+jform.on('submit', function() {
+    jform.reset();
+    jsubmit.button('loading');
+    var postdata = jform.serializeObject();
+    $.xpost(jform.attr('action'), postdata, function(code, message) {
+        if(code == 0) {
+            jsubmit.button(message);
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        } else {
+            $.alert(message);
+            jsubmit.button('reset');
+        }
+    });
+    return false;
+});
+</script>
+
+<?php echo xn_debug_info(); ?>

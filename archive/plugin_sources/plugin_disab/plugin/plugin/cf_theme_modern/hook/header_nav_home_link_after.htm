@@ -1,0 +1,6 @@
+<?php 
+$cf_theme_modern = setting_get('cf_theme_modern');
+if(isset($cf_theme_modern['header_link']) && $cf_theme_modern['header_link']){
+echo $cf_theme_modern['header_link_url'];
+}
+?>

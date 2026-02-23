@@ -1,0 +1,20 @@
+/* Yuyuko(Terminal) by Enonya (hylwxqwq) <black_trees@foxmail.com> (https://github.com/Enonya/yuyuko.vim/) */
+
+:root {
+  --base00: #262626;/*#181818*/
+  --base01: #3a3a3a;/*#282828*/
+  --base02: #444444;/*#383838*/
+  --base03: #ff87df;/*#585858*/
+  --base04: #ffdfdf;/*#b8b8b8*/
+  --base05: #ffffff;/*#d8d8d8*/
+  --base06: #ffdfff;/*#e8e8e8*/
+  --base07: #ffffff;/*#f8f8f8*/
+  --base08: #df5f87;/*#ab4642*/
+  --base09: #d787ff;/*#dc9656*/
+  --base0A: #dfaf00;/*#f7ca88*/
+  --base0B: #ff87df;/*#a1b56c*/
+  --base0C: #afafff;/*#86c1b9*/
+  --base0D: #8787ff;/*#7cafc2*/
+  --base0E: #af5fff;/*#ba8baf*/
+  --base0F: #8700ff;/*#a16946*/
+}

@@ -1,0 +1,41 @@
+<div class="row line-height-4">
+    <div class="col-md-2 col-sm-12 text-center">
+        <img loading="lazy" decoding="async" class="logo-4" src="<?= $_user['avatar_url'];?>">
+        <br><b>
+            <?= $_user['username'];?>
+        </b>
+        <!--{hook user_profile_username_after.htm}-->
+    </div>
+    <div class="col-4 col-sm-5">
+        <span class="text-muted">
+            <?= lang('threads');?>：
+        </span>
+        <?= $_user['threads'];?>
+        <br><span class="text-muted">
+            <?= lang('posts');?>：
+        </span>
+        <?= $_user['posts'];?>
+        <!--{hook user_profile_posts_after.htm}-->
+    </div>
+    <div class="col-auto">
+        <span class="text-muted">
+            <?= lang('user_group');?>：
+        </span>
+        <?= $_user['groupname'];?>
+        <br><span class="text-muted">
+            <?= lang('create_date');?>：
+        </span>
+        <?= $_user['create_date_fmt'];?>
+        <br><span class="text-muted">
+            <?= lang('last_login_date');?>：
+        </span>
+        <?= $_user['login_date_fmt'];?>
+        <?php if($gid == 1) { ?>
+        <br><span class="text-danger">
+            <?= lang('email');?>：
+        </span>
+        <?= $_user['email'];?><br>
+        <?php } ?>
+        <!--{hook user_profile_login_date_after.htm}-->
+    </div>
+</div>

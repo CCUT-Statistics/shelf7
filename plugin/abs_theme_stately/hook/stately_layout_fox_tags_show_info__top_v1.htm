@@ -1,0 +1,46 @@
+<div class="card mb-3">
+    <div class="row g-0">
+        <div class="col-auto">
+            <div class="card-body pr-0 pb-0 d-flex flex-column">
+                <img loading="lazy" decoding="async" class="card-img w-px-75" src="<?= $this_tag_cover_url ?>">
+                <div class="follow_tag text-center mb-3">
+                    <a role="button" href="javascript:;" id="follow_tag" onclick="follow_tag('<?=  $query['tagid']; ?>')" class="btn <?=  !$is_follow ? 'btn-primary' : 'btn-secondary'; ?> btn-sm">
+                        <?= $is_follow ? '已关注' : '关注标签'; ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card-body">
+                <div class="row flex-column flex-md-row">
+                    <div class="col">
+                        <h3 class="card-title h5">
+                            <?= $tagname ?>
+                        </h5>
+                        <div class="card-text">
+                            <?= $this_tag_brief ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="d-flex justify-content-between mt-3">
+                            <div class="d-flex flex-column mr-2">
+                                <small class="text-muted"> 成员数 </small>
+                                <span>
+                                    <?=  $query['fans']; ?>
+                                </span>
+                            </div>
+                            <?php if (!empty($group['allowtags2'])) { ?>
+                            <div class="d-flex flex-column mr-1">
+                                <a href="<?=  url('tag-edit-'.$tagid); ?>" role="button" class="btn btn-secondary btn-sm">
+                                    <i class="la la-edit"></i>
+                                    <?= lang('edit') ?>
+                                </a>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

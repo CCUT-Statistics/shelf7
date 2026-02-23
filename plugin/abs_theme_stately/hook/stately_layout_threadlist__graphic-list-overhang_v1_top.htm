@@ -1,0 +1,47 @@
+<li class="thread d-flex align-items-stretch gx-3 <?= 'col-lg-' . $stately_threadlist_cols_count; ?> <?= $_thread['top_class'];?>" data-tid="<?= $_thread['tid'] ?>">
+    <article class="card w-100 mb-3 style-graphic-list-overhang_v1-top">
+        <?php if(!is_null($_post_message_image)): ?>
+        <div class="profile-img21 px-4">
+        <a class="subject" href="<?= url('thread-'.$_thread['tid']);?>">
+            <img loading="lazy" decoding="async" class="img-fluid rounded shadow-sm" src="<?= $_post_message_image ?>">
+            </a>
+        </div>
+        <?php endif; ?>
+        <div class="p-3">
+            <h3 class="my-1 h5">
+                <!--{hook stately_threadlist_checkbox.htm}-->
+                <!--{hook stately_threadlist_subject.htm}-->
+            </h3>
+            <div class="small">
+                <?php if($fid == 0): ?>
+                <a href="<?= url('forum-'.$_thread['fid']);?>">
+                    <i class="las la-comment"></i>
+                    <?= $_thread['forumname'] ?>
+                </a> ·
+                <?php endif; ?> <time class="text-muted">
+                    <?= $_thread['create_date_fmt'];?>
+                </time>
+            </div>
+            <div class="card-text my-2 ">
+                <?= $_post_message_excerpt ?>
+            </div>
+        </div>
+        <div class="p-3 pt-0 flex-grow-0 mt-auto">
+            <div class="d-flex align-items-center justify-content-between mt-2">
+                <div>
+                    <a href="<?= url('user-'.$_thread['uid']);?>" class="mb-0 h6">
+                        <span class="v_avatar v_avatar-post">
+                            <img loading="lazy" decoding="async" src="<?= $_thread['user_avatar_url'];?>" class="w-px-20 img-fluid rounded-circle">
+                            <!--{hook thread_list_inc_avatar_after.htm}-->
+                        </span>
+                        <!--{hook stately_threadlist_username.htm}-->
+                    </a>
+                </div>
+                <div class="card-actions small">
+                    <!--{hook stately_threadlist_views_count.htm}-->
+                    <!--{hook stately_threadlist_posts_count_with_lastuid.htm}-->
+                </div>
+            </div>
+        </div>
+    </article>
+</li>

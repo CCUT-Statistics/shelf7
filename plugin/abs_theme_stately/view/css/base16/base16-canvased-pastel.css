@@ -1,0 +1,21 @@
+/* Canvased Pastel by dkeg */
+/* Ported to base16 by Tillreetree */
+
+:root {
+    --base00:#170f0d;
+    --base01:#26251c; /* 0 */
+    --base02:#443b2c; /* 3 */
+    --base03:#534d35; /* 4 */
+    --base04:#7b8574; /* 6 */
+    --base05:#999f91; /* 8 */
+    --base06:#c4b67a; /* c */
+    --base07:#cfc995; /* d */
+    --base08:#b2b08c; /* a */
+    --base09:#c4bb8c; /* b */
+    --base0A:#837b61; /* 7 */
+    --base0B:#c4b67a; /* c */
+    --base0C:#999f91; /* 8 */
+    --base0D:#cfc995; /* d */
+    --base0E:#c4bb8c; /* b */
+    --base0F:#b2b08c; /* a */
+}

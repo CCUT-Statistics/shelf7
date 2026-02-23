@@ -1,0 +1,64 @@
+<?php !defined('DEBUG') AND exit('Access Denied.');?> 
+<template include="./plugin/abs_theme_stately/overwrite/plugin/fox_score/oddfox/core/fox_theme_my_score.template.php">
+  <slot name="my_body"> <?php $CanWithdrawal = ComputeCanMoney($uid,$conf['withdrawal_min']); ?> 
+    
+    <form role="form" class="row form" method="post" id="wform">
+      <div class="col-md-6">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"> <?php echo lang('withdrawal_accout');?> </span></div>
+          <select name="w_type" class="form-select" style="display:inline-block;" id="w_type"> <?php foreach($conf['withdrawal_arr'] as $key =>$v){ ?> <option value="<?php echo $v['wid'] ?>"> <?php echo $v['w_name'];?> </option> <?php } ?> </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"> <?php echo lang('withdrawal_info');?> </span></div>
+          <input type="text" name="w_info" id="w_info" maxlength="16" class="form-control" />
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="input-group ">
+          <div class="input-group-prepend"><span class="input-group-text"> <?php echo lang('withdrawal_need');?> </span></div>
+          <input type="number" min="<?php echo $conf['withdrawal_min']; ?>" name="w_need" id="w_need" maxlength="16" class="form-control" />
+        </div>
+        <div class="row mb-3">
+          <div class="col-md">
+            当前您拥有 <?php echo $user['rmbs'] ?> <?php echo $conf['rmb_name'] ?>(目前服务费为： <?php echo 10 * (10 - $conf['withdrawal_divide']);?>%,预扣)
+          </div>
+          <div class="col-md text-md-center">
+            <?php if($CanWithdrawal > 0){ ?> <span class="text-success">您已满足提现条件,准予提现</span> <?php }else{ ?> <span class="text-danger">您当前不满足提现条件</span> <?php } ?>
+          </div>
+          <div class="col-md text-md-end">
+            最低可提现金额： <?php echo $conf['withdrawal_min']; ?>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <button type="button" id="wbtn" class="btn btn-primary btn-block"> <?php echo lang('confirm').lang('submit');?> </button>
+      </div>
+      
+      
+      
+      
+      
+    </form>
+    </div>
+  </slot>
+</template>
+<script>$('a[data-active="my-withdrawal"]').addClass('active');</script>
+<script>
+  const w_form = $('#wform'),
+    w_btn = $('#wbtn');
+  w_btn.click(() => {
+    const postdata = w_form.serialize();
+    w_btn.button('loading');
+    $.xpost("<?php echo url('my-withdrawal');?>", postdata, (code, message) => {
+      if (code == 0) {
+        $.alert(message);
+        w_btn.button(message).delay(1500).button('reset').location(xn.url("my-withdrawal"));
+      } else {
+        $.alert(message);
+        w_btn.button('reset');
+      }
+    })
+  })
+</script>

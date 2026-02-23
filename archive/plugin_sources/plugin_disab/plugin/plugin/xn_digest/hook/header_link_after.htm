@@ -1,0 +1,23 @@
+<style>
+/*
+box-shadow: 0 0 5px red;
+*/
+@keyframes xndigest {
+	0% { color: red; text-shadow: 0 0 3px #FF8D8D;} 
+	20% { color: orange; text-shadow: 0 0 3px #FFE1AD;} 
+	40% { color: green; text-shadow: 0 0 3px #B3FFAF;} 
+	65% { color: blue; text-shadow: 0 0 3px #AFE4FF;} 
+	80% { color: purple; text-shadow: 0 0 3px #FFC9F3;} 
+	100% { color: red; text-shadow: 0 0 3px #FF8D8D;} 
+}
+
+/*水晶闪烁效果 占内存*/
+i.icon-diamond.flash{color: #D53D38;  /*animation: xndigest 5s linear infinite;*/ }
+
+/* i.icon-digest-1 {  text-shadow: 0 0 3px #AFE4FF; }
+i.icon-digest-2 {  text-shadow: 0 0 3px #FFF177; }
+i.icon-digest-3 {  text-shadow: 0 0 3px #FF8D8D; } */
+.icon-digest-1:before { content: "\f087"; color: #FFFFFF; background-color: #5BC0DE;border-radius: 3px;padding: 0px 4px;font-size: 10px;} /* "\f0a5" */
+.icon-digest-2:before { content: "\f219";  color: #FFFFFF; background-color: #ECA541;border-radius: 3px;padding: 0px 4px;font-size: 10px;}
+.icon-digest-3:before { content: "\f06d";color: #FFFFFF; background-color: #D53D38;border-radius: 3px;padding: 0px 4px;font-size: 10px;}
+</style>

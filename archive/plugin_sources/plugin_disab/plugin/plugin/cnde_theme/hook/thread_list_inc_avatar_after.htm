@@ -1,0 +1,19 @@
+
+<!--获取附件首张图片-->	
+<?php
+$attach = db_find_one('attach', array('tid'=>$_thread['tid'],'filetype'=>'image'),'',array('filename'), NULL);
+//$attach = db_sql_find("SELECT * FROM bbs_attach WHERE tid == $_thread['tid']  and filetype == 'image' LIMIT 1;");
+$attach['url'] = $conf['upload_url'].'attach/'.$attach['filename'];
+$ok = $attach['filename'];
+if(empty($ok))
+{
+?>
+<div class="spic">
+<a href="?<?=$_thread['url']?>"><img src="plugin/cnde_theme/images/404.png" ></a></div>	
+<?php
+}
+else{
+?>
+<div class="spic">
+<a href="?<?=$_thread['url']?>"><img src="<?php echo $attach['url'];?>" ></a></div>
+<?php } ?>

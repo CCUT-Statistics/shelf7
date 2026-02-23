@@ -1,0 +1,1 @@
+case 'iqismart_localimg': include _include(APP_PATH.'plugin/zz_iqismart_editplus/route/localimg.php'); break;

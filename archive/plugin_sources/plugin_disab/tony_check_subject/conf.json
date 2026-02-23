@@ -1,0 +1,10 @@
+{
+    "name": "Tony 标题重复检测",
+    "brief": "Tony 防止标题重复",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": []
+}

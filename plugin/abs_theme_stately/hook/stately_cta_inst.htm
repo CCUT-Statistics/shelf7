@@ -1,0 +1,30 @@
+<?php 
+if (empty($abs_theme_stately_setting) || is_null($abs_theme_stately_setting)) : ?>
+<div class="container-sm">
+    <div class="card card-body text-center my-4">
+        <div>
+            <?php if ($uid && $gid == 1) : ?>
+            <span class="badge rounded-pill bg-label-danger fs-xlarge
+                        mb-4">
+                <i class="las la-exclamation-triangle fs-1"></i>
+            </span>
+            <p>请卸载再安装本主题才能使用。</p>
+            <p>Please uninstall and reinstall this theme to use it.</p>
+            <a href="admin/" class="btn btn-primary">进入后台 Go to admin</a>
+            <?php else : ?>
+            <span class="badge rounded-pill bg-label-info fs-xlarge mb-4">
+                <i class="las la-clock fs-1"></i>
+            </span>
+            <p>本网站正在建设，请过一段时间再来看看吧。</p>
+            <p>This site is under construction, so please check back in a while.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
+
+</html>
+<?php die;
+    endif; ?>

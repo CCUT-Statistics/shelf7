@@ -1,0 +1,41 @@
+<?php if(is_array($_post_replies_array) && !empty($_post_replies_array)): foreach ($_post_replies_array as $reply_item) : ?>
+<li class="post_reply_item mb-2 pb-2 border-bottom " id="post_reply_item_<?= $_post['pid'] ?>_<?= $reply_item['fl'] ?>" data-pid="<?= $_post['pid'] ?>" data-reply_id="<?= $reply_item['fl'] ?>">
+
+	<div class="d-flex media">
+		<a href="<?= url("user-" . $reply_item['uid']) ?>">
+			<img src="<?= $reply_item['avatar_url'] ?>" alt="<?= $reply_item['username'] ?>" class="img-fluid avatar-3" loading="lazy" onerror="this.src='view/img/avatar.png'">
+		</a>
+		<section class="media-body flex-grow-1 ml-2">
+
+
+			<div class="message">
+				<span class="reply_item_user">
+
+					<a href="<?= url("user-" . $reply_item['uid']) ?>">
+						<?= $reply_item['username'] ?>
+					</a>
+
+					<?php if ($reply_item['t_uid'] > 0 && $reply_item['t_username'] != '') : ?>
+					<em> &rarr; <a href="<?= url("user-" . $reply_item['t_uid']) ?>"><?= $reply_item['t_username'] ?></a></em>
+					<?php endif; ?>
+					:
+				</span>
+
+				<?= $reply_item['message'] ?>
+			</div>
+			<?php if($uid): ?>
+			<footer class="d-flex align-items-center justify-content-end small">
+				<button type="button" data-pid="<?= $_post['pid'] ?>" data-reply_id="<?= $reply_item['fl'] ?>" data-reply_to_username="<?= $reply_item['username'] ?>" class="btn btn-link px-1 py-0 " onclick="post_reply__reply(this.getAttribute('data-pid'),this.getAttribute('data-reply_id'),this.getAttribute('data-reply_to_username'))"><i class="icon-reply"></i> 回复</button>
+
+				<?php if ($reply_item['uid'] == $uid || (isset($_post['floormanage']) && $_post['floormanage'])) : ?>
+				<button type="button" data-pid="<?= $_post['pid'] ?>" data-reply_id="<?= $reply_item['fl'] ?>" class="btn btn-link text-danger px-1 py-0" onclick="post_reply__delete(this.getAttribute('data-pid'),this.getAttribute('data-reply_id'))"><i class="icon-trash"></i> 删除</button>
+				<?php endif; ?>
+
+				<time datetime="<?= $reply_item['update'] ?>" class="text-muted "> <i class="la la-clock" aria-hidden="true"></i> <?= humandate($reply_item['update']) ?></time>
+			</footer>
+			<?php endif; ?>
+		</section>
+	</div>
+
+</li>
+<?php endforeach; endif; ?>

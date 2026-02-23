@@ -1,0 +1,12 @@
+{
+    "name": "At提及用户助手",
+    "brief": "Stately主题专用插件。帮助用户轻松地在回帖中提及其他用户。",
+    "version": "1.0.0",
+    "bbs_version": "4.0.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": {
+        "huux_notice": "1.0.0"
+    }
+}

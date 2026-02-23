@@ -1,0 +1,333 @@
+<?php
+if (!function_exists('catch_post_first_img')) {
+    /**
+     * 获取文章第一张缩略图 
+     *
+     * @param string $content 文章内容
+     * @return string|null 文章第一张缩略图的网址
+     */
+    function catch_post_first_img($content) {
+        $output = preg_match_all('/<img*.+src=[\'"]([^\'"]+)[\'"].*>/iU', $content, $matches);
+        if (empty($output)) {
+            $first_img = NULL;
+        } else {
+            $first_img = $matches[1][0];
+        }
+        return $first_img;
+    }
+}
+$_post_message_image = NULL; //帖子里的第一张图片地址
+if ($abs_theme_stately_setting['ui_tweek']['threadlist']['show_thread_thumbnail']) {
+    $_post_message_image = catch_post_first_img($first['message_fmt']);
+}
+$_post_cover_image = isset($thread['cover']) ? $thread['cover'] : NULL;
+$_post_cover_image_fallback = $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/img/' . (intval($thread['tid']) % 10) . '.jpg';
+?>
+
+<section data-layout="blog_v2">
+
+    <article>
+        <?php if (in_array($abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'], ['title-below-cover', 'title-above-cover'])) : ?>
+            <header class="article-header-section style--<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'] ?> title-align-<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_align'] ?> title-size-<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_size'] ?> <?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_shadow'] ? 'title-shadow' : '' ?> ">
+
+                <div class="article-title col-12 col-md-10 col-lg-8 col-xxl-7 mx-auto">
+                    <?php if ($abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'] === 'title-below-cover' && !empty($_post_cover_image)) : ?>
+                        <div class="article-cover">
+                            <img loading="lazy" decoding="async" src="<?= $_post_cover_image ?>" alt="<?= $thread['subject']; ?>" class="img-fluid article-cover-image">
+                            <div class="img-shadow">
+                                <img loading="lazy" decoding="async" src="<?= $_post_cover_image ?>" loading="lazy">
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <aside class="meta-top mb-4">
+                        <a href="<?php echo url('forum-' . $fid); ?>" class="badge bg-label-primary"><?= $forum['name']; ?></a>
+                        <!--{hook thread_subject_before.htm}-->
+                        <!--{hook thread_subject_start.htm}-->
+                        <!--{hook thread_subject_end.htm}-->
+                        <!--{hook thread_subject_after.htm}-->
+                    </aside>
+                    <h1 id="the_thread_subject" class="m-0"><?= $thread['subject']; ?></h1>
+                    <aside class="meta-bottom d-flex align-items-center flex-wrap mt-4">
+                        <div>
+                            <div class="user-info d-flex">
+                                <div class="avatar flex-shrink-0 me-3">
+                                    <a href="<?php echo url('user-' . $thread['uid']); ?>" class="v_avatar v_avatar-post">
+                                        <img loading="lazy" decoding="async" src="<?= $thread['user_avatar_url']; ?>" alt="User" class="rounded-circle" loading="lazy">
+
+                                    </a>
+                                </div>
+                                <div class="me-2">
+                                    <div>
+                                        <a href="<?= url('user-' . $thread['uid']); ?>" class="mb-0 h6">
+                                            <?= $thread['username'] ?>
+                                        </a>
+                                    </div>
+                                    <span class="mr-2">
+                                        <i class="la la-clock"></i>
+                                        <time datetime="<?= $thread['create_date']; ?>" class="small text-muted">
+                                            <?= date($abs_theme_stately_setting['global']['datetime_format']['date_only'], $thread['create_date']); ?>
+                                        </time>
+                                    </span>
+                                    <span class="mr-2">
+                                        <i class="la la-eye"></i>
+                                        <span class="small text-muted">
+                                            <?= $thread['views']; ?>
+                                        </span>
+                                    </span>
+                                    <!--{hook thread_views_after.htm}-->
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <!--{hook stately_thread_btn_update.htm}-->
+                            <!--{hook stately_thread_btn_delete.htm}-->
+                        </div>
+                    </aside>
+
+                </div>
+                <?php if ($abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'] === 'title-above-cover' && !empty($_post_cover_image)) : ?>
+                    <div class="article-cover">
+                        <img loading="lazy" decoding="async" src="<?= $_post_cover_image ?>" alt="<?= $thread['subject']; ?>" class="img-fluid article-cover-image">
+                        <div class="img-shadow">
+                            <img loading="lazy" decoding="async" src="<?= $_post_cover_image ?>" loading="lazy">
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </header>
+        <?php elseif (in_array($abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'], ['title-left-cover', 'title-right-cover'])) : ?>
+            <header class="article-header-section style--<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'] ?> title-align-<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_align'] ?> title-size-<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_size'] ?> <?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_shadow'] ? 'title-shadow' : '' ?>">
+                <div class="row g-0">
+                    <?php if ($abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'] === 'title-right-cover') : ?>
+                        <div class="article-cover col-lg-6">
+                            <?php if (!empty($_post_cover_image)) : ?>
+                                <img loading="lazy" decoding="async" src="<?= $_post_cover_image ?>" alt="<?= $thread['subject']; ?>" class="img-fluid article-cover-image">
+                            <?php else : ?>
+                                <img loading="lazy" decoding="async" src="<?= !empty($_post_message_image) ? $_post_message_image : $_post_cover_image_fallback ?>" alt="<?= $thread['subject']; ?>" class="img-fluid article-cover-image">
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="col-lg-6 article-title d-flex flex-column justify-content-center">
+                        <div class="p-5">
+                            <aside class="meta-top mb-4">
+                                <a href="<?php echo url('forum-' . $fid); ?>" class="badge bg-label-primary"><?= $forum['name']; ?></a>
+                                <!--{hook thread_subject_before.htm}-->
+                                <!--{hook thread_subject_start.htm}-->
+                                <!--{hook thread_subject_end.htm}-->
+                                <!--{hook thread_subject_after.htm}-->
+                            </aside>
+                            <h1 id="the_thread_subject" class="m-0"><?= $thread['subject']; ?></h1>
+                            <aside class="meta-bottom d-flex align-items-center flex-wrap mt-4">
+                                <div>
+                                    <div class="user-info d-flex">
+                                        <div class="avatar flex-shrink-0 me-3">
+                                            <a href="<?php echo url('user-' . $thread['uid']); ?>" class="v_avatar v_avatar-post">
+                                                <img loading="lazy" decoding="async" src="<?= $thread['user_avatar_url']; ?>" alt="User" class="rounded-circle" loading="lazy">
+
+                                            </a>
+                                        </div>
+                                        <div class="me-2">
+                                            <div>
+                                                <a href="<?= url('user-' . $thread['uid']); ?>" class="mb-0 h6">
+                                                    <?= $thread['username'] ?>
+                                                </a>
+                                            </div>
+                                            <span class="mr-2">
+                                                <i class="la la-clock"></i>
+                                                <time datetime="<?= $thread['create_date']; ?>" class="small text-muted">
+                                                    <?= date($abs_theme_stately_setting['global']['datetime_format']['date_only'], $thread['create_date']); ?>
+                                                </time>
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="la la-eye"></i>
+                                                <span class="small text-muted">
+                                                    <?= $thread['views']; ?>
+                                                </span>
+                                            </span>
+                                            <!--{hook thread_views_after.htm}-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <!--{hook stately_thread_btn_update.htm}-->
+                                    <!--{hook stately_thread_btn_delete.htm}-->
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                    <?php if ($abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['header_section_style'] === 'title-left-cover') : ?>
+                        <div class="article-cover col-lg-6">
+                            <?php if (!empty($_post_cover_image)) : ?>
+                                <img loading="lazy" decoding="async" src="<?= $_post_cover_image ?>" alt="<?= $thread['subject']; ?>" class="img-fluid article-cover-image">
+                            <?php else : ?>
+                                <img loading="lazy" decoding="async" src="<?= !empty($_post_message_image) ? $_post_message_image : $_post_cover_image_fallback ?>" alt="<?= $thread['subject']; ?>" class="img-fluid article-cover-image">
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </header>
+        <?php else : ?>
+            <header class="article-header-section style--title-front-cover title-align-<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_align'] ?> title-size-<?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_size'] ?> <?= $abs_theme_stately_setting['ui_tweek']['thread_style_blog_v2']['title_shadow'] ? 'title-shadow' : '' ?>">
+                <div class="article-title col-12 col-md-10 col-lg-8 col-xxl-7 mx-auto">
+                    <aside class="meta-top mb-4">
+                        <a href="<?php echo url('forum-' . $fid); ?>" class="badge bg-label-primary"><?= $forum['name']; ?></a>
+                        <!--{hook thread_subject_before.htm}-->
+                        <!--{hook thread_subject_start.htm}-->
+                        <!--{hook thread_subject_end.htm}-->
+                        <!--{hook thread_subject_after.htm}-->
+                    </aside>
+                    <h1 id="the_thread_subject" class="m-0"><?= $thread['subject']; ?></h1>
+                    <aside class="meta-bottom d-flex align-items-center flex-wrap mt-4">
+                        <div>
+                            <div class="user-info d-flex">
+                                <div class="avatar flex-shrink-0 me-3">
+                                    <a href="<?php echo url('user-' . $thread['uid']); ?>" class="v_avatar v_avatar-post">
+                                        <img loading="lazy" decoding="async" src="<?= $thread['user_avatar_url']; ?>" alt="User" class="rounded-circle" loading="lazy">
+
+                                    </a>
+                                </div>
+                                <div class="me-2">
+                                    <div>
+                                        <a href="<?= url('user-' . $thread['uid']); ?>" class="mb-0 h6">
+                                            <?= $thread['username'] ?>
+                                        </a>
+                                    </div>
+                                    <span class="mr-2">
+                                        <i class="la la-clock"></i>
+                                        <time datetime="<?= $thread['create_date']; ?>" class="small text-muted">
+                                            <?= date($abs_theme_stately_setting['global']['datetime_format']['date_only'], $thread['create_date']); ?>
+                                        </time>
+                                    </span>
+                                    <span class="mr-2">
+                                        <i class="la la-eye"></i>
+                                        <span class="small text-muted">
+                                            <?= $thread['views']; ?>
+                                        </span>
+                                    </span>
+                                    <!--{hook thread_views_after.htm}-->
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <!--{hook stately_thread_btn_update.htm}-->
+                            <!--{hook stately_thread_btn_delete.htm}-->
+                        </div>
+                    </aside>
+
+                </div>
+                <div class="article-cover">
+                    <?php if ($_post_cover_image) : ?>
+                        <img loading="lazy" decoding="async" src="<?= $_post_cover_image ?>" alt="<?= $thread['subject']; ?>" class="img-fluid article-cover-image">
+                    <?php endif; ?>
+                </div>
+            </header>
+        <?php endif; ?>
+
+        <div id="the_thread_message" class="message" isfirst="1">
+
+            <?php if ($abs_theme_stately_setting['ui_tweek']['thread']['show_fab']) { ?>
+                <!--{hook stately_fab_thread.htm}-->
+            <?php } ?>
+
+            <!--{hook stately_thread_message.htm}-->
+        </div>
+        <footer>
+            <!--{hook stately_thread_plugin_slot.htm}-->
+        </footer>
+    </article>
+    <div class="d-none threadlist"><input type="checkbox" name="modtid" value="<?= $thread['tid']; ?>" checked /></div>
+    <?php include _include(APP_PATH . 'view/htm/thread_list_mod.inc.htm'); ?>
+    <!---->
+
+    <?php if ($abs_theme_stately_setting['ui_tweek']['thread']['show_user_recent_threads']) : ?>
+        <div class="row g-1">
+            <div class="col-lg-3">
+                    <h2 class="h3">关于作者</h2>
+        <!--{hook widget_thread_user_info.htm}-->
+            </div>
+            <div class="col-lg-9">
+                <?php
+                if ($abs_theme_stately_setting['ui_tweek']['thread']['show_user_recent_threads']) :
+                    $user_recent_thread_list = mythread_find_by_uid($thread['uid'], 1, 3);
+                    // 过滤没有权限访问的主题 / filter no permission thread
+                    thread_list_access_filter($user_recent_thread_list, $gid);
+                ?>
+                    <h2 class="h3">更多来自<?= $thread['user']['username'] ?></h2>
+
+                    <ul class="list-unstyled threadlist row g-0 mb-0" data-style="blog_v2_top">
+                        <?php
+                        $stately_threadlist_cols_count = 4;
+                        $stately_threadlist_style = 'blog_v2_top';
+                        $have_allowtop = false;
+
+                        foreach ($user_recent_thread_list as $_thread) :
+
+                            // hook stately_threadlist_before__getting_data.php
+
+                        ?>
+
+                            <!--{hook stately_layout_threadlist__blog_v2_top.htm}-->
+
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <hr>
+
+    <!--{hook thread_postlist_before.htm}-->
+
+    <?php if (in_array(intval($gid), array(1), true) || (boolval($abs_theme_stately_setting['global']['thread']['show_postlist']))) : ?>
+
+        <section class="col-12 col-md-10 col-lg-9 mx-auto card-postlist">
+            <div class="card-header">
+                <h2 class="text-center ">
+                    <?= lang('new_post'); ?> <sup><span class="posts"><?= $thread['posts']; ?></span></sup>
+                </h2>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <!--{hook thread_post_list_title_middle.htm}-->
+                    </div>
+                    <div>
+                        <!--{hook thread_post_list_title_right.htm}-->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled postlist">
+                    <?php include _include(APP_PATH . 'view/htm/post_list.inc.htm'); ?>
+                    <?php if (!empty($user)) : ?>
+                        <!--{hook stately_thread_newpost_form.htm}-->
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </section>
+
+    <?php endif; ?>
+
+    <!--{hook thread_postlist_after.htm}-->
+    <?php if ($pagination) : ?>
+        <nav>
+            <ul class="pagination mt-4 mb-5 justify-content-center flex-wrap">
+                <?= $pagination; ?>
+            </ul>
+        </nav>
+    <?php endif; ?>
+    <!--{hook thread_page_after.htm}-->
+</section>
+
+<script id="article_img_shadow_js">
+    let header_section = document.querySelector(".article-header-section");
+    let cover_element = document.querySelector(".article-cover>img.article-cover-image");
+
+    if (header_section && header_section.classList.contains("cover-shadow-colorful") && cover_element) {
+        let img_shadow = document.createElement("img");
+        img_shadow.setAttribute("src", cover_element.getAttribute("src"));
+        img_shadow.setAttribute("alt", cover_element.getAttribute("alt"));
+        let img_shadow_container = document.createElement("div");
+        img_shadow_container.className = "img-shadow";
+        img_shadow_container.appendChild(img_shadow);
+        document.querySelector(".article-cover").appendChild(img_shadow_container);
+    }
+</script>

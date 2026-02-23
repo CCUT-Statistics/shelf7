@@ -1,0 +1,12 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['thread']['show_floor_number']): ?>
+<!--{hook post_list_inc_floor_before.htm}-->
+<span class="floor-parent">
+    <?php 
+    if( boolval($abs_theme_stately_setting['special']['post_floor_replace']['enable']) && !empty($abs_theme_stately_setting['special']['post_floor_replace']['floor_1'])) :
+        echo $abs_theme_stately_setting['special']['post_floor_replace']['floor_1'];
+    else:
+        echo '<span class="floor">1</span>' . lang('floor');
+    endif; ?>
+</span>
+<!--{hook post_list_inc_floor_after.htm}-->
+<?php endif; ?>

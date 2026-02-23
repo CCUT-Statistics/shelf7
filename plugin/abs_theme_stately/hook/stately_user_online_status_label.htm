@@ -1,0 +1,10 @@
+<?php
+	foreach(online_list_cache() as $online_user) { 
+		if($online_user['uid'] == $_user['uid']){
+		echo "<li><span class='badge bg-label-success'>在线</span></li>";
+		break;
+		} else { 
+			continue; 
+		}
+	}
+?>

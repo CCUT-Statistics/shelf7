@@ -1,0 +1,139 @@
+<?php if($route == 'index' && $abs_theme_stately_setting['custom_content']['homepage_cta']['enable'] 
+&& ( ($abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'only_guest' && !$user) || ( $abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'always' ) )
+) : ?>
+<?php if(
+    $abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'always' ||
+    $abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'only_guest' && !$user
+    ): 
+    $cta_button_1 = '';
+    $cta_button_2 = '';
+    $cta_button_3 = '';
+    $cta_button_4 = '';
+    for ($i=1; $i < 5; $i++) { 
+        $cta_button_var_name = 'cta_button_' . $i;
+        
+        if(!empty($abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['href'])) {
+            ${$cta_button_var_name . '_href'} = $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['href'];
+            switch(${$cta_button_var_name . '_href'}) {
+                case '__login__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('user-login') . '"';
+                break;
+                case '__register__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('user-create') . '"';
+                break;
+                case '__thread_create__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('thread-create-0') . '"';
+                break;
+                case '__my__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('my') . '"';
+                break;
+                case '__login_modal__':
+                ${$cta_button_var_name . '_href'} = 'href="#" data-bs-toggle="modal" data-bs-target="#loginModal"';
+                break;
+                default:
+                ${$cta_button_var_name . '_href'} = 'href="' . ${$cta_button_var_name . '_href'} . '"';
+                break;
+            }
+            if( 
+                $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['visibility'] === 'all'
+                || $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['visibility'] === 'guest_only' && !$user
+                || $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['visibility'] === 'login_only' && $user
+             ) {
+                ${$cta_button_var_name} .= '<a ' . ${$cta_button_var_name . '_href'} . ' class="cta-btn btn btn-' . $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['style'] . '">' . $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['content'] . '</a>';
+            }
+        }
+    }
+    ?>
+
+<?php 
+    $stately_homepage_cta_hero_text_class = '';
+    switch($abs_theme_stately_setting['custom_content']['homepage_cta_hero_setting']['text_color']) {
+        case 'dark':
+        $stately_homepage_cta_hero_text_class = 'text-black';
+        break;
+        case 'light':
+        default:
+
+        $stately_homepage_cta_hero_text_class = 'text-white';
+        break;
+    }
+    
+    
+    switch($abs_theme_stately_setting['custom_content']['homepage_cta']['style'] ): 
+		case 'pos_hero__img_back': ?>
+<div id="stately_cta_hero" class="jumbotron jumbotron-fluid" style="background-image:url(<?= $abs_theme_stately_setting['custom_content']['homepage_cta']['image'] ?>)">
+    <div class="container text-center">
+        <section class="<?= $stately_homepage_cta_hero_text_class ?>">
+            <h2 class="display-5 <?= $stately_homepage_cta_hero_text_class ?>"><?= !empty($user) ? str_replace('__username__', $user['username'],$abs_theme_stately_setting['custom_content']['homepage_cta']['title_login']) : $abs_theme_stately_setting['custom_content']['homepage_cta']['title'] ?></h2>
+            <?= !empty($user) ? htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['homepage_cta']['content_login']) : htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['homepage_cta']['content']) ?>
+            <?= $cta_button_1 ?>
+            <?= $cta_button_2 ?>
+            <?= $cta_button_3 ?>
+            <?= $cta_button_4 ?>
+        </section>
+
+        <?php if($abs_theme_stately_setting['custom_content']['homepage_cta_hero_setting']['show_search_form']): ?>
+        <section>
+            <form action="<?= url('search') ?>" class="hero_search_container">
+                <div class="input-group input-group-merge">
+                    <div class="form-floating ">
+                        <input type="text" class="form-control" id="hero_search" name="keyword" autocomplete="off" placeholder=" ">
+                        <label for="hero_search"><?= $abs_theme_stately_setting['global']['search']['placeholder'] ?></label>
+                    </div>
+                    <span class="input-group-text p-0"><button class="btn btn-sm btn-link" type="submit"><span class="la la-search"></span></button></span>
+                </div>
+                <?php if($abs_theme_stately_setting['custom_content']['homepage_cta_hero_setting']['show_search_hot_keywords']): ?>
+
+                <ul class="list-inline d-inline-block mb-0">
+                    <?php
+                        $stately_search_hot_keywords = explode('|', $abs_theme_stately_setting['global']['search']['hot_keywords']);
+                        foreach ($stately_search_hot_keywords as $hot_keyword) :
+                        ?>
+                    <li class="list-inline-item"><a href="<?= url('search-' . $hot_keyword) ?>" class="badge bg-label-secondary">
+                            <?= $hot_keyword ?>
+                        </a></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif;?>
+            </form>
+        </section>
+        <?php endif;?>
+
+        <?php if($abs_theme_stately_setting['custom_content']['homepage_cta_hero_setting']['show_site_stats']): ?>
+        <section class="mt-5 stats text-center">
+            <div class="row">
+    
+                <div class="col-12 sr-only">
+                    <h3 class="h2">站点统计</h3>
+                    <p>以下是我们网站的一些关键数据。</p>
+                </div>
+                <div class="col-sm-4">
+                    <p class="display-3 text-primary"><i class="la la-copy"></i></p>
+                    <h3 class="fs-5"><?=  lang('threads');?></h3>
+                    <b class="h2"><?=  $runtime['threads'];?></b>
+                </div>
+                <div class="col-sm-4">
+                    <p class="display-3 text-primary"><i class="la la-commenting"></i></p>
+                    <h5 class="fs-5"><?=  lang('posts');?></h5>
+                    <b class="h2"><?=  $runtime['posts'];?></b>
+                </div>
+                <div class="col-sm-4">
+                    <p class="display-3 text-primary"><i class="la la-users"></i></p>
+                    <h3 class="fs-5"><?=  lang('users');?></h3>
+                    <b class="h2"><?=  $runtime['users'];?></b>
+                </div>
+            </div>
+        </section>
+        <?php endif;?>
+        
+    </div>
+</div>
+<?php break; default: ?>
+<?php break; endswitch; ?>
+
+<!--{hook stately_cta_invite_user.htm}-->
+
+<?php endif; endif;?>
+
+
+

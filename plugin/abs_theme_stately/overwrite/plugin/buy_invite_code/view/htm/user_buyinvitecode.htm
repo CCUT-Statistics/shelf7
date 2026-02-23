@@ -1,0 +1,57 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+
+<div class="row">
+	<div class="col-lg-6 mx-auto">
+		<ul class="nav nav-pills justify-content-center mb-3 ">
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-buyinvitecode');?>" data-active="user-buyinvitecode">购买邀请码</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-invitecode');?>" data-active="user-invitecode">查询订单</a>
+			</li>
+		</ul>
+		<div class="card">
+			<div class="card-body">
+				<form action="<?php echo url('user-buyinvitecode');?>" method="post" id="form">
+				<?php if($kv['invite_codeprompt']){?>
+					<div class="alert alert-info"><?php echo $kv['invite_codeprompt'];?></div>
+				<?php }?>
+
+					<div class=" form-group">
+						<label>购买数量</label>
+						<input class="form-control" value="1" readonly>
+						<span class="">需支付 <strong id="desamount" class="text-primary"><?php echo $kv['invite_codeprice'];?></strong> 元</span>
+					</div>
+					
+					
+					
+					  <div class=" form-group">
+						<label class="mr-3">失效时间</label>
+						<span class="ml-4"><?php echo date('Y-m-d H:i',$time+86400 * 10);?></span>
+					  </div>
+
+					  <div class="form-group row gx-0">
+						<label class="mx-3">支付方式</label>
+						<div class="ml-4 threadlist">
+							<?php
+								foreach ($kv['invite_pay'] as $key => $value) {
+									if($value == 1) $type ='支付宝';
+									if($value == 2) $type ='微信';
+									if($value == 3) $type ='QQ';
+									echo '<label class="custom-input custom-radio mr-2"><input class="mr-1" type="radio" name="invite_buy" value="'.$value.'">'.$type.'</label>';
+								}	
+							?>
+							
+						</div>
+					  </div>
+					<button class="btn btn-primary btn-block payinvitecode" data-modal-url="<?php echo url("user-payinvitecode");?>" data-modal-title="购买邀请码" data-modal-arg=".threadlist" data-modal-size="md"><?php echo lang('next_step');?></button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+$('a[data-active="user-buyinvitecode"]').addClass('active');
+$("input[name='invite_buy']:first").click();
+</script>

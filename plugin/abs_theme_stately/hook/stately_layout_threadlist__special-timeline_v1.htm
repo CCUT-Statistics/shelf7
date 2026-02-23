@@ -1,0 +1,52 @@
+<li class="thread my-2 timeline-item <?= $_thread['top_class'];?>" data-tid="<?= $_thread['tid'];?>">
+    <span class="timeline-point-wrapper"><span class="timeline-point <?php if($_thread['top']==1){ echo 'timeline-point-warning';}elseif($_thread['top']==3){echo 'timeline-point-danger';}elseif($_thread['closed']){echo 'timeline-point-secondary';}else{ echo 'timeline-point-primary';}?> "></span></span>
+    <div class="timeline-event">
+
+        <time class="small text-muted">
+            <?= $_thread['create_date_fmt'];?>
+        </time>
+
+        <h3 class="h5 my-2">
+            <!--{hook stately_threadlist_checkbox.htm}-->
+
+            <!--{hook stately_threadlist_subject.htm}-->
+        </h3>
+
+        <div class="card-text my-2">
+            <?= $_post_message_excerpt ?>
+        </div>
+
+        <?php if(!is_null($_post_message_image)): ?>
+        <!--{hook stately_threadlist_images_sns.htm}-->
+        <?php endif; ?>
+        <div class="mt-2 card-actions">
+            <a href="<?= url('user-'.$_thread['uid']);?>" class="mb-0 h6">
+                <span class="v_avatar v_avatar-post">
+                    <img loading="lazy" decoding="async" src="<?= $_thread['user_avatar_url'];?>" class="w-px-20 img-fluid rounded-circle">
+                    <!--{hook thread_list_inc_avatar_after.htm}-->
+                </span>
+                <!--{hook stately_threadlist_username.htm}-->
+            </a>
+
+            <?php if($fid == 0): ?>
+            <a href="<?= url('forum-'.$_thread['fid']);?>" class="btn btn-xs bg-label-primary">
+                <i class="las la-comment"></i>
+                <?= $_thread['forumname'] ?>
+            </a>
+            <?php endif; ?>
+
+            <!--{hook stately_threadlist_views_count.htm}-->
+            <!--{hook stately_threadlist_posts_count_with_lastuid.htm}-->
+        </div>
+
+
+
+
+
+
+
+
+
+
+    </div>
+</li>

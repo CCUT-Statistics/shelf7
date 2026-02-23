@@ -1,0 +1,320 @@
+
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+
+<?php
+	// 公用一个模板
+	if($route == 'thread' && $action == 'create') {
+		$form_title = lang('thread_create');
+		$form_action = url("thread-create");
+		$form_submit_txt = lang('thread_create');
+		$form_subject = '';
+		$form_message = '';
+		$form_doctype = 1;
+		$isfirst = 1;
+		$quotepid = 0;
+		$location = url("forum-'+jfid.checked()+'");
+		$filelist = array();
+	} elseif($route == 'post' && $action == 'update') {
+		$form_title = lang('post_update');
+		$form_action = url("post-update-$pid");
+		$form_submit_txt = lang('post_update');
+		$form_subject = $thread['subject'];
+		$form_message = $post['message'];
+		$form_doctype = $post['doctype'];
+		$isfirst = $post['isfirst'];
+		$quotepid = $post['quotepid'];
+		$location = url("thread-$tid");
+	} elseif($route == 'post' && $action == 'create') {
+		$form_title = lang('post_create');
+		$form_action = url("post-create-$tid-0");
+		$form_submit_txt = lang('post_create');
+		$form_subject = '';
+		$form_message = '';
+		$form_doctype = 1;
+		$isfirst = 0;
+		//$quotepid = 0;
+		$location = url("thread-$tid");
+		$filelist = array();
+	}
+	
+	// hook post_start_init.htm
+	
+	$filelist += (array)_SESSION('tmp_files');
+?>
+<div id="postPage">
+<!--{hook post_start.htm}-->
+<form action="<?php echo $form_action;?>" method="post" id="form">
+<div class="row">
+	<div class="col-12 col-lg-8 mx-auto pr-lg-0">
+		<div class="card">
+			<div class="card-header">
+				<?php echo $form_title; ?>
+			</div>
+			<div class="card-body">
+				
+					<input type="hidden" name="doctype" value="<?php echo $form_doctype;?>" />
+					<input type="hidden" name="quotepid" value="<?php echo $quotepid;?>" />
+						<!--{hook post_subject_after_custom.htm}-->
+					
+					<?php if($isfirst) { ?>
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="<?php echo lang('subject');?>" name="subject" value="<?php echo $form_subject;?>" id="subject">
+						</div>
+						<?php } ?>
+
+					<div class="form-group">
+						<textarea class="form-control" placeholder="<?php echo lang('message');?>" name="message" id="message" style="height: 300px;"><?php echo $form_message;?></textarea>
+					</div>
+					
+					
+
+					<div class="d-flex justify-content-between">
+						<div class="attachlist_parent1">
+					<?php if(!$isfirst) { ?>
+							<a class="small text-left" href="javascript:void(0)">
+								<label class="addattach" id="addattach">
+									<i class="icon-folder-open-o"></i> 
+									<?php echo lang('add_attach');?>
+									<input type="file"  multiple="multiple" class="invisible" />
+								</label>
+							</a>
+							<?php echo post_file_list_html($filelist, TRUE);?>
+						<?php } ?>
+							<!--{hook post_bottom_right.htm}-->
+						</div>
+						<div class="text-right">
+					<?php if($isfirst) { ?>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+							发表主题
+						</button>
+						<?php }else{ ?>
+							<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?php echo lang('submiting');?>..."> <?php echo $form_submit_txt;?> </button>
+						<?php } ?>
+							<!--{hook post_bottom_left.htm}-->
+						</div>
+					</div>
+					
+					<!--{hook post_submit_after.htm}-->
+					
+				
+			</div>
+		</div>
+	</div>
+	<?php if($isfirst) { ?>
+	<div class="col-12 col-lg-4 mx-auto position-relative">
+		<div class="card sticky-top-item sticky-top" style="top: 5.4rem;">
+			
+			<el-tabs v-model="activeName" type="card" stretch="true" @tab-click="handleClick">
+				
+				<el-tab-pane label="功能" name="first">
+					<div class="p-3">
+						<!--{hook post_fid_before.htm}-->
+					
+					<!--{hook post_subject_before.htm}-->
+					<!-- <div class="form-group">
+						<input type="text" class="form-control" placeholder="<?php echo lang('subject');?>" name="subject" value="<?php echo $form_subject;?>" id="subject">
+					</div> -->
+					<!--{hook post_subject_after.htm}-->
+					<!--{hook post_message_after.htm}-->
+					</div>		
+				</el-tab-pane>
+				<el-tab-pane label="附件" name="second">
+					<div class="p-3">
+						<div class="attachlist_parent">
+							<div class="text-center " style="border: 1px dashed #dbdbdb;">
+									<label class="addattach mb-0 w-100 py-2" id="addattach" style="cursor: pointer;">
+										<i class="icon-folder-open-o"></i> 
+										<?php echo lang('add_attach');?>
+										<input type="file"  multiple="multiple" class="invisible d-none" />
+									</label>
+							</div>
+							<?php echo post_file_list_html($filelist, TRUE);?>
+						</div>
+					</div>
+				</el-tab-pane>
+			  </el-tabs>
+
+	</div>
+	<?php if (isset($light_config['site_annoucement_switch']) && $light_config['site_annoucement_switch'] == 1 && $light_config['thread_post_annoucement']) {?> 
+
+		<div class="card">
+			<div class="card-header">
+				发帖公告
+			</div>
+			<div class="card-body">
+    			<?php echo $light_config['thread_post_annoucement'] ;?>
+			</div>
+		</div>
+		<?php }?>
+		
+	</div>
+	<?php } ?>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="staticBackdropLabel">选择分类</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<div class="form-group">
+				<!--{hook post_fid_select_before.htm}-->
+				<div class="forumlist">
+						<?php foreach ($forumlist_allowthread as $forum) { ?>
+							<label class="tagSelect">
+							  <input type="radio" name="fid" value="<?php echo $forum['fid']; ?>" class="forum-radio" <?php if ($forum['fid'] == $fid) echo 'checked'; ?>>
+							 <div class="text-center">
+								<div>
+									<img class="avatar-3 rounded-circle " src="<?php echo $forum['icon_url'];?>" style="width: 40px;height: 40px;">
+
+								</div>
+								<div>
+									<?php echo $forum['name']; ?>
+
+								</div>
+							 </div> 
+							</label>
+						  <?php } ?>
+				  </div>
+				<!--{hook post_fid_select_after.htm}-->
+			</div>
+			<!--{hook post_fid_select_tags.htm}-->
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+		  <!-- <button type="button" class="btn btn-primary">确认并发布</button> -->
+			<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?php echo lang('submiting');?>..."> <?php echo $form_submit_txt;?> </button>
+
+		</div>
+	  </div>
+	</div>
+  </div>
+
+</form>
+
+
+<!--{hook post_end.htm}-->
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+
+var vm = new Vue({
+        el: "#postPage",
+        data() {
+          return {
+			drawer: false,
+        	direction: 'rtl',
+			activeName: 'first',
+
+		  };
+        },
+        methods: {
+			handleClose(done) {
+            this.drawer = false;
+      	},
+	  handleClick(tab, event) {
+			console.log(tab, event);
+		  },
+		},
+        mounted() {},
+        created() {},
+      });
+
+var jform = $('#form');
+var jsubmit = $('#submit');
+var isFirstFloor = <?php echo $isfirst;?>;
+// var jfid = jform.find('select[name="fid"]');
+var jforumRadios = $('.forum-radio');
+jform.on('submit', function() {
+	var selectedFid = jforumRadios.filter(':checked').val();
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serialize();
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(!selectedFid && isFirstFloor){
+			$.alert('请选择板块！');
+			jsubmit.button('reset');
+			return
+		}
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.button(message).delay(1000).location('<?php echo $location;?>');
+		} else if(xn.is_number(code)) {
+			alert(message);
+			jsubmit.button('reset');
+		} else {
+			$.alert(message);
+			//jform.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+
+var jattachparent = $('.attachlist_parent');
+$('#addattach').on('change', function(e) {
+	var files = xn.get_files_from_event(e);
+	if (!files) return;
+	
+	// 并发下会 服务端 session 写入会有问题，由客户端控制改为串行
+	if (!jattachparent.find('.attachlist').length) {
+		jattachparent.append('<fieldset class="fieldset"><legend><?php echo lang('uploaded_attach');?></legend><ul class="attachlist"><ul></fieldset>');
+	}
+	
+	var jprogress = jattachparent.find('.progress');
+	if(!jprogress.length) {
+		jprogress = $('<div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div>').appendTo(jattachparent);
+	}
+	jprogressbar = jprogress.find('.progress-bar');
+
+	$.each_sync(files, function(i, callback) {
+		var file = files[i];
+		xn.upload_file(file, xn.url('attach-create'), {is_image: 0}, function(code, message) {
+			if (code != 0) return $.alert(message);
+			// 把文件 append 到附件列表
+			var url = message.url;
+			var filetype = message.filetype;
+			var aid = message.aid;
+			$('.attachlist').append('<li aid="' + aid + '"><a href="' + message.url + '" target="_blank"><i class="icon filetype ' + filetype + '"></i> ' + message.orgfilename + '</a> <a href="javascript:void(0);" class="delete ml-2"><i class="icon-remove"></i> <?php echo lang('delete');?></a></li>');
+			callback();
+			jprogress.hide();
+		}, function(percent) {
+			percent = xn.intval(percent);
+			jprogressbar.css('width', percent+'%');
+			jprogressbar.text(percent+'%');
+			jprogress.show();
+			console.log('progress:'+ percent); 
+		});
+	});
+});
+
+// 删除附件
+jattachparent.on('click', 'a.delete', function() {
+	var jlink = $(this);
+	var jli = jlink.parents('li');
+	var aid = jli.attr('aid');
+	if(!window.confirm(lang.confirm_delete)) return false;
+	$.xpost(xn.url('attach-delete-'+aid), function(code, message) {
+		if(code != 0) return $.alert(message);
+		jlink.parent().remove();
+	});
+	return false;
+})
+
+jforumRadios.on('change', function() {
+  jforumRadios.prop('checked', false); // 取消其他按钮的选中状态
+  $(this).prop('checked', true); // 将当前按钮标记为选中状态
+  console.log($(this).val());
+});
+
+// jform.find('.jforumRadios').checked(<?php echo $fid;?>);
+$('li[data-active="bbs"]').addClass('active');
+$('li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+
+</script>
+
+<!--{hook post_js.htm}-->

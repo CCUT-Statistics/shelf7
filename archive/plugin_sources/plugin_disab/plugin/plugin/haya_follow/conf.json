@@ -1,0 +1,15 @@
+{
+    "name": "用户关注",
+    "brief": "关注自己喜欢的用户",
+    "version": "1.6.5",
+    "author": "deatil",
+    "id": "haya_follow",
+    "bbs_version": "4.0.3",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": {
+        "my_common_mobile_my_thread_after": 800,
+        "my_common_my_thread_after": 800
+    },
+    "dependencies": []
+}

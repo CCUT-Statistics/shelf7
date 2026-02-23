@@ -1,0 +1,105 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<div class="row">
+	<div class="col-lg-8 mx-auto">
+		<ul class="nav nav-pills justify-content-center">
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-buyinvitecode');?>" data-active="user-buyinvitecode"><?php echo lang('buyinvitecode');?></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-invitecode');?>" data-active="user-invitecode"><?php echo lang('invitecode');?></a>
+			</li>
+		</ul>
+		<div class="card mt-3">
+
+			<div class="card-body">
+				<div class="card-body pb-0">
+					<?php if($invitecode['invite_orderexplain']){?>
+					<div class="alert alert-info"><?php echo $invitecode['invite_orderexplain'];?></div>
+					<?php }?>
+					<div class="form-group input-group">
+						<input type="text" name="keyword" id="keyword" placeholder="<?php echo lang('email');?>" value="<?php echo $kwd;?>" class="form-control" />
+						<div class="input-group-append"><button id="search" class="btn btn-primary px-5"><?php echo lang('search');?></button></div>
+					</div>
+					<?php if($invitelist){?>
+					<?php foreach ($invitelist as $invite){?>
+					<div class="shadow-lg px-3 mb-3 bg-white rounded threadlist">
+						<div class="text-muted d-flex justify-content-between thread">
+							<span>创建时间</span>
+							<span><?php echo date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'],$invite['invite_createtime']);?></span>
+						</div>
+						<div class="text-muted d-flex justify-content-between thread">
+							<span>订单号</span>
+							<span><?php echo $invite['invite_order'];?></span>
+						</div>
+						<div class="text-muted d-flex justify-content-between thread">
+							<span>支付方式</span>
+							<span><?php echo lang($invite['invite_payway']);?></span>
+						</div>
+						<div class="text-muted d-flex justify-content-between thread">
+							<span>订单状态</span>
+							<span><?php echo lang('inviteState'.$invite['invite_state']);?> <?php $_chaorder = syn_api($invite['invite_order']); if($invite['invite_state'] != 1 && $_chaorder && $_chaorder['code'] == 1){ echo $_chaorder['out_trade_no'] == $invite['invite_order'] && $_chaorder['status'] == 1 && $invite['invite_state'] != 1 ? '<a href="javascript:;" class="syn" id="syn" data-toggle="tooltip" title="同步订单" data-order="'.$invite['invite_order'].'"><i class="icon-repeat text-muted text-small"></i></a>' :'';}?></span>
+						</div>
+
+						<div class="text-muted d-flex justify-content-between thread">
+							<span>失效时间</span>
+							<span><?php echo date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'],$invite['invite_createtime']+86400 * 10);?></span>
+						</div>
+						<?php if($invite['invite_state'] == 1){ ?>
+						<div class="text-muted text-center thread">
+							<span>邀请码：<span class="text-danger"><?php echo $invite['invite_code'];?></span></span>
+
+						</div>
+						<?php }?>
+					</div>
+					<?php }?>
+					<?php }else{?>
+					<div class="p-4 mb-3 bg-white rounded text-center">
+						<span class="text-muted">暂无记录</span>
+					</div>
+					<?php }?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+	$('a[data-active="user-invitecode"]').addClass('active');
+	var jsearch = $("#search");
+	jsearch.on('click', function () {
+		var keyword = $("#keyword").val();
+		if (keyword) {
+			if (xn.is_email(keyword)) {
+				var url = xn.url('user-invitecode') + "?kwd=" + xn.urlencode(keyword);
+				window.location = url;
+			} else {
+				$.alert('邮箱格式错误');
+			}
+		} else {
+			$.alert('请输入邮箱');
+		}
+	});
+	$('tbody tr td .syn').on('click', function () {
+		var jsyn = $("#syn");
+		var order = $(this).data('order');
+		var postdata = { order: order };
+		$.confirm('确认同步该笔订单？', function () {
+			$.xpost(xn.url('user-syn'), postdata, function (code, message) {
+				if (code == 0) {
+					$.alert(message);
+					jsyn.delay(1000).location();
+				} else if (xn.is_number(code)) {
+					$.alert(message);
+					jsyn.button('reset');
+				} else {
+					jform.find('[name="' + code + '"]').alert(message).focus();
+					jsyn.button('reset');
+				}
+			});
+			return false;
+		});
+	});
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+</script>

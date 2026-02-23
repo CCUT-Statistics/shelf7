@@ -1,0 +1,11 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['global']['breadcrumb_position'] === 'navbar'): ?>
+<!--{hook stately_breadcrumb.htm}-->
+<?php elseif ($abs_theme_stately_setting['ui']['global']['show_navbar_page_title']) : ?>
+<div class="nav-item navbar-page-title text-truncate <?= $abs_theme_stately_setting['ui']['global']['navbar_style'] === 'horizontal' ? 'd-xl-none' : '' ?>">
+    <?php if ($route == 'thread' && is_numeric(param(1))) : ?>
+    <?= $thread['subject']; ?>
+    <?php elseif ($header['mobile_title']) : ?>
+    <?= $header['mobile_title']; ?>
+    <?php endif; ?>
+</div>
+<?php endif; ?>

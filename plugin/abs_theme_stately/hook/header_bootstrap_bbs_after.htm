@@ -1,0 +1,203 @@
+<?php if (!is_null($abs_theme_stately_setting)) : ob_start(); $bs_primary_hsl = hexToHsl($abs_theme_stately_setting['ui']['color']['theme'], true); ?>
+
+<style id="stately_custom_css">
+	/* 主题主色调 */
+	:root {
+		--bs-primary-h: <?=$bs_primary_hsl['h'] ?>;
+		--bs-primary-s: <?=$bs_primary_hsl['s'] ?>;
+		--bs-primary-l: <?=$bs_primary_hsl['l'] ?>;
+		--bs-primary-rgb: <?=hexrgb($abs_theme_stately_setting['ui']['color']['theme']) ?>;
+		--bs-primary: hsl(var(--bs-primary-h), calc(var(--bs-primary-s) * 1%), calc(var(--bs-primary-l) * 1%));
+	}
+
+	<?php unset($bs_primary_hsl);
+	?>
+
+	/* 容器背景色 */
+	.light-style,
+	[data-bs-theme=light] {
+		--bs-body-color: <?=$abs_theme_stately_setting['ui']['color']['color_body_light'] ?>;
+		--bs-body-color-rgb: <?=hexrgb($abs_theme_stately_setting['ui']['color']['color_body_light']) ?>;
+		--bs-body-color-bright: <?=$abs_theme_stately_setting['ui']['color']['color_body_bright_light'] ?>;
+		--bs-body-color-bright-rgb: <?=hexrgb($abs_theme_stately_setting['ui']['color']['color_body_bright_light']) ?>;
+		--card-background-rgb: <?=hexrgb($abs_theme_stately_setting['ui']['color']['color_card_light']) ?>;
+	}
+
+	.dark-style,
+	[data-bs-theme=dark] {
+		--bs-body-color: <?=$abs_theme_stately_setting['ui']['color']['color_body_dark'] ?>;
+		--bs-body-color-rgb: <?=hexrgb($abs_theme_stately_setting['ui']['color']['color_body_dark']) ?>;
+		--bs-body-color-bright: <?=$abs_theme_stately_setting['ui']['color']['color_body_bright_dark'] ?>;
+		--bs-body-color-bright-rgb: <?=hexrgb($abs_theme_stately_setting['ui']['color']['color_body_bright_dark']) ?>;
+		--card-background-rgb: <?=hexrgb($abs_theme_stately_setting['ui']['color']['color_card_dark']) ?>;
+	}
+
+	<?php if (in_array($abs_theme_stately_setting['ui']['background']['style'], ['color', 'image'], true)) : ?>
+
+	/* 自定义背景色 */
+	.light-style,
+	[data-bs-theme=light] {
+		--bs-body-bg: <?=$abs_theme_stately_setting['ui']['background']['color_light'] ?>
+	}
+
+	.dark-style,
+	[data-bs-theme=dark] {
+		--bs-body-bg: <?=$abs_theme_stately_setting['ui']['background']['color_dark'] ?>
+	}
+
+	<?php if($abs_theme_stately_setting['ui']['background']['style']==='image'): ?>
+
+	/* 自定义背景图 */
+	body {
+		background: var(--bs-body-bg) <?=kumquat_css_background_image_assemble($abs_theme_stately_setting['ui']['background']['image']);
+		?>
+	}
+
+	<?php endif;
+	/* background style=image */
+	?><?php endif;
+	/* style=color,image */
+	?><?php if ($abs_theme_stately_setting['ui']['global']['semitransparent_card']) : ?>
+
+	/* 容器背景半透明 */
+	.light-style,
+	[data-bs-theme=light] {
+		--card-background-opacity: 0.75;
+	}
+
+	.dark-style,
+	[data-bs-theme=dark] {
+		--card-background-opacity: 0.95;
+	}
+
+	<?php else :
+
+	/* semitransparent_card */
+	?>:root {
+		--card-background-opacity: 1;
+	}
+
+	<?php endif;
+	/* semitransparent_card */
+	?><?php if ($abs_theme_stately_setting['ui']['global']['blurred_card']) : ?>
+
+	/* 容器背景模糊 */
+	.threadlist .card,
+	.dropdown-menu,
+	.authentication-wrapper .authentication-bg {
+		backdrop-filter: blur(5px);
+	}
+
+	:not(.threadlist) .card:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		backdrop-filter: blur(5px);
+		z-index: -1;
+	}
+
+	<?php endif;
+	/* blurred_card */
+	?>
+
+	/* 应用容器背景效果 */
+	.card {
+		--bs-card-bg: rgba(var(--card-background-rgb), var(--card-background-opacity, 1));
+	}
+
+	.accordion-item {
+		--bs-accordion-bg: rgba(var(--card-background-rgb), var(--card-background-opacity, 1));
+	}
+
+	.dropdown-menu {
+		--bs-dropdown-bg: rgba(var(--card-background-rgb), var(--card-background-opacity, 1));
+	}
+	
+	.bg-navbar-theme,
+	.form-control,
+	.form-select,
+	.input-group-text,
+	.tab-content {
+		background-color: rgba(var(--card-background-rgb), var(--card-background-opacity, 1));
+	}
+
+	.authentication-wrapper .authentication-bg {
+		background-color: rgba(var(--card-background-rgb), var(--card-background-opacity, 1));
+	}
+
+	<?php if (in_array($abs_theme_stately_setting['ui']['background']['style'], array('art_gridient', 'art_image'))) : ?>
+	/* Art Background */
+		
+	.light-style, [data-bs-theme=light] {
+        --bs-body-bg: <?=$abs_theme_stately_setting['ui']['background']['color_light'] ?>
+    }
+
+    .dark-style, [data-bs-theme=dark]  {
+        --bs-body-bg: <?=$abs_theme_stately_setting['ui']['background']['color_dark'] ?>
+    }
+	
+	.bg-art-decoration {
+		height: 66.666vh;
+		background-image: var(--bg-art-decoration-image, linear-gradient(-45deg, var(--bg-art-decoration-color-2, var(--sn-border-primary-light)) 0%, var(--bg-art-decoration-color-1, var(--bs-primary)) 33%, var(--bg-art-decoration-color-2, var(--sn-border-primary-light)) 100%));
+		top: 0;
+		left: 0;
+		width: 100%;
+		overflow: hidden;
+		background-attachment: fixed;
+		position: fixed;
+	}
+
+	.bg-art-decoration svg {
+		left: -2px;
+		width: 100%;
+		bottom: -32px;
+		height: auto;
+		position: absolute;
+		transform: scale(1.1, 0.8);
+		transform-origin: bottom;
+		fill: var(--bs-body-bg);
+	}
+
+	.bg-art-decoration~.layout-page .card-threadlist .nav.nav-pills {
+		background: var(--bs-body-bg);
+		border-radius: 0.375rem;
+	}
+
+	.layout-navbar-fixed :not(.scrolled) .layout-wrapper:not(.layout-horizontal) .layout-page:before {
+		opacity: 0;
+	}
+
+	<?php if ($abs_theme_stately_setting['ui']['background']['art_gridient_shift_homepage_content']) : ?>.route-index .content-wrapper {
+		padding-top: 50vh;
+	}
+
+	<?php endif; /* art_gridient_shift_homepage_content */?>
+	
+	<?php endif; /* style=art_gridient,art_image */
+	?><?php if ($abs_theme_stately_setting['ui']['global']['navbar_style']==='vertical' && $abs_theme_stately_setting['ui']['global']['navbar_width_horizontal']==='fullwidth') : ?>.app-brand .layout-menu-toggle {
+		top: 0.8rem;
+	}
+
+	<?php endif;/* navbar_style:vertical, navbar_width_horizontal:fullwidth */ ?>
+	
+	<?php if ($abs_theme_stately_setting['ui']['background']['style']==='special_StarryNight') : ?>
+	/* 星夜背景 */
+		#StarryNight~.layout-page .card-threadlist .nav.nav-pills {
+		background: var(--bs-body-bg);
+		border-radius: 0.375rem;
+	}
+	<?php endif;/* special_StarryNight */?>
+	/* 自定义 */
+	<?= html_entity_decode($abs_theme_stately_setting['custom_code']['css']['header']); ?>
+
+</style>
+
+<?php 
+$stately_custom_css = ob_get_clean();
+$stately_asset_css->addCssCode(str_replace(['<style id="stately_custom_css">','</style>'],['',''],$stately_custom_css));
+unset($stately_custom_css);
+
+endif; /* stately_custom_css */ ?>

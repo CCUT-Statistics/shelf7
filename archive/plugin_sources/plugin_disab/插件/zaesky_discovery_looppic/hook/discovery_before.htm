@@ -1,0 +1,58 @@
+<?php
+$slidelist = db_find('swiperpic', array(), array('slideid'=>1), 1, 1000, 'slideid');
+?>
+    <!-- <div class="col mb-3">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                    <?php if($slidelist) { foreach ($slidelist as $key => $link) { ?>
+                <div class="swiper-slide">
+                    <a href="<?php echo $link['url'];?>" title="<?php echo $link['name'];?>">
+                        <img class="d-block w-100" src="<?php echo $link['slidepic'];?>" alt="<?php echo $link['name'];?>">
+                        <div class="carousel-caption">
+                            <h5 class="text-white" style="text-shadow:0px 0px 10px black;"><?php echo $link['name'];?></h5>
+                        </div>
+                    </a>
+                </div>
+                <?php }
+            } ?>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div> -->
+        <el-carousel :interval="4000"  height="18rem" class="mb-3 discovery_looppic">
+            <?php if($slidelist) { foreach ($slidelist as $key => $link) { ?>
+                <el-carousel-item>
+				<a href="<?php echo $link['url'];?>" title="<?php echo $link['name'];?>">
+                  
+                        <el-image src="<?php echo $link['slidepic'];?>" style="width: 100%;height: 100%;" fit="cover">
+                            <div slot="placeholder" class="image-slot">
+                              加载中<span class="dot">...</span>
+                            </div>
+                          </el-image>
+                        </a>
+                  </el-carousel-item>
+                <?php }
+            } ?>
+            
+          </el-carousel>
+	
+
+      <style>
+        .el-carousel__item h3 {
+          color: #475669;
+          font-size: 14px;
+          opacity: 0.75;
+          line-height: 200px;
+          margin: 0;
+        }
+        
+        .el-carousel__item:nth-child(2n) {
+          background-color: #006aff;
+        }
+        
+        .el-carousel__item:nth-child(2n+1) {
+          background-color: #05203f;
+        }
+      </style>

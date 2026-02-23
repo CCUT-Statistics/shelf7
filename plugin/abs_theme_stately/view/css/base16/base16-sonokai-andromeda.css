@@ -1,0 +1,20 @@
+/* Sonokai andromeda by Sainnhe Park (https://github.com/sainnhe/sonokai/) */
+
+:root {
+  --base00: #2b2d3a;/* bg0 */
+  --base01: #333648;/* bg1 */
+  --base02: #393e53;/* bg3 */
+  --base03: #3f445b;/* bg4 */
+  --base04: #7e8294;/* grey */
+  --base05: #e1e3e4;/* fg */
+  --base06: #e1e3e4;/* fg */
+  --base07: #e1e3e4;/* fg */
+  --base08: #fb617e;/* red */
+  --base09: #f89860;/* orange */
+  --base0A: #edc763;/* yellow */
+  --base0B: #9ed06c;/* green */
+  --base0C: #77d5f0;/* bg_blue */
+  --base0D: #6dcae8;/* blue */
+  --base0E: #bb97ee;/* purple */
+  --base0F: #5a5e7a;/* grey_dim */
+}

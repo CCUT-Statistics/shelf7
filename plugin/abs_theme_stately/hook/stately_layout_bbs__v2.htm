@@ -1,0 +1,72 @@
+<div class="row" data-style="bbs_v2"> <?php if($abs_theme_stately_setting['ui_tweek']['bbs']['show_newthread_list']): ?> <div class="col-lg-12 mb-4">
+        <!--{hook stately_layout_bbs__v2__post_list.htm}-->
+    </div> <?php endif; ?> <div class="col-lg-9">
+        <!--{hook widget_sitestats_v4.htm}-->
+        <!--{hook stately_layout_bbs__v2__forum_list.htm}-->
+    </div>
+    <div class="col-lg-3">
+
+        <!--{hook widget_slot_bbs.htm}-->
+        
+        <!--{hook widget_slot_homepage.htm}-->
+    </div>
+</div>
+
+<?php if($route === 'index' && $abs_theme_stately_setting['ui_style']['homepage']['still_show_threadlist']): ?>
+<!--{hook stately_layout_homepage__classic_2col.htm}-->
+<?php endif; ?>
+
+<script>
+    function observeForumItems() {
+        let forumItems = document.querySelectorAll('.discovery_forum_v4');
+        if (forumItems.length !== 0) {
+            forumItems.forEach(item => {
+                let timeoutId; // 用于防抖的定时器
+
+                const resizeObserver = new ResizeObserver(entries => {
+                    // 防抖处理：避免频繁触发
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            for (const entry of entries) {
+                                const width = entry.contentRect.width;
+                                if (width <= 600) { // 调整宽度判断条件
+                                    entry.target.classList.add('small-width');
+                                } else {
+                                    entry.target.classList.remove('small-width');
+                                }
+                            }
+                        });
+                    }, 100); // 延迟 100ms 执行
+                });
+
+                resizeObserver.observe(item);
+            });
+        }
+    }
+
+    // 初始化监听
+    window.addEventListener('DOMContentLoaded', () => {
+        observeForumItems();
+
+        // 修改 .subject.break-all 到 .text-truncate
+        document.querySelectorAll('.discovery_forum_v4 .subject.break-all').forEach(subject => {
+            subject.classList.remove('break-all');
+            subject.classList.add('text-truncate');
+        });
+
+        // 移除 .thread.my-2 上的 my-2 类
+        document.querySelectorAll('.discovery_forum_v4 .thread.my-2').forEach(thread => {
+            thread.classList.remove('my-2');
+        });
+
+        document.querySelectorAll('.discovery_forum_v4 .text-grey, .discovery_forum_v4 .text-gray').forEach(item => {
+            item.classList.remove('text-grey', 'text-gray');
+            item.classList.add('opacity-75');
+        });
+
+        document.querySelectorAll('.discovery_forum_v4 .d-flex.justify-content-between.small').forEach(thread => {
+            thread.classList.add('text-truncate');
+        });
+    });
+</script>

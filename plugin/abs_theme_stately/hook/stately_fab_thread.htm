@@ -1,0 +1,10 @@
+<section class="thread-fab-btn-group">
+    <div class="">
+        <!--{hook thread_fab_btn_before_reply.htm}-->
+        <a href="#postlist" class="btn-light btn-fab" title="<?= lang('reply') ?>" data-bs-toggle="tooltip" onclick="$(window).scrollTop($('.postlist').offset().top - 72);"><i class="las la-comments"></i></a>
+        <span>
+            <?= $thread['posts']; ?>
+        </span>
+        <!--{hook thread_fab_btn_after_reply.htm}-->
+    </div>
+</section>

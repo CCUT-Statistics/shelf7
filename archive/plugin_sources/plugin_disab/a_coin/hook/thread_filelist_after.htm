@@ -1,0 +1,16 @@
+<?php 
+}else{
+	if($first['filelist']){
+		$s = '<ul class="attachlist">'."\r\n";
+		foreach ($first['filelist'] as &$attach) {
+			$s .= '<li aid="'.$attach['aid'].'">'."\r\n";
+			$s .= '		<a href="'.url("attach-download-$attach[aid]").'" target="_blank" onClick="return confirm(\'确定支付'.$thread['attach_golds'].'金币下载附件吗？\')">'."\r\n";
+			$s .= '			<i class="icon filetype '.$attach['filetype'].'"></i>'."\r\n";
+			$s .= '			'.$attach['orgfilename']."\r\n";
+			$s .= '		</a>'."\r\n";
+			$s .= '</li>'."\r\n";
+		};
+		$s .= '</ul>'."\r\n";
+		echo $s;
+	}
+ }?>

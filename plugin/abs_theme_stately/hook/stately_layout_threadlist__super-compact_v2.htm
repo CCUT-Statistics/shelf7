@@ -1,0 +1,35 @@
+<li class="thread col-12">
+    <div class="row thread my-2 <?= $_thread['top_class'];?>" data-tid="<?= $_thread['tid'];?>">
+        <div class="col-auto pl-0">
+            <a href="<?= url('user-'.$_thread['uid']);?>" class="v_avatar v_avatar-post">
+                <img loading="lazy" decoding="async" class="w-px-30 mt-n1" src="<?= $_thread['user_avatar_url'];?>">
+                <!--{hook thread_list_inc_avatar_after.htm}-->
+            </a>
+        </div>
+        <div class="col-5 g-0">
+            <!--{hook stately_threadlist_checkbox.htm}-->
+            <!--{hook stately_threadlist_subject.htm}-->
+        </div>
+        <div class="col g-0 small text-right d-none d-md-block">
+            <a href="<?= url('user-'.$_thread['uid']);?>">
+                <!--{hook stately_threadlist_username.htm}-->
+            </a>
+        </div>
+        <div class="col g-1 small text-right">
+            <?php if($fid == 0): ?>
+            <a class="badge bg-label-secondary" href="<?= url('forum-'.$_thread['fid']);?>">
+                <?= $_thread['forumname'] ?>
+            </a>
+            <?php endif; ?>
+        </div>
+        <div class="col pl-0 small text-right">
+            <!--{hook stately_threadlist_views_count.htm}-->
+            <!--{hook stately_threadlist_posts_count.htm}-->
+        </div>
+        <div class="col-auto small d-none d-md-block">
+            <time class="text-muted">
+                <?= date($abs_theme_stately_setting['global']['datetime_format']['date_only'],$_thread['create_date']);?>
+            </time>
+        </div>
+    </div>
+</li>

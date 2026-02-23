@@ -1,0 +1,30 @@
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-primary p-2" >
+                              <div class="iq-alert-text">
+                    <div class="tickerv-wrap ">
+                        <ol>
+                            <?php
+foreach ( $till_news_ticker_links as $ticker_content ) {
+    
+    if (isset($ticker_content['target'])) {
+        $targetadd = ' target="'.$ticker_content['target'].'"';
+    } else {
+        $targetadd = '';
+    }
+if (isset($ticker_content['icon'])) {
+        $iconadd = '<span class="p-2"><i class="'.$ticker_content['icon'].'"></i></span>';
+    } else {
+        $iconadd = '';
+    }
+    
+    echo('<li>'.$iconadd.'<a href="'.$ticker_content['url'].'"'.$targetadd.'>'.$ticker_content['name'].'</a></li>');
+}
+?>
+                
+                        </ol>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>

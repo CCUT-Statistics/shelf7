@@ -1,0 +1,19 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['homepage_sitebrief']['enable']): ?>
+<?php switch($abs_theme_stately_setting['ui_tweek']['homepage_sitebrief']['style']): case 'v2': ?>
+<!--{hook stately_layout_sitebrief__v2.htm}-->
+<?php break; default: ?>
+<div class="card card-site-info mb-3" data-style="v1">
+    <!--{hook index_site_brief_start.htm}-->
+    <h5 class="card-header">
+        <i class="las la-icons fs-big text-info"></i>
+        <?= $conf['sitename']; ?>
+    </h5>
+    <div class="card-body">
+        <div>
+            <?= $conf['sitebrief']; ?>
+        </div>
+    </div>
+    <!--{hook index_site_brief_end.htm}-->
+</div>
+<?php break; endswitch; ?>
+<?php endif; ?>

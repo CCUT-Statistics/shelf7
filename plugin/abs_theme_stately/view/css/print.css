@@ -1,0 +1,8 @@
+@media print {
+    .breadcrumb,#layout-navbar,#layout-appbar,#layout-menu,.layout-navbar-fixed .layout-page:before,.mod-button,.content-footer,.card-postlist,.navigation ,.pagination,.row>.aside,.message+.plugin ,.signature, .thread-fab {
+        display: none !important;
+    }
+    .message a:after {
+        content: "("attr(href)")";
+      }
+}

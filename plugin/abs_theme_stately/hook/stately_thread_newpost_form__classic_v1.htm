@@ -1,0 +1,105 @@
+<li class="post newpost media">
+    <?php if(!empty($user)) : ?>
+    <a href="<?= url('user-'.$user['uid']); ?>" class="mr-3" tabindex="-1"> <img loading="lazy" decoding="async" class="avatar-3" src="<?= $user['avatar_url']; ?>">
+    </a>
+    <div class="media-body">
+        <div class="d-flex justify-content-between small text-muted">
+            <div>
+                <div>
+                    <?= $user['username']; ?>
+                </div>
+            </div>
+            <div>
+                <span class="floor" id="newfloor">
+                    <?= ($thread['posts'] + 2); ?>
+                </span>
+                <?= lang('floor'); ?>
+            </div>
+        </div>
+        <div>
+            <form action="<?= url('post-create-'.$tid.'-1'); ?>" method="post" id="quick_reply_form" class="d-block"> <input type="hidden" name="doctype" value="1" />
+                <input type="hidden" name="return_html" value="1" />
+                <input type="hidden" name="quotepid" value="0" />
+                <!--{hook thread_quick_reply_message_before.htm}-->
+                <div class="message mt-1">
+                    <textarea class="form-control" placeholder="<?= lang('message'); ?>" name="message" id="message" data-emoji="true"></textarea>
+                </div>
+                <!--{hook thread_quick_reply_message_after.htm}-->
+                <div class="text-muted mt-2 small">
+                    <div class="d-flex justify-content-between">
+                        <div class="post-submit">
+                            <!--{hook thread_quick_reply_left_start.htm}-->
+                            <button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting'); ?>...">
+                                <?= lang('post_create'); ?>
+                            </button>
+                            <!--{hook thread_quick_reply_left_end.htm}-->
+                        </div>
+                        <div>
+                            <!--{hook thread_quick_reply_right_start.htm}-->
+                            <a class="la la-mail-forward text-muted" href="<?= url('post-create-'.$tid); ?>" id="advanced_reply">
+                                <?= lang('advanced_reply'); ?>
+                            </a>
+                            <!--{hook thread_quick_reply_right_end.htm}-->
+                        </div>
+                    </div>
+                </div>
+                <!--{hook thread_quick_reply_submit_after.htm}-->
+            </form>
+        </div>
+    </div>
+    <?php else: 
+    $stately_guest = user_guest();
+    ?>
+    <a class="mr-3" tabindex="-1"> <img loading="lazy" decoding="async" class="avatar-3" src="<?= $stately_guest['avatar_url']; ?>">
+    </a>
+    <div class="media-body">
+        <div class="d-flex justify-content-between small text-muted">
+            <div>
+                <div>
+                    <?= lang('guest') ?>
+                </div>
+            </div>
+            <div>
+                <?php if( boolval($abs_theme_stately_setting['special']['post_floor_replace']['enable']) ): ?>
+                <span class="flot_con <?= ($thread['posts'] < 4) ? $thread['posts'] + 1 : $thread['posts'] + 2 ?> " id="newfloor">
+                <?php 
+                $floor_n = $thread['posts'] + 1;
+                if ($thread['posts'] < 3) {
+                    echo $abs_theme_stately_setting['special']['post_floor_replace']['floor_' . $floor_n];
+                } else {
+                    echo $floor_n . lang('floor'); 
+                } ?>
+                </span>
+                <?php else: ?>
+                <span class="floor" id="newfloor">
+                    <?= ($thread['posts'] + 2); ?>
+                </span>
+                <?= lang('floor'); ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div>
+            <div class="message mt-1 form-control h-px-150 d-flex flex-column align-items-center justify-content-center">
+                <p class="mb-2">
+                    <span class="badge bg-label-info badge-center rounded-pill"><i class="las la-user-plus"></i></span>
+                    <?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content'] ?>
+                </p>
+                <p class="m-0 btn-group">
+                    <?php if(!empty($abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_login'])) : ?>
+                    <a href="<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_login'] === '__login__' ? url('user-login')  : $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_login']?>" class="btn btn-primary"><i class="las la-user"></i>
+                        <?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_login'] ?>
+                    </a>
+                    <?php endif; ?>
+                    <?php if(!empty($abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_register'])) : ?>
+                    <a href="<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_register'] === '__register__' ? url('user-create') : $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_register'] ?>" class="btn btn-outline-primary"><i class="las la-user-plus"></i>
+                        <?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_register'] ?>
+                    </a>
+                    <?php endif; ?>
+                </p>
+            </div>
+        </div>
+    </div>
+    <?php 
+    unset($stately_guest);
+    endif; ?>
+</li>

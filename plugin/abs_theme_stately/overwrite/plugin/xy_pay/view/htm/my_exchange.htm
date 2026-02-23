@@ -1,0 +1,138 @@
+<template include="plugin/xy_pay/view/htm/my.template.htm">
+	<slot name="my_body">
+<style>
+.xyfrom{border:1px dashed #008CFF;padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px;line-height: 2em;color: #6D6D6D;}
+.xypd label {margin-right:8px;}
+.xypd span {margin-right:8px;}
+</style>
+
+<div class="container">
+	<div class="row clearfix">
+		<?php if(!empty($conf['exchange'])){?>
+		<div class="col-md-6 mx-auto">
+			<div class="xyfrom">
+				<div class="m-3">
+				<h5 class="text-center">
+				<?php 
+				echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');;
+				echo lang('pay_user_exchange');
+				echo !empty($conf['gold_name']) ? $conf['gold_name'] : lang('pay_gold');
+				?>
+				</h5>
+				<h6 class="text-center text-muted">
+				<?php
+				if(!empty($conf['exchange'])){
+				echo '1';
+				echo !empty($conf['rmb_unit']) ? $conf['rmb_unit'] : '';
+				echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');
+				echo lang('pay_user_cue3');
+				echo $conf['exchange_bl'];
+				echo !empty($conf['gold_unit']) ? $conf['gold_unit'] : '';
+				echo !empty($conf['gold_name']) ? $conf['gold_name'] : lang('pay_gold');
+				} ?>
+				</h6>
+				<form role="form1" action="<?php echo url('my-exchange-r2c');?>" method="post" id="form1">
+					<div class="form-group">
+						<div class="form-group input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><?php echo lang('pay_user_exchange_r2c');?>：</span>
+							</div>
+							<input type="number" class="form-control" placeholder="<?php echo lang('pay_user_exchange_r2c_msg');?><?php echo $conf['exchange_bl'];?><?php echo !empty($conf['gold_unit']) ? $conf['gold_unit'] : ''; ?><?php echo !empty($conf['gold_name']) ? $conf['gold_name'] : lang('pay_gold');?>" name="rc" id="rc" required="" oninvalid="setCustomValidity('<?php echo lang('pay_user_exchange_msg_error');?>')" oninput="setCustomValidity('')" minlength="1">
+						</div>
+					</div>
+				<button type="submit" id="submit1" class="btn btn-default btn-block"><?php echo lang('pay_user_exchange');?></button>
+				</form>
+				</div>
+			</div>
+		</div>
+		<?php }?>
+		<?php if(!empty($conf['disexchange'])){?>
+		<div class="col-md-6 mx-auto">
+			<div class="xyfrom">
+				<div class="m-3">
+				<h5 class="text-center">
+				<?php 
+				echo !empty($conf['gold_name']) ? $conf['gold_name'] : lang('pay_gold');
+				echo lang('pay_user_exchange');
+				echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');;
+				?>
+				</h5>
+				<h6 class="text-center text-muted">
+				<?php
+				echo $conf['exchange_bl'];
+				echo !empty($conf['gold_unit']) ? $conf['gold_unit'] : '';
+				echo !empty($conf['gold_name']) ? $conf['gold_name'] : lang('pay_gold');
+				echo lang('pay_user_cue3');
+				echo '1';
+				echo !empty($conf['rmb_unit']) ? $conf['rmb_unit'] : '';
+				echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');
+				?>
+				</h6>
+				<form role="form2" action="<?php echo url('my-exchange-c2r');?>" method="post" id="form2">
+					<div class="form-group">
+						<div class="form-group input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><?php echo lang('pay_user_exchange_r2c');?>：</span>
+							</div>
+							<input type="number" class="form-control" placeholder="<?php echo lang('pay_user_exchange_r2c_msg');?><?php echo '1';?><?php echo !empty($conf['rmb_unit']) ? $conf['rmb_unit'] : ''; ?><?php echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');?>" name="rc" id="rc" required="" oninvalid="setCustomValidity('<?php echo lang('pay_user_exchange_msg_error');?>')" oninput="setCustomValidity('')" minlength="1">
+						</div>
+					</div>
+				<button type="submit" id="submit2" class="btn btn-default btn-block"><?php echo lang('pay_user_exchange');?></button>
+				</form>
+				</div>
+			</div>
+		</div>
+		<?php }?>
+		
+	</div>
+</div>
+
+
+	</slot>
+</template>
+
+<script>
+var jform1 = $('#form1');
+var jsubmit1 = $('#submit1');
+jform1.on('submit', function() {
+	jform1.reset();
+	jsubmit1.button('loading');
+	var postdata = jform1.serializeObject();
+	$.xpost(jform1.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit1.button(message).delay(3000).button('reset');
+		} else if(xn.is_number(code)) {
+			alert(message);
+			jsubmit1.button('reset');
+		} else {
+			jform1.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit1.button('reset');
+		}
+	});
+	return false;
+});
+
+var jform2 = $('#form2');
+var jsubmit2 = $('#submit2');
+jform2.on('submit', function() {
+	jform2.reset();
+	jsubmit2.button('loading');
+	var postdata = jform2.serializeObject();
+	$.xpost(jform2.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit2.button(message).delay(3000).button('reset');
+		} else if(xn.is_number(code)) {
+			alert(message);
+			jsubmit2.button('reset');
+		} else {
+			jform2.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit2.button('reset');
+		}
+	});
+	return false;
+});
+
+$('a[data-active="my-exchange"]').addClass('active');
+</script>

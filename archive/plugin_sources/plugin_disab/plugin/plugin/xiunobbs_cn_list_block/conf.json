@@ -1,0 +1,13 @@
+{
+    "name": "块列表展示",
+    "brief": "<a href='//xiunobbs.cn' target='_blank' style='display: block; background-color:#c6303e;color: #FFFFFF;'>xiunobbs.cn交流论坛出品</a>将置顶板块帖子切换为块列表样式",
+    "version": "1.1",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [
+        12
+    ],
+    "overwrites_rank": [],
+    "dependencies": []
+}

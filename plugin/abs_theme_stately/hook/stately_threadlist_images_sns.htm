@@ -1,0 +1,60 @@
+<?php if (is_array($_post_message_image)):
+    $stately_sns_image_grid_count = 1;
+    /**
+     * 帖子里有多少张图 => 显示多少张图
+     * 1 => 1
+     * 2 => 2
+     * 3 => 3
+     * 4 => 4
+     * 5 => 4
+     * 6 => 6
+     * 7 => 6
+     * 8 => 6
+     * 9 => 9
+     * >9 => 9
+     */
+    switch (count($_post_message_image)){
+        case 1:
+            $stately_sns_image_grid_count = 1;
+        case 2:
+            $stately_sns_image_grid_count = 2;
+        break;
+        case 3:
+            $stately_sns_image_grid_count = 3;
+        break;
+        case 4:
+        case 5:
+            $stately_sns_image_grid_count = 4;
+        break;
+        case 6:
+        case 7:
+        case 8:
+            $stately_sns_image_grid_count = 6;
+        break;
+        case 9:
+            $stately_sns_image_grid_count = 9;
+        break;
+        default:
+            $stately_sns_image_grid_count = 9;
+        break;
+    }
+?>
+<a href="<?= url('thread-'.$_thread['tid']);?>">
+<section class="stately-sns-image-grid stately-sns-image-grid-<?= $stately_sns_image_grid_count ?>">
+<?php for ($i=0; $i <= ($stately_sns_image_grid_count - 1); $i++): ?>
+    <figure class="stately-sns-image-item">
+        <img loading="lazy" decoding="async" src="<?= $_post_message_image[$i] ?>" class="img-fluid" loading="lazy">
+    </figure>
+<?php endfor; ?>
+</section>
+</a>
+<?php elseif(is_string($_post_message_image)): ?>
+<a href="<?= url('thread-'.$_thread['tid']);?>">
+    <section class="stately-sns-image-grid stately-sns-image-grid-1">
+    <figure class="stately-sns-image-item">
+        <img loading="lazy" decoding="async" src="<?= $_post_message_image ?>" class="img-fluid" loading="lazy">
+    </figure>
+</section>
+</a>
+
+<?php endif; ?>

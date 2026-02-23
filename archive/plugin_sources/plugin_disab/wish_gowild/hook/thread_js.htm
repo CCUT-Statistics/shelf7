@@ -1,0 +1,44 @@
+<?php if(empty($wish_gowild)){$wish_gowild = setting_get('wish_gowild');}?>
+<script>
+(function () {
+    var blank = "<?php echo !empty($wish_gowild['blank']) && $wish_gowild['blank'] == 'yes'?'yes':'no';?>";
+    var safe_tips = "<?php echo !empty($wish_gowild['safe_tips']) && $wish_gowild['safe_tips'] == 'yes'?'yes':'no';?>";
+    var is_count = "<?php echo !empty($wish_gowild['is_count']) && $wish_gowild['is_count'] == 'yes'?'yes':'no';?>";
+    var thread_uid = "<?php echo !empty($thread['uid'])?$thread['uid']:0;?>";
+    var elem = document.getElementsByTagName("main")[0];
+    var ahref = elem.getElementsByTagName("a");
+    host_url = window.location.host;
+    for (var i = 0; i < ahref.length; i++) {
+        var domain = ahref[i].href.split("/");
+        var url = ahref[i].href.replace(/^\s+|\s+$/g, '').toLowerCase();
+        //判断外链
+        if (domain[2] != host_url && (
+                url.indexOf("http://") === 0 ||
+                url.indexOf("https://") === 0 ||
+                url.indexOf("//") === 0 ||
+                url.indexOf("ftp://") === 0 ||
+                url.indexOf("ftps://") === 0
+            )
+        ) {
+            //如果开启安全提示或者同级功能，走gowild页面
+            if(safe_tips === "yes" || is_count === "yes"){
+                ahref[i].href = "<?php echo url('gowild');?>?url=" + xn.urlencode(ahref[i].href);
+            }
+            //如果开启统计功能获取用户
+            if(is_count === "yes" && !/u=\d+/i.test(url)){
+                ahref[i].href += "&u=" + thread_uid;
+            }
+            //如果开启统计功能获取来源
+            if(is_count === "yes" && !/fr=[^&]+/i.test(url)){
+                ahref[i].href += "&fr=" + xn.urlencode(location.href);
+            }
+            //判断新窗口打开
+            if(blank === "yes"){
+                ahref[i].target = "_blank"
+            } else {
+                if(ahref[i].target === "_blank") ahref[i].target = "_self";
+            }
+        }
+    }
+})();
+</script>

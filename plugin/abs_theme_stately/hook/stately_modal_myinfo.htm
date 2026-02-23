@@ -1,0 +1,21 @@
+<?php if($user && function_exists("xn_nav_menu")): ?>
+<div class="offcanvas offcanvas-end shadow <?= ( $abs_theme_stately_setting['ui_tweek']['menu_magichref_user_avatar_submenu']['modal_items_per_row'] ? 'cols-count-2' : '') ?>" tabindex="-1" id="statelyMyInfoModal" aria-modal="true" role="dialog">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+            <i class="las la-angle-left d-flex align-items-center justify-content-center"></i>
+        </button>
+        <div class="user-profile-header-banner rounded-bottom h-px-75"
+         <?php if(function_exists('cover_get_cover_url_by_uid') && isset($user['cover_url']) && !empty($user['cover_url'])): ?> style="background-image:url(
+        <?= cover_get_cover_url_by_uid($user['uid']) ?>);background-size:cover"
+        <?php endif; ?> >
+        </div>
+        <?= str_replace('dropdown-menu','',xn_nav_menu(
+            array(
+                'menu' => 'user_menu',
+                'container' => false,
+                'menu_class' => 'list-unstyled dropdown-menu',
+                'link_class' => 'dropdown-item',
+                'echo' => false
+            )
+        )); ?>
+</div>
+<?php endif; ?>

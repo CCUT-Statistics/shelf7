@@ -1,0 +1,10 @@
+<?php if($action == 'update') :
+$reason = $uid == $post['last_update_uid'] ? $post['last_update_reason'] : '';
+?>
+<div class="form-floating">
+	<input type="text" class="form-control" placeholder="<?= lang('update_reason');?>" name="update_reason" id="update_reason" value="<?= $reason;?>" maxlength="128">
+	<label for="update_reason">
+		<?= lang('update_reason');?>
+	</label>
+</div>
+<?php endif; ?>

@@ -1,0 +1,62 @@
+<?php
+empty($allowupdate) AND $allowupdate = 0;
+empty($allowdelete) AND $allowdelete = 0;
+empty($allowpost) AND $allowpost = 0;
+?>
+<!--{hook post_list_inc_start.htm}-->
+<?php 
+if($postlist) : 
+    if(!isset($abs_theme_stately_setting)) {
+        $abs_theme_stately_setting = setting_get('abs_theme_stately_setting');
+    }
+    $stately_thread_style = (isset($abs_theme_stately_setting['ui_style']['threadlist']['style_for_forum'][$fid]) && $abs_theme_stately_setting['ui_style']['threadlist']['style_for_forum'][$fid] !== '_inherit' ) ? $abs_theme_stately_setting['ui_style']['threadlist']['style_for_forum'][$fid] : $abs_theme_stately_setting['ui_style']['thread']['style_global'];
+    foreach($postlist as $_post) : 
+        $postlist_username_extra_class = '';
+        if(!isset($first)) {
+            $first = array();
+        } 
+        if(boolval($_post['isfirst'])) {
+            continue;
+        }
+        if(isset($_post['rob_anonymous']) && $_post['rob_anonymous']) {
+            $_post['uid'] = 0;
+            $_post['username'] = 'Anonymous';
+            $postlist_username_extra_class .= ' d-inline text-body p-0 nav-link disabled ';
+            $_post['user_avatar_url'] = $conf['logo_mobile_url'];
+        }
+        switch($stately_thread_style):
+            case 'vintage_v1':
+                ?>
+                <!--{hook stately_layout_postlist__vintage_v1.htm}-->
+                <?php 
+                break;
+            default:
+                switch($abs_theme_stately_setting['ui_style']['postlist']['style']){
+                    case 'classic_v2':
+                        ?>
+                        <!--{hook stately_layout_postlist__classic_v2.htm}-->
+                        <?php 
+                        break;
+                    default:
+                        ?>
+                        <!--{hook stately_layout_postlist__classic_v1.htm}-->
+                        <?php 
+                        break;
+                } // endswitch
+                break;
+        endswitch;
+    endforeach;
+else: 
+    ?>
+    <li class="empty card-body text-center">
+        <div>
+            <span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+                <i class="las la-comment fs-1"></i>
+            </span>
+            <p class="m-0">
+                <?= lang('no_reply_yet');?>
+            </p>
+        </div>
+    </li>
+<?php endif; ?>
+<!--{hook post_list_inc_end.htm}-->

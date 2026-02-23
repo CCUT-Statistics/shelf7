@@ -1,0 +1,521 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm'); ?>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <form action="<?php echo url('plugin-setting-pan123_storage');?>" method="post" id="formcreate">
+          <input type="hidden" name="action" id="form_action" value="save">
+          <input type="hidden" name="task_id" id="form_task_id" value="0">
+          <input type="hidden" name="retry_recent_24h" id="retry_recent_24h" value="0">
+          <h4 class="card-title mb-3"><?php echo $header['title']; ?></h4>
+          <div class="alert alert-light border mb-3" role="alert">
+            <strong>123 盘存储插件说明</strong><br>
+            - <strong>日常使用：</strong>开启“双写”和“异步队列”后，发帖的图片文字会自动在后台上传，不卡用户。<br>
+            - <strong>视频上传：</strong>开启后，发帖区会出现视频按钮。视频也是后台传，传完自动出链接。<br>
+            <span class="text-danger">- <strong>安全警告：</strong>clientID 与 clientSecret 相当于网盘钥匙，必须妥善保管，严禁发给他人。如果泄露，请立即去 123 盘后台重置！</span>
+          </div>
+
+          <div class="card border mb-3">
+            <div class="card-body py-2">
+              <div class="small mb-2"><strong>运维速览（先看这里）</strong></div>
+              <?php if (!empty($ops_alerts)) { foreach ($ops_alerts as $oa) { ?>
+                <div class="alert alert-<?php echo htmlspecialchars($oa['type']); ?> py-2 mb-2">
+                  <?php echo htmlspecialchars($oa['text']); ?>
+                </div>
+              <?php } } ?>
+              <div class="small text-muted">
+                Worker 心跳：
+                <?php if (!empty($worker_alive)) { ?>
+                  <span class="text-success">正常（<?php echo intval($worker_heartbeat_age); ?> 秒前）</span>
+                <?php } else { ?>
+                  <span class="text-danger">未检测到最近心跳</span>
+                <?php } ?>
+                <?php if (!empty($worker_lock_text)) { ?>
+                  <br><span>锁文件信息：<?php echo htmlspecialchars($worker_lock_text); ?></span>
+                <?php } ?>
+                <br>队列日志：<?php echo !empty($queue_log_exists) ? ('已生成，大小 ' . pan123_admin_human_size($queue_log_size)) : '未生成'; ?>
+                <?php if (!empty($queue_log_rotated_exists)) { ?>
+                  <br>历史日志：已轮转，大小 <?php echo pan123_admin_human_size($queue_log_rotated_size); ?>
+                <?php } ?>
+                <br>当前失败任务：可重试失败 <?php echo intval($queue_status_counts[PAN123_TASK_FAIL_RETRY] ?? 0); ?> 条，最终失败 <?php echo intval($queue_status_counts[PAN123_TASK_FAIL_FINAL] ?? 0); ?> 条
+              </div>
+            </div>
+          </div>
+
+          <div class="card border mb-3">
+            <div class="card-body py-2">
+              <div class="small mb-2"><strong>常用排障命令（点击复制）</strong></div>
+              <div class="input-group input-group-sm mb-2">
+                <input id="cmd_worker_once" type="text" class="form-control" readonly value="php plugin/pan123_storage/cli/worker.php --limit=20">
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-outline-secondary copy-cmd" data-target="#cmd_worker_once">复制</button>
+                </div>
+              </div>
+              <div class="input-group input-group-sm mb-2">
+                <input id="cmd_worker_loop" type="text" class="form-control" readonly value="php plugin/pan123_storage/cli/worker.php --loop --sleep=2 --limit=20">
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-outline-secondary copy-cmd" data-target="#cmd_worker_loop">复制</button>
+                </div>
+              </div>
+              <div class="input-group input-group-sm">
+                <input id="cmd_failed_sql" type="text" class="form-control" readonly value="SELECT task_id, task_type, status, retries, max_retries, last_error, updated_at FROM <?php echo htmlspecialchars($task_table); ?> WHERE status IN ('FAIL_RETRY', 'FAIL_FINAL') ORDER BY task_id DESC LIMIT 100;">
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-outline-secondary copy-cmd" data-target="#cmd_failed_sql">复制</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="mb-4" />
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">clientID</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="clientID" value="<?php echo htmlspecialchars($config['clientID'] ?? ''); ?>" placeholder="比如: abc123def456">
+              <div class="figure-caption mt-2">如何获取：登录 123 盘开放平台 -> 我的应用 -> 复制 clientID。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">clientSecret</label>
+            <div class="col-md-8">
+              <input type="password" class="form-control" name="clientSecret" value="<?php echo htmlspecialchars($config['clientSecret'] ?? ''); ?>" placeholder="密码/密钥信息">
+              <div class="figure-caption mt-2">如何获取：同上，点击查看并复制 clientSecret。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">图片目录ID</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="parentFileID_image" value="<?php echo intval($config['parentFileID_image'] ?? 0); ?>" placeholder="0 表示根目录">
+              <div class="figure-caption mt-2">123盘里存放<strong>图片</strong>的文件夹 ID（建议在网盘建个叫“论坛图片”的文件夹，点开看网址里的那串数字填这里）。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">文字目录ID</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="parentFileID_text" value="<?php echo intval($config['parentFileID_text'] ?? 0); ?>" placeholder="0 表示根目录">
+              <div class="figure-caption mt-2">123盘里存放<strong>帖子文字</strong>的文件夹 ID。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">视频目录ID</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="parentFileID_video" value="<?php echo intval($config['parentFileID_video'] ?? 0); ?>" placeholder="0 表示根目录">
+              <div class="figure-caption mt-2">123盘里存放<strong>视频</strong>的文件夹 ID。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">遇到同名文件</label>
+            <div class="col-md-8">
+              <select name="duplicate" class="form-control">
+                <option value="1" <?php if (($config['duplicate'] ?? 1) == 1) echo 'selected'; ?>>1 - 都留着（网盘自动给新文件加数字后缀）</option>
+                <option value="2" <?php if (($config['duplicate'] ?? 1) == 2) echo 'selected'; ?>>2 - 覆盖原文件（建议选这个，省空间）</option>
+              </select>
+              <div class="figure-caption mt-2">当上传的文件和网盘里已有文件重名时的处理方式。</div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">图片双写（备份）</label>
+            <div class="col-md-8">
+              <label class="custom-input custom-checkbox">
+                <input type="checkbox" name="enable_image_backup" value="1" <?php if (!empty($config['enable_image_backup'])) echo 'checked'; ?>> 开启（图片存服务器，同时偷偷存一份到123盘）
+              </label>
+              <div class="figure-caption mt-2">强烈建议开启，就算服务器被清空，网盘里还有图。发帖时完全感觉不到卡。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">文字双写（备份）</label>
+            <div class="col-md-8">
+              <label class="custom-input custom-checkbox">
+                <input type="checkbox" name="enable_text_backup" value="1" <?php if (!empty($config['enable_text_backup'])) echo 'checked'; ?>> 开启（发帖的字自动存成文件传到网盘）
+              </label>
+              <div class="figure-caption mt-2">只有发主贴和回帖时会触发。作为数据库故障时的兜底。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">视频上传功能</label>
+            <div class="col-md-8">
+              <label class="custom-input custom-checkbox">
+                <input type="checkbox" name="enable_video_upload" value="1" <?php if (!empty($config['enable_video_upload'])) echo 'checked'; ?>> 开启（发帖区多一个“传视频”按钮）
+              </label>
+              <div class="figure-caption mt-2">选了上面那个“视频文件夹 ID”才能用这个。发视频也是传网盘，不占用服务器空间。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">给视频出链接</label>
+            <div class="col-md-8">
+              <label class="custom-input custom-checkbox">
+                <input type="checkbox" name="auto_share_video" value="1" <?php if (!empty($config['auto_share_video'])) echo 'checked'; ?>> 视频传完后自动给别人一个能看的链接
+              </label>
+              <div class="figure-caption mt-2">只有勾了这个，大家点进帖子才能直接看那个视频。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">分享有效期</label>
+            <div class="col-md-8">
+              <select name="shareExpire" class="form-control">
+                <option value="0" <?php if (($config['shareExpire'] ?? 0) == 0) echo 'selected'; ?>>永久（推荐）</option>
+                <option value="1" <?php if (($config['shareExpire'] ?? 0) == 1) echo 'selected'; ?>>1 天就过期</option>
+                <option value="7" <?php if (($config['shareExpire'] ?? 0) == 7) echo 'selected'; ?>>7 天就过期</option>
+                <option value="30" <?php if (($config['shareExpire'] ?? 0) == 30) echo 'selected'; ?>>30 天就过期</option>
+              </select>
+              <div class="figure-caption mt-2">推荐永久，否则帖子过几天别人点进去就看不到了。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">分享密码（提取码）</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="sharePwd" value="<?php echo htmlspecialchars($config['sharePwd'] ?? ''); ?>" placeholder="留空就是不需要密码">
+              <div class="figure-caption mt-2">建议留空。要是填了，点进去还要输一次这个密码。</div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">高级：直链模式</label>
+            <div class="col-md-8">
+              <label class="custom-input custom-checkbox">
+                <input type="checkbox" name="enable_direct_link" value="1" <?php if (!empty($config['enable_direct_link'])) echo 'checked'; ?>> 开启直链（需 123 盘 VIP）
+              </label>
+              <div class="figure-caption mt-2">只有 123 盘开了这功能的才勾选！勾了后帖子里的视频就像本地视频一样，能直接点击播放。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">高级：直链防盗</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control mb-2" name="direct_link_uid" value="<?php echo intval($config['direct_link_uid'] ?? 0); ?>" placeholder="填写网盘里的鉴权 UID">
+              <input type="text" class="form-control" name="direct_link_primary_key" value="<?php echo htmlspecialchars($config['direct_link_primary_key'] ?? ''); ?>" placeholder="填写网盘里的鉴权 primary_key">
+              <div class="figure-caption mt-2">防别人偷链接用。如果上面没打勾，这两行空着就行。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">防盗有效期(秒)</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="direct_link_expire_sec" value="<?php echo intval($config['direct_link_expire_sec'] ?? 300); ?>" placeholder="300">
+              <div class="figure-caption mt-2">推荐 300 秒。看完就不能重新点开，防别人外传链接。</div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">异步队列开关</label>
+            <div class="col-md-8">
+              <label class="custom-input custom-checkbox">
+                <input type="checkbox" name="queue_enable" value="1" <?php if (!empty($config['queue_enable']) || !isset($config['queue_enable'])) echo 'checked'; ?>> 必须开启（让发帖像飞一样快）
+              </label>
+              <div class="figure-caption mt-2"><strong>千万别关！</strong>关了发帖会卡死。开启后，发帖的内容会进到下面的“队列”里排队慢慢传。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">失败重试上限</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="queue_max_retries" value="<?php echo intval($config['queue_max_retries'] ?? 5); ?>" placeholder="默认 5">
+              <div class="figure-caption mt-2">推荐填 5。遇到网络问题，服务器会自动多试几次。超过这么多次，就会显示“最终失败”，需要你下面手动点重试。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">重试间隔(秒)</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="queue_retry_base_sec" value="<?php echo intval($config['queue_retry_base_sec'] ?? 60); ?>" placeholder="默认 60">
+              <div class="figure-caption mt-2">推荐填 60。失败后，等这么久再去重试，以免 123 盘封我们 IP。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">处理超时防卡死(秒)</label>
+            <div class="col-md-8">
+              <input type="number" class="form-control" name="queue_running_timeout" value="<?php echo intval($config['queue_running_timeout'] ?? 900); ?>" placeholder="默认 900">
+              <div class="figure-caption mt-2">推荐填 900（15分钟）。如果遇到大视频，或者服务器卡死，过了这么长时间会自动重试，防止一直卡在“处理中”。</div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <h5 class="mb-3">队列健康</h5>
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">任务统计</label>
+            <div class="col-md-8">
+              <span class="badge badge-secondary mr-2">待处理 <?php echo intval($queue_status_counts[PAN123_TASK_PENDING] ?? 0); ?></span>
+              <span class="badge badge-info mr-2">处理中 <?php echo intval($queue_status_counts[PAN123_TASK_RUNNING] ?? 0); ?></span>
+              <span class="badge badge-success mr-2">成功 <?php echo intval($queue_status_counts[PAN123_TASK_SUCCESS] ?? 0); ?></span>
+              <span class="badge badge-warning mr-2">可重试失败 <?php echo intval($queue_status_counts[PAN123_TASK_FAIL_RETRY] ?? 0); ?></span>
+              <span class="badge badge-danger mr-2">最终失败 <?php echo intval($queue_status_counts[PAN123_TASK_FAIL_FINAL] ?? 0); ?></span>
+              <div class="figure-caption mt-2 text-primary">如果遇到红色“最终失败”，请优先点下方的“一键重试”。<br>成功列表里存放过久的数据会自动清理（默认30天）。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">失败原因分组</label>
+            <div class="col-md-8">
+              <span class="badge badge-danger mr-2">鉴权/Token <?php echo intval($failed_group_counts['auth'] ?? 0); ?></span>
+              <span class="badge badge-warning mr-2">网络/超时 <?php echo intval($failed_group_counts['network'] ?? 0); ?></span>
+              <span class="badge badge-secondary mr-2">本地文件 <?php echo intval($failed_group_counts['local_file'] ?? 0); ?></span>
+              <span class="badge badge-info mr-2">容量/配额 <?php echo intval($failed_group_counts['quota'] ?? 0); ?></span>
+              <span class="badge badge-dark mr-2">其他 <?php echo intval($failed_group_counts['other'] ?? 0); ?></span>
+              <span class="badge badge-light mr-2">未知 <?php echo intval($failed_group_counts['unknown'] ?? 0); ?></span>
+              <div class="figure-caption mt-2">先看“鉴权/Token”和“网络/超时”，这两类通常最容易恢复。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">查看范围</label>
+            <div class="col-md-8">
+              <div class="input-group input-group-sm" style="max-width:420px;">
+                <select id="queue_status_filter" class="form-control">
+                  <option value="" <?php if ($queue_status === '') echo 'selected'; ?>>全部任务</option>
+                  <option value="<?php echo PAN123_TASK_PENDING; ?>" <?php if ($queue_status === PAN123_TASK_PENDING) echo 'selected'; ?>>待处理</option>
+                  <option value="<?php echo PAN123_TASK_RUNNING; ?>" <?php if ($queue_status === PAN123_TASK_RUNNING) echo 'selected'; ?>>处理中</option>
+                  <option value="<?php echo PAN123_TASK_SUCCESS; ?>" <?php if ($queue_status === PAN123_TASK_SUCCESS) echo 'selected'; ?>>成功</option>
+                  <option value="<?php echo PAN123_TASK_FAIL_RETRY; ?>" <?php if ($queue_status === PAN123_TASK_FAIL_RETRY) echo 'selected'; ?>>可重试失败</option>
+                  <option value="<?php echo PAN123_TASK_FAIL_FINAL; ?>" <?php if ($queue_status === PAN123_TASK_FAIL_FINAL) echo 'selected'; ?>>最终失败</option>
+                </select>
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-outline-secondary" id="apply_filter">筛选</button>
+                  <button type="button" class="btn btn-outline-secondary" id="clear_filter">清空</button>
+                  <button type="button" class="btn btn-outline-secondary" id="export_failed_csv">导出失败CSV</button>
+                </div>
+              </div>
+              <label class="custom-input custom-checkbox mt-2">
+                <input type="checkbox" id="failed_24h" value="1" <?php if (!empty($failed_24h)) echo 'checked'; ?>> 仅看最近24小时失败任务（列表与导出同步生效）
+              </label>
+              <div class="figure-caption mt-1">最近24小时失败总数：<?php echo intval($failed_24h_count ?? 0); ?> 条。</div>
+              <div class="figure-caption mt-2">排查问题时建议先看“最终失败”，处理后再看“处理中”。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+              <button type="button" class="btn btn-sm btn-outline-danger" id="retry_all_failed">一键重试失败任务</button>
+              <button type="button" class="btn btn-sm btn-outline-warning ml-2" id="retry_24h_failed">仅重试最近24h失败任务</button>
+              <div class="figure-caption mt-2">建议优先使用“最近24h”按钮，避免历史失败任务被一次性全部重试。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>类型</th>
+                      <th>状态</th>
+                      <th>进度</th>
+                      <th>重试</th>
+                      <th>错误</th>
+                      <th>分组/建议</th>
+                      <th>更新时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php if (!empty($queue_tasklist)) { foreach ($queue_tasklist as $qt) { ?>
+                    <tr>
+                      <td><?php echo intval($qt['task_id']); ?></td>
+                      <td><?php echo htmlspecialchars($qt['task_type']); ?></td>
+                      <td><?php echo htmlspecialchars($qt['status']); ?></td>
+                      <td><?php echo intval($qt['progress']); ?>%</td>
+                      <td><?php echo intval($qt['retries']); ?>/<?php echo intval($qt['max_retries']); ?></td>
+                      <td style="max-width:320px;word-break:break-all;"><?php echo htmlspecialchars($qt['last_error'] ?? ''); ?></td>
+                      <td style="max-width:260px;word-break:break-all;">
+                        <?php if (!empty($qt['error_group'])) { ?>
+                          <span class="badge badge-light"><?php echo htmlspecialchars($qt['error_group']); ?></span>
+                          <div class="small text-muted mt-1"><?php echo htmlspecialchars($qt['advice'] ?? ''); ?></div>
+                        <?php } else { ?>
+                          -
+                        <?php } ?>
+                      </td>
+                      <td><?php echo !empty($qt['updated_at']) ? date('Y-m-d H:i:s', intval($qt['updated_at'])) : '-'; ?></td>
+                      <td>
+                        <?php if (($qt['status'] ?? '') === PAN123_TASK_FAIL_RETRY || ($qt['status'] ?? '') === PAN123_TASK_FAIL_FINAL) { ?>
+                        <button type="button" class="btn btn-sm btn-outline-primary retry_one" data-task-id="<?php echo intval($qt['task_id']); ?>">重试</button>
+                        <?php } else { ?>
+                        -
+                        <?php } ?>
+                      </td>
+                    </tr>
+                    <?php } } else { ?>
+                    <tr><td colspan="9" class="text-center text-muted">暂无任务</td></tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="form-group row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+              <button type="button" class="btn btn-primary" id="submit">保存</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm'); ?>
+
+<script>
+var jform = $('#formcreate');
+var jsubmit = $('#submit');
+var jaction = $('#form_action');
+var jtaskid = $('#form_task_id');
+var jretry24h = $('#retry_recent_24h');
+var baseSettingUrl = '<?php echo url('plugin-setting-pan123_storage');?>';
+var failRetryCount = <?php echo intval($queue_status_counts[PAN123_TASK_FAIL_RETRY] ?? 0); ?>;
+var failFinalCount = <?php echo intval($queue_status_counts[PAN123_TASK_FAIL_FINAL] ?? 0); ?>;
+var failed24hCount = <?php echo intval($failed_24h_count ?? 0); ?>;
+
+jsubmit.on('click', function() {
+  jaction.val('save');
+  jtaskid.val('0');
+  jretry24h.val('0');
+  jform.trigger('submit');
+});
+
+$('#retry_all_failed').on('click', function() {
+  var total = failRetryCount + failFinalCount;
+  $.confirm('确认重试全部失败任务吗？当前约 ' + total + ' 条（每次最多处理 500 条）。', function() {
+    jaction.val('retry_failed');
+    jtaskid.val('0');
+    jretry24h.val('0');
+    jform.trigger('submit');
+  });
+});
+
+$('#retry_24h_failed').on('click', function() {
+  $.confirm('确认仅重试最近24小时失败任务吗？当前约 ' + failed24hCount + ' 条（每次最多处理 500 条）。', function() {
+    jaction.val('retry_failed');
+    jtaskid.val('0');
+    jretry24h.val('1');
+    jform.trigger('submit');
+  });
+});
+
+$('.retry_one').on('click', function() {
+  var id = $(this).data('task-id') || 0;
+  if (!id) return;
+  $.confirm('确认重试任务 #' + id + ' 吗？', function() {
+    jaction.val('retry_failed');
+    jtaskid.val(id);
+    jretry24h.val('0');
+    jform.trigger('submit');
+  });
+});
+
+$('#apply_filter').on('click', function() {
+  var status = $('#queue_status_filter').val() || '';
+  var failed24h = $('#failed_24h').is(':checked') ? '1' : '';
+  var u = baseSettingUrl;
+  if (failed24h !== '1' && status !== '') {
+    u += '&queue_status=' + encodeURIComponent(status);
+  }
+  if (failed24h === '1') {
+    u += '&failed_24h=1';
+  }
+  window.location.href = u;
+});
+
+$('#clear_filter').on('click', function() {
+  window.location.href = baseSettingUrl;
+});
+
+$('#export_failed_csv').on('click', function() {
+  var failed24h = $('#failed_24h').is(':checked') ? '&failed_24h=1' : '';
+  window.open(baseSettingUrl + '&export=failed_csv' + failed24h, '_blank');
+});
+
+function syncFailed24hMode() {
+  var enabled = $('#failed_24h').is(':checked');
+  $('#queue_status_filter').prop('disabled', enabled);
+  if (enabled) {
+    $('#queue_status_filter').val('');
+  }
+}
+
+$('#failed_24h').on('change', syncFailed24hMode);
+syncFailed24hMode();
+
+function copyTextToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise(function(resolve, reject) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      resolve();
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+$('.copy-cmd').on('click', function() {
+  var target = $(this).data('target');
+  var text = $(target).val() || '';
+  if (!text) return;
+  copyTextToClipboard(text).then(function() {
+    if ($.toast) {
+      $.toast({title: '已复制', content: '命令已复制到剪贴板', type: 'success'});
+    } else {
+      $.alert('已复制到剪贴板');
+    }
+  }).catch(function() {
+    $.alert('复制失败，请手动复制');
+  });
+});
+
+jform.on('submit', function() {
+  var action = jaction.val() || 'save';
+  jsubmit.button('loading');
+  var postdata = jform.serialize();
+  $.xpost(jform.attr('action'), postdata, function(code, message) {
+    if(code == 0) {
+      $.alert(message);
+      jsubmit.button('reset');
+    } else {
+      $.alert(message);
+      jsubmit.button('reset');
+    }
+  });
+  if (action !== 'save') {
+    jaction.val('save');
+    jtaskid.val('0');
+    jretry24h.val('0');
+  }
+  return false;
+});
+</script>

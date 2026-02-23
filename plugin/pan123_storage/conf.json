@@ -1,0 +1,15 @@
+{
+  "name": "123盘存储/备份",
+  "brief": "图片/文字本地+123盘双写备份；提供视频上传到123盘并生成分享/直链。",
+  "version": "0.1.0",
+  "bbs_version": "4.0.7",
+  "installed": 0,
+  "enable": 0,
+  "hooks_rank": {
+    "index_route_case_end.php": 80,
+    "attach_assoc_post_end.php": 80,
+    "thread_create_thread_end.php": 80,
+    "post_post_end.php": 80,
+    "post_js.htm": 80
+  }
+}

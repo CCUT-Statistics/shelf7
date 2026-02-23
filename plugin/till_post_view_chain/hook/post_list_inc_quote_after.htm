@@ -1,0 +1,3 @@
+<?php if(intval($_post['quotepid']) !== 0): ?>
+<a href="javascript:void(0)" class="text-muted mx-3" data-modal-url="<?= url('post-show_all_reply-' . $_post['pid'] . '-1') ?>" data-modal-title="<?= lang('view_reply_chain') ?>" data-modal-size="lg" title="<?= lang('view_reply_chain') ?>"><i class="icon-sort"></i> <i class="icon-comments-o"></i> <span class="sr-only"><?= lang('view_reply_chain') ?></span></a>
+<?php endif; ?>

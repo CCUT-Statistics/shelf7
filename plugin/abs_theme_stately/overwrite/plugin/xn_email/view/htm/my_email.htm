@@ -1,0 +1,101 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.template.htm">
+    <slot name="my_body">
+        <div class="row">
+            <div class="col-lg-10">
+                <label class="form-label" for="e__mail"><?php echo lang('email') ;?></label>
+                <div class="input-group mb-3" id="email_div">
+                    <input type="text" class="form-control" placeholder="john_doe@example.com" id="e__mail" value="<?php echo $user['email'];?>">
+                    <?php 
+                    if(file_exists(APP_PATH . "plugin/lee_not_email/conf.php")){
+                        $conf_email = include(APP_PATH . "plugin/lee_not_email/conf.php");
+?>
+<?php if($conf_email['b_or_w'] == 'b'){ ?>
+    <div class="btn btn-danger btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#the_email">查看禁用邮箱列表</div>
+    <div class="modal fade" id="the_email" tabindex="-1" role="dialog" aria-labelledby="the_email" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">当前禁用注册邮箱</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <?php foreach($the_arr as $m){
+                            echo '<li><span class="text-muted">example</span><strong>@'.$m.'</strong></li>';
+    
+                            }
+                            ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php }elseif($conf_email['b_or_w'] == 'w'){ ?>
+    <div class="btn btn-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#the_email">查看可用邮箱列表</div>
+    <div class="modal fade" id="the_email" tabindex="-1" role="dialog" aria-labelledby="the_email" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">当前支持注册邮箱</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <?php foreach($the_arr as $m){
+                        echo '<li><span class="text-muted">example</span><strong>@'.$m.'</strong></li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    <?php } ?>
+                    <div id="d_submit">
+                        <button type="button" id="submit" class="btn btn-primary" data-active="<?php echo url('my-email');?>"><?php echo lang('set_email');?></button>
+                    </div>
+                </div>
+                <div class="input-group mb-3" style="display:none;" id="code_txb">
+                    <div class="input-group-prepend"><span class="input-group-text"><?php echo lang('verify_code') ;?></span></div><input type="text" class="form-control" placeholder="000000" id="email_verify">
+                    <div style="display:none;" id="d_verify"><button type="button" id="verify" class="btn btn-primary" data-active="<?php echo url('my-email');?>"><?php echo lang('verify_email');?></button></div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <label class="form-label" for="e__mail"><?php echo lang('close_status') ;?></label>
+                <div class="input-group mb-3" id="email_status_div">
+                    <input type="text" class="alert alert-info w-100" id="email_status" value="<?php echo lang('email_status'.$user['email_v']);?>" readonly>
+                </div>
+                
+            </div>
+        </div>
+
+    </slot>
+</template>
+<script>
+    $('a[data-active="my-email"]').addClass('active');
+</script>
+<script>
+    var je_mail = $("#e__mail"); var jsubmit = $("#submit"); var jverify = $("#verify"); var jdiv_submit = $("#d_submit"); var jdiv_verify = $("#d_verify"); var jcodetxb = $("#code_txb"); var jemail = $("#email_div"); var jemail_status = $("#email_status_div"); jverifycode = $("#email_verify");
+    jsubmit.on('click', function () {
+        $.confirm('<h5 class=text-warning>您确定要更改邮箱吗?</h5>提交后状态将暂时变为未验证状态，需要等待您从新的邮箱接收验证邮件，以完成修改。邮箱将作为找回密码的唯一凭据，请谨慎修改！', function () {
+            jsubmit.button('loading');
+            var postdata = "email=" + je_mail.val(); postdata += "&op=0";
+            $.xpost(jsubmit.attr('data-active'), postdata, function (code, message) {
+                if (code == 0) {
+                    jdiv_submit.fadeOut(); jdiv_verify.fadeIn(); jcodetxb.fadeIn(); jemail.fadeOut(); jemail_status.fadeOut(); $.alert(message); jsubmit.button(message).delay(3000).button('reset');
+                } else { $.alert(message); jsubmit.button('reset'); }
+            });
+        });
+    });
+    jverify.on('click', function () {
+        jverify.button('loading');
+        var postdata = "code=" + jverifycode.val(); postdata += "&op=1";
+        $.xpost(jverify.attr('data-active'), postdata, function (code, message) {
+            if (code == 0) {
+                $.alert(message); setTimeout(function () { location.reload(); }, 1000);
+            } else { $.alert(message); jverify.button('reset'); }
+        });
+    });
+</script>

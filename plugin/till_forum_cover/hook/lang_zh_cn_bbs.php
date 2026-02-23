@@ -1,0 +1,1 @@
+'select_cover_image' => '选择封面图',

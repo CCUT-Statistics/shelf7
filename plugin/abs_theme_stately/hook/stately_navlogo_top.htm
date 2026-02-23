@@ -1,0 +1,37 @@
+<?php 
+$abs_stately_navbar_display_add = '';
+if (
+    ($route !== 'user' || ($route === 'user' && !in_array(param(1),['login','create','resetpw'])) ) 
+    && $abs_theme_stately_setting['ui']['global']['navbar_style'] === 'vertical') {
+$abs_stately_navbar_display_add = 'd-xl-none';
+}
+?>
+<?php switch($abs_theme_stately_setting['ui']['global']['navbar_logo_show']): ?>
+<?php case 'logo': ?>
+<div class="nav-item app-brand <?= $abs_stately_navbar_display_add ?>">
+    <a href="./" class="navbar-brand d-inline-flex align-items-center">
+        <span class="navbar-brand-logo d-inline-block">
+            <img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['global']['icon']['logo'] ?>" alt="<?= $abs_stately_sitename; ?>" class="img-fluid" loading="lazy">
+        </span>
+    </a>
+</div>
+<?php break; case 'both': ?>
+<div class="nav-item app-brand <?= $abs_stately_navbar_display_add ?>">
+    <a href="./" class="navbar-brand d-inline-flex align-items-center">
+        <span class="navbar-brand-logo d-inline-block">
+            <img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['global']['icon']['logo'] ?>" alt="<?= $abs_stately_sitename; ?>" class="img-fluid" loading="lazy">
+        </span>
+        <span class="d-none d-md-inline navbar-brand-text fw-bolder fs-big ms-2">
+            <?= $abs_stately_sitename; ?>
+        </span>
+    </a>
+</div>
+<?php break; default: /* text */ ?>
+<div class="nav-item <?= $abs_stately_navbar_display_add ?>">
+    <a href="./" class="navbar-brand d-inline-flex align-items-center">
+        <span class="navbar-brand-text fw-bolder fs-big ms-2">
+            <?= $abs_stately_sitename; ?>
+        </span>
+    </a>
+</div>
+<?php break; endswitch; ?>

@@ -1,0 +1,9 @@
+
+<?php if(!isset($till_thread_cover_setting)){
+    $till_thread_cover_setting = setting_get('till_thread_cover_setting');
+}
+if($till_thread_cover_setting['show_on_thread_page'] && isset($thread['cover']) && !empty($thread['cover'])){?>
+<div class="thread-cover-container">
+    <img class="thread-cover img-fluid" src="<?php echo $thread['cover'];?>" alt="<?php echo $thread['subject'];?>" />
+</div>
+<?php }/*endif*/ ?>

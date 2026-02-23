@@ -1,0 +1,135 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');
+$abs_stately_user_page_2col_styles = ['classic_v1','special_zb_v2','modern_v3','yuzu_v2','yuzu_v5','yuzu_v8','yuzu_v10','yuzu_v11','yuzu_v13',];
+?>
+
+<!--{hook stately_hero_my.htm}-->
+
+<!--{hook my_common_start.htm}-->
+
+<div class="btn-group mb-3 d-none" role="group" id="my_mobile_nav">
+	<!--{hook my_common_mobile_my_before.htm}-->
+	<a role="button" class="btn btn-secondary" data-active="menu-my" href="<?= url('my');?>"><?= lang('user_profile') ?></a>
+	<!--{hook my_common_mobile_my_after.htm}-->
+	<!--{hook my_common_mobile_my_thread_before.htm}-->
+	<a role="button" class="btn btn-secondary" data-active="menu-my-thread" href="<?= url('my-thread');?>">论坛帖子</a>
+	<!--{hook my_common_mobile_my_thread_after.htm}-->
+</div>
+<div class="<?= in_array($abs_theme_stately_setting['ui_style']['user']['style'],$abs_stately_user_page_2col_styles) ? 'row' : '' ?>">
+	<!-- 左侧菜单 -->
+	<?php switch($abs_theme_stately_setting['ui_style']['user']['style']) { case 'modern_v1': 
+	?>
+	<!--{hook stately_layout_my_aside__modern_v1.htm}-->
+	<?php break; case 'modern_v2': ?>
+	<?php break; case 'modern_v3': ?>
+	<!--{hook stately_layout_my_aside__modern_v3.htm}-->
+	<?php break; case 'yuzu_v1': ?>
+	<?php break; case 'yuzu_v2': ?>
+	<!--{hook stately_hero_my__yuzu_v2.htm}-->
+	<?php break; case 'yuzu_v3': ?>
+	<?php break; case 'yuzu_v4': ?>
+	<?php break; case 'yuzu_v5': ?>
+	<!--{hook stately_hero_my__yuzu_v5.htm}-->
+	<?php break; case 'yuzu_v6': ?>
+	<?php break; case 'yuzu_v7': ?>
+	<!--{hook stately_hero_my__yuzu_v7.htm}-->
+	<?php break; case 'yuzu_v8': ?>
+	<!--{hook stately_hero_my__yuzu_v8.htm}-->
+	<?php break; case 'yuzu_v9': ?>
+	<?php break; case 'yuzu_v10': ?>
+	<!--{hook stately_hero_my__yuzu_v10.htm}-->
+	<?php break; case 'yuzu_v11': ?>
+	<!--{hook stately_hero_my__yuzu_v11.htm}-->
+	<?php break; case 'yuzu_v12': ?>
+	<?php break; case 'yuzu_v13': ?>
+	<!--{hook stately_hero_my__yuzu_v13.htm}-->
+	<?php break; case 'yuzu_v14': ?>
+	<?php break; case 'special_zb_v2': ?>
+	<!--{hook stately_layout_my_aside__special_zb_v2.htm}-->0
+	<?php break; default: ?>
+	<div class="col-lg-3" id="my_aside" data-style="classic_v1">
+		<div class="card">
+			<div class="user-profile-header-banner rounded-top"
+         <?php if(function_exists('cover_get_cover_url_by_uid') && isset($user['cover_url']) && !empty($user['cover_url'])): ?> style="background-image:url(
+        <?= cover_get_cover_url_by_uid($user['uid']) ?>);background-size:cover"
+        <?php endif; ?> >
+    </div>
+			<div class="user-profile-header pt-0 card-body text-center">
+				<div class="v_avatar v_avatar-user">
+					<!--{hook my_common_avatar_before.htm}-->
+					<img loading="lazy" decoding="async" src="<?= $user['avatar_url'];?>" alt="user image" class="d-block h-auto mx-auto rounded user-profile-img">
+					<!--{hook my_common_avatar_after.htm}-->
+				</div>
+				<p class="my-2">
+					<!--{hook my_common_username_before.htm}-->
+					<?= $user['username'];?>
+					<!--{hook my_common_username_after.htm}-->
+				</p>
+				<?php if(isset($user['signature']) ): ?>
+                    <div class="my-2">
+                        <i class="la la-pen text-info"></i>
+                        <?= !empty($user['signature']) ? htmlspecialchars_decode($user['signature']) : htmlspecialchars_decode($abs_theme_stately_setting['ui_tweek']['user']['default_signature_other']) ?>
+                    </div>
+                    <?php endif; ?>
+				<!--{hook stately_hero_my_stats.htm}-->
+					
+			</div>
+			<nav class="list-group list-group-flush text-center" id="my_nav">
+				<!--{hook my_common_my_before.htm}-->
+				<a href="<?php echo url('my');?>" class="list-group-item list-group-item-action" data-active="menu-my">个人资料</a>
+				<!--{hook my_common_my_after.htm}-->
+				
+				<!--{hook my_common_my_thread_before.htm}-->
+				<a href="<?php echo url('my-thread');?>" class="list-group-item list-group-item-action" data-active="menu-my-thread">论坛帖子</a>
+				<!--{hook my_common_my_thread_after.htm}-->
+			</nav>
+		</div>
+	</div>
+	<?php }/* endswitch */ ?>
+
+	<!-- 右侧内容 -->
+	<div class="<?= in_array($abs_theme_stately_setting['ui_style']['user']['style'],$abs_stately_user_page_2col_styles) ? 'col-lg-9' : '' ?>">
+	<?php switch($abs_theme_stately_setting['ui_tweek']['user']['lv2_menu_location']){ 
+	case'side': ?>
+	<div id="my_main">
+		<!--{hook my_common_main_card_before.htm}-->
+		<div class="nav-align-left mb-4 my_subnav">
+			<div class="mr-3">
+				<!--{hook my_common_my_nav_slot_before.htm}-->
+				<slot name="my_nav" />
+				<!--{hook my_common_my_nav_slot_after.htm}-->
+			</div>
+			<div class="tab-content">
+				<div class="tab-pane show active">
+					<!--{hook my_common_my_body_slot_before.htm}-->
+					<slot name="my_body" />
+					<!--{hook my_common_my_body_slot_after.htm}-->
+				</div>
+			</div>
+		</div>
+		<!--{hook my_common_main_card_after.htm}-->
+	</div>
+	<?php break; 
+	default: ?>
+	<div id="my_main">
+		<!--{hook my_common_main_card_before.htm}-->
+		<div class="card">
+			<div class="my_subnav">
+				<!--{hook my_common_my_nav_slot_before.htm}-->
+				<slot name="my_nav" />
+				<!--{hook my_common_my_nav_slot_after.htm}-->
+			</div>
+			<div class="card-body">
+				<!--{hook my_common_my_body_slot_before.htm}-->
+				<slot name="my_body" />
+				<!--{hook my_common_my_body_slot_after.htm}-->
+			</div>
+		</div>
+		<!--{hook my_common_main_card_after.htm}-->
+	</div>
+	<?php break; 
+} /* endswitch */ ?>
+</div>
+</div>
+<!--{hook my_common_end.htm}-->
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<!--{hook my_common_js.htm}-->

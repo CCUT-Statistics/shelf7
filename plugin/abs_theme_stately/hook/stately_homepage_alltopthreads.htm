@@ -1,0 +1,53 @@
+<?php 
+if($abs_theme_stately_setting['ui_tweek']['homepage']['show_alltopthreads']):
+if($active == 'default' && $page === 1 ) {
+    $threadlist_top = $toplist3;
+    thread_list_access_filter($threadlist_top, $gid); //过滤没有权限访问的帖子，必须要做
+    if(isset($threadlist_top)) { 
+        $have_allowtop = false;
+        foreach($threadlist_top as &$_thread) {
+            if(isset($threadlist) && isset($threadlist[array_search($_thread['tid'],array_column($threadlist,'tid'))])) {
+                unset($threadlist[array_search($_thread['tid'],array_column($threadlist,'tid'))]);
+            }
+            $_thread['allowtop'] = forum_access_mod($_thread['fid'], $gid, 'allowtop');
+            if($_thread['allowtop']) {
+                $have_allowtop = true;
+            }
+        }
+        $top_tids = array_column($threadlist_top, 'tid');
+    }
+}
+if($page === 1 && isset($threadlist_top) && !empty($threadlist_top) ) : ?>
+<div class="card threadlist-sticky">
+    <div class="card-header pb-0">
+        <div class="d-flex justify-content-between">
+            <h2 class="h5 text-info">
+                <i class="la la-flag "></i>
+                <?php echo lang('all_top');?>
+            </h2>
+            <!--{hook index_thread_list_top_item_right.htm}-->
+        </div>
+    </div>
+    <div class="card-body pt-0">
+        <ul class="list-unstyled mb-0">
+            <?php if(isset($threadlist_top) ) : 
+            foreach($threadlist_top as &$_thread) : 
+            ?>
+            <!--{hook stately_layout_threadlist__super-compact_v1.htm}-->
+            <?php endforeach;
+            else: ?>
+            <div class="empty card-body p-0 text-center">
+                <span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+                    <i class="la la-bug fs-1"></i>
+                </span>
+                <p>
+                    <?php echo lang('none');?>
+                </p>
+            </div>
+            <?php endif; ?>
+        </ul>
+    </div>
+</div>
+<?php 
+endif;
+endif; ?>

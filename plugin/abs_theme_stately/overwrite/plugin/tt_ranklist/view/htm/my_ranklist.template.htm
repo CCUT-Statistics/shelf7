@@ -1,0 +1,49 @@
+<?php 
+$header['title_mobile'] = '排行榜';
+$header['title'] = $header['title_mobile'] . ' - ' . $conf['sitename'];
+include _include(APP_PATH . 'view/htm/header.inc.htm'); ?>
+<div class="card mb-3 p-3">
+	<h2 class="h3 m-0">
+		<i class="las la-chart-bar"></i>
+		<?= $header['title_mobile'] ?>
+	</h2>
+</div>
+<div class="nav-align-top mb-4">
+	<ul class="nav nav-tabs nav-fill">
+		<li class="nav-item">
+			<a class="nav-link" href="<?= url('my-ranklist');?>" data-active="my-ranklist">
+				<?= lang('threads');?>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="<?= url('my-ranklist_posts');?>" data-active="my-ranklist_posts">
+				<?= lang('posts');?>
+			</a>
+		</li>
+		<?php if(isset($user['credits'])): ?>
+		<li class="nav-item">
+			<a class="nav-link" href="<?= url('my-ranklist_credits');?>" data-active="my-ranklist_credits">
+				<?= $credits1_name ?>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="<?= url('my-ranklist_golds');?>" data-active="my-ranklist_golds">
+				<?= $credits2_name ?>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="<?= url('my-ranklist_rmbs');?>" data-active="my-ranklist_rmbs">
+				<?= $credits3_name ?>
+			</a>
+		</li>
+		<?php endif; ?>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane fade show active" role="tabpanel">
+			<slot name="my_body" />
+		</div>
+	</div>
+	<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>
+	<script>
+		$('a[data-active="menu-my-ranklist"]').addClass('active');
+	</script>

@@ -1,0 +1,11 @@
+{
+    "name": "今日发帖标识",
+    "brief": "在帖子列表后面显示今日发帖标识。更多小功能请访问：<a class='badge badge-primary' href='https://www.noteweb.top/'>NOTEWEB</a>",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

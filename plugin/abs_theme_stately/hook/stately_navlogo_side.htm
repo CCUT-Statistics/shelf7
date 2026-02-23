@@ -1,0 +1,24 @@
+<?php switch($abs_theme_stately_setting['ui']['global']['navbar_logo_show']): ?>
+<?php case 'logo': ?>
+<a href="./" class="app-brand-link">
+    <span class="app-brand-logo demo">
+        <img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['global']['icon']['logo'] ?>" alt="<?= $abs_stately_sitename; ?>">
+    </span>
+</a>
+<?php break; case 'both': ?>
+<a href="./" class="app-brand-link">
+    <span class="app-brand-logo demo">
+        <img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['global']['icon']['logo'] ?>" alt="<?= $abs_stately_sitename; ?>">
+    </span>
+    <span class="app-brand-text <?= $abs_stately_app_brand_text_class ?> my-0 menu-text fw-bolder ms-2">
+        <?= $abs_stately_sitename; ?>
+    </span>
+</a>
+<?php break; default: /* text */ ?>
+<a href="./" class="app-brand-link">
+    <span class="app-brand-logo demo"></span>
+    <span class="app-brand-text <?= $abs_stately_app_brand_text_class ?> my-0 menu-text fw-bolder ms-2">
+        <?= $abs_stately_sitename; ?>
+    </span>
+</a>
+<?php break; endswitch; ?>

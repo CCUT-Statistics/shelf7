@@ -1,0 +1,303 @@
+<?php
+
+$page = param(2, 1);
+$comp = param(1, 'threads');
+$pagesize = $conf['pagesize'];
+
+if ($uid) :
+include _include(APP_PATH . 'view/htm/header.inc.htm');
+
+    $see_check = check_need_check($group, 'see');
+    $active = '';
+    if($comp == 'posts') {
+        if ($see_check) {
+            $threadlist = post_find_by_uid_for_tt_check(-1, $page, $pagesize);
+        }else {
+            $threadlist = post_find_by_uid_for_tt_check($uid, $page, $pagesize);
+        }
+    } else {
+        $threadlist = thread_find(array('fid' => array('>=' => 1), 'OK' => array('!=' => '1') ), array('tid' => -1), $page, $pagesize);
+    }
+    
+    $pagination = pagination(url("moderate-".$comp."-{page}"), count($threadlist), $page, $pagesize);
+    /* 去掉不应显示的帖子 */
+    foreach ($threadlist as $tid => $thread) {
+        if (isset($thread['OK']) && $see_check) {
+            if ($thread['OK'] === '1') {
+                unset($threadlist[$tid]);
+            }
+            $load_check_js = true;
+        } else {
+            if (isset($thread['OK']) && !(($thread['OK'] !== '1' && $thread['OK'] !== '-2') && ($thread['user']['uid']) == intval($uid))) {
+                unset($threadlist[$tid]);
+            }
+        }
+    }
+?>
+<!--{hook index_start.htm}-->
+<div data-layout="classic_1col" class="row">
+    <div class="col-12 main">
+        <!--{hook index_main_start.htm}-->
+        <div class="card-threadlist">
+            <div class="mb-3">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $active == 'default' ? 'active' : ''; ?>" href="<?= url('index'); ?>">
+                            <?= lang('new_thread'); ?>
+                        </a>
+                    </li>
+                    <!--{hook index_thread_list_nav_item_after.htm}-->
+                </ul>
+            </div>
+            <!--{hook stately_threadlist_before.htm}-->
+            <?php if($comp == 'posts'): $postlist = $threadlist; ?>
+            <div class="card card-body">
+                <ul class="list-unstyled postlist">
+                    <?php include _include(APP_PATH.'view/htm/post_list.inc.htm'); ?>
+                </ul>
+            </div>
+            <?php else: ?>
+            <ul class="list-unstyled threadlist">
+                <!--{hook forum_threadlist_before.htm}-->
+                <?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+                <!--{hook forum_threadlist_after.htm}-->
+            </ul>
+            <?php if ($see_check) : ?>
+            <div class="input-group justify-content-center"> <span class="input-group-text">&#8627; 以上：</span> <button id="toAdopt" type="button" class="btn btn-success" onclick="set_thread_check(1)">
+                    <?php echo lang('toAdopt') ?>
+                </button>
+                <button id="toPass" type="button" class="btn btn-warning" onclick="set_thread_check(-1)">
+                    <?php echo lang('toPass') ?>
+                </button>
+                <button id="toDelete" type="button" class="btn btn-danger" onclick="set_thread_recycle(1)">
+                    <?php echo lang('toDelete') ?>
+                </button>
+            </div>
+            <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <?php include _include(APP_PATH . 'view/htm/thread_list_mod.inc.htm'); ?>
+        <!--{hook index_page_before.htm}-->
+        <nav class="my-3">
+            <ul class="pagination justify-content-center flex-wrap">
+                <?= $pagination; ?>
+            </ul>
+        </nav>
+        <!--{hook index_page_end.htm}-->
+    </div>
+</div>
+<div hidden class="row">
+    <div class="col-lg-9 main">
+        <!--{hook index_main_start.htm}-->
+        <div class="card card-threadlist">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./">
+                            <?php echo lang('new_thread'); ?>
+                        </a>
+                    </li>
+                    <!--{hook index_thread_list_nav_item_after.htm}-->
+                </ul>
+            </div>
+            <div class="card-body">
+                <?php if($comp == 'posts'): $postlist = $threadlist; ?>
+                <ul class="list-unstyled postlist">
+                    <?php include _include(APP_PATH.'view/htm/post_list.inc.htm'); ?>
+                </ul>
+                <?php else: ?>
+                <ul class="list-unstyled threadlist">
+                    <!--{hook forum_threadlist_before.htm}-->
+                    <?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+                    <!--{hook forum_threadlist_after.htm}-->
+                </ul>
+                <?php if ($see_check) : ?>
+                <div> &#8627; 以上： <button id="toAdopt" type="button" class="btn btn-success" onclick="set_thread_check(1)">
+                        <?php echo lang('toAdopt') ?>
+                    </button>
+                    <button id="toPass" type="button" class="btn btn-warning" onclick="set_thread_check(-1)">
+                        <?php echo lang('toPass') ?>
+                    </button>
+                    <button id="toDelete" type="button" class="btn btn-danger" onclick="set_thread_recycle(1)">
+                        <?php echo lang('toDelete') ?>
+                    </button>
+                </div>
+                <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php include _include(APP_PATH . 'view/htm/thread_list_mod.inc.htm'); ?>
+        <!--{hook index_page_before.htm}-->
+        <nav class="my-3">
+            <ul class="pagination justify-content-center flex-wrap">
+                <?php echo $pagination; ?>
+            </ul>
+        </nav>
+        <!--{hook index_page_end.htm}-->
+    </div>
+    <div class="col-lg-3 d-none d-lg-block aside">
+        <a role="button" class="btn btn-primary btn-block mb-3" href="<?php echo url('thread-create-' . $fid); ?>">
+            <?php echo lang('thread_create_new'); ?>
+        </a>
+        <!--{hook index_site_brief_before.htm}-->
+        <div class="card card-site-info">
+            <!--{hook index_site_brief_start.htm}-->
+            <div class="m-3">
+                <h5 class="text-center">
+                    <?php echo $conf['sitename']; ?>
+                </h5>
+                <div class="small line-height-3">
+                    <?php echo $conf['sitebrief']; ?>
+                </div>
+            </div>
+            <div class="card-footer p-2">
+                <table class="w-100 small">
+                    <tr align="center">
+                        <td>
+                            <span class="text-muted">
+                                <?php echo lang('threads'); ?>
+                            </span><br>
+                            <b>
+                                <?php echo $runtime['threads']; ?>
+                            </b>
+                        </td>
+                        <td>
+                            <span class="text-muted">
+                                <?php echo lang('posts'); ?>
+                            </span><br>
+                            <b>
+                                <?php echo $runtime['posts']; ?>
+                            </b>
+                        </td>
+                        <td>
+                            <span class="text-muted">
+                                <?php echo lang('users'); ?>
+                            </span><br>
+                            <b>
+                                <?php echo $runtime['users']; ?>
+                            </b>
+                        </td>
+                        <?php if ($runtime['onlines'] > 0) { ?>
+                        <td>
+                            <span class="text-muted">
+                                <?php echo lang('online'); ?>
+                            </span><br>
+                            <b>
+                                <?php echo $runtime['onlines']; ?>
+                            </b>
+                        </td>
+                        <?php } ?>
+                    </tr>
+                </table>
+            </div>
+            <!--{hook index_site_brief_end.htm}-->
+        </div>
+        <!--{hook index_site_brief_after.htm}-->
+    </div>
+</div>
+<!--{hook index_end.htm}-->
+<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>
+<?php if (isset($load_check_js)) { ?>
+<script>
+    function set_thread_check(opt) {
+        var the_opcode = opt;
+        $.confirm('是否要审核这些主题呢？', function (e,the_opt = the_opcode) {
+            the_threads = $('input[name="modtid"]');
+            the_threads.each(function (index) {
+                if (this.checked) {
+                    $.xpost(xn.url('post-check-' + this.value), {
+                        'opt': the_opt,
+                        'data': this.value,
+                        'act': 0
+                    }, function (code, message) {
+                        if (code == 0) {
+                            //alert(message);
+                            $.toast({
+			                	title: lang.tips_title,
+			                	content: message,
+			                	type: 'success',
+			                	pause_on_hover: true,
+			                	delay: 5000
+			                });
+                            console.info(message);
+                            window.location.reload();
+                        } else {
+                            console.warn(message);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    function set_post_check(pid, OK) {
+        $.confirm('是否要审核该回帖呢？', function () {
+            $.xpost(xn.url('post-check-' + pid), { 'opt': OK, 'data': pid, 'act': 1 }, function (code, message) {
+                if (code == 0) {
+                    location.reload();
+                } else {
+                    $.toast({
+			        	title: lang.tips_title,
+			        	content: message,
+			        	type: 'success',
+			        	pause_on_hover: true,
+			        	delay: 5000
+			        });
+                }
+            });
+        });
+    }
+
+    function set_thread_recycle(OK) {
+        var opt = OK == 1 ? '删除' : '恢复';
+        var the_opcode = opt;
+        $.confirm('是否要' + opt + '该主题呢？', function (e,the_opt = the_opcode) {
+            the_threads = $('input[name="modtid"]');
+            the_threads.each(function (index) {
+                if (this.checked) {
+                    $.xpost(xn.url('post-recycle-' + this.value), {
+                        'opt': the_opt,
+                        'data': this.value,
+                        'act': 0
+                    }, function (code, message) {
+                        if (code == 0) {
+                            //alert(message);
+                            $.toast({
+			                	title: lang.tips_title,
+			                	content: message,
+			                	type: 'success',
+			                	pause_on_hover: true,
+			                	delay: 5000
+			                });
+                            console.info(message);
+                            window.location.reload();
+                        } else {
+                            $.toast({
+			                	title: lang.tips_title,
+			                	content: message,
+			                	type: 'warning',
+			                	pause_on_hover: true,
+			                	delay: 5000
+			                });
+                            console.warn(message);
+                        }
+                    });
+                }
+            });
+        });
+    }
+</script>
+<?php } ?>
+<?php if($comp == 'posts'): ?>
+<script>
+    $('li[data-active="moderate_posts"] .nav-link').addClass('active');
+</script>
+<?php else : ?>
+<script>
+    $('li[data-active="moderate_threads"] .nav-link').addClass('active');
+</script>
+<?php endif; ?>
+<?php else :
+    header("Location: index.htm");
+?>
+<?php endif; ?>

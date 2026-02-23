@@ -1,0 +1,72 @@
+<style id="stately_page_auth_style">
+    body {
+        background-image: url(<?= $abs_theme_stately_setting['page']['user_register']['background_image'] ?>);
+        background-position: center;
+        background-size: cover;
+    }
+
+    p>.form-control {
+        border-radius: 0;
+        border-top-style: none;
+        border-left-style: none;
+        border-right-style: none;
+        display: inline-block;
+        width: auto;
+        padding: 0.25rem 0.625rem;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .authentication-wrapper.authentication-basic .authentication-inner {
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    .pl-4 {
+        padding-left: 2em !important
+    }
+</style>
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y mx-auto">
+        <div class="authentication-inner">
+            <!--{hook user_create_card_before.htm}-->
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="sr-only">
+                        <?= $abs_theme_stately_setting['page']['user_register']['title'] ?>
+                    </h1>
+                    <!--{hook user_create_title_after.htm}-->
+                    <?= htmlspecialchars_decode($abs_theme_stately_setting['page']['user_register']['content']) ?>
+                    <form action="<?= url('user-create');?>" method="post" id="form">
+                        <p>尊敬的<a href="."><?= $conf['sitename'] ?></a>： </p>
+                        <p class="pl-4">您好！ </p>
+                        <p class="pl-4">我想加入你们的网站。 </p>
+                        <p class="pl-4">我的名字是 <input type="text" class="form-control" name="username" id="username" onchange="document.getElementById('myname').innerHTML = this.value.length != 0 ? this.value : '我'; document.getElementById('time_now').innerHTML = new Date().toLocaleDateString()">；</p>
+                        <!--{hook user_create_username_after.htm}-->
+                        <p class="pl-4">我的电子邮箱地址是<input type="text" class="form-control" id="email" name="email" placeholder="john_doe@example.com" required>；</p>
+                        <!--{hook user_create_email_after.htm}-->
+                        <p class="pl-4">我希望我的密码是<input type="password" class="form-control" name="password" id="password">。</p>
+                        <!--{hook user_create_password_after.htm}-->
+                        <p class="pl-4"> 我也读完了您给我的那份<a href="<?= url('terms') ?>"><?= $abs_theme_stately_setting['page']['terms']['title'] ?></a>， <span class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="true" id="terms_confirmed">
+                                <label class="form-check-label" for="terms_confirmed"> 我理解并且完全同意里面说的内容。 </label>
+                            </span></p> <?php if( $conf['user_create_email_on'] ) : ?> <p>以及，我绝对不是机器人，您提供的验证码是<input type="text" class="form-control" name="code" id="code">。如果我没收到验证码，<button type="submit" class="btn btn-link" id="sendcode" data-loading-text="<?= lang('sending');?>..." action="<?= url('user-send_code-user_create');?>">请给我发送一次</button>。</p> <?php endif; ?>
+                        <p class="pl-4">此致</p>
+                        <p>敬礼</p>
+                        <p class="text-right"><span id="myname">我</span> <br> <time id="time_now">现在</time></p>
+                        <button class="btn btn-primary btn-block w-100" type="submit" id="submit" data-loading-text="<?= lang('submiting');?>..." <?php if($conf['user_create_email_on']) echo 'disabled' ?><i class="las la-paper-plane"></i> 发送</button>
+                        <!--{hook user_create_submit_after.htm}-->
+                    </form>
+                    <!--{hook user_create_form_footer_left.htm}-->
+                    <p class="text-center mt-3">
+                        <?= sprintf( htmlspecialchars_decode($abs_theme_stately_setting['page']['user_register']['goto_login_text']), '<a href="' . url('user-login') . '">' . lang('user_login') . '</a>') ?>
+                    </p>
+                    <!--{hook user_create_form_footer_right_start.htm}-->
+                    <!--{hook user_create_form_footer_right_end.htm}-->
+                </div>
+            </div>
+        </div>
+        <!--{hook user_create_card_after.htm}-->
+        <!-- /Register -->
+    </div>
+</div>

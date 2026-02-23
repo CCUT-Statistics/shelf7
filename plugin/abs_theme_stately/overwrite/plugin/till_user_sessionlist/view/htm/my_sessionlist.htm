@@ -1,0 +1,43 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.template.htm">
+    <slot name="my_body">
+        <section>
+            <h5>您目前在以下设备登录</h5>
+            <table class="table">
+                <thead>
+                    <th>设备</th>
+                    <th>操作</th>
+                </thead>
+                <tbody> <?php if ($sessionlist): foreach ($sessionlist as $value) : ?> <tr>
+                        <td> <?php echo get_device_type($value['useragent']);?> <span class="badge bg-label-secondary"><?php echo long2ip($value['ip']);?></span>
+                        </td>
+                        <td>
+                            <!-- offline id 必须保留 --> 
+                            <?php if ($sid == $value['sid']) { ?> <?php echo lang('user_online_self');?> <?php } else { ?> <a class="offline btn btn-sm btn-danger" href="javascript:void(0);" data-sid="<?php echo $value['sid']; ?>" rel="nofollow"> <?php echo lang('user_offline');?> </a> <?php } ?>
+                        </td>
+                    </tr> <?php endforeach; endif; ?> </tbody>
+            </table>
+        </section>
+    </slot>
+</template>
+<script>
+    let offlineList = document.querySelectorAll('.offline');
+
+    for (let i in offlineList) {
+        offlineList[i].onclick = function () {
+            let sid = this.getAttribute('data-sid');
+            $.xpost(xn.url('my-onlinelist'),{id: sid}, function (code, message) {
+                if (0 == code) {
+                    $.alert(message);
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    $.alert(message);
+                }
+            });
+            return false;
+        };
+    }
+
+    $('a[data-active="my-onlinelist"]').addClass('active');
+</script>

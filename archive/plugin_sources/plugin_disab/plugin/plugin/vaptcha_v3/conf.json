@@ -1,0 +1,10 @@
+{
+    "name": "手势验证码（VAPTCHA）",
+    "brief": "VAPTCHA手势验证码是人工智能的次时代验证码，完全免费，本插件为官方插件，技术支持 QQ：1828005327（小V）<br>使用方法： 登录官网 - 创建验证单元 - 获取VID及KEY  -  填入VID及KEY - 完成<br>官网地址： <a href='https://www.vaptcha.com' target='_blank'>https://www.vaptcha.com</a>",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": []
+}

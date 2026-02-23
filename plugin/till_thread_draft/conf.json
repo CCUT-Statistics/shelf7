@@ -1,0 +1,13 @@
+﻿{
+    "name": "帖子草稿箱",
+    "brief": "发布或编辑帖子时可将该帖子设为“草稿”状态，方便后续编辑和发布。",
+    "version": "1.1.1",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": [],
+    "username": "Tillreetree",
+    "uid": 0
+}

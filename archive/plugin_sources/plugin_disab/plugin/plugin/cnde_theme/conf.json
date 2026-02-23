@@ -1,0 +1,10 @@
+{
+    "name": "博客主题",
+    "brief": "谈笑间博客主题！修改版本，加入大白css，更改读取附件图片，本模版依赖官方精华主题模块,添加上下贴功能",
+    "version": "1.0.5",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "dependencies": []
+}

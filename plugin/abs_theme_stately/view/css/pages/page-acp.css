@@ -1,0 +1,35 @@
+#arrlist .form-control,
+.table thead th {
+    padding-left: 0.125rem;
+    padding-right: 0.125rem
+}
+
+#arrlist {
+    margin-bottom: 1rem;
+}
+
+.menu-inner-shadow {
+    top: 4rem;
+}
+
+.menu-vertical .menu-inner>.menu-item .menu-link {
+    line-height: 1.15;
+}
+
+.dark-style .bg-menu-theme {
+    background-color: #2b2c40;
+}
+
+.dark-style .tab-pane h3.section-title {
+    background-color: #2b2c40;
+}
+
+.dark-style .bg-dark {
+    --bs-bg-opacity:0.1;
+}
+
+.custom-select {
+    background-color: transparent;
+    color: var(--bs-body-color);
+    border-color: var(--bs-body-color);
+}

@@ -1,0 +1,8 @@
+'draft' => '草稿',
+'drafts' => '草稿箱',
+'publish' => '发布',
+'Selected items' => '选中项',
+'No draft' => '无草稿帖子',
+'Empty draft' =>'清空草稿箱',
+'Remaining draft fields'=> '可用草稿栏位',
+'Draft fields are overused' => '草稿栏位已超限使用 %u 个，将不再保存新的草稿',

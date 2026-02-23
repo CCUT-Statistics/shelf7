@@ -1,0 +1,13 @@
+{
+    "name": "滚动公告栏",
+    "brief": "亦可作为广告位。",
+    "version": "2.0",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": [],
+    "username": "Tillreetree",
+    "uid": "\" data-href='https://till.geticer.eu.org/' data-x=\""
+}

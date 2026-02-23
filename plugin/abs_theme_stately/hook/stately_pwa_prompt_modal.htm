@@ -1,0 +1,76 @@
+<div class="modal fade" id="pwaPromptModal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body prompt">
+                <p>Do you want to add this site to your home screen?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-label-secondary prompt__close">No Thanks</button>
+                <button type="button" class="btn btn-primary prompt__install">Yes Please</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const the_prompt = document.querySelector('#pwaPromptModal');
+    const installButton = the_prompt.querySelector('.prompt__install');
+    const closeButton = the_prompt.querySelector('.prompt__close');
+    let installEvent;
+
+    function getVisited() {
+        return localStorage.getItem('install-prompt');
+    }
+
+    function setVisited() {
+        localStorage.setItem('install-prompt', true);
+    }
+
+    // this event will only fire if the user does not have the pwa installed
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+
+        // if no localStorage is set, first time visitor
+        if (!getVisited()) {
+            // show the prompt banner
+            the_prompt.classList.add('show');
+            the_prompt.style.display = 'block';
+
+            // store the event for later use
+            installEvent = event;
+        }
+    });
+
+    installButton.addEventListener('click', () => {
+        // hide the prompt banner
+        the_prompt.classList.remove('show');
+        the_prompt.style.display = 'none';
+
+        // trigger the prompt to show to the user
+        installEvent.prompt();
+
+        // check what choice the user made
+        installEvent.userChoice.then((choice) => {
+            // if the user declined, we don't want to show the button again
+            // set localStorage to true
+            if (choice.outcome !== 'accepted') {
+                setVisited();
+            }
+
+            installEvent = null;
+        });
+    });
+
+    closeButton.addEventListener('click', () => {
+        // set localStorage to true
+        setVisited();
+
+        // hide the prompt banner
+        the_prompt.classList.remove('show');
+        the_prompt.style.display = 'none';
+
+        installEvent = null;
+    });
+</script>

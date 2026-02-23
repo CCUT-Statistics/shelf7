@@ -1,0 +1,21 @@
+<?php
+    if($abs_theme_stately_setting['ui_tweek']['thread']['show_user_recent_threads']):
+	$user_recent_thread_list = mythread_find_by_uid($thread['uid'], 1, 10);
+	// 过滤没有权限访问的主题 / filter no permission thread
+	thread_list_access_filter($user_recent_thread_list, $gid);
+?>
+<div class="card mb-3">
+    <h6 class="card-header">作者最近主题：</h6>
+    <div class="card-body">
+        <ul>
+            <?php foreach($user_recent_thread_list as $user_recent_thread) : ?>
+            <li>
+                <a href="<?php echo url('thread-'.$user_recent_thread['tid']);?>">
+                    <?php echo $user_recent_thread['subject'];?>
+                </a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

@@ -1,0 +1,61 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.template.htm">
+  <slot name="my_body">
+    <section id="template-customizer">
+      <h3> <?= lang('Customizer') ?> </h3>
+      <section id="template-customizer-mode" class="mb-3">
+        <h4 class="h5">颜色模式</h4>
+        <div class="form-check">
+          <input name="template-customizer-mode" value="light" class="form-check-input" type="radio" id="template-customizer-mode_light">
+          <label class="form-check-label" for="template-customizer-mode_light"> 浅色 </label>
+        </div>
+        <div class="form-check">
+          <input name="template-customizer-mode" value="dark" class="form-check-input" type="radio" id="template-customizer-mode_dark">
+          <label class="form-check-label" for="template-customizer-mode_dark"> 深色 </label>
+        </div>
+        <div class="form-check">
+          <input name="template-customizer-mode" value="auto" class="form-check-input" type="radio" id="template-customizer-auto">
+          <label class="form-check-label" for="template-customizer-auto"> 自动 <span class="text-muted">根据日出日落时间自动设置</span> </label>
+        </div>
+        <div class="form-check">
+          <input name="template-customizer-mode" value="system" class="form-check-input" type="radio" id="template-customizer-system">
+          <label class="form-check-label" for="template-customizer-system"> 系统 <span class="text-muted">根据系统设置自动设置</span> </label>
+        </div>
+      </section>
+      <h4 class="h5">主题色调</h4>
+      <!--{hook stately_template_customizer_color.htm}-->
+      <section id="clear-localstorge" class="mb-3">
+        <h4 class="h5">清理个性化数据</h4>
+        <p>点击按钮，清理保存在您浏览器上的“个性化”数据，包括菜单的展开/折叠状态、颜色模式等。</p>
+        <button type="button" class="btn btn-warning " onclick="localStorage.clear();alert('清理成功，刷新页面后生效。')">清理个性化数据</button>
+      </section>
+    </section>
+  </slot>
+</template>
+<script>
+  //选中现在使用的颜色模式
+  $.each($('#template-customizer-mode input[name=template-customizer-mode]'), function (index, value) {
+    if (value.value == stately_get_theme_color_mode()) {
+      value.checked = true;
+    }
+  });
+  //更新颜色模式
+  $('#template-customizer-mode input[name=template-customizer-mode]').change(function () {
+    localStorage.setItem('statelyThemeColorMode', this.value);
+    stately_apply_theme_color_mode(this.value);
+  });
+  //选中现在使用的色调
+  $.each($('#template-customizer-color input[name=template-customizer-color]'), function (index, value) {
+    if (value.value == stately_get_theme_color()) {
+      value.checked = true;
+    }
+  });
+  //更新色调
+  $('#template-customizer-color input[name=template-customizer-color]').change(function () {
+    localStorage.setItem('statelyThemeColor', this.value);
+    stately_apply_theme_color(this.value);
+  });
+  //stately_apply_theme_color_mode
+  $('a[data-active="my"]').addClass('active');
+
+  $('a[data-active="my-s_customizer"]').addClass('active');
+</script>

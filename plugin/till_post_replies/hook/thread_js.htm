@@ -1,0 +1,221 @@
+<script>
+	/**
+	 * 回复按钮
+	 * 
+	 * @param {HTMLElement} e - 操作对象本身
+	 */
+	function post_reply__reply(pid, reply_id, reply_to_username = '') {
+		let post_reply_form = document.getElementById('post_replies_write_form_' + pid);
+		post_reply_form.querySelector("textarea[name='post_reply_content']").setAttribute('placeholder', '回复 ' + reply_to_username);
+		post_reply_form.querySelector("input[name='to_reply_id']").value = reply_id;
+		post_reply_form.querySelector("button.post_reply_reset").removeAttribute('hidden');
+	}
+
+	/**
+	 * 删除按钮
+	 * 
+	 * @param {HTMLElement} e - 操作对象本身
+	 */
+	function post_reply__delete(pid, reply_id) {
+		// post-rfloor-{pid}.htm?action=delfloor&where=6
+		$.xpost(
+			xn.url('post-rfloor-' + pid, url_rewrite_on),
+			new URLSearchParams(
+				{
+					ajax: 1,
+					action: 'delfloor',
+					where: reply_id
+				}
+			).toString(),
+			function (code, message) {
+				if (code == 0) {
+					document.getElementById('post_reply_item_' + pid + '_' + reply_id).remove();
+					if (typeof $.toast === 'function') {
+						$.toast({
+							title: '回复',
+							subtitle: code,
+							content: message,
+							type: 'success',
+							pause_on_hover: true,
+							delay: 2000,
+						});
+					}
+				} else {
+					if (typeof $.toast === 'function') {
+						$.toast({
+							title: lang.info,
+							subtitle: code,
+							content: message,
+							type: 'warning',
+							pause_on_hover: false,
+							delay: 5000,
+						});
+					} else {
+						$.alert(message);
+					}
+				}
+			}
+		);
+	}
+	/**
+	 * 跳转页码
+	 * 
+	 * @param {HTMLElement} e - 操作对象本身
+	 */
+	function post_reply__go_to_page(pid, page) {
+		// post-rfloor-{pid}.htm?action=list&page=1
+		let max_page = document.getElementById('post_replies_max_page_' + pid).value;
+		let url = xn.url('post-rfloor-' + pid, url_rewrite_on);
+		if (url.indexOf('?') !== -1) {
+			url = url.concat('&');
+		} else {
+			url = url.concat('?');
+		}
+		url = url.concat(
+			new URLSearchParams(
+				{
+					ajax: 1,
+					action: 'list',
+					page: page,
+					return_html: 1
+				}
+			).toString()
+		);
+
+		if (Number(page) < 1) {
+			$.alert('已经是第一页了');
+			return false;
+		}
+
+		if (Number(page) > Number(max_page)) {
+			$.alert('已经是最后一页了');
+			return false;
+		}
+
+		document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .loading').removeAttribute('hidden');
+
+		$.xget(
+			url,
+			function (code, message) {
+				if (code == 0) {
+					console.log(code, message);
+					document.getElementById('post_replies_' + pid).querySelector('.post_replies_list>ul').innerHTML = message.data;
+
+					document.getElementById('post_replies_current_page_display_' + pid).innerText = page;
+					document.getElementById('post_replies_current_page_' + pid).value = page;
+
+					document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .loading').setAttribute('hidden', 'hidden');
+
+					document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.next>.page-link').setAttribute('data-page', new Number(page) + 1);
+					document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.prev>.page-link').setAttribute('data-page', new Number(page) - 1);
+
+					document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.last>.page-link').setAttribute('data-page', message.max_page);
+
+					document.getElementById('post_replies_max_page_' + pid).value = message.max_page;
+
+					if (page === '1') {
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.prev').classList.add('disabled');
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.first').classList.add('disabled');
+					} else {
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.prev').classList.remove('disabled');
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.first').classList.remove('disabled');
+					}
+					if (page === max_page) {
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.next').classList.add('disabled');
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.last').classList.add('disabled');
+					} else {
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.next').classList.remove('disabled');
+						document.getElementById('post_replies_' + pid).querySelector('.post_replies_list_pagination .page-item.last').classList.remove('disabled');
+					}
+					return true;
+				} else {
+					if (typeof $.toast === 'function') {
+						$.toast({
+							title: '回复',
+							subtitle: code,
+							content: message,
+							type: 'warning',
+							pause_on_hover: false,
+							delay: 5000,
+						});
+					} else {
+						$.alert(message);
+					}
+					return true;
+				}
+			}
+		);
+
+	}
+	/**
+	 * 发表回复
+	 * 
+	 * @param {HTMLElement} e - 操作对象本身
+	 */
+	function post_reply__write_form_handler(e) {
+		// post-rfloor-{pid}.htm?action=add&post_reply_content={message}&to_uid={uid}
+		let form_data = new FormData(e);
+		let post_data = new URLSearchParams(form_data).toString();
+		let submit_btn = $(e.querySelector('button.post_reply_submit'));
+		submit_btn.button('loading');
+		$.xpost(
+			e.getAttribute('action'),
+			post_data,
+			function (code, message) {
+				if (code == 0) {
+					console.log(code, message);
+					var new_post_reply_html = $(message.data);
+					new_post_reply_html.insertAfter('#post_replies_list_' + form_data.get('pid') + '>ul>li:last-child');
+					var empty_placeholder_li = document.querySelector('#post_replies_list_' + form_data.get('pid') + '>ul>li.empty');
+					if (empty_placeholder_li !== null) {
+						empty_placeholder_li.remove();
+					}
+					submit_btn.button('reset');
+
+					post_reply__reply_reset(form_data.get('pid'), true);
+					if (typeof $.toast === 'function') {
+						$.toast({
+							title: '回复',
+							subtitle: code,
+							content: message.message,
+							type: 'success',
+							pause_on_hover: true,
+							delay: 2000,
+						});
+					}
+				} else {
+					if (typeof $.toast === 'function') {
+						$.toast({
+							title: '回复',
+							subtitle: code,
+							content: message,
+							type: 'warning',
+							pause_on_hover: false,
+							delay: 5000,
+						});
+					} else {
+						$.alert(message);
+					}
+					submit_btn.button('reset');
+				}
+			}
+		);
+
+	}
+
+	/**
+	 * 重置表单
+	 */
+	function post_reply__reply_reset(pid, clear_content = false) {
+		let post_reply_form = document.getElementById('post_replies_write_form_' + pid);
+		let submit_btn = $(post_reply_form.querySelector('button.post_reply_submit'));
+		post_reply_form.querySelector("textarea[name='post_reply_content']").setAttribute('placeholder', '');
+		post_reply_form.querySelector("input[name='to_reply_id']").value = 0;
+		post_reply_form.querySelector("button.post_reply_reset").setAttribute('hidden', 'hidden');
+		if (clear_content) {
+			post_reply_form.querySelector("textarea[name='post_reply_content']").value = '';
+		}
+		submit_btn.button('reset');
+	}
+
+</script>

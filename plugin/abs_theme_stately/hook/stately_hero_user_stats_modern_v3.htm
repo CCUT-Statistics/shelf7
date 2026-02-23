@@ -1,0 +1,73 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['user']['show_stats_on_hero']): ?>
+<div class="d-flex align-items-center justify-content-start flex-shrink-0 d-lg-none">
+    <div class="d-inline-flex flex-wrap justify-content-start mt-3 me-2 mw-n2 text-center ">
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['threads'];?>
+            </span>
+            <small>
+                <?= lang('threads');?>
+            </small>
+        </div>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['posts'];?>
+            </span>
+            <small>
+                <?= lang('posts');?>
+            </small>
+        </div>
+        <?php if(isset($_user['digests'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['digests'];?>
+            </span>
+            <small>
+                <?= lang('digests');?>
+            </small>
+        </div>
+        <?php endif; ?>
+        <?php if(isset($_user['follows'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['follows'];?>
+            </span>
+            <small> 关注数 </small>
+        </div>
+        <?php endif; ?>
+        <?php if(isset($_user['followeds'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['followeds'];?>
+            </span>
+            <small> 粉丝数 </small>
+        </div>
+        <?php endif; ?>
+
+<?php if(isset($_user['credits'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['credits'] ?>
+            </span>
+            <small> <?= lang('credits1') ?> </small>
+        </div>
+<?php endif; ?>
+<?php if(isset($_user['golds']) && intval($gid) === 1): ?>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['golds'] ?>
+            </span>
+            <small> <?= lang('credits2') ?> </small>
+        </div>
+<?php endif; ?>
+<?php if(isset($_user['rmbs']) && intval($gid) === 1): ?>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold">
+                <?= $_user['rmbs'] ?>
+            </span>
+            <small> <?= lang('credits3') ?> </small>
+        </div>
+<?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>

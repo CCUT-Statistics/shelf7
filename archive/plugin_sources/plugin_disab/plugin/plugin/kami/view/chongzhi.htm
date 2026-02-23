@@ -1,0 +1,64 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<div class="row line-height-3">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title"><?php echo '充值';?></h5>
+				<p>
+					小提示:1元=10悦币,点击下方的充值链接获取卡号卡密
+				</p>
+				<p style="text-align: center;">
+					<a href="http://tenyet.com.cn" target="_blank"><strong><span style="color:#ff0000">10元</span></strong></a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="http://tenyet.com.cn" target="_blank"><strong><span style="color:#ff0000">50元</span></strong></a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="http://tenyet.com.cn" target="_blank"><strong><span style="color:#ff0000">100元</span></strong></a>
+				</p>
+				<form action="<?php echo url('kami-chongzhi2');?>" method="post" id="form">
+					<div class="form-group input-group">
+						<input type="text" class="form-control" placeholder="<?php echo '需要充值的邮箱';?>" id="youxiang" name="youxiang">
+						<div class="invalid-feedback"></div>
+					</div>
+					<div class="form-group input-group">
+						<input type="text" class="form-control" placeholder="<?php echo '卡号';?>" id="kahao" name="kahao">
+						<input type="text" class="form-control" placeholder="<?php echo '卡密';?>" id="kami" name="kami">
+						<div class="invalid-feedback"></div>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>"><?php echo '充值';?></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+	var jform = $('#form');
+	var jsubmit = $('#submit');
+	var jyouxiang = $('#youxiang');
+	var jkahao = $('#kahao');
+	var jkami = $('#kami');
+	jform.on('submit', function() {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serializeObject();
+		$.xpost(jform.attr('action'), postdata, function(code, message) {
+			if(code == 0) {
+				$.alert(message);
+				jsubmit.button('reset');
+			} else if(code == 'youxiang') {
+				jyouxiang.alert(message).focus();
+				jsubmit.button('reset');
+			} else if(code == 'kahao') {
+				jkahao.alert(message).focus();
+				jsubmit.button('reset');
+			} else if(code == 'kami') {
+				jkami.alert(message).focus();
+				jsubmit.button('reset');
+			} else {
+				$.alert(message);
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+</script>

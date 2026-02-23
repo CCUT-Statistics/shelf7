@@ -1,0 +1,7 @@
+<?php 
+$_user = db_find_one('user',array('uid'=>$thread['uid']));
+$colour = db_find_one('group',array('gid'=>$_user['gid'])); 
+?>
+<span class="badge mr-1 bg-<?php echo $colour['colour'];?> text-<?php echo $colour['fcolour'];?>" style="font-size:<?php echo $colour['size'];?>px!important">
+    <?php echo $colour['name'];?>
+</span>

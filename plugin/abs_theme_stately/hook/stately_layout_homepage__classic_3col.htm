@@ -1,0 +1,66 @@
+<?php $stately_homepage_thread_list_nav_extra_class = 'd-lg-none'; ?>
+<div data-layout="classic_3col" class="row">
+    <div class="col-lg-2 hidden-md hidden-sm">
+        <div class="card p-2" id="v_pills_tab">
+            <div class="nav-align-left flex-column">
+                <ul class="nav nav-pills w-100">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $active == 'default' ? 'active' : ''; ?>" href="./<?= url($route); ?>">
+                            <i class="la la-compass"></i>
+                            <?= lang('new_thread'); ?>
+                        </a>
+                    </li>
+                    <!--{hook index_thread_list_nav_item_after.htm}-->
+                    <li class="nav-item ml-auto">
+                        <!--{hook index_thread_list_nav_item_end.htm}-->
+                    </li>
+                </ul>
+                <hr class="my-1">
+                <ul class="nav nav-pills w-100 forumlist">
+                    <?php foreach($forumlist_show as $_forum) : ?>
+                    <!--{hook header_nav_forumlist_loop_start.htm}-->
+                    <li class="nav-item" fid="<?= $_forum['fid'];?>" data-active="fid-<?= $_forum['fid'];?>">
+                        <a class="nav-link" href="<?= url('forum-'.$_forum['fid']);?>">
+                            <img loading="lazy" decoding="async" src="<?= $_forum['icon_url'] ?>" class="w-px-20">
+                            <?= $_forum['name'];?>
+                        </a>
+                    </li>
+                    <!--{hook header_nav_forumlist_loop_end.htm}-->
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+        <!--{hook index_main_left.htm}-->
+    </div>
+    <div class="col-lg-7 main">
+        <!--{hook widget_sitestats_v4.htm}-->
+        <!--{hook mobile_index_main_start.htm}-->
+        <!--{hook index_main_start.htm}-->
+        <!--{hook stately_homepage_alltopthreads.htm}-->
+        <div class="card-threadlist">
+            <!--{hook stately_modal_newthread.htm}-->
+            <?php if($abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'outer'): ?>
+            <!--{hook stately_homepage_thread_list_nav.htm}-->
+            <?php endif; ?>
+            <!--{hook stately_threadlist_before.htm}-->
+            <div class="<?= $stately_threadlist_class_add ?>">
+            <?php if($abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'inner'): ?>
+            <!--{hook stately_homepage_thread_list_nav.htm}-->
+            <?php endif; ?>
+                <ul class="list-unstyled threadlist row g-0 mb-0" data-style="<?= $stately_threadlist_style ?>">
+                    <!--{hook index_threadlist_before.htm}-->
+                    <?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+                    <!--{hook index_threadlist_after.htm}-->
+                </ul>
+            </div>
+        </div>
+        <?php include _include(APP_PATH . 'view/htm/thread_list_mod.inc.htm'); ?>
+        <!--{hook index_page_before.htm}-->
+        <!--{hook stately_threadlist_pagination.htm}-->
+        <!--{hook mobile_index_page_end.htm}-->
+        <!--{hook index_page_end.htm}-->
+    </div>
+    <div class="<?= $abs_stetely_sidebar_class ?>">
+        <!--{hook widget_slot_homepage.htm}-->
+    </div>
+</div>

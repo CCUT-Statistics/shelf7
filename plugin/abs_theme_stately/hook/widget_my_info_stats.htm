@@ -1,0 +1,34 @@
+<div class="d-flex justify-content-between text-center mt-3">
+    <div class="d-flex flex-column">
+        <small class="text-muted">
+            <?= lang('threads');?>
+        </small>
+        <span>
+            <?= $user['threads'];?>
+        </span>
+    </div>
+    <div class="d-flex flex-column">
+        <small class="text-muted">
+            <?= lang('posts');?>
+        </small>
+        <span>
+            <?= $user['posts'];?>
+        </span>
+    </div>
+    <?php if(isset($user['follows'])): ?>
+    <div class="d-flex flex-column">
+        <small class="text-muted"> 关注 </small>
+        <span>
+            <?= $user['follows'];?>
+        </span>
+    </div>
+    <?php endif; ?>
+    <?php if(isset($user['followeds'])): ?>
+    <div class="d-flex flex-column">
+        <small class="text-muted"> 粉丝 </small>
+        <span>
+            <?= $user['followeds'];?>
+        </span>
+    </div>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,1 @@
+'select_cover_image' => 'Select Cover Image',

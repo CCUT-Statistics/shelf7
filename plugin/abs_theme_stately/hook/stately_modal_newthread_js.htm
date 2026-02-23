@@ -1,0 +1,29 @@
+<?php if( $abs_theme_stately_setting['special']['quickthread_modal']['enable'] && isset($hook_modal_new_thread_exist) && $hook_modal_new_thread_exist ): ?>
+<script defer id="modal_newthread_js">
+    window.onload = function () {
+
+        var jform = $('#quick_post_form');
+        var jsubmit = $('#submit');
+        var jfid = jform.find('select[name="fid"]');
+        jform.on('submit', function () {
+            jform.reset();
+            jsubmit.button('loading');
+            var postdata = jform.serialize();
+            $.xpost(jform.attr('action'), postdata, function (code, message) {
+                if (code == 0) {
+                    $.toast({ title: message, content: message, type: 'success' });
+                    jsubmit.button(message).delay(1000).location('');
+                } else if (xn.is_number(code)) {
+                    alert(message);
+                    jsubmit.button('reset');
+                } else {
+                    $.toast({ title: '注意', subtitle: code, content: message, type: 'warning' });
+                    //jform.find('[name="'+code+'"]').alert(message).focus();
+                    jsubmit.button('reset');
+                }
+            });
+            return false;
+        });
+    }
+</script>
+<?php endif;?>

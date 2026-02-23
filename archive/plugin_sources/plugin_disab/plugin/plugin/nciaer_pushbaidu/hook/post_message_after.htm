@@ -1,0 +1,13 @@
+<?php
+ $pconfig = kv_get('nciaer_pushbaidu');
+ $gids = $pconfig['gids'] ? $pconfig['gids']:array();
+ if(in_array($user['gid'], $gids)):
+?>
+<div class = "form-group">
+   <label class="form-check-inline">
+      <input type = "checkbox" name = "pushbaidu" value = "1" />&nbsp;发帖后推送到百度
+   </label>
+</div>
+<?php
+endif;
+?>

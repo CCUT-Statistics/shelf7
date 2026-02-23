@@ -1,0 +1,5 @@
+'bbspage' => '【Stately】BBS主页',
+'portalpage' => '【Stately】门户主页',
+'appbar_menu' => '【Stately】App底部栏',
+'stately_contextmenu__normal' => '【Stately】右键菜单自定义链接',
+'app_changelog' => 'App更新记录【请保证最后一项是最新版！】',

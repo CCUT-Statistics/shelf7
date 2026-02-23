@@ -1,0 +1,71 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+
+<div class="card">
+    <div class="card-header">擦亮帖子</div>
+    <div class="card-body ajax-body">
+        <form action="<?php echo url('mod-caliang');?>" method="post" id="mod_caliang_form">
+            <div class="form-group row">
+                <label class="col-3 form-control-label text-right">是否擦亮：</label>
+                <div class="col-9">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="top" value="0" id="caliang_no">
+                        <label class="form-check-label" for="caliang_no">
+                            不擦亮
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="top" value="1" id="caliang_yes">
+                        <label class="form-check-label" for="caliang_yes">
+                            擦亮
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-3 form-control-label "></label>
+                <div class="col-sm-9">
+                    <button type="submit" class="btn btn-primary mr-2" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('confirm');?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script ajax-eval="true">
+
+    // 接受传参
+    var args = args || { jmodal: null, callback: null, arg: null };
+    var jmodal = args.jmodal;
+    var callback = args.callback;
+    var arg = args.arg;
+    var jthreadlist = $(arg);  // .threadlist
+    var tidarr = jthreadlist.find('input[name="modtid"]').checked();
+    var jform = $('#mod_caliang_form');
+    var jtop = jform.find('input[name="top"]');
+    var jsubmit = jform.find('button[type="submit"]');
+
+    jform.on('submit', function () {
+        jform.reset();
+        jsubmit.button('loading');
+        var postdata = jform.serializeObject();
+        postdata.tidarr = tidarr;
+        postdata.top = jtop.checked();
+        $.xpost(jform.attr('action'), postdata, function (code, message) {
+            if (code == 0) {
+                jsubmit.button(message);
+                setTimeout(function () {
+                    if (jmodal) jmodal.modal('dispose');
+                    if (callback) callback(message);
+                    window.location.reload();
+                }, 1000);
+            } else {
+                alert(message);
+                jsubmit.button('reset');
+            }
+        });
+        return false;
+    });
+
+
+</script>

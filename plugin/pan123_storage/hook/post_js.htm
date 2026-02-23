@@ -1,0 +1,205 @@
+<?php
+$config = setting_get('pan123_storage');
+$enable_video_upload = !empty($config['enable_video_upload']);
+?>
+<?php if ($enable_video_upload) { ?>
+<script>
+(function() {
+	// 仅在发帖/回帖页面插入
+	var $attachParent = $('.attachlist_parent');
+	if (!$attachParent.length) return;
+
+	// 避免重复插入
+	if ($attachParent.data('pan123-inited')) return;
+	$attachParent.data('pan123-inited', 1);
+
+	var $wrap = $('<div class="pan123-video-uploader mt-2"></div>');
+	var $btn = $('<label class="btn btn-sm btn-outline-secondary mr-2 mb-2" style="cursor:pointer;"><i class="icon icon-video-camera"></i> 上传视频(123盘)<input type="file" accept="video/*" style="display:none;"></label>');
+	var $tips = $('<span class="small text-muted">第一段：本地上传到服务器；第二段：服务器异步上传到123盘</span>');
+	var $status = $('<div class="small text-muted mt-2" style="display:none;"></div>');
+	var $progress = $('<div class="progress mt-2" style="display:none;"><div class="progress-bar" role="progressbar" style="width:0%">0%</div></div>');
+	var $retry = $('<div class="mt-2" style="display:none;"><button type="button" class="btn btn-sm btn-outline-danger">重试上传</button></div>');
+	var $retryBtn = $retry.find('button');
+
+	$wrap.append($btn).append($tips).append($status).append($progress).append($retry);
+	$attachParent.prepend($wrap);
+
+	var $input = $btn.find('input[type=file]');
+	var pollTimer = null;
+	var retryTaskId = 0;
+
+	function setProgress(pct, text) {
+		pct = Math.max(0, Math.min(100, pct));
+		$progress.show();
+		$status.show();
+		$progress.find('.progress-bar').css('width', pct + '%').text(pct + '%');
+		$status.text(text || '');
+	}
+
+	function resetProgress() {
+		if (pollTimer) {
+			clearInterval(pollTimer);
+			pollTimer = null;
+		}
+		$progress.hide();
+		$status.hide().text('');
+		$progress.find('.progress-bar').css('width', '0%').text('0%');
+	}
+
+	function hideRetry() {
+		retryTaskId = 0;
+		$retry.hide();
+	}
+
+	function showRetry(taskId, errText) {
+		retryTaskId = parseInt(taskId || 0, 10);
+		if (isNaN(retryTaskId) || retryTaskId <= 0) {
+			retryTaskId = 0;
+			$retry.hide();
+			return;
+		}
+		$retry.show();
+		$status.show().text(errText || '上传失败，可点击“重试上传”');
+	}
+
+	function insertEmbed(embed) {
+		if (!embed) return;
+		if (window.tinymce && tinymce.activeEditor) {
+			tinymce.activeEditor.insertContent(embed);
+		} else {
+			var $msg = $('#message');
+			$msg.val(($msg.val() || '') + "\n" + embed);
+		}
+	}
+
+	function pollTask(taskId) {
+		if (pollTimer) {
+			clearInterval(pollTimer);
+			pollTimer = null;
+		}
+		var maxFail = 5;
+		var failCount = 0;
+		pollTimer = setInterval(function() {
+			$.xpost(xn.url('pan123-task_status'), {task_id: taskId}, function(code, message) {
+				if (code != 0) {
+					failCount++;
+					setProgress(55, '服务器→123盘：状态查询失败，重试中…');
+					if (failCount >= maxFail) {
+						resetProgress();
+						$.alert(message || '任务状态查询失败');
+					}
+					return;
+				}
+
+				failCount = 0;
+				var status = (message && message.status) ? message.status : 'PENDING';
+				var progress = (message && typeof message.progress !== 'undefined') ? parseInt(message.progress, 10) : 0;
+				if (isNaN(progress)) progress = 0;
+
+				if (status === 'PENDING') {
+					setProgress(Math.max(progress, 55), '服务器→123盘：排队中');
+					return;
+				}
+				if (status === 'RUNNING') {
+					setProgress(Math.max(progress, 70), '服务器→123盘：上传中');
+					return;
+				}
+				if (status === 'FAIL_RETRY') {
+					setProgress(Math.max(progress, 60), '服务器→123盘：失败，等待重试');
+					return;
+				}
+				if (status === 'FAIL_FINAL') {
+					resetProgress();
+					showRetry((message && message.task_id) ? message.task_id : taskId, (message && message.error) ? message.error : '上传失败，已达最大重试次数');
+					return;
+				}
+				if (status === 'SUCCESS') {
+					setProgress(100, '服务器→123盘：完成');
+					setTimeout(function() { resetProgress(); }, 300);
+					hideRetry();
+					insertEmbed(message.embed || '');
+
+					var hint = '';
+					if (message.shareUrl) hint += '分享链接：' + message.shareUrl + "\n";
+					if (message.directUrl) hint += '直链：' + message.directUrl + "\n";
+					if ($.toast) {
+						$.toast({title: '123盘', content: '视频上传成功\n' + hint, type: 'success'});
+					} else {
+						$.alert('视频上传成功\n' + hint);
+					}
+				}
+			});
+		}, 2000);
+	}
+
+	$retryBtn.on('click', function() {
+		if (!retryTaskId) return;
+		var taskId = retryTaskId;
+		$.xpost(xn.url('pan123-task_retry'), {task_id: retryTaskId}, function(code, message) {
+			if (code != 0) {
+				$.alert(message || '重试失败');
+				return;
+			}
+			hideRetry();
+			setProgress(55, '服务器→123盘：已重新入队，等待处理');
+			pollTask(taskId);
+		});
+	});
+
+	$input.on('change', function(e) {
+		var files = e.target.files;
+		if (!files || !files.length) return;
+		var file = files[0];
+		hideRetry();
+
+		var fd = new FormData();
+		fd.append('file', file);
+
+		setProgress(1, '本地→服务器：准备上传');
+
+		$.ajax({
+			url: xn.url('pan123-video_upload'),
+			method: 'POST',
+			data: fd,
+			processData: false,
+			contentType: false,
+			xhr: function() {
+				var xhr = $.ajaxSettings.xhr();
+				if (xhr.upload) {
+					xhr.upload.addEventListener('progress', function(evt) {
+						if (evt.lengthComputable) {
+							var pct = Math.round(evt.loaded / evt.total * 100);
+							setProgress(Math.max(1, Math.min(50, Math.round(pct * 0.5))), '本地→服务器：上传中');
+						}
+					}, false);
+				}
+				return xhr;
+			},
+			success: function(r) {
+				if (!r || typeof r.code === 'undefined') {
+					resetProgress();
+					return $.alert('上传接口返回异常');
+				}
+				if (r.code != 0) {
+					resetProgress();
+					return $.alert(r.message || '上传失败');
+				}
+				if (!r.task_id) {
+					resetProgress();
+					return $.alert('未返回 task_id，无法追踪任务状态');
+				}
+				setProgress(55, '服务器→123盘：已入队，等待处理');
+				pollTask(r.task_id);
+			},
+			error: function() {
+				resetProgress();
+				$.alert('上传失败：网络错误或服务器错误');
+			}
+		});
+
+		// 清空 input，允许重复选择同一文件
+		$input.val('');
+	});
+})();
+</script>
+<?php } ?>

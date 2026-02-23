@@ -1,0 +1,40 @@
+<div class="card card-site-info border-1 hidden-lg">
+	<div class="m-2 yqli">
+		<ul>
+		<li>
+		<i class="icon fas fa-hashtag yqicon"></i>
+		<br>
+		<span class="text-muted">
+		<?php echo lang('threads');?></span>
+		<span>
+		<b><?php echo $runtime['threads'];?></b>
+		  <b><span style="font-size:.8rem;display:block;color:#8590a6"><?php echo lang('today_threads');?><span style="color:#000;"><?php echo $runtime['todaythreads'];?></span></span></b>
+		  </span>
+		</li>
+		<li>
+		<i class="icon far fa-comments yqicon"></i>
+		<br>
+		<span class="text-muted">
+		<?php echo lang('posts');?></span>
+		<span>
+		<b><?php echo $runtime['posts'];?></b>
+		  <b><span style="font-size:.8rem;display:block;color:#8590a6"><?php echo lang('today_posts');?><span style="color:#000;"><?php echo $runtime['todayposts'];?></span></span></b>
+		  </span>
+		</li>
+		<li>
+		<i class="icon far fa-address-book yqicon"></i>
+		<br>
+		<span class="text-muted">
+		<?php echo lang('users');?></span>
+		<span>
+		<b><?php echo $runtime['users'];?></b>
+		  <b><span style="font-size:.8rem;display:block;color:#8590a6;">
+		  <?php if($runtime['onlines'] > 0) { ?>
+		  <?php echo lang('online');?><span style="color:#000"><?php echo $runtime['onlines'];?></span>•
+		  <?php } ?>
+		  <?php echo lang('today_users');?><span style="color:#000"><?php echo $runtime['todayusers'];?></span></span></b>
+		  </span>
+		</li>
+		</ul>
+	</div>
+</div>

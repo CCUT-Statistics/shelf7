@@ -1,0 +1,7 @@
+<!--{hook post_list_inc_update_before.htm}-->
+<?php if ( in_array(intval($gid),array(1),true) || ( boolval($abs_theme_stately_setting['global']['reply']['show_edit_button']) && ($allowupdate || $_post['allowupdate']) ) ){ ?>
+<a href="<?= url('post-update-'.$_post['pid']);?>" class="text-muted post_update mr-3"><i class="la la-edit" title="<?= lang('edit');?>"></i> <span class="d-none d-lg-inline">
+        <?= lang('edit');?>
+    </span></a>
+<?php } /* endif */ ?>
+<!--{hook post_list_inc_update_after.htm}-->

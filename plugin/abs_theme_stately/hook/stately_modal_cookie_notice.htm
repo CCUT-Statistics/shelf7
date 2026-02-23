@@ -1,0 +1,154 @@
+<?php if ($abs_theme_stately_setting['custom_content']['global_cookie_notice']['enable'] && !isset($_COOKIE['cookie_policy'])) : ?>
+<style id="stately_cookie_dialog_css">
+    #StatelyCookieDialog {
+        position: fixed;
+        z-index: 800;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    #StatelyCookieDialog p {
+        margin: 0;
+    }
+
+    #StatelyCookieDialog[data-style="v1"] {
+        max-width: 36rem;
+        bottom: 0;
+        right: 0;
+        width: calc(100% - 3rem);
+    }
+
+    #StatelyCookieDialog[data-style="v1"] .cookie-button {
+        margin-top: 1em;
+    }
+
+    #StatelyCookieDialog[data-style="v2"] {
+        max-width: 36rem;
+        bottom: 0;
+        right: 0;
+        width: calc(100% - 3rem);
+    }
+
+    #StatelyCookieDialog[data-style="v2"] .cookie-button {
+        flex: 1 0 auto;
+    }
+
+    #StatelyCookieDialog[data-style="v3"] {
+        max-width: 56rem;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 3rem);
+    }
+
+    #StatelyCookieDialog[data-style="v4"] {
+        max-width: 24rem;
+        bottom: 0;
+        right: 0;
+        width: calc(100% - 3rem);
+    }
+
+    #StatelyCookieDialog[data-style="v5"] {
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    #StatelyCookieDialog[data-style="v5"] .container-xs {
+        padding-right: 1rem;
+        padding-left: 1rem;
+        max-width: 24rem;
+        margin: 0 auto;
+    }
+</style>
+
+<?php switch ($abs_theme_stately_setting['custom_content']['global_cookie_notice']['style']) {
+        case 'v2': ?>
+<div class="card cookie-dialog m-4" id="StatelyCookieDialog" data-style="<?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['style'] ?>" hidden>
+    <div class="d-block d-lg-flex align-items-center">
+        <div class="mb-2 mb-lg-0 mr-lg-3">
+            <?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global_cookie_notice']['content']) ?>
+        </div>
+        <div class="cookie-button">
+            <button type="button" class="btn btn-primary" id="cookie_accept">知道了</button>
+            <a href="<?= url('terms') ?>" class="btn btn-link" id="cookie_learn_more">了解更多</a>
+        </div>
+    </div>
+</div>
+<?php break;
+        case 'v3': ?>
+<div class="card cookie-dialog mb-4" id="StatelyCookieDialog" data-style="<?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['style'] ?>" hidden>
+    <div class="d-flex align-items-center">
+        <div class="mr-2">
+            <?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global_cookie_notice']['content']) ?>
+        </div>
+        <div class="cookie-button">
+            <button type="button" class="btn btn-close p-2 rounded-circle bg-label-secondary" id="cookie_accept"></button>
+        </div>
+    </div>
+</div>
+<?php break;
+        case 'v4': ?>
+<div class="card cookie-dialog m-4" id="StatelyCookieDialog" data-style="<?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['style'] ?>" hidden>
+    <h3 class="h5"><?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['title'] ?></h3>
+    <?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global_cookie_notice']['content']) ?>
+    <div class="mt-3 cookie-button d-flex">
+        <button type="button" class="d-inline-block w-50 btn btn-primary mr-1" id="cookie_accept">知道了</button>
+        <a href="<?= url('terms') ?>" class="d-inline-block w-50 btn bg-label-primary ml-1" id="cookie_learn_more">了解更多</a>
+    </div>
+</div>
+<?php break;
+        case 'v5': ?>
+<div class="card cookie-dialog m-0" id="StatelyCookieDialog" data-style="<?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['style'] ?>" hidden>
+    <div class="container-xs">
+        <h3 class="h5"><?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['title'] ?></h3>
+        <?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global_cookie_notice']['content']) ?>
+        <div class="mt-3 cookie-button">
+            <button type="button" class="btn btn-primary" id="cookie_accept">知道了</button>
+            <a href="<?= url('terms') ?>" class="btn btn-link" id="cookie_learn_more">了解更多</a>
+        </div>
+    </div>
+</div>
+<?php break;
+        default: /* v1 */ ?>
+<div class="card cookie-dialog m-4" id="StatelyCookieDialog" data-style="<?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['style'] ?>" hidden>
+    <div class="row g-3">
+        <div class="col-2">
+            <img loading="lazy" decoding="async" src="./plugin/abs_theme_stately/view/img/cookie.png" class="img-fluid cookie-icon" alt="Tasty Cookie" loading="lazy">
+        </div>
+        <div class="col-10">
+            <h3 class="h5"><?= $abs_theme_stately_setting['custom_content']['global_cookie_notice']['title'] ?></h3>
+            <?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global_cookie_notice']['content']) ?>
+            <div class="mt-3 cookie-button">
+                <button type="button" class="btn btn-primary" id="cookie_accept">知道了</button>
+                <a href="<?= url('terms') ?>" class="btn btn-link" id="cookie_learn_more">了解更多</a>
+            </div>
+        </div>
+    </div>
+</div>
+<?php break;
+    } /* endswitch */ ?>
+
+
+
+<script id="stately_cookie_dialog_js">
+
+    if (document.cookie.indexOf('cookie_policy') === -1) {  
+        document.getElementById('StatelyCookieDialog').removeAttribute('hidden');  
+    } else {  
+        document.getElementById('StatelyCookieDialog').setAttribute('hidden', 'true');  
+    }  
+  
+    document.getElementById('cookie_accept').addEventListener('click', function () {  
+        var expirationDate = new Date((new Date().getTime()) + 6 * 30 * 24 * 60 * 60 * 1000);
+
+        document.cookie = 'cookie_policy=accept; expires=' + expirationDate.toUTCString() + '; path=/; domain=<?= $_SERVER["SERVER_NAME"]; ?>';  
+
+        document.getElementById('StatelyCookieDialog').setAttribute('hidden', 'true');  
+    });  
+</script>
+
+<?php endif; ?>

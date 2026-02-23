@@ -1,0 +1,14 @@
+{
+    "name": "用户组样式插件",
+    "brief": "可批量设置不同用户组文字颜色背景颜色字体大小<br>独立配置表，扩展性更强",
+    "version": "1.1",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": {
+        "thread_list_inc_username_after.htm": 999,
+        "thread_username_after.htm": 999,
+        "post_list_inc_username_after.htm": 999
+    },
+    "dependencies": []
+}

@@ -1,0 +1,16 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.common.template.htm">
+	<slot name="my_nav">
+		<ul class="nav nav-pills">
+			<!--{hook my_nav_sg_invite_before.htm}-->
+			<li class="nav-item">
+				<a class="nav-link" href="<?= url('my-sg_invite' );?>" data-active="my-sg_invite">
+					<?php echo lang('sg_invite');?>
+				</a>
+			</li>
+			<!--{hook my_nav_sg_invite_after.htm}-->
+		</ul>
+	</slot>
+</template>
+<script>
+	$('a[data-active="menu-my-sg_invite"]').addClass('active');
+</script>

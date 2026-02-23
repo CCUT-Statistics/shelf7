@@ -1,0 +1,16 @@
+<template include="./view/htm/my.common.template.htm">
+	<slot name="my_nav">
+		<!--{hook my_nav_count_top.htm}-->
+		<ul class="nav nav-tabs card-header-tabs">
+			<!--{hook my_nav_count_before.htm}-->
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url("my-count");?>" data-active="my-gowild-count"><?php echo lang('my_gowild_count');?></a>
+			</li>
+			<!--{hook my_nav_count_after.htm}-->
+		</ul>
+	</slot>
+</template>
+
+<script>
+$('a[data-active="menu-my-count"]').addClass('active');
+</script>

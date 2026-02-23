@@ -1,0 +1,11 @@
+<?php if($isfirst&&$group['allowOffer']=="1"&&$action == 'create') { $set_offer=setting_get('tt_offer');$offer_script=1;?>
+<div  class="form-group input-group" id="tt_offer">
+	<label class="input-group-prepend"><span class="input-group-text"><?php echo lang('offer');?> :</span> </label>
+	<div class="custom-input form-control"><?php echo $input['offer_status'];?></div>
+
+	<div class="form-group input-group" id="offer_group">
+		<div class="input-group-prepend"><span class="input-group-text">悬赏金额</span></div>
+		<input maxlength="10" type="text" class="form-control" name="offer_num" placeholder="<?php echo lang('credits'.$set_offer['credits_type']).($set_offer['credits_type']=='3'?' (单位:分)':'');?>" id="offer_num" style="display: inline-block;"/>
+	</div>
+</div>
+<?php } ?>

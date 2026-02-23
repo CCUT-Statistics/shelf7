@@ -1,0 +1,100 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+
+<!--{hook index_start.htm}-->
+<div class="row">
+	<div class="col-lg-9 main">
+		<!--{hook index_main_start.htm}-->
+		<div class="card card-threadlist">
+			<div class="box_title">
+        <ul class="nav_type" style="margin-top: 16px;">
+          <li class="<?php echo $active == 'default' ? 'activeNav' : '';?>">
+            <a class="redNav" href="./<?php echo url("$route");?>"><?php echo lang('new_thread');?></a>
+          </li>
+          <!--{hook index_thread_list_nav_item_after.htm}-->
+        </ul>
+			</div>
+			<div class="card-body" style="padding-top: 0px;padding-left:0px;padding-right:0px;">
+				<ul class="list-unstyled threadlist mb-0">
+					<!--{hook index_threadlist_before.htm}-->
+					<?php include _include(APP_PATH.'view/htm/thread_list.inc.htm');?>
+					<!--{hook index_threadlist_after.htm}-->
+				</ul>
+			</div>
+		</div>
+		
+		<?php include _include(APP_PATH.'view/htm/thread_list_mod.inc.htm');?>
+		
+		<!--{hook index_page_before.htm}-->
+		<nav class="my-3"><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+		<!--{hook index_page_end.htm}-->
+	</div>
+	<div class="col-lg-3 d-none d-lg-block aside">
+		<div class="main_right_top module_box">
+			<a class="button" href="<?php echo url('thread-create-'.$fid);?>"><i class="icon fas fa-edit Button-icon"></i><?php echo lang('thread_create_new');?></a>
+		</div>
+		<!--{hook index_site_brief_before.htm}-->
+		<div class="main_right_bottom module_box main_right_forum hidden-sm">
+			<!--{hook index_site_brief_start.htm}-->
+			<div class="main_right_item">
+				<p class="title"><span class="icon fas fa-home"></span> <?php echo lang('site_info');?></p>
+			</div>
+			<div class="line-height-3"><?php echo $conf['sitebrief'];?></div>
+		</div>
+		<div class="main_right_bottom module_box main_right_forum hidden-sm">
+			<div class="main_right_item">
+				<p class="title"><span class="icon fas fa-server"></span> <?php echo lang('site_data');?></p>
+			</div>
+			<style>
+			.yqli li{float:left;width:33.3333333333%;text-align:center;}
+			.yqicon{font-size:30px;}
+			</style>
+			<div class="m-2 yqli">
+			<ul>
+			  <li>
+				<i class="icon fas fa-hashtag yqicon"></i><br>
+				<span class="text-muted"><?php echo lang('threads');?></span>
+				<span>
+				  <b><?php echo $runtime['threads'];?></b>
+				  <b><span style="font-size:.8rem;display:block;color:#8590a6"><?php echo lang('today_threads');?><span style="color:#000;"> <?php echo $runtime['todaythreads'];?></span></span></b>
+				</span>
+			  </li>
+			  <li>
+				<i class="icon far fa-comments yqicon"></i><br>
+				<span class="text-muted"><?php echo lang('posts');?></span>
+				<span>
+				  <b><?php echo $runtime['posts'];?></b>
+				  <b><span style="font-size:.8rem;display:block;color:#8590a6"><?php echo lang('today_posts');?><span style="color:#000;"> <?php echo $runtime['todayposts'];?></span></span></b>
+				</span>
+			  </li>
+			  <li>
+				<span class="icon far fa-address-book yqicon"></span><br>
+				<span class="text-muted"><?php echo lang('users');?></span>
+				<span>
+					<b><?php echo $runtime['users'];?></b>
+					<b><span style="font-size:.8rem;display:block;color:#8590a6;">
+					<?php if($runtime['onlines'] > 0) { ?>
+					<?php echo lang('online');?><span style="color:#000"> <?php echo $runtime['onlines'];?></span>
+					<?php } ?>
+					</span></b>
+				</span>
+			  </li>
+			</ul>
+			</div>
+			<!--{hook index_site_brief_end.htm}-->
+		</div>
+		<!--{hook index_site_brief_after.htm}-->
+		<!--{hook main_right_forum.htm}-->
+		<!--{hook main_right_image.htm}-->
+		<!--{hook index_main_right_end.htm}-->
+	</div>
+</div>
+
+<!--{hook index_end.htm}-->
+
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+$(".item-allDiscussions").addClass("active");
+</script>
+
+<!--{hook index_js.htm}-->

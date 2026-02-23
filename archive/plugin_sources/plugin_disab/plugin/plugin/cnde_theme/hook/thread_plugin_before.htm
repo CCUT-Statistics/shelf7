@@ -1,0 +1,17 @@
+
+
+
+<!--在内容页增加上一篇和下一篇-->
+<div class="updown">
+<?php
+$arrlist_n = db_find_one('thread', array('fid'=>$fid, 'tid'=>array('>'=>$tid)), array('tid'=>1));
+$arrlist_p = db_find_one('thread', array('fid'=>$fid, 'tid'=>array('<'=>$tid)), array('tid'=>-1));
+if($arrlist_p){
+echo '<a href="'.url("thread-".$arrlist_p['tid']).'"><span>上一篇：'.$arrlist_p['subject'].'</span></a>';
+}else{echo '<span>上一篇：没了</span>';}
+if($arrlist_n){
+echo '<a href="'.url("thread-".$arrlist_n['tid']).'"><span>下一篇：'.$arrlist_n['subject'].'</span></a>';
+}else{echo '<span>下一篇：没了</span>';}
+?>
+</div>
+<!--//可直接hook在帖子结尾-->

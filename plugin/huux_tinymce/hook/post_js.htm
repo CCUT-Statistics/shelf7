@@ -1,0 +1,26 @@
+
+<script  id="tinymce_external_objs" type="text/javascript">
+    var t_external_toolbar = [];
+    var t_external_plugins = {};
+</script>
+
+<!--{hook huux_tinymce_post_js_before.htm}-->
+
+<script id="tinymce_js"  type="text/javascript" src="plugin/huux_tinymce/tinymce/tinymce.min.js"></script>
+<script id="tinymce_init_post_js"  type="text/javascript" src="plugin/huux_tinymce/tinymce/init.js"></script>
+<script id="tinymce_init_custom_js"  type="text/javascript">
+    document.addEventListener('DOMContentLoaded',function () {
+
+        // 启动HTML模式
+        document.querySelector('input[name="doctype"]').value = 0;
+
+        // 取文本框message所在form表单
+        var xn_sbform = document.querySelector('form#form'); 
+
+        // 给submit挂载同步事件；实际上tinymce的保存是在init.js里的setup函数里做的，在这里只是为了多重保险
+        xn_sbform.addEventListener('submit', function () { tinyMCE.editors['message'].save(); }); 
+    });
+</script>
+
+<!--{hook huux_tinymce_post_js_after.htm}-->
+

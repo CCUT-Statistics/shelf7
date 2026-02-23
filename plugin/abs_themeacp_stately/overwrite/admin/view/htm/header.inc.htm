@@ -1,0 +1,172 @@
+<?php 
+
+$conf= G('conf');
+
+if (!function_exists('checkIsBetweenTime')) {
+    /**
+     * 判断当前的时分是否在指定的时间段内
+     * @param string $start 开始时分  eg:10:30
+     * @param string $end 结束时分   eg:15:30
+     * @param bool $nextday 结束时间是否在第二天？（用于判断“从晚上到第二天早上”的情况）
+     * @author mzc
+     * @date 2018/8/9 10:46
+     * @return bool  true:在范围内，false:没在范围内
+     */
+
+    function checkIsBetweenTime($start, $end, $nextday = false) {
+        $date = date('H:i');
+        $curTime = strtotime($date); //当前时分
+        $assignTime1 = strtotime($start); //获得指定分钟时间戳，00:00
+        if ($nextday) {
+            $assignTime2 = strtotime($end . ' +24 hours'); //获得指定分钟时间戳，01:00 + 24小时
+        } else {
+            $assignTime2 = strtotime($end); //获得指定分钟时间戳，01:00
+        }
+        if ($curTime > $assignTime1 && $curTime < $assignTime2) {
+            return true;
+        }
+        return false;
+    }
+}
+
+if(!isset($abs_theme_stately_setting)) {
+	$cached_setting = kv_get('setting');
+	$abs_theme_stately_setting = !is_null(setting_get('abs_theme_stately_setting'))
+		? setting_get('abs_theme_stately_setting')
+		: (isset($cached_setting['abs_theme_stately_setting']) ? $cached_setting['abs_theme_stately_setting'] : array());
+}
+
+if (!is_array($abs_theme_stately_setting)) {
+	$abs_theme_stately_setting = array();
+}
+if (empty($abs_theme_stately_setting['ui']['color']['mode'])) {
+	$abs_theme_stately_setting['ui']['color']['mode'] = 'light';
+}
+if (empty($abs_theme_stately_setting['ui']['auto_dark_mode_config']['begin_time'])) {
+	$abs_theme_stately_setting['ui']['auto_dark_mode_config']['begin_time'] = '20:00';
+}
+if (empty($abs_theme_stately_setting['ui']['auto_dark_mode_config']['end_time'])) {
+	$abs_theme_stately_setting['ui']['auto_dark_mode_config']['end_time'] = '06:00';
+}
+if (empty($abs_theme_stately_setting['ui']['background']['style'])) {
+	$abs_theme_stately_setting['ui']['background']['style'] = 'color';
+}
+
+$is_dark_mode = (
+	$abs_theme_stately_setting['ui']['color']['mode'] === 'dark' ||
+	($abs_theme_stately_setting['ui']['color']['mode'] === 'auto' &&
+	checkIsBetweenTime(
+		$abs_theme_stately_setting['ui']['auto_dark_mode_config']['begin_time'],
+		$abs_theme_stately_setting['ui']['auto_dark_mode_config']['end_time'],
+		true
+	))
+);
+$abs_stately_body_class = $is_dark_mode ? 'dark-style' : 'light-style';
+
+
+
+if (isset($abs_theme_stately_setting['ui']['global']['navbar_active_color_vertical'])) {
+	$abs_stately_body_class .= ' ' . 'layout-menu-active-color-' . $abs_theme_stately_setting['ui']['global']['navbar_active_color_vertical'];
+}
+
+$page_background_gradient_color_map = [
+'gradient_Garden' => 'bg-gradient-1',
+'gradient_Peach' => 'bg-gradient-2',
+'gradient_Ocean' => 'bg-gradient-3',
+'gradient_Tangerine' => 'bg-gradient-4',
+'gradient_Pastel' => 'bg-gradient-5',
+'gradient_Autumn' => 'bg-gradient-6',
+'gradient_Meadow' => 'bg-gradient-7',
+'gradient_Twilight' => 'bg-gradient-8',
+'gradient_Book' => 'bg-gradient-9',
+'gradient_Fairy' => 'bg-gradient-10',
+];
+if(in_array($abs_theme_stately_setting['ui']['background']['style'], array_keys($page_background_gradient_color_map), true)) {
+	$abs_stately_body_class .= ' ' . $page_background_gradient_color_map[$abs_theme_stately_setting['ui']['background']['style']];
+}
+
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $conf['lang'];?>" class="<?= $abs_stately_body_class ?> layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default">
+
+	<head> <?php $header = G('header');?> <?php $user = G('user');?> <?php $menu = G('menu');?> <?php $forumlist_show = G('forumlist_show');?> <?php $route = G('route');?> <?php $conf = G('conf');?> <?php $static_version = $conf['static_version'];?>
+		<!--{hook admin_header_meta_before.htm}-->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="XiunoBBS 4.0" />
+		<meta name="keywords" content="<?php echo strip_tags($header['keywords']);?>" />
+		<meta name="description" content="<?php echo strip_tags($header['description']);?>" />
+		<meta name="renderer" content="webkit" />
+		<title> <?php echo $header['title'];?> </title>
+		<link rel="shortcut icon" href="../view/img/favicon.ico" />
+		<link rel="icon" sizes="32x32" href="../view/img/favicon.ico">
+		<link rel="Bookmark" href="../view/img/favicon.ico" />
+		<!--{hook admin_header_bootstrap_before.htm}-->
+		<link rel="stylesheet" href="../view/css/bootstrap.css<?php echo $static_version;?>">
+		<!-- Core CSS -->
+		<?php if($is_dark_mode): ?>
+		<link rel="stylesheet" href="../plugin/abs_theme_stately/view/css/core-dark.css">
+		<?php else: ?>
+		<link rel="stylesheet" href="../plugin/abs_theme_stately/view/css/core.css">
+		<?php endif; ?>
+		<link rel="stylesheet" href="../plugin/abs_theme_stately/view/css/theme-default.css">
+		<link rel="stylesheet" href="../plugin/abs_theme_stately/view/css/bbs.css">
+		<link rel="stylesheet" href="../plugin/abs_theme_stately/view/css/pages/page-acp.css">
+		<!-- Vendors CSS -->
+		<link rel="stylesheet" href="../plugin/abs_theme_stately/view/libs/perfect-scrollbar/perfect-scrollbar.css" />
+		<link rel="stylesheet" href="../plugin/abs_theme_stately/view/css/line-awesome.min.css" />
+		<!--{hook admin_header_bootstrap_after.htm}-->
+		<!--{hook admin_header_bootstrap_bbs_before.htm}-->
+		<!-- <link rel="stylesheet" href="../view/css/bootstrap-bbs.css<?php echo $static_version;?>"> -->
+		<!--{hook admin_header_bootstrap_bbs_after.htm}-->
+		<!--{hook admin_header_admin_css_before.htm}-->
+		<link rel="stylesheet" href="view/css/admin.css<?php echo $static_version;?>">
+		<!--{hook admin_header_admin_css_after.htm}-->
+		<!--{hook admin_header_css_after.htm}-->
+		<!-- Helpers -->
+		<script src="../plugin/abs_theme_stately/view/js/helpers.js"></script>
+	</head>
+
+	<body>
+		<div class="layout-wrapper layout-content-navbar">
+			<div class="layout-container"> <?php include _include(ADMIN_PATH.'view/htm/header_nav.inc.htm');?> <div class="layout-page">
+					<nav
+						 class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center border border-primary"
+						 id="layout-navbar">
+						<div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+							<a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+								<i class="la la-bars"></i>
+							</a>
+						</div>
+						<div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+							<div class="navbar-nav align-items-center">
+								<div class="nav-item"> <?php echo(empty($header['mobile_title'])? lang('admin_index_page') : lang('admin_index_page') . ' - ' . $header['mobile_title']);?> </div>
+							</div>
+							<ul class="navbar-nav flex-row align-items-center ms-auto">
+								<!--{hook admin_header_nav_user_start.htm}-->
+								<!-- User -->
+								<li class="nav-item">
+									<a class="nav-link" href="../<?php echo url('my');?>">
+										<img class="avatar-1" src="<?php echo (strpos($user['avatar_url'], '//') === FALSE ? '../' : '').$user['avatar_url'];?>">
+										<span class="d-none d-md-inline"><?php echo isset($user['username']) ? $user['username'] : '';?> </span>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="../"><i class="icon-home"></i>
+										<?php echo lang('front_index_page');?>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="<?php echo url('index-logout');?>"><i class="icon-sign-out"></i>
+										<span class="d-none d-md-inline"><?php echo lang('logout');?> </span>
+									</a>
+								</li>
+								<!--/ User -->
+								<!--{hook admin_header_nav_user_end.htm}-->
+							</ul>
+						</div>
+					</nav>
+					<div class="content-wrapper">
+						<!--{hook admin_header_body_start.htm}-->
+						<main class="container flex-grow-1 container-p-y">
+							<!--{hook admin_body_start.htm}-->

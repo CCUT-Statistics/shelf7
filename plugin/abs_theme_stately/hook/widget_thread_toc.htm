@@ -1,0 +1,13 @@
+<?php
+if($abs_theme_stately_setting['special']['thread_toc']['enable']) :
+?>
+<?php if($abs_theme_stately_setting['special']['thread_toc']['position'] === 'side'): ?>
+<div id='table_of_contents__widget' class="card my-3">
+    <?php echo article_toc($first['message_fmt'], 'widget'); ?>
+</div>
+<?php elseif($abs_theme_stately_setting['special']['thread_toc']['position'] === 'auto'): ?>
+<div id='table_of_contents__widget' class="card my-3 d-none d-lg-flex">
+    <?php echo article_toc($first['message_fmt'],'widget'); ?>
+</div>
+<?php endif; ?>
+<?php endif; ?>

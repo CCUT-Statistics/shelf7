@@ -1,0 +1,7 @@
+<?php if(boolval($uid) && $abs_theme_stately_setting['special']['notice_sound']['enable'] && (isset($user['unread_notices']) && intval($user['unread_notices']) !== 0)): 
+$stately_notice_audio = ($abs_theme_stately_setting['special']['notice_sound']['choice'] === 'custom') ? : $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/sfx/' . $abs_theme_stately_setting['special']['notice_sound']['choice'];
+?>
+<audio id="stately_notice_audio" controls autoplay hidden>
+    <source src="<?= $stately_notice_audio ?>" type="audio/ogg">
+</audio>
+<?php endif; ?>

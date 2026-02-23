@@ -1,0 +1,24 @@
+<div class="modal fade" id="statelySearchModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <h2 class="sr-only"><?= lang('search') ?></h2>
+            <section class="d-flex align-content-center p-lg-1">
+                <button type="button" class="close pl-2" data-bs-dismiss="modal" aria-label="Close" title="<?= lang('back') ?>" data-bs-toggle="tooltip">
+                    <span class="las la-angle-left" aria-hidden="true"></span>
+                </button>
+                <form action="<?= url('search');?>" id="header_search_form" class="media-body">
+                    <div class="input-group input-group-lg shadow-none">
+                        <input type="text" id="modalSearchInput" class="form-control form-control-lg border-0" name="keyword" placeholder="<?= $abs_theme_stately_setting['global']['search']['placeholder'] ?>">
+                        <div class="input-group-append">
+                            <button class="btn text-primary" type="submit" title="<?= lang('search') ?>" data-bs-toggle="tooltip"><i class="las la-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            <div class="search-results">
+                <section class="search-result-list p-0">
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<?php if (!empty($_user['prison_status'])) { ?>
+    <div class="text-warning"><i class="icon-bell"></i> 该用户因
+        <?php echo $_user['prison_message']; ?> 已于
+        <?php echo $_user['prison_start_time']; ?> 被关进小黑屋！解禁时间：
+        <?php echo $_user['prison_end_time']; ?>
+    </div>
+    <?php } ?>

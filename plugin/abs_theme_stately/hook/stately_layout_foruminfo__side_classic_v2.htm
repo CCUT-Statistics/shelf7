@@ -1,0 +1,83 @@
+<?php if($abs_theme_stately_setting['ui_style']['forum']['style_forum_info'] === 'side_classic_v2' && !(param(0,'') == 'tag')): ?>
+<div class="card card-forum-info">
+    <?php if(isset($forum['cover_url']) && !empty($forum['cover_url']) && $abs_theme_stately_setting['ui_style']['forum']['show_forum_cover_image']): ?>
+    <div class="card-header p-0 m-0">
+        <img loading="lazy" decoding="async" class="card-img-top" src="<?= $forum['cover_url'] ?>" alt="<?= $forum['name'];?>" style="max-height: 256px; width: 100%; object-fit: cover; object-position: top center;" >
+    </div>
+    <?php endif; ?>
+    <div class="card-body">
+        <div>
+            <img loading="lazy" decoding="async" class="avatar-3 rounded" src="<?= $forum['icon_url'];?>">
+            <h2 class="card-title h6"><?= $forum['name'];?></h2>
+        </div>
+        <div class="my-2">
+            <?php if($forum['brief']): ?>
+            <!--{hook forum_brief_before.htm}-->
+            <div class="card-text"><?= $forum['brief'];?></div>
+            <!--{hook forum_brief_after.htm}-->
+            <?php endif; ?>
+        </div>
+        <?php if($forum['announcement']) : ?>
+        <div class="card bg-transparent border border-info mt-3">
+            <div class="p-2">
+                <h3 class="card-title h6">
+                    <strong>
+                        <?= lang('forum_anouncement');?>：
+                    </strong>
+                </h3>
+                <p class="card-text">
+                    <?= $forum['announcement'];?>
+                </p>
+            </div>
+        </div>
+        <?php endif; ?>
+        <hr>
+        <div class="d-flex justify-content-between mt-3">
+            <div class="d-flex flex-column mr-1">
+                <small class="text-muted">
+                    <?= lang('threads');?>
+                </small>
+                <span>
+                    <?= $forum['threads'];?>
+                </span>
+            </div>
+            <div class="d-flex flex-column mr-1">
+                <small class="text-muted">
+                    <?= lang('today_posts');?>
+                </small>
+                <span>
+                    <?= $forum['todayposts'];?>
+                </span>
+            </div>
+            <div class="d-flex flex-column mr-1">
+                <small class="text-muted">
+                    <?= lang('today_threads');?>
+                </small>
+                <span>
+                    <?= $forum['todaythreads'];?>
+                </span>
+            </div>
+            <!--{hook forum_todaythreads_after.htm}-->
+        </div>
+        <hr>
+        <div class="text-small">
+            <h3 class="text-muted h6"><?= lang('forum_moderator');?>：</h3>
+                <?php if($forum['modlist']): ?>
+                <ul class="list-unstyled m-0 d-flex align-items-center avatar-group my-3">
+                    <?php foreach ($forum['modlist'] as $mod) : ?>
+                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="<?= $mod['username'];?>" class="avatar pull-up">
+                        <a href="<?= url('user-'.$mod['uid']);?>">
+                            <img loading="lazy" decoding="async" class="rounded-circle" src="<?= $mod['avatar_url'];?>">
+                        </a>
+                    </li>
+                    <?php endforeach; ?>
+
+                </ul>
+                <?php else: ?>
+                <span class="text-gray"><?= lang('no_moderator');?><i class="fa fa-frown"></i></span>
+                <?php endif; ?>
+        </div>
+        <!--{hook forum_brief_after.htm}-->
+    </div>
+</div>
+<?php endif; ?>

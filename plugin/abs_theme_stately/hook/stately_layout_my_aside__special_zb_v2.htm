@@ -1,0 +1,93 @@
+<aside class="col-lg-3" id="user_aside" data-style="special_zb_v2"> <?php if (function_exists('vip__isvip')){ if(vip__isvip($user['vip_end']) && function_exists('vip_read')) { //如果是VIP ?> 
+    
+    <?php } else { //普通用户 ?> <div class="card bg-dark bg-gradient text-center p-3 cta-vip">
+        <a href="<?= url('my-vip') ?>" class="text-warning" style="--bs-warning-rgb:246,232,213">👑 开通会员 尊享会员权益!</a>
+        <i class="las la-diamond"></i>
+    </div> <?php }} //endif ?> 
+    <section class="row row-cols-2 gx-1">
+        <div class="col">
+            <div class="card">
+                <div class="p-2">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-info">
+                            <p class="card-text mb-2"><?= $credits2_name ?></p>
+                            <div class="d-flex align-items-end mb-2">
+                                <h4 class="h5 card-title m-0 text-warning"><?= $user['golds'] ?></h4>
+                            </div>
+                        </div>
+                        <div class="card-icon">
+                            <span class="badge bg-label-warning rounded p-2">
+                                <i class="la la-coins"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="p-2">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-info">
+                            <p class="card-text mb-2"><?= $credits3_name ?></p>
+                            <div class="d-flex align-items-end mb-2">
+                                <h4 class="h5 card-title m-0 text-info"><?= $user['rmbs']*0.01 ?></h4>
+                            </div>
+                        </div>
+                        <div class="card-icon">
+                            <span class="badge bg-label-info rounded p-2">
+                                <i class="la la-money-bill-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+    <section class="row row-cols-2 gx-1">
+
+        <div hidden class="col">
+            <div class="card">
+                <div class="p-2">
+                    <p class="card-text mb-2"><a href="" class="text-body"><i class="las la-file-alt text-success"></i> 创作中心 <i class="las la-angle-right"></i></a></p>
+                </div>
+            </div>
+        </div>
+        <div hidden class="col">
+            <div class="card">
+                <div class="p-2">
+                    <p class="card-text mb-2"><a href="" class="text-body"><i class="las la-piggy-bank text-warning"></i> 推广中心 <i class="las la-angle-right"></i></a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="card">
+        <div class="p-2">
+            <p class="card-text mb-2">我的服务</p>
+            <ul class="row row-cols-4 gx-1 list-unstyled text-center">
+                <li class="col">
+                    <a href="" class="text-body">
+                        <span class="verified-badge v_badge-bg-warning fs-5"><i class="icon-check"></i></span>
+                        <span class="d-block">认证中心</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card">
+        <div class="p-2">
+            <p class="card-text mb-2">功能设置</p>
+            <ul class="row row-cols-4 gx-1 list-unstyled text-center">
+                <li class="col">
+                    <a href="" class="text-body">
+                            <span class="badge bg-label-info rounded p-2">
+                                <i class="la la-lock fs-4"></i>
+                            </span>
+                        <span class="d-block">我的密码</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <a href="<?= url('user-logout') ?>" class="btn btn-danger btn-block">退出登录</a>
+</aside>

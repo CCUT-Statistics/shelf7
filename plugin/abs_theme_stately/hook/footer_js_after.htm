@@ -1,0 +1,154 @@
+<?php if ($abs_theme_stately_setting['advanced']['pwa']['enable']) : ?>
+<script id="pwa_js">
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/js/sw.js.php', {
+                scope: '/'
+            })
+            .then(function (registration) {
+                console.log('Service worker 注册成功:', registration)
+            })
+            .catch(function (error) {
+                console.log('Service worker 注册失败:', error)
+            })
+    }
+</script>
+<?php endif; ?>
+<?php if (in_array(param(0,''),['index','forum','']) && $abs_theme_stately_setting['ui_tweek']['threadlist']['use_waterfall']) : ?>
+<script id="masonry_js" src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/masonry/4.2.2/masonry.pkgd.min.js" type="application/javascript"></script>
+<script id="imagesloaded_js" src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery.imagesloaded/5.0.0/imagesloaded.pkgd.js" type="application/javascript"></script>
+<script id="threadlist_waterfall_js">
+    const waterfall_container = $('.threadlist');
+    $(function () {
+        waterfall_container.imagesLoaded(function () {
+            waterfall_container.masonry({
+                itemSelector: '.thread',
+                isAnimated: true,
+            });
+        });
+    });</script>
+<?php endif; ?>
+<?php if ($abs_theme_stately_setting['ui_tweek']['thread']['use_code_highlight']) : ?>
+<script id="prettyprint_js" src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/libs/prettify.js"></script>
+<script id="prettyprint_js__extension" src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/libs/prettify-lang-combo.min.js"></script>
+<script id="prettyprint_js_init">
+    $(document).ready(function () {
+        $(".message pre:not(.prettyprint)").addClass("prettyprint");
+        prettyPrint();
+    });
+</script>
+
+<link 
+href="<?= ( 
+    $abs_theme_stately_setting['ui']['color']['mode'] === 'dark' ||
+    ($abs_theme_stately_setting['ui']['color']['mode'] === 'auto' && 
+    checkIsBetweenTime($abs_theme_stately_setting['ui']['auto_dark_mode_config']['begin_time'],$abs_theme_stately_setting['ui']['auto_dark_mode_config']['end_time'],true)) 
+    ? $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/base16/' . $abs_theme_stately_setting['ui_tweek']['thread']['code_highlight_theme'] 
+    : $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/base16/' . $abs_theme_stately_setting['ui_tweek']['thread']['code_highlight_theme_light'] ) ?>" 
+data-light_mode_href="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/css/base16/<?= $abs_theme_stately_setting['ui_tweek']['thread']['code_highlight_theme_light'] ?>" 
+data-dark_mode_href="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/css/base16/<?= $abs_theme_stately_setting['ui_tweek']['thread']['code_highlight_theme'] ?>" 
+tpye="text/css" rel="stylesheet" id="prettyprint_css">
+<?php endif; ?>
+<script id="scrolled_js">
+    document.addEventListener('scroll', function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; // 已经读过被卷起来的文档部分
+        var scrollHeight = document.documentElement.scrollHeight; // 文档总高度
+        var clientHeight = document.documentElement.clientHeight; // 窗口可视高度
+        if (scrollTop > 120) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
+        }
+        <?php if ($abs_theme_stately_setting['global']['settings']['show_read_progress']) : ?>
+            if (document.getElementById('read-progress')) {
+            document.getElementById('read-progress').style.width = +(scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100 + '%';
+        }
+        <?php endif; ?>
+    });
+    var befortop = 0;
+    document.addEventListener("scroll", function () {
+    var aftertop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+    var scrollhide_navbar = document.querySelector('#layout-navbar');
+    var scrollhide_appbar = document.querySelector('#layout-appbar');
+    if (aftertop - befortop > 0) {
+        <?php if($abs_theme_stately_setting['global']['settings']['hide_navbar_on_scroll']): ?>
+        if (scrollhide_navbar) {
+            scrollhide_navbar.classList.add('scrollhide');
+            document.querySelector('.layout-page').classList.add('scrollhide');
+        }
+        <?php endif; ?>
+        <?php if($abs_theme_stately_setting['global']['settings']['hide_appbar_on_scroll']): ?>
+        if (scrollhide_appbar) {
+            scrollhide_appbar.classList.add('scrollhide');
+        }
+        <?php endif; ?>
+    } else {
+        <?php if($abs_theme_stately_setting['global']['settings']['hide_navbar_on_scroll']): ?>
+        if (scrollhide_navbar) {
+            scrollhide_navbar.classList.remove('scrollhide');
+            document.querySelector('.layout-page').classList.remove('scrollhide');
+        }
+        <?php endif; ?>
+        <?php if($abs_theme_stately_setting['global']['settings']['hide_appbar_on_scroll']): ?>
+        if (scrollhide_appbar) {
+            scrollhide_appbar.classList.remove('scrollhide');
+        }
+        <?php endif; ?>
+    }
+    befortop = aftertop;
+}, false);
+</script>
+<?php if (in_array(param(0,''),['','index','forum']) && isset($abs_theme_stately_setting['ui_tweek']['threadlist']['use_ajax_load']) && $abs_theme_stately_setting['ui_tweek']['threadlist']['use_ajax_load']) : ?>
+<script id="threadlist_loadmore_js">
+    document.getElementById('t_loadmore').addEventListener('click', function () {
+        var button = this;
+        button_spinner = button.querySelector('.spinner-border');
+        button_spinner.removeAttribute('hidden');
+
+        var nextHref = button.getAttribute('data-href');
+        if (nextHref !== undefined) { //如果地址存在
+            $.ajax({ //发起ajax请求
+                url: nextHref, //请求的地址就是下一页的链接
+                type: 'get',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('X-Requested-With', '');
+                },
+                error: function (xhr, status, error) {
+                    console.warn('获取失败！' + status + ': ' + error);
+                    window.location.href = nextHref;
+                },
+                success: function (response) {
+                    button_spinner.setAttribute('hidden', 'hidden');
+
+                    var new_res = $(response).find('.thread'); //挑出帖子数据
+                    new_res.insertBefore($('.loadmore-container')); //将数据加载加进threadlist
+
+                    if (typeof waterfall_container !== 'undefined') {
+
+                        // 重新加载新添加的元素
+                        waterfall_container.masonry('reloadItems');
+
+                        // 重新排列所有元素
+                        waterfall_container.masonry('layout');
+                    }
+
+                    var newNextHref = $(response).find('#t_loadmore').attr('data-href'); //找出新的下一页链接
+                    if (newNextHref != undefined) {
+                        $('#t_loadmore').attr('data-href', newNextHref);
+                    } else {
+                        $('#t_loadmore').attr('hidden', 'hidden'); //如果没有下一页了，隐藏按钮
+                    }
+                }
+            });
+        }
+        return false;
+    });
+</script>
+<?php endif; ?>
+
+<!--{hook stately_switch_theme_color_mode_js_footer.htm}-->
+
+<?= htmlspecialchars_decode($abs_theme_stately_setting['custom_code']['javascript']['after_body']) ?>
+
+<link rel="stylesheet" href="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/css/forum_compact.css">
+<script src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/js/forum_compact.js"></script>

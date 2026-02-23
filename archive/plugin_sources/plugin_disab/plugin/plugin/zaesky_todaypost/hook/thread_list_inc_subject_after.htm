@@ -1,0 +1,9 @@
+<?php  
+	if (date('Y-m-d', $_thread['create_date']) == date('Y-m-d')) {
+	?>
+	<img src="plugin/zaesky_todaypost/img/new.gif" >
+	<?php 
+	} else {
+		$haya_post_info_today_thread_hightlighter_class = '';
+	}
+?>

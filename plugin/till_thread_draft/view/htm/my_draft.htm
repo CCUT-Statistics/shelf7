@@ -1,0 +1,94 @@
+<template include="./view/htm/my_thread.template.htm">
+	<slot name="my_body">
+		<p class="text-center">
+			<?php
+			$user_thread_draft_available_slots_count = $till_thread_draft_setting['thread_draft_slot_count'] - thread_draft_count($uid);
+			if($user_thread_draft_available_slots_count <= -1) {
+				echo(sprintf(lang('Remaining draft fields'), abs($user_thread_draft_available_slots_count)));
+			} else {
+				echo(lang('Remaining draft fields').'：'.$user_thread_draft_available_slots_count);
+			}
+			?>
+		</p>
+		<ul class="list-unstyled postlist mb-0">
+			<?php include _include(APP_PATH.'/plugin/till_thread_draft/view/htm/draft_list.inc.htm');?>
+		</ul>
+
+	</slot>
+</template>
+
+<script>
+	$('a[data-active="my-draft"]').addClass('active');
+</script>
+
+<script id="till_thread_draft">
+
+	function draft_delete_all(uid) {
+		$.xpost(xn.url('my-draft-delete_all'), { uid: uid }, function (code, message) {
+			if (code == 0) {
+				$.alert(message).delay(2000).location(xn.url('my-draft'));
+				return;
+			} else {
+				$.alert(message);
+			}
+		});
+	}
+
+	function draft_delete(uid, slot = []) {
+		if (slot.length === 0) {
+			return;
+		}
+		$.xpost(xn.url('my-draft-delete'), { uid: uid, slot: slot }, function (code, message) {
+			if (code == 0) {
+				$.alert(message).delay(2000).location(xn.url('my-draft'));
+				return;
+			} else {
+				$.alert(message);
+			}
+		});
+	}
+
+	function draft_publish(uid, slot = []) {
+		if (slot.length === 0) {
+			return;
+		}
+		$.xpost(xn.url('my-draft-publish'), { uid: uid, slot: slot }, function (code, message) {
+			if (code == 0) {
+				$.alert(message).delay(2000).location(xn.url('my-draft'));
+				return;
+			} else {
+				$.alert(message);
+			}
+		});
+	}
+
+	$('#draft_delete_all').on('click', function () {
+		$.confirm(lang.confirm_title, function () { draft_delete_all(uid) }, { body: "确认删除全部草稿？" });
+	});
+
+	$('#draft_delete_multi').on('click', function () {
+		var the_slots = [];
+		$("input[type='checkbox'][name='modtid']:checked").each(function () {
+			the_slots.push($(this).val());
+		});
+		if (the_slots.length === 0) {
+			$.alert('请选择要操作的草稿');
+			return;
+		}
+		$.confirm(lang.confirm_title, function () { draft_delete(uid, the_slots); }, { body: "确认删除这些草稿？" });
+	});
+
+	$('#draft_publish_multi').on('click', function () {
+		var the_slots = [];
+		$("input[type='checkbox'][name='modtid']:checked").each(function () {
+			the_slots.push($(this).val());
+		});
+		if (the_slots.length === 0) {
+			$.alert('请选择要操作的草稿');
+			return;
+		}
+		$.confirm(lang.confirm_title, function () { draft_publish(uid, the_slots); }, { body: "确认发布这些草稿？" });
+	});
+
+
+</script>

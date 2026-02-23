@@ -1,0 +1,37 @@
+<?php $cf_theme_modern=setting_get('cf_theme_modern');?>
+<style type="text/css">	
+  .aboutinfo{
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 20px;
+  color:gray;
+  }
+  .footerdiv{
+  background-color: lightgray;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  }
+</style>
+<footer class="footerdiv" id="footer">
+  <center><br>
+    <h4 class="aboutinfo" font-weight="lighter">
+      <!--{hook footer_footer_left_start.htm}-->
+      <?php if(isset($cf_theme_modern['footer_top']) && $cf_theme_modern['footer_top']) { echo $cf_theme_modern['footer_top'];} ?>
+      <!--{hook footer_footer_left_end.htm}-->
+      <br>
+      <?php if(isset($cf_theme_modern['ShowXiuno']) && $cf_theme_modern['ShowXiuno']) { ?>Powered by Xiuno<?php } ?>
+      <?php if(($cf_theme_modern['ShowXiuno']=='1') && ($cf_theme_modern['ShowProcessed']=='1')) { echo "|"; } ?>
+      <?php if(isset($cf_theme_modern['ShowProcessed']) && $cf_theme_modern['ShowProcessed']) { ?>
+				Processed: <?php echo substr(microtime(1) - $starttime, 0, 5);?>, SQL: <?php echo count($db->sqls);?>
+			<?php } ?>
+    </h4>
+    <!--{hook footer_footer_right_start.htm}-->
+		<?php if(isset($cf_theme_modern['footer_down']) && $cf_theme_modern['footer_down']) { echo $cf_theme_modern['footer_down'];} ?>
+		<!--{hook footer_footer_right_end.htm}-->
+	<br></center>
+</footer>
+<script>
+//Please respect the results of the developer?¡¥s labor and be sure to keep this information
+console.log("%cTheme By https://cloudatabases.com", "color:#fff; background: linear-gradient(270deg, #986fee, #8695e6, #68b7dd, #18d7d3); padding: 8px 15px; border-radius: 0 15px 0 15px");// ^_^
+</script>

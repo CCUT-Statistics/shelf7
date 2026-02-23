@@ -1,0 +1,1 @@
+$input['_deprecated'] = form_radio_yes_no('deprecated',$_user['deprecated']);

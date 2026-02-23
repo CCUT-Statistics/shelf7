@@ -1,0 +1,98 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<style type="text/css">
+.aky_input {display: block;border: 1px solid #ced4da;border-radius: 0.25rem;width: 100% !important;}
+</style>
+<div class="row">
+	<div class="col-lg-10 mx-auto">
+	    <div class="card" >
+	        <div class="card-body" >
+                欢迎加入xiuno粉丝交流论坛吹水:1107254698<br>
+                本插件在使用过程发现明显问题请联系我:1413647809,谢谢<br>
+                允许为每个用户组自定义背景颜色字体颜色与字体大小<br>
+                <b>1.1版：</b>调整了首页用户组显示的位置，新增用户名颜色自定义
+            </div>
+	    </div>
+		<div class="card">
+			<div class="card-body">
+			<form action="<?php echo url("plugin-setting-aky_gstyle");?>" method="post" id="form">
+			    <table cellspacing="0" class="table table-bordered table-striped">
+			        <tr>
+			            <th>用户组名称</th>
+			            <th>背景颜色</th>
+			            <th>字体颜色</th>
+			            <th>字体大小</th>
+			        </tr>
+			        <?php 
+				foreach($grouplist as $_group){	
+				    if($_group['gid']==0)continue;
+				?>
+				<tr>
+				    <td width="15%"><?php echo $_group['name'] ?></td>
+				    <td width="28%">
+				        <select name="gc_<?php echo $_group['gid'] ?>" id="gc_<?php echo $_group['gid'] ?>" class="aky_input" style="height: 28px;">
+							<option value="secondary">灰色</option>
+							<option value="primary">蓝色</option>
+							<option value="danger">红色</option>
+							<option value="warning">橙色</option>
+							<option value="success">绿色</option>
+							<option value="info">天蓝</option>
+							<option value="dark">黑色</option>
+							<option value="light">亮色</option>
+							<option value="white">白色</option>
+						</select>
+				    </td>
+				    <td width="28%">
+				        <select name="gf_<?php echo $_group['gid'] ?>" id="gf_<?php echo $_group['gid'] ?>" class="aky_input" style="height: 28px;">
+							<option value="secondary">灰色</option>
+							<option value="primary">蓝色</option>
+							<option value="danger">红色</option>
+							<option value="warning">橙色</option>
+							<option value="success">绿色</option>
+							<option value="info">天蓝</option>
+							<option value="dark">黑色</option>
+							<option value="light">亮色</option>
+							<option value="white">白色</option>
+						</select>
+				    </td>
+				    <td width="28%"><input name="gz_<?php echo $_group['gid'] ?>" id="gz_<?php echo $_group['gid'] ?>" class="aky_input" style="height: 28px;"></td>
+				</tr>
+				<?php } ?>
+			    </table>
+				<div class="form-group row">
+				    <button type="button" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('confirm');?></button>
+					</div>
+			</form>
+            </div>
+  
+</div>
+</div>
+</div>
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+<script>
+    $(function(){
+        getDate();
+    })
+    
+    $("#submit").on('click',function(){
+        $("#submit").button('loading');
+        let postdata = $("#form").serializeObject();
+        postdata.op = 1 ;
+        $.xpost($("#form").attr('action'),postdata,function(code,message){
+            $.alert(message); 
+            $("#submit").button('reset');
+            getDate();
+        });
+    })
+    
+    function getDate(){
+        let postdata = $("#form").serializeObject();
+        postdata.op = 0 ;
+        $.xpost($("#form").attr('action'),postdata,function(code,message){
+            message.forEach((data,index)=>{
+                $("#gc_"+data.gid).val(data.colour);
+                $("#gf_"+data.gid).val(data.fcolour);
+                $("#gz_"+data.gid).val(data.size);
+            })
+        })
+    }
+</script>

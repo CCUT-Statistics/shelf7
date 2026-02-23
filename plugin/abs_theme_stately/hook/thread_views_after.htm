@@ -1,0 +1,15 @@
+<?php if($abs_theme_stately_setting['special']['share_card_modal']['enable'] && $abs_theme_stately_setting['special']['share_card_modal']['position'] === 'thread_views_after'): $share_card_modal_exists = true; ?>
+<button type="button" class="btn btn-xs btn-link mr-2" data-bs-toggle="modal" data-bs-target="#share_card"><i class="la la-share"></i> <?php echo lang('share'); ?></button>
+<?php endif; ?>
+
+<?php if($abs_theme_stately_setting['ui_tweek']['thread']['show_font_size_btn']): ?>
+<button type="button" class="btn btn-xs btn-link mr-2" onclick="document.querySelectorAll('.message').forEach(function(element) {element.classList.toggle('fs-large');});"><i class="la la-text-height"></i> <?php echo lang('text_size'); ?></button>
+<?php endif; ?>
+
+<?php if($abs_theme_stately_setting['special']['print_btn']['enable'] && $abs_theme_stately_setting['special']['print_btn']['position'] === 'thread_views_after'): ?>
+<button type="button" onclick="window.print()" class="btn btn-xs btn-link "><i class="la la-print"></i> <?= lang('print') ?></button>
+<?php endif; ?>
+
+<?php if($abs_theme_stately_setting['special']['print_btn']['enable'] && $abs_theme_stately_setting['special']['thread_reading_mode']['position'] === 'thread_views_after'): ?>
+<button type="button" class="btn btn-xs btn-link reading_mode_card_open_button" data-bs-toggle="modal" data-bs-target="#reading_mode_card"><i class="la la-book-open"></i> <?= lang('reading_mode') ?></button>
+<?php endif; ?>

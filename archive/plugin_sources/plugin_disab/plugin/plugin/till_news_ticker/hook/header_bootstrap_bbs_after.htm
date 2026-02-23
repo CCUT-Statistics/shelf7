@@ -1,0 +1,36 @@
+<style>
+<?php echo ticker_magic_keyframes(count($till_news_ticker_links));?>
+
+    .tickerv-wrap {
+        height: 1.5em;
+        padding: 0;
+        font-size: 1rem;
+        box-sizing: content-box;
+        overflow: hidden;
+    }
+
+    .tickerv-wrap ol {
+        margin: 0;
+        padding: 0;
+        animation: TickerMagic 5s ease-out infinite;
+        will-change: margin;
+    }
+
+    .tickerv-wrap ol:hover {
+        animation-play-state: paused;
+    }
+
+    .tickerv-wrap ol li {
+        width: 100%;
+        height: 1em;
+        padding: .25em 0;
+        line-height: 1em;
+        font-size: 1em;
+        white-space: nowrap;
+        box-sizing: content-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+<?php echo ticker_magic_duration(count($till_news_ticker_links),$till_news_ticker_setting['single_time']);?>
+    </style>

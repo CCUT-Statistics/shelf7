@@ -1,0 +1,17 @@
+<?php if($isfirst&&$group['allowPostRead']=="1") { ?>
+<div class=" form-group input-group" style="margin-top: -1.25rem;padding: 0 1.25rem;">
+<label class="input-group-prepend"><span class="input-group-text"><?php echo lang('permission');?> : </span></label>
+<div class="custom-input form-control"><?php echo $input['readp_status'];?></div>
+</div>
+<div class="form-group input-group" id="readp_group" style="padding: 0 1.25rem;" >
+<div class="input-group-prepend"><span class="input-group-text">权限设置</span></div>
+<select name="user_group_select" id="user_group_select" style="display: inline-block;width: auto;" class="custom-select">
+    <?php foreach($grouplist as $__group) { ?>
+        <option id="op_<?php echo $__group['gid'];?>" value="<?php echo $__group['name'];?>" data-active="<?php echo $__group['readp'];?>"><?php echo $__group['name'];?></option>
+    <?php }?>
+</select>
+<input maxlength="3" type="text"  name="readp" placeholder="0" id="pnumber" value="<?php echo $pnumber;?>" class="form-control" style="display: inline-block;"/></div>
+<div style="padding: 0px 1.25rem;">
+<button type="button" class="btn btn-sm btn-success mt-2" onclick="try{ tinymce.activeEditor.insertContent('[ttlogin]请在此输入登录可见内容[/ttlogin]',true)  } catch(err) {document.getElementById('message').innerHTML+='[ttlogin]请在此输入登录可见内容[/ttlogin]';}">登录</button>&nbsp;
+<button type="button" class="btn btn-sm btn-success mt-2" onclick="try{ tinymce.activeEditor.insertContent('[ttreply]请在此输入回帖可见内容[/ttreply]',true)  } catch(err) {document.getElementById('message').innerHTML+='[ttreply]请在此输入回帖可见内容[/ttreply]';}">回帖</button></div>
+<?php } ?>

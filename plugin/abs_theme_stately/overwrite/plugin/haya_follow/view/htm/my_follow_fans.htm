@@ -1,0 +1,42 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/haya_follow/view/htm/my_follow.template.htm">
+	<slot name="my_body">
+		<ul class="row p-0">
+			<?php if (!empty($haya_follow_followeds)) { 
+				foreach ($haya_follow_followeds as $haya_follow_fans_user) { ?>
+			<!--{hook haya_follow_fans_user_item.htm}-->
+			<?php }} else { ?>
+			<li class="d-block haya-follower-empty">
+				<div class="empty p-3 text-center">
+					<span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+						<i class="las la-user fs-1"></i>
+					</span>
+					<p> 还没有关注我的用户 </p>
+				</div>
+			</li>
+			<?php } ?>
+		</ul>
+		<?php if (!empty($haya_follow_post_pagination)) { ?>
+		<nav>
+			<ul class="pagination justify-content-center">
+				<?php echo $haya_follow_post_pagination; ?>
+			</ul>
+		</nav>
+		<?php } ?>
+	</slot>
+</template>
+<script>
+	$(function () {
+
+		$(document).on("click", ".js-haya-follow-user-setting", function () {
+			var settings = $(".haya-follow-user-settings");
+			if (settings.hasClass("d-none")) {
+				settings.removeClass("d-none");
+			} else {
+				settings.addClass("d-none");
+			}
+		});
+
+	});
+
+	$('a[data-active="my-follow-fans"]').addClass('active');
+</script>

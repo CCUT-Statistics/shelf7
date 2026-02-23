@@ -1,0 +1,8 @@
+'draft' => 'Draft',
+'drafts' => 'Drafts',
+'publish' => 'Publish',
+'Selected items' => 'Selected items',
+'No draft' => 'No draft so far',
+'Empty draft' =>'Empty draft',
+'Remaining draft fields'=> 'Remaining draft fields',
+'Draft fields are overused' => '%u draft field has been exceeded and no new drafts will be saved',

@@ -1,0 +1,6 @@
+<!--{hook thread_update_before.htm}-->
+<?php if ( in_array(intval($gid),array(1),true) || ( boolval($abs_theme_stately_setting['global']['thread']['show_edit_button']) && ($allowupdate || $first['allowupdate']) ) ) : ?>
+<a href="<?= url('post-update-'.$thread['firstpid']); ?>" class="text-muted mr-2 post_update"><i class="la la-edit"></i>
+    <?= lang('edit'); ?>
+</a>
+<?php endif; ?>

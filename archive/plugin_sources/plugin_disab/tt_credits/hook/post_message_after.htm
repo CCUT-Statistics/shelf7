@@ -1,0 +1,22 @@
+<?php if($isfirst&&$group['allowsell']=="1") {?>
+<div class="form-group input-group" id="form-group-radio">
+	<label class="input-group-prepend"><span class="input-group-text"><?php echo lang('pay');?> :</span></label>
+	<div class="custom-input form-control"><?php echo $input['content_num_status'];?></div>
+
+	<div class="form-group input-group" id="content_num_input">
+		<div class="input-group-prepend"><span class="input-group-text">收取费用</span></div>
+		<input maxlength="10" type="text" class="form-control" name="content_num" placeholder="0" id="content_number" value="<?php echo $content_num;?>" style="display: inline-block;">
+		<select name="content_type" id="content_type" style="display: inline-block;width: auto;" class="custom-select">
+			<option value="<?php echo lang('credits1');?>"><?php echo lang('credits1');?></option>
+			<option value="<?php echo lang('credits2');?>"><?php echo lang('credits2');?></option>
+			<option value="<?php echo lang('credits3');?>"><?php echo lang('credits3');?></option>
+		</select>
+		<div class="input-group">
+			<button type="button" class="btn btn-sm btn-success mt-2" id="insert_p" onclick="try{ tinymce.activeEditor.insertContent('[ttPay]请在此输入付费内容[/ttPay]',true)  } catch(err) {document.getElementById('message').innerHTML+='[ttPay]请在此输入付费内容[/ttPay]';}"><?php echo lang('insert_pay');?></button>
+			<span class="small ml-2 mt-3">一定要记得<span class="text-danger font-weight-bold">插入付费内容</span>和设置好<span class="text-danger font-weight-bold">收取费用</span>才能够生效哦！</span>
+			<!--{hook post_message_credits_after.htm}-->
+		</div>
+
+	</div>
+</div>
+<?php } ?>

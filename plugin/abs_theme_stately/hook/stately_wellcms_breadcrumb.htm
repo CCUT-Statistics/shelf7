@@ -1,0 +1,11 @@
+
+<!--{hook website_read_main_breadcrumb_before.htm}-->
+<?php if($abs_theme_stately_setting['ui_tweek']['global']['show_breadcrumb']) : ?>
+<ol class="breadcrumb d-flex">
+    <li class="breadcrumb-item"><a href="./" aria-label="<?php echo lang('index_page'); ?>"><i class="la la-home"></i></a></li>
+    <li class="breadcrumb-item"><a href="<?php echo well_nav_format($forum, $extra); ?>"><?php echo $forum['name'];?></a></li>
+    <li class="breadcrumb-item active"><a href="<?php echo well_url_format($fid, $tid, FALSE, $extra); ?>" title="<?php echo lang('index_page');?>返回主题第一页"><?php echo $thread['subject'];?></a></li>
+    <!--{hook website_read_main_breadcrumb.htm}-->
+</ol>
+<?php endif; ?>
+<!--{hook website_read_main_breadcrumb_after.htm}-->

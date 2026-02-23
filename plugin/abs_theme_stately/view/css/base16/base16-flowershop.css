@@ -1,0 +1,39 @@
+/* flowershop by irhl (https://github.com/irhl/flowershop.vim/) */
+/*
+"          +------------------+    +---------------------+
+"          |       ,-_,.      |    |nnnnnnnnnnnnnnnnnnnnn|
+"          |     ,( _  ))     |    |nnnnnnnnnnnnnnnnnnnnn|
+"          |     7 (_) 77     |    |nn                 nn|
+"          |     ((   :))     |    |nn                 nn|
+"          |      ~__>~'      |    |nn                 nn|
+"          |       cY?'       |    |nn   FLOWERSHOP    nn|
+"          |       `l,__      |    |nn   24 - color    nn|
+"          |        l7-'      |    |nn                 nn|
+"          |       ;l         |    |nn                 nn|
+"          |       _i_,       |    |nn                 nn|
+"          |      l___l       |    |nnnnnnnnnnnnnnnnnnnnn|
+"          |      \___/ ~mako |    |nnnnnnnnnnnnnnnnnnnnn|
+"          |------------------|    |---------------------|
+"          +------------------+    +---------------------+
+
+"                        FLOWERSHOP 花屋
+"                     garage pop colorscheme
+*/
+:root {
+  --base00: #514036;
+  --base01: #514036;
+  --base02: #705a4b;
+  --base03: #7c6858;
+  --base04: #f4c1ba;
+  --base05: #dbc1a2;
+  --base06: #efcca0;
+  --base07: #c3fbb6;
+  --base08: #e5b58b;
+  --base09: #e29e9e;
+  --base0A: #92b792;
+  --base0B: #c6986f;
+  --base0C: #b6c698;
+  --base0D: #c4a683;
+  --base0E: #8daf85;
+  --base0F: #ea8ca4;
+}

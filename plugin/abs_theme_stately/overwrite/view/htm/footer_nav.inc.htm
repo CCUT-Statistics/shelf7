@@ -1,0 +1,46 @@
+<?php if(
+	$abs_theme_stately_setting['ui']['global']['footer_info_position'] === 'page_end'
+	|| ($abs_theme_stately_setting['ui']['global']['footer_info_position'] === 'sidebar_end' && $abs_theme_stately_setting['ui']['global']['navbar_style'] !== 'vertical')
+	): ?>
+<!-- Footer -->
+<footer class="content-footer footer bg-footer-theme">
+	<div class="container d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+		<div class="mb-2 mb-md-0">
+			<!--{hook footer_footer_left_start.htm}-->
+			<?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global']['footer_left_content']) ?>
+			<!--{hook footer_footer_left_end.htm}-->
+		</div>
+		<div>
+			<!--{hook footer_footer_right_start.htm}-->
+			<?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global']['footer_right_content']) ?>
+			<!--{hook footer_footer_right_end.htm}-->
+		</div>
+	</div>
+</footer>
+<!-- / Footer -->
+<?php elseif($abs_theme_stately_setting['ui']['global']['footer_info_position'] === 'page_end_v2'): ?>
+<footer class="content-footer border-top footer bg-footer-theme py-4 mt-3" id="footer">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-lg-2">
+				<img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['global']['icon']['logo'] ?>" alt="<?= $abs_stately_sitename; ?>" class="d-block mx-auto my-0 img-fluid footer-site-icon">
+			</div>
+			<div class="col-lg-7 text-center text-lg-start">
+				<span class="d-block h5"><?= $conf['sitename'] ?></span>
+				<!--{hook footer_footer_left_start.htm}-->
+				<?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global']['footer_left_content']) ?>
+				<!--{hook footer_footer_left_end.htm}-->
+				<hr class="my-2">
+				<!--{hook footer_footer_right_start.htm}-->
+				<?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global']['footer_right_content']) ?>
+				<!--{hook footer_footer_right_end.htm}-->
+			</div>
+			<div class="col-lg-3">
+				<address class="d-flex align-items-center flex-wrap justify-content-center ">
+					<?= stately_generate_contacts_button($abs_theme_stately_setting['global']['contact']) ?>
+				</address>
+			</div>
+		</div>
+	</div>
+</footer>
+<?php endif; ?>

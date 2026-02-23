@@ -1,0 +1,335 @@
+</div>
+<!-- / Layout container -->
+<?php
+
+$stately_asset_css->clearcCssFile();
+$stately_asset_css->clearCssFileDirect();
+$stately_asset_css->clearCssCode();
+
+if (!$is_message_page): ?>
+	<!-- Overlay -->
+	<div class="layout-overlay layout-menu-toggle"></div>
+	</div>
+	<!--{hook stately_modal_search.htm}-->
+	<!--{hook stately_modal_myinfo.htm}-->
+	<!--{hook stately_xmas_lights.htm}-->
+<?php endif; ?>
+<?php if ($abs_theme_stately_setting['special']['share_card_modal']['enable'] && isset($share_card_modal_exists) && $share_card_modal_exists): ?>
+	<!--{hook stately_modal_share_card.htm}-->
+<?php endif; ?>
+<?php if ($abs_theme_stately_setting['special']['new_context_menu']['enable']): ?>
+	<!--{hook stately_contextmenu.htm}-->
+<?php endif; ?>
+<!-- / Layout wrapper -->
+<!--{hook footer_js_before.htm}-->
+<!-- Core JS -->
+<?php if ($browser['name'] == 'ie') : ?>
+	<script id="es6_shim_DO_NOT_USE_OR_YOU_WILL_BE_FIRED" src="<?= $conf['view_url']; ?>js/es6-shim.js<?= $static_version; ?>"></script>
+<?php endif; ?>
+<?php if (!$is_message_page): ?>
+	<script id="lang_js" src="lang/<?= $conf['lang']; ?>/bbs.js<?= $static_version; ?>"></script>
+	<!-- JS START -->
+	<?php
+	$stately_asset_js->addJsFileDirect($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/jquery/jquery.js');
+	$stately_asset_js->addJsFileDirect($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/popper/popper.min.js');
+	$stately_asset_js->addJsFileDirect($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/js/xiuno.js');
+	$stately_asset_js->addJsFileDirect($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/js/bootstrap.js');
+	$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/perfect-scrollbar/perfect-scrollbar.js');
+	$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/js/menu.js');
+	$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/js/main.js');
+	$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/BS5Modal.js');
+	$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/toast.js');
+	$stately_asset_js->addJsFile($conf['view_url'] . 'js/async.js');
+	$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/js/bootstrap-plugin.js');
+	$stately_asset_js->addJsFile($conf['view_url'] . 'js/form.js');
+
+	if ($abs_theme_stately_setting['advanced']['fuck_you_hacker']['enable']) {
+		$stately_asset_js->addJsCode('
+		<script type="text/javascript">
+			var h = window.innerHeight, w = window.innerWidth;
+			window.oncontextmenu = function () { return false; }
+			window.addEventListener("keydown", function (e) {
+				if (e.keyCode == 123) {
+					window.event.returnValue = false;
+					console.log("你瞧啥?!?!");
+					return false;
+				} else if ((e.ctrlKey) && (e.shiftKey) && (e.keyCode == 73)) {
+					window.event.returnValue = false;
+					console.log("你瞧啥?!?!");
+					return false;
+				} else if ((e.shiftKey) && (e.keyCode == 121)) {
+					window.event.returnValue = false;
+					return false;
+				} else if ((e.ctrlKey) && (e.keyCode == 85)) {
+					window.event.returnValue = false;
+					return false;
+				} else if ((e.ctrlKey) && (e.keyCode == 83)) {
+					window.event.returnValue = false;
+					return false;
+				}
+			}, false);
+			function checkDebugger() {
+				const d = new Date();
+				debugger;
+				const dur = Date.now() - d;
+				if (dur < 5) {
+					return false;
+				} else {
+					window.location = "https://fakebsod.com/generic";
+					return true;
+				}
+			};
+			function breakDebugger() {
+				if (checkDebugger()) {
+					breakDebugger();
+				}
+			};
+
+			(function isConsoleOpen() {
+				breakDebugger();
+			})();
+			(function () {
+				var re = /x/;
+				var i = 0;
+				console.log(re);
+				re.toString = function () {
+					window.close();
+					window.location = "about:blank";
+					console.log("你瞧啥?!?!");
+				}
+			})();
+
+			//禁用控制台打开
+			document.onkeydown = function (e) {
+				var currKey = 0, evt = e || window.event;
+				currKey = evt.keyCode || evt.which || evt.charCode;
+				if ((currKey == 123) || ((event.ctrlKey == true) && (event.shiftKey == true) && (currKey == 73))) {
+					$.toast({
+						title: "你瞧啥?!?!",
+						content: "你瞧啥,瞧你咋滴,聊天背景图",
+						type: "warning",
+						pause_on_hover: true,
+						delay: 5000
+					});
+					window.event.cancelBubble = true;
+					window.event.returnValue = false;
+					return false;
+				}
+			}
+		');
+	}
+
+	if ($abs_theme_stately_setting['ui']['other']['let_it_snow']) {
+		$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/ThreeCanvas.js');
+		$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/js/Snow.js');
+		$stately_asset_js->addJsCode('jQuery(document).ready(function() { initSnow(jQuery("body")); });');
+		$stately_asset_css->addCssCode('canvas.letitsnow {position: fixed;top: 0;left: 0;z-index: 1070;pointer-events: none; user-select: none; transition: opacity 1s ease-out; opacity: 1;}.scrolled canvas.letitsnow {opacity: .33;}');
+	}
+
+	if ($abs_theme_stately_setting['ui_tweek']['threadlist']['show_user_vcard']) {
+		$stately_asset_js->addJsCode("if (document.querySelectorAll('.threadlist .thread').length !== 0 && document.body.classList.contains('route-thread') !== true) {
+				var popoverTriggerList = [].slice.call(document.querySelectorAll('.threadlist .thread'));
+				var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+					if (popoverTriggerEl.getAttribute('data-tid') !== null) {
+						var vAvatarEl = popoverTriggerEl.querySelector('.v_avatar');
+						var userVcardHtmlId = '#user_vcard_for_' + popoverTriggerEl.getAttribute('data-tid');
+						var userVcardHtml = document.querySelector(userVcardHtmlId).innerHTML;
+						return new bootstrap.Popover(vAvatarEl, {
+							delay: 500,
+							trigger: 'hover',
+							html: true,
+							content: userVcardHtml
+						});
+					} else {
+						return false;
+					}
+				});
+			}");
+	}
+	if ($abs_theme_stately_setting['ui']['global']['use_twemoji']) {
+		$stately_asset_js->addJsFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/twemoji.min.js');
+		$stately_asset_js->addJsCode('twemoji.parse(document.body);');
+	}
+
+	echo $stately_asset_js->Javascript('stately.min.js');
+
+	?>
+
+	<!--{hook stately_modal_cookie_notice.htm}-->
+
+	<!-- JS END -->
+	<!-- Main JS -->
+	<script id="bbs_global_js">
+		var debug = DEBUG = <?= DEBUG; ?>; // const
+		var url_rewrite_on = <?= $conf['url_rewrite_on']; ?>; // const
+		var forumarr = <?= xn_json_encode($forumarr); ?>; // var
+		var fid = <?= $fid; ?>; // let
+		var uid = <?= intval($uid); ?>; // let
+		var gid = <?= intval($gid); ?>; // let
+		xn.options.water_image_url = '<?= $conf['logo_water_url']; ?>';
+	</script>
+	<script id="bbs_js" src="./plugin/abs_theme_stately/view/js/bbs.js<?= $static_version; ?>"></script>
+	<!-- Page JS -->
+	<script id="bs4_tooltip_init_js">
+		//DO NOT USE [data-toggle="tooltip"] OR YOU WILL BE FIRED
+		//Use [data-bs-toggle="tooltip"] Instead
+		let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
+		let tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+			return new bootstrap.Tooltip(tooltipTriggerEl)
+		});
+	</script>
+	<?php if ($abs_theme_stately_setting['custom_content']['global']['footer_right_performance_info'] === 'full'): ?>
+		<!--{hook stately_usagedd_js.htm}-->
+	<?php endif; ?>
+	<!--{hook stately_modal_notice.htm}-->
+	<!--{hook stately_modal_newthread_js.htm}-->
+	<!--{hook stately_fullscreen_js.htm}-->
+	<!--{hook stately_bg_random_art_profile_cover_js.htm}-->
+	<!--{hook footer_js_after.htm}-->
+	<?php if (($user && $user['unread_notices'] > 0 && param(0, '') !== 'my' && param(1, '') !== 'notice') || ($user && param(0, '') !== 'my' && param(1, '') !== 'notice' && $abs_theme_stately_setting['special']['new_notice_page']['enable'] !== 1)): ?>
+		<!--{hook my_notice_js.htm}-->
+	<?php endif; ?>
+<?php endif; ?>
+
+<!--{hook stately_modal_login.htm}-->
+
+<?php
+
+echo $stately_asset_css->Stylesheet('stately_f.min.css');
+
+?>
+
+
+<?php if ($abs_theme_stately_setting['global']['settings']['enable_page_transition']):
+?>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// 隐藏加载指示器
+			if (!document.body.classList.contains('loaded')) {
+				document.body.classList.add('loaded');
+			}
+			document.getElementById('barbara_loading').style.opacity = '0';
+
+			// 当用户尝试离开页面时显示加载指示器
+			window.addEventListener('beforeunload', function() {
+				document.body.classList.remove('loaded');
+				document.getElementById('barbara_loading').style.opacity = '1';
+			});
+
+			// 监听 popstate 事件
+			window.addEventListener('popstate', function(event) {
+				document.body.classList.add('loaded');
+				document.getElementById('barbara_loading').style.opacity = '0';
+			});
+		});
+	</script>
+<?php endif; ?>
+
+<script id="quicksearch_js">
+$(document).ready(function() {
+  // 防抖函数  
+  var debounce = function(func, wait) {
+    let timeout;
+    return function() {
+      const context = this,
+        args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+
+  // 搜索功能
+  const search_f = function() {
+    $('#modalSearchInput').on('input',
+      debounce(
+        function() {
+          let value = $(this).val();
+          let searchResultList = $('.search-results .search-result-list');
+          
+          if (value.length >= 3) {
+            // 超过三个字才会开始搜索，节省服务器资源
+            $.ajax({
+              url: 'quicksearch.htm',
+              type: 'GET',
+              dataType: 'json',
+              data: {
+                ajax: 1,
+                kw: value
+              },
+              success: function(response) {
+                if (response.code == 0) {
+                  searchResultList.empty();
+                  let ul = $('<ul class="list-group"></ul>');
+                  let search_more_button = $('<a href="search-' + value + '.htm" class="btn bg-label-primary btn-block mt-3">查阅更多搜索结果</a>');
+                  response.message.search_result.forEach(function(item) {
+                    let li = $('<li class="list-group-item border-0"></li>');
+                    let a = $('<a></a>').attr('href', item.url).html(item.subject);
+                    li.append(a);
+                    ul.append(li);
+                  });
+                  searchResultList.append(ul);
+                  searchResultList.append(search_more_button);
+                } else {
+                  searchResultList.empty();
+                  let alert_box = $('<div class="alert alert-warning text-center mb-0"></div>');
+                  alert_box.text(response.message);
+                  searchResultList.append(alert_box);
+                }
+              },
+              error: function(xhr, status, error) {
+                searchResultList.empty();
+                let alert_box = $('<div class="alert alert-danger text-center mb-0"></div>');
+                alert_box.text(error);
+                searchResultList.append(alert_box);
+                console.error('Error: ' + error);
+              }
+            });
+          } else if (value.length == 1 || value.length == 2) {
+            // 提示用户需要输入超过3个字
+            searchResultList.empty();
+            let alert_box = $('<div class="alert alert-info text-center mb-0"></div>');
+            alert_box.text('请输入至少3个字符开始搜索');
+            searchResultList.append(alert_box);
+          } else {
+            // 没有字
+            searchResultList.empty();
+            //searchResultList.append('<div class="text-muted text-center">输入关键词开始搜索</div>');
+          }
+        }, 300
+      )
+    );
+  }
+  
+  // 初始化搜索功能
+  search_f();
+  
+  // 模态框显示时清空之前的结果
+  $('#searchModal').on('shown.bs.modal', function() {
+    $('.search-result-list').empty();
+    $('.search-result-list').append('<div class="text-muted text-center py-4">输入关键词开始搜索</div>');
+  });
+  
+  // 按ESC键关闭模态框
+  $(document).keyup(function(e) {
+    if (e.keyCode === 27 && $('#searchModal').hasClass('show')) {
+      $('#searchModal').modal('hide');
+    }
+  });
+});
+</script>
+</body>
+
+<!--{hook footer_end.htm}-->
+
+</html>
+<?= cron_run();
+if (isset($abs_theme_stately_setting) && $abs_theme_stately_setting['advanced']['minify']['enable'] && $abs_theme_stately_setting['advanced']['minify']['enable_html']) {
+	$html_source = ob_get_clean();
+	if (DEBUG === 0 || DEBUG === 1) {
+		print compressHtml($html_source);
+	} else {
+		print $html_source;
+	}
+}
+unset($abs_theme_stately_setting); ?>

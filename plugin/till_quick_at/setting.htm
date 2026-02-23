@@ -1,0 +1,59 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+
+
+<div class="card">
+	<div class="card-body">
+		<form action="<?php echo url("plugin-setting-till_quick_at");?>" method="post" id="form">
+			<h2 class="card-title">At提及用户助手 设置</h2>
+			<p>作者: Tillreetree 2024</p>
+			<div class="form-group row">
+				<label class="col-sm-2 form-control-label">与“帖子增强”（haya_post_info）插件兼容？</label>
+				<div class="col-sm-10">
+					<?php echo $input['compatible_with_haya_post_info']; ?>
+					<p class="form-text">“帖子增强”插件内置了“@用户提醒”功能，本插件也附带了该功能。所以如果你在用“帖子增强”插件的话，请务必设置为 <?= lang('no') ?> 以防重复发送消息等问题产生。</p>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 form-control-label">使用缓存？</label>
+				<div class="col-sm-10">
+					<?php echo $input['use_cache']; ?>
+					<p class="form-text">搜索用户名时会进行缓存，如果无法搜索到用户名的话，请选 <?= lang('no') ?> 。注意设置为 <?= lang('no') ?> 可能会增加服务器负担。</p>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 form-control-label"></label>
+				<div class="col-sm-10">
+					<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('confirm');?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+
+	var jform = $("#form");
+	var jsubmit = $("#submit");
+	var referer = '<?php echo http_referer();?>';
+	jform.on('submit', function () {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serialize();
+		$.xpost(jform.attr('action'), postdata, function (code, message) {
+			if (code == 0) {
+				$.alert(message);
+				jsubmit.text(message).delay(2000).button('reset').location(referer);
+				return;
+			} else {
+				$.alert(message);
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+
+</script>

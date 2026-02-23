@@ -1,0 +1,27 @@
+<?php if($route == 'forum'): ?>
+
+<?php if($abs_theme_stately_setting['ui_tweek']['global']['show_breadcrumb']) : ?>
+<ol class="breadcrumb d-none d-md-flex">
+    <li class="breadcrumb-item"><a href="./"><i class="las la-home" aria-hidden="true"></i></a></li>
+    <li class="breadcrumb-item active"><a href="<?= url('forum-'.$fid);?>">
+            <?= $forum['name'];?>
+        </a></li>
+    <!--{hook forum_breadcrumb.htm}-->
+</ol>
+<?php endif; ?>
+<?php elseif($route == 'thread' && is_numeric($action)): ?>
+<!--{hook thread_breadcrumb_before.htm}-->
+<?php if ($abs_theme_stately_setting['ui_tweek']['global']['show_breadcrumb']) { ?>
+<ol class="breadcrumb d-none d-md-flex">
+    <li class="breadcrumb-item"><a href="./" aria-label="<?= lang('index_page'); ?>"><i class="las la-home"></i></a></li>
+    <li class="breadcrumb-item"><a href="<?= url('forum-'.$fid); ?>">
+            <?= $forum['name']; ?>
+        </a></li>
+    <li class="breadcrumb-item active"><a href="<?= url('thread-'.$tid); ?>" title="返回主题第一页">
+            <?= $thread['subject']; ?>
+        </a></li>
+    <!--{hook thread_breadcrumb.htm}-->
+</ol>
+<?php } ?>
+<!--{hook thread_breadcrumb_after.htm}-->
+<?php endif; ?>

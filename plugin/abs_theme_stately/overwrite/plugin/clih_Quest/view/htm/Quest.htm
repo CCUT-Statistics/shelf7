@@ -1,0 +1,114 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.template.htm">
+    <slot name="my_body">
+
+                    <?php 
+                    $quavatars = setting_get('quavatar');
+                    $quthreads = setting_get('quthread');
+                    $quposts = setting_get('qupost');
+                    $today = time();
+                    
+                    $type1 = db_count('Quest',array('uid'=>$uid, 'type'=>1));
+                    $type2 = db_count('Quest',array('uid'=>$uid, 'type'=>2,'create_date'=>array('>'=>$today)));
+                    $type3 = db_count('Quest',array('uid'=>$uid, 'type'=>3,'create_date'=>array('>'=>$today)));
+                    $Quthread = db_count('post',array('uid'=>$uid,'isfirst'=>1,'create_date'=>array('>'=>$today)));
+                    $Qupost = db_count('post',array('uid'=>$uid,'isfirst'=>0,'create_date'=>array('>'=>$today)));
+                    ?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>任务</th>
+                                <th>奖励积分</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>上传头像</td>
+                            <td>
+                            <?php echo $quavatars;?>
+                            </td>
+                            <td><?php if($user['avatar'] != 0){?>
+                            <span class="badge bg-label-success">已完成</span>
+                            <?php }else{?>
+                            <span class="badge bg-label-danger">未完成</span>
+                            <?php }?></td>
+                            <td>
+                            <?php if($user['avatar'] != 0){?>
+                            <?php if($type1 > 0){?>
+                            <span class="badge badge-dark">已领取</span>
+                            <?php }else{ ?>
+                            <span class="badge badge-success opt" onclick="set(1);history.go(0)" >领取</span>
+                            <?php }?>
+                            <?php }else{ ?>
+                            <span class="badge badge-secondary">领取</span>
+                            <?php }?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>每日发帖</td>
+                            <td>
+                            <?php echo $quthreads;?>
+                            </td>
+                            <td><?php if($Quthread > 0){?>
+                            <span class="badge bg-label-success">已完成</span>
+                            <?php }else{ ?>
+                            <span class="badge bg-label-danger">未完成</span>
+                            <?php }?></td>
+                            <td>
+                            <?php if($Quthread > 0){?>
+                            <?php if($type2 > 0){?>
+                            <span class="badge badge-dark">已领取</span>
+                            <?php }else{ ?>
+                            <span class="badge badge-success opt" onclick="set(2);history.go(0)" >领取</span>
+                            <?php } ?>
+                            
+                            <?php }else{ ?>
+                            <span class="badge badge-secondary">领取</span>
+                            <?php }?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>每日回帖</td>
+                            <td>
+                            <?php echo $quposts;?>
+                            </td>
+                            <td><?php if($Qupost > 0){?>
+                            <span class="badge bg-label-success">已完成</span>
+                            <?php }else{ ?>
+                            <span class="badge bg-label-danger">未完成</span>
+                            <?php }?></td>
+                            <td>
+                            <?php if($Qupost > 0){?>
+                            <?php if($type3 > 0){?>
+                            <span class="badge badge-dark">已领取</span>
+                            <?php }else{ ?>
+                            <span class="badge badge-success opt" onclick="set(3);history.go(0)" >领取</span>
+                            <?php } ?>
+                            <?php }else{ ?>
+                            <span class="badge badge-secondary">领取</span>
+                            <?php }?>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    </table>
+
+    </slot>
+</template>
+
+<script>
+    $('a[data-active="my-Quest"]').addClass('active');
+</script>
+
+<script>
+function set(opt)
+{
+    var postdata = {opt: opt};
+    $.xpost("<?php echo url('my-Quest');?>", postdata, function(code, message) {
+        if(code == 0) return; else {$.alert(message);}
+    });
+}
+
+</script>

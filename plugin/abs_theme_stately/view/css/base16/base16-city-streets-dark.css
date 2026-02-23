@@ -1,0 +1,21 @@
+/* City Streets Dark by dkeg */
+/* Ported to base16 by Tillreetree */
+
+:root {
+    --base00:#201e24; /* 0 */
+    --base01:#2d2b30; /* 1 */
+    --base02:#413c3e; /* 3 */
+    --base03:#4e4a4b; /* 5 */
+    --base04:#837c78; /* 8 */
+    --base05:#c2bec1; /* b */
+    --base06:#cbc5ba; /* d */
+    --base07:#efe8dc; /* f */
+    --base08:#a7a099; /* a */
+    --base09:#837e81; /* 7 */ 
+    --base0A:#e3ddd2; /* e */
+    --base0B:#c3bcb2; /* c */
+    --base0C:#c2bec1; /* b */
+    --base0D:#cbc5ba; /* d */
+    --base0E:#c3bcb2; /* c */
+    --base0F:#89827d; /* 9 */
+}

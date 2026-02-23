@@ -1,0 +1,9 @@
+<!--{hook thread_list_inc_lastuid_before.htm}-->
+<?php if($_thread['lastuid']) : ?>
+<span class="last-post username mx-1 text-muted d-inline-block">
+    <i class="las la-reply"></i>
+    <?= $_thread['last_date_fmt'];?> ·
+    <?= $_thread['lastusername'];?>
+</span>
+<?php endif; ?>
+<!--{hook thread_list_inc_lastuid_after.htm}-->

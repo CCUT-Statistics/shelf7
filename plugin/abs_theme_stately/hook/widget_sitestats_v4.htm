@@ -1,0 +1,33 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['homepage_stats']['enable'] && $abs_theme_stately_setting['ui_tweek']['homepage_stats']['style'] === 'v4' ):?>
+<div class=" d-flex justify-content-between breadcrumb">
+    <ul class="list-inline m-0 text-muted">
+        <li class="list-inline-item"><i class="las la-comment"></i>
+            <?= lang('threads');?>
+            <b>
+                <?= $runtime['threads'];?>
+            </b>
+        </li>
+        <li class="list-inline-item"><i class="las la-comments"></i>
+            <?= lang('posts');?>
+            <b>
+                <?= $runtime['posts'];?>
+            </b>
+        </li>
+        <li class="list-inline-item"><i class="las la-users"></i>
+            <?= lang('users');?>
+            <b>
+                <?= $runtime['users'];?>
+            </b>
+        </li>
+        <?php if($runtime['onlines'] > 0) { ?>
+        <li class="list-inline-item"><i class="las la-user-plus"></i>
+            <?= lang('online');?>
+            <b>
+                <?= $runtime['onlines'];?>
+            </b>
+        </li>
+        <?php } ?>
+    </ul>
+    <span tabindex="0" data-bs-toggle="tooltip" title="Wish You HAPPY EVERYDAY!"><i class="las la-heart fa fa-heart text-danger"></i></span>
+</div>
+<?php endif; ?>

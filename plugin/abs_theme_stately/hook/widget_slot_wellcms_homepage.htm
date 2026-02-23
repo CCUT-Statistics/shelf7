@@ -1,0 +1,25 @@
+<!--{hook website_index_flat_before.htm}-->
+<!--{hook stately_cta_homepage_side.htm}-->
+<!--{hook widget_siteinfo.htm}-->
+<!--{hook website_index_flat_middle.htm}-->
+<?php if($flaglist){foreach($flaglist as $_flag) { ?>
+    <div class="card d-none d-lg-block aside">
+        <div class="card-header">
+            <h3 class="font-weight-bold">
+                <a href="<?php echo $_flag['url'];?>" title='<?php echo $_flag['name'];?>' aria-label='<?php echo $_flag['name'];?>'><?php echo $_flag['name']; ?></a>
+            </h3>
+        </div>
+        <ul class="list-unstyled threadlist mx-3 mb-1 nowrap">
+            <?php if($_flag['list']){foreach($_flag['list'] as $_thread) { ?>
+            <li class="thread py-2">
+                <h4 class="m-0">
+                    <a href="<?php echo $_thread['url'];?>" class="d-block ellipsis" <?php echo ($_thread['link']?'rel="nofollow" target="_blank"':''); ?> title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                        <?php echo $_thread['subject'];?>
+                    </a>
+                </h4>
+            </li>
+            <?php }} ?>
+        </ul>
+    </div>
+    <?php }} ?>
+<!--{hook website_index_flat_end.htm}-->

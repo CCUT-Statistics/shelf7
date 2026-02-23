@@ -1,0 +1,11 @@
+<?php 
+if( !isset($till_v_settings) ) {
+    $till_v_settings = setting_get('till_verified_member_setting');
+}
+
+if( $till_v_settings['v_show_post_list_inc_avatar_after'] && isset($_post['user']['v']) && $_post['user']['v'] ) { 
+    if( !function_exists('v_show_badge') ) {
+        include _include(APP_PATH.'plugin/till_verified_member/model/v.func.php');
+    }
+    echo v_show_badge($_post['user']['v'], $_post['user']['v_title'], $till_v_settings);
+} ?>

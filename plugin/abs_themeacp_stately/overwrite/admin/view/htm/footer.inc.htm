@@ -1,0 +1,104 @@
+<!--{hook admin_footer_start.htm}-->
+
+<?php $db = G('db') ?>
+<?php $time = G('time') ?>
+<?php $ip = G('ip') ?>
+<?php $useragent = G('useragent') ?>
+<?php $starttime = G('starttime') ?>
+<?php $forumlist = G('forumlist') ?>
+<?php $forumarr = G('forumarr') ?>
+<?php $fid = G('fid') ?>
+<?php $conf = G('conf') ?>
+<?php $static_version = $conf['static_version'] ?>
+
+<aside class="container-sm">
+	<details class="card p-1 bg-dark text-white">
+		<summary>NOTHING TO SEE HERE</summary>
+		<?= xn_debug_info(); ?>
+	</details>
+</aside>
+
+</main>
+<!-- / Content -->
+
+
+<!--{hook admin_footer_footer_before.htm}-->
+
+<footer class="text-muted small bg-dark py-4" id="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<!--{hook footer_footer_left_start.htm}-->
+				Powered by <b>Xiuno BBS <span>
+						<?= $conf['version'] ?>
+					</span></b>
+				<!--{hook footer_footer_left_end.htm}-->
+			</div>
+			<div class="col text-right">
+				<!--{hook footer_footer_right_start.htm}-->
+				Time: <b>
+					<?= substr(microtime(1) - $starttime, 0, 5) ?>
+				</b>, SQL: <b>
+					<?= count($db->sqls) ?>
+				</b>
+				<!--{hook footer_footer_right_end.htm}-->
+			</div>
+		</div>
+	</div>
+</footer>
+
+<!--{hook admin_footer_footer_after.htm}-->
+
+
+</div>
+<!-- Content wrapper -->
+
+</div>
+<!-- / Layout page -->
+
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+
+</div>
+<!-- / Layout wrapper -->
+
+<!--{hook admin_footer_js_before.htm}-->
+
+<script src="../lang/<?= $conf['lang'] ?>/bbs.js<?= $static_version ?>"></script>
+<script src="../view/js/jquery-3.1.0.js<?= $static_version ?>"></script>
+<script src="../view/js/popper.js<?= $static_version ?>"></script>
+<script src="../view/js/bootstrap.js<?= $static_version ?>"></script>
+<script src="../view/js/xiuno.js<?= $static_version ?>"></script>
+<script src="../view/js/bootstrap-plugin.js<?= $static_version ?>"></script>
+<script src="../view/js/async.js<?= $static_version ?>"></script>
+<script src="../view/js/form.js<?= $static_version ?>"></script>
+
+<!-- Vendors JS START -->
+<!--
+	<script src="../plugin/abs_theme_stately/view/libs/jquery/jquery.js"></script>
+	<script src="../plugin/abs_theme_stately/view/libs/popper/popper.js"></script>
+	<script src="../plugin/abs_theme_stately/view/js/bootstrap.js"></script>
+-->
+<script src="../plugin/abs_theme_stately/view/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="../plugin/abs_theme_stately/view/js/menu.js"></script>
+<script src="../plugin/abs_theme_stately/view/js/main.js"></script>
+<!-- Vendors JS END -->
+
+<!-- Main JS -->
+<script>
+	var debug = DEBUG = <?= DEBUG; ?>;
+	var url_rewrite_on = <?= $conf['url_rewrite_on'] ?>;
+	var fid = <?= $fid ?>;
+</script>
+<script src="../view/js/bbs.js<?= $static_version ?>"></script>
+
+<!-- Page JS -->
+<!--{hook admin_footer_js_after.htm}-->
+
+</body>
+
+</html>
+
+<!--{hook admin_footer_end.htm}-->

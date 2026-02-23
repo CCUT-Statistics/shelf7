@@ -1,0 +1,25 @@
+<?php if(!isset($abs_theme_stately_setting)): ?>
+<!--{hook post_list_inc_floor_before.htm}-->
+<?php if($_post['floor']) : ?>
+<span class="floor-parent">
+    <span class="floor">
+        <?= $_post['floor'];?>
+    </span>
+    <?= lang('floor');?>
+</span>
+<?php endif; ?>
+<!--{hook post_list_inc_floor_after.htm}-->
+<?php elseif($abs_theme_stately_setting['ui_tweek']['thread']['show_floor_number']): ?>
+<!--{hook post_list_inc_floor_before.htm}-->
+<?php if($_post['floor']) : ?>
+<span class="floor-parent">
+    <?php 
+    if( boolval($abs_theme_stately_setting['special']['post_floor_replace']['enable']) && $_post['floor'] <= 10 && !empty($abs_theme_stately_setting['special']['post_floor_replace']['floor_' . $_post['floor']])) :
+        echo $abs_theme_stately_setting['special']['post_floor_replace']['floor_' . $_post['floor']];
+    else:
+        echo '<span class="floor">' . $_post['floor'] . '</span>' . lang('floor');
+    endif; ?>
+</span>
+<?php endif; ?>
+<!--{hook post_list_inc_floor_after.htm}-->
+<?php endif; ?>

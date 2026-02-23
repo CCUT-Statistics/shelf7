@@ -1,0 +1,4 @@
+<?php 
+//查找付费记录
+$attach_pay = db_find_one('ws_thread_pay', array('tid' => $tid, 'uid' => $uid, 'type' => 2));
+if($thread['attach_golds']<=0||$attach_pay||$uid==$thread['uid']){?>

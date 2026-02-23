@@ -1,0 +1,14 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.template.htm">
+	<slot name="my_body">
+		<form action="<?php echo url('my-email_notice');?>" method="post" id="form">
+			<h5 class="card-title">主题有新回复邮件通知</h5>
+			<div> <?php echo form_radio_yes_no('email_notice', $checked); ?> </div>
+			<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('save');?></button>
+		</form>
+	</slot>
+</template>
+<script src="<?php echo $conf['view_url'];?>js/md5.js"></script>
+<script>
+	$('a[data-active="my"]').addClass('active');
+	$('a[data-active="my-email_notice"]').addClass('active');
+</script>

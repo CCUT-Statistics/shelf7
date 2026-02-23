@@ -1,0 +1,46 @@
+<!---->
+<?php
+
+if(!isset($abs_theme_stately_setting)) {
+    $cached_setting = kv_get('setting');
+    $abs_theme_stately_setting = !is_null(setting_get('abs_theme_stately_setting'))
+        ? setting_get('abs_theme_stately_setting')
+        : (isset($cached_setting['abs_theme_stately_setting']) ? $cached_setting['abs_theme_stately_setting'] : array());
+    //var_dump($abs_theme_stately_setting);
+    if(empty($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'])) {
+        $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] = 'plugin/abs_theme_stately/';
+    }
+}
+if (!function_exists('stately_format_number')) {
+    /**
+     * 将数字转换为k(kilo),m(million),b(billion),t(trillion)等的形式
+     * @param int $number
+     * @param int $precision 准确度（保留小数后几位）
+     * @return string
+     */
+    function stately_format_number($number = 0, $precision = 2) {
+        $number = intval($number);
+        $suffix = '';
+        if ($number >= 1000 && $number < 1000000) {
+            // 一千到一百万
+            $number = round($number / 1000, $precision);
+            $suffix = 'k';
+        } elseif ($number >= 1000000 && $number < 1000000000) {
+            // 一百万到十亿
+            $number = round($number / 1000000, $precision);
+            $suffix = 'm';
+        } elseif ($number >= 1000000000 && $number < 1000000000000) {
+            // 十亿到一兆(一万亿)
+            $number = round($number / 1000000000, $precision);
+            $suffix = 'b';
+        } elseif ($number >= 1000000000000) {
+            // 一兆以上
+            $number = round($number / 1000000000000, $precision);
+            $suffix = 't';
+        }
+        return $number . $suffix;
+    }
+}
+?>
+
+<!---->

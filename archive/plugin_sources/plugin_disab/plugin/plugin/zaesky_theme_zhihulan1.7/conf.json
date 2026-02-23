@@ -1,0 +1,11 @@
+{
+    "name": "知乎蓝简约主题（完整适配版）",
+    "brief": "基于大白简约主题修改。<br />详情更多信息请访问》<a href='#' style='red'>NOTEWEB</a><br/>1.7更新日志：<br/>统一样式，去繁为简<br/>精简导航栏，容纳更多板块分类<br/>重制导航栏二级菜单，适配积分显示<br/>PC端用户主页新增右侧信息栏<br/>优化应用内置浏览器兼容<br/>其他细节性优化",
+    "version": "1.7",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

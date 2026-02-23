@@ -1,0 +1,46 @@
+<li class="thread card mb-3 style-sns_v3 <?= $_thread['top_class'];?>" data-tid="<?= $_thread['tid'];?>">
+    <div class="p-3">
+        <div class="row g-1">
+            <div class="col">
+                <div class="mx-2">
+                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-1">
+                        <div class="d-flex">
+                            <a href="<?= url('user-'.$_thread['uid']);?>" class="w-px-50 pr-2 mr-1 v_avatar v_avatar-post">
+                                <img loading="lazy" decoding="async" src="<?= $_thread['user_avatar_url'];?>" class="img-fluid rounded-circle" loading="lazy">
+                                <!--{hook thread_list_inc_avatar_after.htm}-->
+                            </a>
+                            <div>
+                                <a href="<?= url('user-'.$_thread['uid']);?>" class="d-block">
+                                    <!--{hook stately_threadlist_username.htm}-->
+                                </a>
+                                <time class="small text-muted">
+                                    <?= $_thread['create_date_fmt'];?>
+                                </time>
+                            </div>
+                        </div>
+                        <!--{hook stately_threadlist_checkbox.htm}-->
+                    </div>
+                    <h5 class="card-title h6 my-2">
+                        <!--{hook stately_threadlist_subject.htm}-->
+                    </h5>
+                    <div class="card-text my-2">
+                        <?= $_post_message_excerpt ?>
+                    </div>
+                    <?php if(!is_null($_post_message_image)): ?>
+                        <!--{hook stately_threadlist_images_sns.htm}-->
+                    <?php endif; ?>
+                    <div class="mt-2 card-actions">
+                        <?php if($fid == 0): ?>
+                        <a href="<?= url('forum-'.$_thread['fid']);?>" class="small">
+                            <i class="las la-comment"></i>
+                            <?= $_thread['forumname'] ?>
+                        </a>
+                        <?php endif; ?>
+                        <!--{hook stately_threadlist_views_count.htm}-->
+                        <!--{hook stately_threadlist_posts_count_with_lastuid.htm}-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,112 @@
+<section class="px-3 pb-3">
+    <div class="row">
+        <?php if(!empty($abs_theme_stately_setting['global']['search']['hot_keywords'])): ?>
+        <div class="col-12">
+            <h3 class="h6 d-inline-block mr-2 mb-0"><i class="las la-fire text-danger"></i> 热门搜索</h3>
+            <ul class="list-inline d-inline-block mb-0">
+                <?php
+                $stately_search_hot_keywords = explode('|', $abs_theme_stately_setting['global']['search']['hot_keywords']);
+                foreach ($stately_search_hot_keywords as $hot_keyword) :
+                ?>
+                <li class="list-inline-item"><a href="<?= url('search-' . $hot_keyword) ?>">
+                        <?= $hot_keyword ?>
+                    </a></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <!--{hook stately_modal_search_after_hotkeywords.htm}-->
+        <?php endif; ?>
+        <?php if(!empty($abs_theme_stately_setting['global']['search']['show_history_keywords'])): ?>
+        <div class="col-12">
+            <h3 class="mt-3 h6 mr-2 mb-1"><i class="las la-clock text-primary"></i> 搜索历史 <button type="button" id="stately_search_history_clear" class="border-0 badge bg-label-warning" hidden>清空</button></h3>
+            <div id="stately_search_history_list"></div>
+        </div>
+        <script id="stately_search_history_js">
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('stately_search_form').addEventListener('submit', function (event) {
+                    //event.preventDefault(); // 阻止表单提交
+
+                    var keywordInput = this.querySelector('input[name=keyword]');
+                    var keywordValue = keywordInput.value.trim();
+
+                    if (keywordValue) {
+                        // 更新搜索历史  
+                        updateSearchHistory(keywordValue);
+                        // 显示搜索历史（如果尚未显示）  
+                        displaySearchHistory();
+                    }
+                });
+
+                function updateSearchHistory(keyword) {
+                    var searchHistory = JSON.parse(localStorage.getItem('search_history')) || [];
+
+                    // 如果搜索历史中不包含当前关键词，则添加到数组中  
+                    if (!searchHistory.includes(keyword)) {
+                        searchHistory.push(keyword);
+
+                        // 限制搜索历史数量（可选）  
+                        if (searchHistory.length > 10) {
+                            searchHistory.shift(); // 移除最旧的搜索  
+                        }
+
+                        // 将更新后的搜索历史存储回localStorage  
+                        localStorage.setItem('search_history', JSON.stringify(searchHistory));
+                    }
+                }
+
+                function displaySearchHistory() {
+                    var historyList = document.getElementById('stately_search_history_list');
+                    var searchHistory = JSON.parse(localStorage.getItem('search_history')) || [];
+
+                    // 清空历史列表  
+                    historyList.innerHTML = '';
+
+                    // 显示搜索历史  
+                    searchHistory.forEach(function (keyword) {
+                        var link = document.createElement('a');
+                        link.href = 'search.htm?keyword=' + encodeURIComponent(keyword); // 假设您想在URL中包含搜索关键词  
+                        link.classList.add('badge');
+                        link.classList.add('bg-label-secondary');
+                        link.setAttribute('target', '_blank');
+
+                        link.textContent = keyword;
+                        historyList.appendChild(link);
+                    });
+
+                    // 显示清空按钮（如果历史不为空）  
+                    var clearButton = document.getElementById('stately_search_history_clear');
+                    if (searchHistory.length > 0) {
+                        clearButton.hidden = false;
+                    } else {
+                        clearButton.hidden = true;
+                    }
+
+                    // 添加清空搜索历史的点击事件  
+                    clearButton.addEventListener('click', function () {
+                        localStorage.removeItem('search_history');
+                        displaySearchHistory(); // 重新显示（现在是空的）  
+                    });
+                }
+
+                // 首次加载页面时显示搜索历史  
+                displaySearchHistory();
+            });
+        </script>
+        <?php endif; ?>
+
+        <?php if(false): ?>
+        <div class="col-lg-6">
+            <h3 class="h6 mr-2"><i class="las la-chart-bar text-primary"></i> 排行榜</h3>
+            <ol>
+                <li>yes</li>
+            </ol>
+        </div>
+        <div class="col-lg-6">
+            <h3 class="h6 mr-2"><i class="las la-bullhorn text-info"></i> 活动</h3>
+            <ul class="list-unstyled">
+                <li><img loading="lazy" decoding="async" src="https://image-placeholder.com/images/actual-size/234x60.png" class="img-fluid" alt="活动"></li>
+            </ul>
+        </div>
+        <?php endif; ?>
+    </div>
+</section>

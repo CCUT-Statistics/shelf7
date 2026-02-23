@@ -1,0 +1,19 @@
+
+
+
+<!---->
+<?php if($stately_thread_style !== 'vintage_v1'){ ?>
+<!--{hook post_list_inc_subject_before.htm}-->
+<?php } ?>
+<?php if(!empty($_post['subject'])) { ?>
+<h3 class="h6"><i class="las la-reply"></i>
+    <a href="<?= url('thread-'.$_post['tid']);?>">
+        <?= $_post['subject'];?>
+    </a>
+</h3>
+<?php } ?>
+<!--{hook post_list_inc_subject_after.htm}-->
+<!---->
+
+
+

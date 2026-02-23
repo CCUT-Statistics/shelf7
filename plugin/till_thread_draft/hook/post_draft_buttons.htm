@@ -1,0 +1,15 @@
+<?php if ( ($route == 'thread' && $action == 'create')&& thread_draft_count($uid) > 0) : ?>
+<a href="<?php echo url('my-draft');?>" class="btn btn-info">
+    <?php
+        echo lang('drafts'); ?>
+    <span class="badge badge-light my-0">
+        <?= thread_draft_count($uid) ?>
+    </span>
+</a>
+<a href="<?php echo url('my-draft-edit-'.thread_draft_get_freshest_draft_id_by_uid($uid));?>" class="btn btn-info">恢复最新草稿</a>
+<?php elseif($route == 'my' && $action == 'draft'): ?>
+<a href="<?php echo url('my-draft');?>" class="btn btn-info">
+    <i class="icon-chevron-left"></i>
+    <?php echo lang('back'); ?>
+</a>
+<?php endif; ?>

@@ -1,0 +1,31 @@
+
+	<slot name="my_body">
+		<div class="card d-lg-none my-profilecard" >
+		        <div class="my_name imgbg_top" style="background:url(plugin/zaesky_theme_zhihulan/img/idback.png);background-size:cover;">
+				<div class="myname2 text-center">
+		        <span><img class="avatar-3" src="<?php echo $user['avatar_url'];?>" style="width: 3.5rem;
+			height: 3.5rem;
+			border: 2px solid rgba(255, 255, 255, 0.5);">
+				<!--{hook myxx_user_avatar_after.htm}-->
+				</span><br/><span class="text-white"><?php echo $user['username'];?>
+				<!--{hook myxx_username_end.htm}-->
+				<br/><span class="badge badge-yellow">UID:<?php echo $user['uid']; ?></span>&nbsp;<span class="badge badge-yellow"><?php echo $user['groupname'];?></span>
+				<!--{hook myxx_username_after.htm}-->
+				</span>
+				</div>
+				</div>
+				<div class="my_tzxx text-center">
+				<ul>
+				<li><span class="xianshishu"><?php echo lang('threads');?><br/></span><b><?php echo $user['threads'];?></b></li>
+				<li><span class="xianshishu"><?php echo lang('posts');?><br/></span><b><?php echo $user['posts'];?></b></li>
+				<li><span class="xianshishu"><?php echo lang('haya_favorite_count'); ?><b></span><br/><?php echo intval($user['favorites']);?></b></li>
+				<li><span class="xianshishu"><?php echo lang('digests');?></span><br/><b><?php echo $user['digests'];?></b></li>
+				</ul>
+				</div>
+			
+		</div>	
+	</slot>
+
+<script>
+$('a[data-active="my-profile"]').addClass('active');
+</script>

@@ -1,0 +1,11 @@
+{
+    "name": "外链跳转提醒仿知乎",
+    "brief": "可设置提示文字，新窗口打开，统计，nofollow，样式仿照知乎 <a href='https://club.ntne.cc/' class='badge badge-primary'>NT社区</a>",
+    "version": "1.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

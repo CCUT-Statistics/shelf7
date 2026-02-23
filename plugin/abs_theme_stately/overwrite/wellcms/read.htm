@@ -1,0 +1,126 @@
+<?php include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/view/htm/header.inc.htm');?>
+
+<!--{hook website_read_start.htm}-->
+<?php 
+
+$stately_thread_style = ''; //帖子风格
+if ($fid && isset($abs_theme_stately_setting['wellcms_ui_style']['thread']['style_for_forum'][$fid])) {
+	if ($abs_theme_stately_setting['wellcms_ui_style']['thread']['style_for_forum'][$fid] === '_inherit') {
+		$stately_thread_style = $abs_theme_stately_setting['wellcms_ui_style']['thread']['style_global'];
+	} else {
+		$stately_thread_style = $abs_theme_stately_setting['wellcms_ui_style']['thread']['style_for_forum'][$fid];
+	}
+} else {
+	$stately_thread_style = $abs_theme_stately_setting['wellcms_ui_style']['thread']['style_global'];
+}
+
+switch($stately_thread_style) { case 'blog': ?>
+<!--{hook stately_layout_wellcms_read__blog.htm}-->
+<?php break; default:  ?>
+<!--{hook stately_layout_wellcms_read__classic.htm}-->
+<?php } /* endswitch */ ?>
+
+<!--{hook website_read_end.htm}-->
+
+<?php include _include(APP_PATH . 'plugin/abs_theme_stately/overwrite/view/htm/footer.inc.htm');?>
+
+<script>
+var jform = $('#quick_reply_form');
+var jsubmit = $('#submit');
+jform.on('submit', function() {
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serialize();
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			var s = '<ul>'+message+'</ul>';
+			var jli = $(s).find('li');
+			jli.insertBefore($('.postlist > .post').last());
+            $('.post-subject').remove();
+			jsubmit.button('reset');
+			$('#message').val('');
+			
+			/*楼层 +1*/
+			var jfloor = $('#newfloor');
+			jfloor.html(xn.intval(jfloor.html()) + 1);
+			
+			/*回复数 +1*/
+			var jposts = $('.posts');
+			jposts.html(xn.intval(jposts.html()) + 1);
+			
+		} else if(code < 0) {
+			$.alert(message);
+			jsubmit.button('reset');
+		} else {
+			jform.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+
+/*缩放图片，适应屏幕大小*/
+function resize_image() {
+	var jmessagelist = $('div.message');
+	var first_width = jmessagelist.width(); /* 815 : 746; 734 746*/
+	jmessagelist.each(function() {
+		var jdiv = $(this);
+		var maxwidth = jdiv.attr('isfirst') ? first_width : jdiv.width();
+		var jmessage_width = Math.min(jdiv.width(), maxwidth);
+		jdiv.find('img, embed, iframe, video').each(function() {
+			var jimg = $(this);
+			var img_width = this.org_width;
+			var img_height = this.org_height;
+			if(!img_width) {
+				var img_width = jimg.attr('width');
+				var img_height = jimg.attr('height');
+				this.org_width = img_width;
+				this.org_height = img_height;
+			}
+			/*var percent = xn.min(100, xn.ceil((img_width / jmessage_width) * 100));*/
+			if(img_width > jmessage_width) {
+				if(this.tagName == 'IMG') {
+					jimg.width(jmessage_width);
+					jimg.css('height', 'auto');
+					jimg.css('cursor', 'pointer');
+					jimg.on('click', function() {
+						/*window.open(jimg.attr('src'));*/
+					});
+				} else {
+					jimg.width(jmessage_width);
+					var height = (img_height / img_width) * jimg.width();
+					jimg.height(height);
+				}
+			}
+		});
+	});
+}
+
+/*对于超宽的表格，加上响应式*/
+function resize_table() {
+	$('div.message').each(function() {
+		var jdiv = $(this);
+		jdiv.find('table').addClass('table').wrap('<div class="table-responsive"></div>'); 
+	});
+}
+
+$(function() {
+	resize_image();
+	resize_table();
+	$(window).on('resize', resize_image);
+});
+
+/*输入框自动伸缩*/
+var jmessage = $('#message');
+jmessage.on('focus', function() {if(jmessage.t) { clearTimeout(jmessage.t); jmessage.t = null; } jmessage.css('height', '6rem'); });
+jmessage.on('blur', function() {jmessage.t = setTimeout(function() { jmessage.css('height', '2.5rem');}, 1000); });
+
+$('#nav li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+</script>
+
+<?php if($thread['closed'] && ($gid == 0 || $gid > 5)) { ?>
+<script>
+jmessage.val('<?php echo lang('thread_has_already_closed');?>').attr('readonly', 'readonly');
+</script>
+<?php } ?>
+<!--{hook website_read_js.htm}-->

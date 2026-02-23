@@ -1,0 +1,204 @@
+
+.dplayer .dplayer-comment {
+    display: none !important;
+}
+#video-title {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    z-index: 1;
+}
+#danmu-display {
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);*/
+    /* 添加阴影效果 */
+}
+
+#danmu-send {
+    border: none;
+    /* 去除边框 */
+    transition: background-color 0.3s;
+    /* 添加过渡效果 */
+}
+
+#danmu-send:hover {
+    background-color: #0056b3;
+    /* 设置鼠标悬停时的颜色 */
+}
+
+#danmu-list p {
+    animation: fadein 0.5s;
+    /* 添加动画效果 */
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+#danmu-list {
+    height: 100%;
+    overflow-y: auto;
+}
+
+#danmu-display {
+    height: calc(100% - 4.75rem);
+    background-color: rgb(var(--card-background-rgb,248, 249, 250));
+    margin-bottom: 1rem;
+}
+
+#danmu-list p {
+    margin: 5px 0;
+    /* 设置段落间距 */
+    padding: 5px;
+    /* 设置段落内边距 */
+    border-radius: 5px;
+    /* 设置段落圆角 */
+    background-color: #ffffff;
+    /* 设置段落背景颜色 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* 添加阴影效果 */
+}
+
+.col-lg-4 {
+    height: 516px;
+    /* 结果是 470px */
+}
+
+.movie-name {
+    text-align: center;
+}
+
+.movie-item {
+    position: relative;
+    width: 193px;
+    /* 设置固定的宽度 */
+}
+
+.movie-image {
+    width: 100%;
+    /* 设置图片宽度为 100% */
+    height: auto;
+    /* 设置图片高度自动 */
+}
+
+.movie-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+    color: #ffffff;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.movie-rating {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.movie-actors {
+    font-size: 14px;
+
+}
+
+.movie-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 20px;
+}
+
+.movie-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+@media (max-width: 576px) {
+    .movie-item {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+@media (max-width: 576px) {
+    #dplayer {
+        height: 300px; /* 或者你需要的任何高度 */
+    }
+    #danmu-display {
+        height: 200px; /* 或者你需要的任何高度 */
+        overflow: scroll; /* 或者 "hidden" */
+    }
+}
+
+.col-1-7 {
+    width: 100%;
+    flex-basis: 100%;
+}
+
+@media (min-width: 375px) {
+    .col-1-7 {
+        width: 50%;
+        flex-basis: 50%;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-1-7 {
+        width: 25%;
+        flex-basis: 25%;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-1-7 {
+        width: 14.2%;
+        flex-basis: 14.2%;
+    }
+}
+
+.movie_schedule-poster {
+    height: 12em;
+    width: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    margin: 0 auto;
+}
+
+#movie_container.lights-out {
+    box-shadow: 0 0 0 100vmax black;
+    backdrop-filter: brightness(0);
+    position:fixed;
+    top: 0;
+    left: 0;
+    width:100%;
+    z-index: 10000;
+    padding-top: 2rem;
+}
+
+#movie_container.lights-out .card, 
+#movie_container.lights-out #danmu-input {
+    opacity: 0.25;
+    transition: opacity .1s ease-out
+}
+
+#movie_container.lights-out .card:hover,
+#movie_container.lights-out .card:focus, 
+#movie_container.lights-out .card:focus-within, 
+#movie_container.lights-out #danmu-input:hover,
+#movie_container.lights-out #danmu-input:focus, 
+#movie_container.lights-out #danmu-input:focus-within{
+    opacity: 1;
+}
+   

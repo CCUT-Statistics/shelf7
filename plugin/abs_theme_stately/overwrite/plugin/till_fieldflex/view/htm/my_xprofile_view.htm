@@ -1,0 +1,15 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.template.htm">
+	<slot name="my_body">
+		<div class="d-flex justify-content-between align-items-center mb-2">
+			<h3 class="h5 m-0"><?= lang('my_extra_profile') ?></h3>
+			<a href="<?= url('my-xprofile-edit') ?>" class="btn btn-primary"><?= lang('edit') ?></a>
+		</div>
+		<div>
+			<?= $my_custom_field_data_html ?>
+		</div>
+	</slot>
+</template>
+
+<script>
+$('a[data-active="my-xprofile"]').addClass('active');
+</script>

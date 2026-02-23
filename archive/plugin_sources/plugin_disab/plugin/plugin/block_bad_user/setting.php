@@ -1,0 +1,3 @@
+<?php
+/*** @技术支持 一起smart https://www.iqismart.com***/
+!defined('DEBUG') and exit('Access Denied.'); if ($method == 'GET') {$get_bad_user = kv_get('block_bad_user');include _include(APP_PATH.'plugin/block_bad_user/view/setting.htm');} else {$bad_user = array();$bad_user['mod1'] = param('mod1');$bad_user['mod2'] = param('mod2');$bad_user['mod3'] = param('mod3');$bad_user['mod4'] = param('mod4');$bad_user['mod5'] = param('mod5');$bad_user['mod6'] = param('mod6');$bad_user['blocktip'] = param('blocktip');kv_set('block_bad_user', $bad_user);$goback =url('plugin-setting-block_bad_user');message(0, '<p>设置成功</p><a role="button" class="btn btn-secondary btn-block m-t-1" href="'.$goback.'">返回</a>');}

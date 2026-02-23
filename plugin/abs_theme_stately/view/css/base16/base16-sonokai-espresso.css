@@ -1,0 +1,20 @@
+/* Sonokai espresso by Sainnhe Park (https://github.com/sainnhe/sonokai/) */
+
+:root {
+  --base00: #312c2b;/* bg0 */
+  --base01: #393230;/* bg1 */
+  --base02: #49403c;/* bg3 */
+  --base03: #4e433f;/* bg4 */
+  --base04: #90817b;/* grey */
+  --base05: #e4e3e1;/* fg */
+  --base06: #e4e3e1;/* fg */
+  --base07: #e4e3e1;/* fg */
+  --base08: #f86882;/* red */
+  --base09: #f08d71;/* orange */
+  --base0A: #f0c66f;/* yellow */
+  --base0B: #a6cd77;/* green */
+  --base0C: #7ad5f1;/* bg_blue */
+  --base0D: #81d0c9;/* blue */
+  --base0E: #9fa0e1;/* purple */
+  --base0F: #6a5e59;/* grey_dim */
+}

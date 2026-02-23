@@ -1,0 +1,40 @@
+﻿<li class="thread card tap p-2" data-href="<?= url('thread-'.$_thread['tid']);?>" data-tid="<?= $_thread['tid'];?>">
+    <div class=" media py-2 <?= $_thread['top_class'];?> ">
+        <a href="<?= url('user-'.$_thread['uid']);?>" tabindex="-1" class="ml-1 mt-1 mr-3 v_avatar v_avatar-post">
+            <img loading="lazy" decoding="async" class="avatar-3" src="<?= $_thread['user_avatar_url'];?>">
+            <!--{hook thread_list_inc_avatar_after.htm}-->
+        </a>
+        <div class="media-body">
+            <h3 class="subject break-all fs-6">
+                <!--{hook stately_threadlist_subject.htm}-->
+            </h3>
+            <div class="d-flex justify-content-between small mt-1">
+                <div>
+                    <span class="">
+                        <?php if($fid == 0): ?>
+                        <a href="<?= url('forum-'.$_thread['fid']);?>">
+                            <?= $_thread['forumname'] ?>
+                        </a>
+                        <?php endif; ?>
+                        <span class="hidden-sm "> · </span>
+                        <span class="username text-muted mr-1 <?php if($_thread['lastuid']) { echo 'hidden-sm'; } ?>" uid="<?= $_thread['uid'];?>">
+                            <!--{hook stately_threadlist_username.htm}-->
+                        </span>
+                        <time datetime="<?= $_thread['create_date'];?>" class="date text-muted <?php if($_thread['lastuid']) { echo 'hidden-sm'; } ?>">
+                            <?= $_thread['create_date_fmt'];?>
+                        </time>
+                    </span>
+                    <!--{hook thread_list_inc_username_after.htm}-->
+                    <!--{hook stately_threadlist_lastuid.htm}-->
+                </div>
+                <div class="text-muted small">
+                    <!--{hook stately_threadlist_views_count.htm}-->
+                    <!--{hook stately_threadlist_posts_count.htm}-->
+                    <span class="ml-2">
+                        <!--{hook stately_threadlist_checkbox.htm}-->
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

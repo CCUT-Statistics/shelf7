@@ -1,0 +1,29 @@
+<?php
+if(empty($wish_gowild)){
+    $wish_gowild = setting_get('wish_gowild');
+}
+if(empty($wish_gowild['add_nofollow']) || $wish_gowild['add_nofollow'] == 'yes'){
+    $wish_pattern = '!<a[^>]+?href\s?=["\']([^>]+?)["\'][^>]*>.+?</a>!sim';
+    preg_match_all($wish_pattern, $first['message_fmt'], $wish_m);
+    if(!empty($wish_m[1])){
+        $wish_host = _SERVER('HTTP_HOST');
+        foreach($wish_m[1] as $k=>$m_url){
+            $m_url = trim($m_url);
+            $marr = parse_url($m_url);
+            //判断是否外链
+            if(!empty($marr['host']) && $marr['host'] != $wish_host && (
+                    strpos($m_url, 'http://') === 0 ||
+                    strpos($m_url, 'https://') === 0 ||
+                    strpos($m_url, '//') === 0 ||
+                    strpos($m_url, 'ftp://') === 0 ||
+                    strpos($m_url, 'ftps://') === 0
+                )
+            ){
+                $wish_new_url = preg_replace('/rel\s?=\s?["\'][^>]*?["\']/sim', '', $wish_m[0][$k]);
+                $wish_new_url = str_replace('<a', '<a rel="external nofollow"', $wish_new_url);
+                $first['message_fmt'] = str_replace($wish_m[0][$k], $wish_new_url, $first['message_fmt']);
+            }
+        }
+    }
+}
+?>

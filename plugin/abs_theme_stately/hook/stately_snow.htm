@@ -1,0 +1,6 @@
+<?php if($abs_theme_stately_setting['ui']['other']['let_it_snow']): ?>
+    <script id="three_js" src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/libs/ThreeCanvas.js"></script>
+    <script id="snow_js" src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/js/Snow.js"></script>
+    <script id="snow_init_js">jQuery(document).ready(function() { initSnow(jQuery("body")); });</script>
+    <style>canvas.letitsnow {position: fixed;top: 0;left: 0;z-index: 1070;pointer-events: none; user-select: none; transition: opacity 1s ease-out; opacity: 1;}.scrolled canvas.letitsnow {opacity: .33;}</style>
+<?php endif; ?>

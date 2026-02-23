@@ -1,0 +1,36 @@
+<?php if(!$ajax) include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<?php if($post_update_log_list): ?>
+<p class="text-info">共进行 <span class="updates">
+		<?= $post['updates'];?>
+	</span> 次编辑</p>
+<div>
+	<ol class="update_log_list">
+		<?php foreach ($post_update_log_list as $arr) { ?>
+		<li data-logid="<?= $arr['logid'];?>">
+			<div class="d-flex justify-content-between">
+				<div><a href="<?= url('user-'.$arr['uid']);?>"><img loading="lazy" decoding="async" src="<?= $arr['user']['avatar_url'];?>" class="avatar-1 mr-1" />
+						<?= $arr['user']['username'];?>
+					</a>
+					<time datetime="<?= $arr['create_date'];?>" class="text-muted ml-2" data-bs-toggle="tooltip" title="<?= date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'],$arr['create_date']);?>">
+						<?= $arr['create_date_fmt'];?>
+					</time>
+					<span class="ml-2">
+						<?= $arr['reason'];?>
+					</span>
+				</div>
+				<div>
+					<a href="<?= url('post-update_log_read-'.$arr['logid']);?>" class="_update_log_history" target="_blank"><span class="las la-clock"></span> 查看历史</a>
+					<?php if($gid < 4 && $gid > 0) : ?>
+					<a href="<?= url('post-update_log_delete-'.$arr['logid']);?>" class="_update_log_delete text-danger">
+						<i class="las la-trash"></i>
+						<?= lang('delete');?>
+					</a>
+					<?php endif; ?>
+				</div>
+			</div>
+		</li>
+		<?php } ?>
+	</ol>
+</div>
+<?php endif; ?>
+<?php if(!$ajax) include _include(APP_PATH.'view/htm/footer.inc.htm');?>

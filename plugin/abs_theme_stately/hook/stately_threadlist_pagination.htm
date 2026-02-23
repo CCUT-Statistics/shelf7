@@ -1,0 +1,24 @@
+<?php if (
+    isset($abs_theme_stately_setting['ui_tweek']['threadlist']['use_ajax_load'])
+    && $abs_theme_stately_setting['ui_tweek']['threadlist']['use_ajax_load']
+    ) : ?>
+<nav class="my-3">
+    <?php if(!empty($threadlist) && count($threadlist) >= $pagesize): ?>
+    <button id="t_loadmore" class="btn btn-block btn-primary" data-href="
+    <?= url(
+        ( empty(param(0)) ? 'index' : param(0) )
+        .'-'
+        .( empty(param(1)) ? 2 : ( param(0) === 'forum' ? strval($fid . '-' . (intval(param(2,1)) + 1))  : (intval(param(1,1)) + 1) ) ) )
+    ?>" title="<?php echo lang('load_more'); ?>" onclick="history.replaceState(null,null,this.href)"><span class="spinner-border spinner-border-sm" hidden="hidden" role="status" aria-hidden="true"></span>加载更多</button>
+    <?php endif; ?>
+</nav>
+<?php else: ?>
+<nav class="my-3">
+    <ul class="pagination justify-content-center flex-wrap">
+        <?= $pagination; ?>
+    </ul>
+</nav>
+<?php endif; ?>
+
+
+

@@ -1,0 +1,137 @@
+<div class="row" data-layout="blog">
+    <div class="col-md-9 mx-auto">
+        <?php
+        if (!function_exists('catch_post_first_img')) {
+            /**
+             * 获取文章第一张缩略图 
+             *
+             * @param string $content 文章内容
+             * @return string|null 文章第一张缩略图的网址
+             */
+            function catch_post_first_img($content) {
+                $output = preg_match_all('/<img*.+src=[\'"]([^\'"]+)[\'"].*>/iU', $content, $matches);
+                if (empty($output)) {
+                    $first_img = NULL;
+                } else {
+                    $first_img = $matches[1][0];
+                }
+                return $first_img;
+            }
+        }
+        $_post_message_image = NULL; //帖子里的第一张图片地址
+        if ($abs_theme_stately_setting['ui_tweek']['threadlist']['show_thread_thumbnail']) {
+            $_post_message_image = catch_post_first_img($first['message_fmt']);
+        }
+
+        if (!is_null($_post_message_image)) : /* 如果有封面图的话,显示封面图 */ ?>
+        <div class="card bg-primary text-white" style="background-image:url(<?= $_post_message_image ?>);background-position:center;background-size:cover">
+            <div class="post-heading px-3 py-5 text-center">
+                <!--{hook thread_subject_before.htm}-->
+                <h1 id="the_thread_subject" class="subject d-block fs-2">
+                    <!--{hook thread_subject_start.htm}-->
+                    <?= $thread['subject']; ?>
+                    <!--{hook thread_subject_end.htm}-->
+                </h1>
+                <!--{hook thread_subject_after.htm}-->
+                <span class="meta">
+                    <a href="<?= url('user-' . $thread['uid']); ?>" class="username <?= !empty($thread_username_extra_class) ? $thread_username_extra_class : 'text-white' ?>">
+                        <?= $thread['username'] ?>
+                    </a> · <time datetime="<?= $thread['create_date'] ?>>">
+                        <?= $thread['create_date_fmt'] ?>
+                    </time> · <a href="<?= url('forum-' . $fid) ?>" class="text-white">
+                        <?= $forum['name'] ?>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <?php else : /* 否则使用标准样式 */ ?>
+        <div class="">
+            <div class="post-heading px-3 py-5 text-center">
+                <!--{hook thread_subject_before.htm}-->
+                <h1 id="the_thread_subject" class="d-block fs-2">
+                    <!--{hook thread_subject_start.htm}-->
+                    <?= $thread['subject']; ?>
+                    <!--{hook thread_subject_end.htm}-->
+                </h1>
+                <!--{hook thread_subject_after.htm}-->
+                <span class="meta">
+                    <a href="<?= url('user-' . $thread['uid']); ?>" class="username <?= $thread_username_extra_class ?>">
+                        <?= $thread['username'] ?>
+                    </a> · <time datetime="<?= $thread['create_date'] ?>>">
+                        <?= $thread['create_date_fmt'] ?>
+                    </time> · <a href="<?= url('forum-' . $fid) ?>">
+                        <?= $forum['name'] ?>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+    <div class="col-md-9 mx-auto">
+        <?php if ($abs_theme_stately_setting['ui_tweek']['thread']['show_fab']) { ?>
+        <!--{hook stately_fab_thread.htm}-->
+        <?php } ?>
+        <div class="card card-body mb-3">
+            <div id="the_thread_message" class="message" isfirst="1">
+                <!--{hook stately_thread_message.htm}-->
+            </div>
+            <!--{hook stately_thread_plugin_slot.htm}-->
+            <div class="post-meta d-flex justify-content-between">
+                <div>
+                    <span class="text-muted ml-2"><i class="la la-eye"></i>
+                        <?= $thread['views']; ?>
+                    </span>
+                    <!--{hook thread_views_after.htm}-->
+                </div>
+                <div>
+                    <!--{hook stately_thread_btn_update.htm}-->
+                    <!--{hook stately_thread_btn_delete.htm}-->
+                </div>
+            </div>
+        </div>
+        <div class="d-none threadlist"><input type="checkbox" name="modtid" value="<?= $thread['tid']; ?>" checked /></div>
+        <?php include _include(APP_PATH . 'view/htm/thread_list_mod.inc.htm'); ?>
+        <!---->
+        <!--{hook thread_postlist_before.htm}-->
+
+        <?php if ( in_array(intval($gid),array(1),true) || ( boolval($abs_theme_stately_setting['global']['thread']['show_postlist']) ) ): ?>
+
+        <div class="card card-postlist">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <b>
+                            <?= lang('new_post'); ?>
+                        </b> ( <span class="posts">
+                            <?= $thread['posts']; ?>
+                        </span> )
+                    </div>
+                    <!--{hook thread_post_list_title_middle.htm}-->
+                    <div>
+                        <!--{hook thread_post_list_title_right.htm}-->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled postlist">
+                    <?php include _include(APP_PATH . 'view/htm/post_list.inc.htm'); ?>
+                    <?php if (!empty($user)) : ?>
+                    <!--{hook stately_thread_newpost_form.htm}-->
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+
+        <?php endif; ?>
+        
+        <!--{hook thread_postlist_after.htm}-->
+        <?php if ($pagination) : ?>
+        <nav>
+            <ul class="pagination mt-4 mb-5 justify-content-center flex-wrap">
+                <?= $pagination; ?>
+            </ul>
+        </nav>
+        <?php endif; ?>
+        <!--{hook thread_page_after.htm}-->
+    </div>
+</div>

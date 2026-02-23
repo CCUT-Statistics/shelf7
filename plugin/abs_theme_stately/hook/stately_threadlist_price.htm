@@ -1,0 +1,25 @@
+<?php if( intval($_thread['content_buy']) != 0 ): ?>
+<?php $this_thread_price = ''; ?>
+<?php switch($_thread['content_buy_type']) {
+    case 1:
+    $this_thread_price .= $_thread['content_buy'];
+    $this_thread_price .= $credits1_name;
+    break;
+    case 2:
+    $this_thread_price .= $_thread['content_buy'];
+    $this_thread_price .= $credits2_name;
+    break;
+    case 3:
+    $this_thread_price .= intval($_thread['content_buy']) * 0.01;
+    $this_thread_price .= $credits3_name;
+    break;
+    default:
+    $this_thread_price .= $_thread['content_buy'];
+    $this_thread_price .= lang('credits');
+    break;
+} 
+echo $this_thread_price;
+?>
+<?php else: ?>
+<?php echo lang('free_as_in_beer'); ?>
+<?php endif; ?>

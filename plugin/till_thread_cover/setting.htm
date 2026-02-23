@@ -1,0 +1,65 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+<div class="row">
+	<div class="col-lg-10 offset-lg-1">
+		<div class="card">
+			<div class="card-block">
+				<form action="<?php echo url('plugin-setting-till_thread_cover');?>" method="post" id="form">
+					<h4 class="card-title">帖子封面图设置</h4>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">最大文件大小(MB)</label>
+						<div class="col-sm-10">
+							<?php echo $input['max_size_mb']; ?>
+							<p>若遇到超时导致上传失败的情况，请调低。</p>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">在帖子页面中显示？</label>
+						<div class="col-sm-10">
+							<?php echo $input['show_on_thread_page']; ?>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">使用预制CSS？</label>
+						<div class="col-sm-10">
+							<?php echo $input['use_preset_css']; ?>
+							<p>若打算使用自己的CSS来改善封面图的外观，请选“否”。</p>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label"></label>
+						<div class="col-sm-10">
+							<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('confirm');?></button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+
+var jform = $("#form");
+var jsubmit = $("#submit");
+var referer = '<?php echo http_referer();?>';
+jform.on('submit', function(){
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serialize();
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.text(message).delay(2000).button('reset').location(referer);
+			return;
+		} else {
+			$.alert(message);
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+
+</script>

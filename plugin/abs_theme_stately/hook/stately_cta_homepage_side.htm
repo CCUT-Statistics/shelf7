@@ -1,0 +1,94 @@
+<?php if($abs_theme_stately_setting['custom_content']['homepage_cta']['enable'] 
+&& ( ($abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'only_guest' && !$user) || ( $abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'always' ) )
+) : ?>
+<?php if(
+    $abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'always' ||
+    $abs_theme_stately_setting['custom_content']['homepage_cta']['visibility'] === 'only_guest' && !$user
+    ): 
+    $cta_button_1 = '';
+    $cta_button_2 = '';
+    $cta_button_3 = '';
+    $cta_button_4 = '';
+    for ($i=1; $i < 5; $i++) { 
+        $cta_button_var_name = 'cta_button_' . $i;
+        
+        if(!empty($abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['href'])) {
+            ${$cta_button_var_name . '_href'} = $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['href'];
+            switch(${$cta_button_var_name . '_href'}) {
+                case '__login__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('user-login') . '"';
+                break;
+                case '__register__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('user-create') . '"';
+                break;
+                case '__thread_create__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('thread-create-0') . '"';
+                break;
+                case '__my__':
+                ${$cta_button_var_name . '_href'} = 'href="' . url('my') . '"';
+                break;
+                case '__login_modal__':
+                ${$cta_button_var_name . '_href'} = 'href="#" data-bs-toggle="modal" data-bs-target="#loginModal"';
+                break;
+                default:
+                ${$cta_button_var_name . '_href'} = 'href="' . ${$cta_button_var_name . '_href'} . '"';
+                break;
+            }
+            if( 
+                $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['visibility'] === 'all'
+                || $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['visibility'] === 'guest_only' && !$user
+                || $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['visibility'] === 'login_only' && $user
+             ) {
+                ${$cta_button_var_name} .= '<a ' . ${$cta_button_var_name . '_href'} . ' class="cta-btn btn btn-' . $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['style'] . '">' . $abs_theme_stately_setting['custom_content']['homepage_cta_button_' . $i]['content'] . '</a>';
+            }
+        }
+    }
+    ?>
+<?php switch($abs_theme_stately_setting['custom_content']['homepage_cta']['style']): ?>
+<?php case 'pos_side__img_top': ?>
+<div class="card mb-3">
+    <div class="d-flex align-items-end row">
+        <div class="col-12 text-center ">
+            <div class="card-body pb-0 px-0 px-md-4">
+                <img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['custom_content']['homepage_cta']['image'] ?>" class="img-fluid">
+            </div>
+        </div>
+        <div class="col-12 text-center ">
+            <div class="card-body">
+                <h2 class="card-title text-primary h5">
+                <?= !empty($user) ? str_replace('__username__', $user['username'],$abs_theme_stately_setting['custom_content']['homepage_cta']['title_login']) : $abs_theme_stately_setting['custom_content']['homepage_cta']['title'] ?>
+                </h2>
+                <?= !empty($user) ? htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['homepage_cta']['content_login']) : htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['homepage_cta']['content']) ?>
+                <?= $cta_button_1 ?>
+                <?= $cta_button_2 ?>
+                <?= $cta_button_3 ?>
+                <?= $cta_button_4 ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php break; case 'pos_side__img_bottom': ?>
+<div class="card mb-3">
+    <div class="d-flex align-items-end row">
+        <div class="col-12 text-center ">
+            <div class="card-body">
+                <h2 class="card-title text-primary h5">
+                    <?= !empty($user) ? str_replace('__username__', $user['username'],$abs_theme_stately_setting['custom_content']['homepage_cta']['title_login']) : $abs_theme_stately_setting['custom_content']['homepage_cta']['title'] ?>
+                </h2>
+                <?= !empty($user) ? htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['homepage_cta']['content_login']) : htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['homepage_cta']['content']) ?>
+                <?= $cta_button_1 ?>
+                <?= $cta_button_2 ?>
+                <?= $cta_button_3 ?>
+                <?= $cta_button_4 ?>
+            </div>
+        </div>
+        <div class="col-12 text-center ">
+            <div class="card-body pb-0 px-0 px-md-4">
+                <img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['custom_content']['homepage_cta']['image'] ?>" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+<?php break; default: ?>
+<?php break; endswitch; ?>
+<?php endif; endif;?>

@@ -1,0 +1,11 @@
+﻿{
+    "name": "了结",
+    "brief": "让用户可以永久停用自己的账号，但为管理员留出逆转该操作的后门。受到“链滴”启发。作者：Tillreetree；图标：Flaticon.com",
+    "version": "1.0.1",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,10 @@
+{
+    "name": "匿名回复",
+    "brief": "用户选择是否匿名显示。<br>插件由<a href=\"https://www.jbxiaozi.com/\" target=\"_blank\" _href=\"https://www.jbxiaozi.com/\"><span style=\"color:#0070c0\">脚本小子</span></a>制作",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": []
+}

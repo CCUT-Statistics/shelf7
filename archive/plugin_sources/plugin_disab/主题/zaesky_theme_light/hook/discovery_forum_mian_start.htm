@@ -1,0 +1,30 @@
+<div class="userContainer">
+  <div class="userContent-wrapper">
+    <div class="userContent">
+      <?php 
+		$userlist = discovery_get_site_new_user(20);
+        foreach ($userlist as $user) {
+			$user_avatarimg = 'view/img/avatar.png';
+			$user['avatar']!=0 && $user_avatarimg = $conf['upload_url'].'avatar/000/'.$user['uid'].'.png?'.$user['avatar'];
+      $user['login_name_date'] = $user['dname'].'('.humandate($user['login_date']).')';
+      $user['avtive_date'] = humandate($user['login_date']);
+
+			  ?>
+        <div class="card userCard">
+          <div class="card-body text-center">
+            <a title="<?php echo $user['login_name_date'];?>" class="tt" href="<?php echo url("user-$user[uid]");?>">
+              <img src="<?php echo $user_avatarimg; ?>" class="avatar-4" alt="<?php echo $user['dname'];?>">
+            </a>
+            <div class="userCardName mt-2 font-weight-bold"><?php echo $user['dname'];?></div>
+            <div class="small text-muted"><?php echo $user['avtive_date'];?>活跃</div>
+          </div>
+        </div>
+			
+		<?php } ?>
+      
+      
+    </div>
+  </div>
+</div>
+
+

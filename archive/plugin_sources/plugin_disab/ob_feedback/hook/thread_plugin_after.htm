@@ -1,0 +1,8 @@
+ <hr>
+            <?php $ob_feedarray = array($thread['uid'], url('thread-' . $thread['tid']), $thread['subject']);
+            $ob_imp = implode('[|]', $ob_feedarray);
+            $ob_imp = htmlspecialchars($ob_imp);
+            ?>
+            <div class="d-flex justify-content-between small text-muted">
+            <a>&nbsp;</a>
+            <a href="javascript:;"  data-username="<?php echo $thread['username']; ?>" data-uid="<?php echo $thread['uid']; ?>" data-modal-url="<?php echo url("feedback"); ?>" data-modal-title="反馈问题" data-modal-arg="<?php echo $ob_imp; ?>" title="反馈问题"style="color: #868e96 !important;"><i class="icon-info-circle" aria-hidden="true"></i> 投诉举报</a></div>

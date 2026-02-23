@@ -1,0 +1,10 @@
+{
+    "name": "帖子封面图",
+    "brief": "提供帖子封面图设置及上传功能。",
+    "version": "1.0.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,79 @@
+<?php if ($draftlist) : ?>
+<div class="list-group">
+    <?php foreach ($draftlist as $draft_id => $draft) : ?>
+    <article class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex flex-column flex-md-row justify-content-between">
+            <main class="flex-grow-1">
+                <h3 class="h5 mb-2">
+                    <a href="<?= url('thread-create-' . $draft['fid']) ?>">
+                        <?= $draft['subject'] ?>
+                    </a>
+                    <time class="small text-small text-muted" datetime="<?= date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'], $draft['create_time']) ?>">
+                        <i class="las la-clock"></i>
+                        <?= humandate($draft['create_time']) ?>
+                    </time>
+                </h3>
+                <p>
+                    <?= mb_substr(strip_tags(htmlspecialchars_decode($draft["message"])), 0, 128) ?>
+                </p>
+            </main>
+            <aside class="ml-auto flex-grow-0 flex-shrink-0 w-auto">
+                <div class="form-check d-inline-block">
+                    <input type="checkbox" name="modtid" value="<?php echo $draft_id; ?>" id="modtid_<?php echo $draft_id; ?>" class="form-check-input" />
+                    <label class="form-check-label" for="modtid_<?php echo $draft_id; ?>"></label>
+                </div>
+                <button type="button" onclick="draft_publish(<?= $uid ?>,[<?= $draft_id ?>])" class="btn btn-primary">
+                    <?= lang('create_thread') ?>
+                </button>
+                <a href="<?= url('my-draft-edit-' . $draft_id) ?>" class="btn btn-outline-secondary">
+                    <?= lang('edit') ?>
+                </a>
+                <button type="button" onclick="draft_delete(<?= $uid ?>,[<?= $draft_id ?>])" class="btn btn-outline-danger">
+                    <?= lang('delete') ?>
+                </button>
+            </aside>
+        </div>
+    </article>
+    <?php endforeach; ?>
+</div>
+</div>
+<div class="d-flex justify-content-between flex-wrap my-3">
+    <div>
+        <button type="button" id="draft_delete_all" class="btn btn-danger">
+            <?= lang('Empty draft') ?>
+        </button>
+    </div>
+    <div class="d-flex align-items-center">
+        <div class="form-check mr-3">
+            <input type="checkbox" data-target='input[name="modtid"]' class="checkall form-check-input" value="" id="draft_checkall" aria-label="<?php echo lang('checkall'); ?>" />
+            <label class="form-check-label" for="draft_checkall">
+                <?php echo lang('checkall'); ?>
+            </label>
+        </div>
+        <span>
+            <?= lang('Selected items') ?>：
+        </span>
+        <div class="mod-button">
+            <button type="button" id="draft_publish_multi" class="btn btn-primary">
+                <?= lang('create_thread') ?>
+            </button>
+            <button type="button" id="draft_delete_multi" class="btn btn-outline-danger">
+                <?= lang('delete') ?>
+            </button>
+        </div>
+    </div>
+</div>
+</div>
+<?php else : ?>
+<div class="empty card-body text-center my-4">
+    <div>
+        <span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+            <i class="la la-files-o fs-1"></i>
+        </span>
+        <p class="m-0">
+            <?= lang('No draft') ?>
+        </p>
+    </div>
+</div>
+<?php endif; ?>
+<div>

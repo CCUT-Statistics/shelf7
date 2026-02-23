@@ -1,0 +1,172 @@
+<?php 
+
+$num_pid = db_count('shoplist', array('OK' => 0, 'text' => array('!=' => '')));
+$page = param(2,1);
+
+$shoplist = db_find('shoplist', array('OK' => 0, 'text' => array('!=' => '')), array('create_date' => -1), $page, $pagesize = 999);
+$pagination = pagination(url("shop-{page}"), $num_pid, $page, $pagesize);
+
+include _include(APP_PATH . 'view/htm/header.inc.htm'); ?>
+
+
+
+<section>
+    <ul class="nav nav-pills justify-content-center ">
+
+        <li class="nav-item">
+            <a class="nav-link active" href="shop.htm" data-active="shop">道具</a>
+        </li>
+        <?php if($uid){?>
+        <li class="nav-item">
+            <a class="nav-link" href="kami.htm" data-active="kami">我的卡密</a>
+        </li>
+        <?php }?>
+    </ul>
+
+    <div class="row">
+        <?php foreach($shoplist as $v){
+        $users = user_read_cache($v['uid']);
+        ?>
+        <div class="col-12 col-md-4">
+            <article class="card">
+                <div class="card-body">
+                    <div class="media d-flex ">
+                        <div class="media-left">
+                            <img src="<?php echo $v['poto'];?>" alt="<?php echo $v['title'];?>" class="media-object img-thumbnail" style="width:65px;height:65px;">
+                        </div>
+                        <div class="media-body flex-grow-1 pl-2">
+                            <h4 class="media-heading"><?php echo $v['title'];?></h4>
+                            <p><b class="badge bg-warning">价格 ：<?php echo $v['sum'].' '.lang('credits'.$v['sumtype']);?></b>
+                                <b class="badge bg-info">数量：
+                                    <?php $texts = $v['text'];
+                                $cdkArray = explode("\n", $texts);
+                                $cdkArrays = array_filter($cdkArray, 'trim');
+                                $lineCount = count($cdkArrays); 
+                                
+                                if ($v['type'] == 1){
+                                echo $lineCount.' 个';
+                                }elseif($v['type'] == 2){
+                                echo 'Max';
+                                }elseif($v['type'] == 3){
+                                echo '1 个';
+                                }?></b>
+                            </p>
+                        </div>
+                    </div>
+                    <footer class="row">
+                        <div class="col-6">
+                            <a href="<?php echo $v['url'];?>" class="btn btn-outline-primary btn-block" role="button">
+                                详情
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" class="btn btn-primary btn-block" role="button" data-bs-toggle="modal" data-bs-target="#shop<?php echo $v['id'];?>">
+                                购买
+                            </a>
+                        </div>
+                    </footer>
+                </div>
+            </article>
+        </div>
+        <aside class="modal fade" id="shop<?php echo $v['id'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><?php echo $v['title'];?><small> &middot; 作者：<img class="avatar-1" src="<?php echo $users['avatar_url'];?>" /><?php echo $users['username'];?></small> </h4>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="<?php echo url('mod-shopgou');?>" method="post" class="jform">
+                            <input type="hidden" name="id" value="<?php echo $v['id'];?>">
+                            <dl>
+                                <dt>描述</dt>
+                                <dd><?php echo $v['message'];?></dd>
+                            </dl>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <dl>
+                                        <dt>价格：</dt>
+                                        <dd class="lead h4"><b class="text-primary"><?php echo $v['sum'].' '.lang('credits'.$v['sumtype']);?></b></dd>
+
+                                    </dl>
+                                </div>
+                                <div class="col-sm-6">
+                                    <dl>
+                                        <dt>剩余：</dt>
+                                        <dd class="lead h4"><?php $texts = $v['text'];
+                                        $cdkArray = explode("\n", $texts);
+                                        $cdkArrays = array_filter($cdkArray, 'trim');
+                                        $lineCount = count($cdkArrays); 
+                                        
+                                        if ($v['type'] == 1){
+                                        echo $lineCount.' 个';
+                                        }elseif($v['type'] == 2){
+                                        echo 'Max';
+                                        }elseif($v['type'] == 3){
+                                        echo '1 个';
+                                        }?></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">取消购买</button>
+                        <button type="submit" data-loading-text="<?php echo lang('submiting');?>..." class="btn btn-primary jsubmit">确认购买</button>
+                    </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </aside>
+
+        <?php }?>
+    </div>
+    <nav class="text-center">
+        <ul class="pagination"><?php echo $pagination; ?></ul>
+    </nav>
+</section>
+
+<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>
+
+<script>
+    var jform = $('.jform');
+    var jsubmit = $('.jsubmit');
+    jform.on('submit', function () {
+        jform.reset();
+        jsubmit.button('loading');
+        var postdata = jform.serializeObject();
+        $.xpost(jform.attr('action'), postdata, function (code, message) {
+            if (code == 0) {
+                $.toast({
+                    type: 'success',
+                    title: lang.tips_title,
+                    subtitle: code,
+                    content: message,
+                    delay: 60000,
+                    pause_on_hover: true
+                });
+                jsubmit.button(message).delay(3000).button('reset');
+            } else if (xn.is_number(code)) {
+                $.toast({
+                    type: 'info',
+                    title: lang.tips_title,
+                    subtitle: code,
+                    content: message,
+                    delay: 3000,
+                    pause_on_hover: true
+                });
+                jsubmit.button('reset');
+            } else {
+                $.toast({
+                    type: 'warning',
+                    title: lang.tips_title,
+                    subtitle: code,
+                    content: message,
+                    delay: 3000,
+                    pause_on_hover: true
+                });
+                jsubmit.button('reset');
+            }
+        });
+        return false;
+    });
+</script>

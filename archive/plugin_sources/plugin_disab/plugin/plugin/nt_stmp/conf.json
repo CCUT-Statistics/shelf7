@@ -1,0 +1,11 @@
+{
+    "name": "STMP修复",
+    "brief": "修复XiunoSTMP无法发送邮件<br>更多插件交流尽在：<a href='https://xiuno.zerun.asia'>xiuno交流论坛</a>",
+    "version": "1.0",
+    "bbs_version": "4.0.4",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,27 @@
+<?php if(empty($uid)) message(-1,'您需要先登录才能打赏记录!');
+$tid = param(2, 0); $page =  param(3, 1);
+$set=setting_get('tt_reward');
+$_thread=db_find_one('thread',array('tid'=>$tid));
+empty($_thread) AND message(-1, '主题不存在');
+thread_format($_thread);
+$data= db_find('reward',array('tid'=>$tid),array('time'=>1), $page, $pagesize=20);
+$s_count = db_count('reward',array('tid'=>$tid));
+$pagination = pagination(url("thread-sReward-{$tid}-{page}"), $s_count, $page, $pagesize=20);
+function get_user($uid) {
+    $user = db_find_one('user',array('uid'=>$uid));
+    return $user;
+}
+$_statics = db_find_one('thread_red',array('tid'=>$tid));
+include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<div class="row"><div class="col-lg-10 mx-auto"><div class="card"><div class="card-body" ><h4>打赏记录 - <?php echo $_thread['subject'];?></h4>
+    <div style="margin-bottom:8px;"><a href="<?php echo url("user-$_thread[uid]");?>" class="mr-3" tabindex="-1"><img class="avatar-1" src="<?php echo $_thread['user']['avatar_url'];?>">&nbsp;<?php echo $_thread['user']['username'];?></a></div>
+    <div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text">参与人数</span></div>
+        <input type="text" class="form-control" disabled style="background-color: white;" value="<?php echo $s_count;?>"></div>
+</div></div><div class="card"><div class="card-body">
+<table class="table"><tr><th style="width:25%;">时间</th><th style="width:30%;">用户</th><th style="width:15%;"><?php echo lang('credits1');?></th><th style="width:15%;"><?php echo lang('credits2');?></th><th style="width:15%;"><?php echo lang('credits3');?></th></tr>
+    <?php foreach($data as $v){$__user = get_user($v['uid']);user_format($__user); ?>
+    <tr style="<?php echo $v['uid']==$uid?'font-weight:bold;':'';?>"><td><?php echo date('Y-m-d H:i:s',$v['time']);?></td><td><a href="<?php echo url("user-$v[uid]");?>" class="mr-3" tabindex="-1"><img class="avatar-1" src="<?php echo $__user['avatar_url'];?>"></a>&nbsp;<a href="<?php echo url("user-$v[uid]");?>" class="mr-3" tabindex="-1"><?php echo $__user['username'];?></a></td><td><?php echo $v['credits'];?></td><td><?php echo $v['golds'];?></td><td><?php echo $v['rmbs']/100.0;?></td>
+    </tr><?php }?></table>
+    <nav class="text-center"><ul class="pagination"><?php echo $pagination; ?></ul></nav>
+</div></div></div></div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>

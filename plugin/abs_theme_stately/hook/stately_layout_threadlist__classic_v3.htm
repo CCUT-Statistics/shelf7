@@ -1,0 +1,39 @@
+<li class="thread my-1 " data-href="<?= url('thread-'.$_thread['tid']);?>" data-tid="<?= $_thread['tid'];?>">
+    <div class="media">
+        <a href="<?= url('user-'.$_thread['uid']);?>" tabindex="-1" class="ml-1 mt-1 mr-3 v_avatar v_avatar-post">
+            <img loading="lazy" decoding="async" class="avatar-3" src="<?= $_thread['user_avatar_url'];?>">
+            <!--{hook thread_list_inc_avatar_after.htm}-->
+        </a>
+        <div class="media-body">
+            <div>
+                <span class="username">
+                    <a href="<?= url('user-'.$_thread['uid']);?>" class="text-muted">
+                        <!--{hook stately_threadlist_username.htm}-->
+                    </a>
+                </span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <h3 class="subject break-all fs-6">
+                    <!--{hook stately_threadlist_subject.htm}-->
+                </h3>
+                <div class="text-muted small">
+                    <!--{hook stately_threadlist_views_count.htm}-->
+                    <!--{hook stately_threadlist_posts_count.htm}-->
+                    <!--{hook stately_threadlist_checkbox.htm}-->
+                </div>
+            </div>
+            <div class="d-flex justify-content-between small mt-1">
+                <div>
+                    <?php if($fid == 0): ?>
+                    <a class="text-muted" href="<?= url('forum-'.$_thread['fid']);?>">
+                        <?= $_thread['forumname'] ?>
+                    </a>
+                    <?php endif; ?> · <span class="date text-muted">
+                        <?= $_thread['create_date_fmt'];?>
+                    </span>
+                    <!--{hook stately_threadlist_lastuid.htm}-->
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

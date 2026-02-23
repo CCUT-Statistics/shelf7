@@ -1,0 +1,11 @@
+{
+    "name": "附件购买",
+    "brief": "编辑帖子时可设置附件s售价(发布暂不支持) <a href='http://iqismart.com'>http://iqismart.com 一起smart出品  QQ: 364337403</a>",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,34 @@
+<!--
+
+<ul class="attachlist">
+<li aid="_0">
+		<a href="attach-download-_0.htm" target="_blank">
+			<i class="icon filetype zip"></i>
+			zz_iqismart_attach.zip
+		</a>
+<small class=" d-none d-md-block text-muted float-right">6.75K
+ | 更新时间：01/01/1970
+</small>
+		<a href="javascript:void(0)" class="delete ml-3"><i class="icon-remove"></i> 删除</a>
+</li>
+</ul>
+
+-->
+ 
+<script>
+  $(function(){
+    $('.attachlist li').each(function (index) {
+      var li = $(this)
+		var aid = li.attr('aid');
+       var attach_name = li.find('a').eq(0);
+      var selectType = $("<select name='attach-"+aid+"-type' style='line-height:1rem;margin-left:10px;margin-right:10px'><option value='credits'>经验</option><option value='golds'>金币</option><option value='rmbs'>人民币</option></select>");
+      attach_name.after(selectType);
+  
+    	li.find('select').after("<input name='attach-"+aid+"-value'   value='0' style='width:50px;line-height:1rem;margin-left:10px;' type='number' />");
+      
+      
+    });
+  	
+  })
+ 
+</script>

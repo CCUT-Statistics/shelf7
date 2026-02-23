@@ -1,0 +1,45 @@
+<?php if($uid): ?> 
+    <div class="w-100">
+        <?php if($abs_theme_stately_setting['ui_tweek']['navbar_vertical']['show_user_cover']): ?>
+        <div class="user-profile-header-banner rounded-top h-px-75"></div>
+        <?php endif; ?>
+        <div class="user-profile-header">
+            <div class="d-flex">
+                <div class="app-brand-logo  flex-shrink-0 me-3 py-1">
+                    <div class="avatar">
+                        <a href="<?= url('my') ?>" class="v_avatar v_avatar-post">
+                            <img loading="lazy" decoding="async" src="<?= $user['avatar_url'] ?>" alt="<?= $user['username'] ?>" class="w-px-40 h-auto rounded-circle">
+                            <?= ( function_exists('v_show_badge') ? v_show_badge($user['v'], $user['v_title'], $till_v_settings = setting_get('till_verified_member_setting')) : '') ?>
+                        </a>
+                    </div>
+                </div>
+                <div class="app-brand-text flex-grow-1 ">
+                    <?php if (function_exists('vip__isvip') && vip__isvip($user['vip_end']) && function_exists('vip_read')) { $vip_info = vip_read($uid); /* 如果是VIP */ ?>
+                        <a href="<?= url('my'); ?>" class="h5 my-1 fw-semibold text-danger isvip">
+                            <?= $user['username'] ?> <small class="fw-semibold isvip"><span class="badge bg-label-warning">VIP Lv.<?= $vip_info['level'] ?></span></small>
+                        </a>
+                    <?php unset($vip_info); } else { /* 普通用户 */ ?>
+                        <a href="<?= url('my'); ?>" class="h5 my-1 fw-semibold">
+                            <?= $user['username'] ?>
+                        </a>
+                    <?php } /* endif */ ?>
+                    <span class="badge badge-pill bg-label-info">
+                        <?= $user['groupname'] ?>
+                    </span>
+            </div>
+            </div>
+        </div>
+    </div>
+
+<?php else: ?> 
+<div class="app-brand-link">
+    <a href="./">
+        <span class="app-brand-logo demo">
+            <img loading="lazy" decoding="async" src="<?= $abs_theme_stately_setting['global']['icon']['logo'] ?>" alt="<?= $conf['sitename']; ?>">
+        </span>
+    </a>
+    <a href="<?php echo url('user-login');?>">
+        <span class="app-brand-text <?= $abs_stately_app_brand_text_class ?> d-block my-0 menu-text ms-2 line-height-2"><b class="text-primary">登录/注册</b><br>发现更多精彩！</span>
+    </a>
+</div> 
+<?php endif; ?>

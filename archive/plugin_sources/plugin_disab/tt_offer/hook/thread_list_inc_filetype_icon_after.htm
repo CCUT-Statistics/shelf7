@@ -1,0 +1,6 @@
+<?php if($_thread['offerNum']!=0){
+    if($_thread['offerStatus']==0){ ?>
+<!-- <i class="icon-magic" style="color:gold;" aria-hidden="true" title="有悬赏!"></i> <span style="color:gold"><?php echo '[',lang('offer'),']',credits_get_text($set_offer['credits_type'],$thread['offerNum']);?></span>--><span style="color:#F45B69;font-weight: 600;']'">[未解决]  </span>
+<?php } else{ ?>
+<!-- <i class="icon-magic" style="color:lawngreen;" aria-hidden="true" title="已采纳!"></i> <span style="color:lawngreen"><?php echo '[',lang('offer'),']',credits_get_text($set_offer['credits_type'],$thread['offerNum']);?></span>--><span style="color: #88D498;font-weight: 600;">[已采纳]</span>
+<?php }} ?>

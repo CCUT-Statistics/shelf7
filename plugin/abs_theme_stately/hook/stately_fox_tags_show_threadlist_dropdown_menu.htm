@@ -1,0 +1,18 @@
+<!--{hook forum_thread_list_dropdown_before.htm}-->
+<div class="text-right card-header-dropdown">
+    <div class="btn-group">
+        <button type="button" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="ordery_dropdown_menu">
+            <?= lang('orderby');?>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="ordery_dropdown_menu">
+            <a class="dropdown-item" href="<?= url('tag-' . $tagid . '-1', array('orderby'=>'tid'));?>"><i class="icon text-primary <?= $orderby == 'tid' ? 'la la-check' : '';?>"></i>&nbsp;
+                <?= lang('thread_create_date');?>
+            </a>
+            <a class="dropdown-item" href="<?= url('tag-'.$tagid.'-1', array('orderby'=>'lastpid'));?>"><i class="icon text-primary <?= $orderby == 'lastpid' ? 'la la-check' : '';?>"></i>&nbsp;
+                <?= lang('post_create_date');?>
+            </a>
+            <!--{hook forum_thread_list_dropdown_menu.htm}-->
+        </ul>
+    </div>
+</div>
+<!--{hook forum_thread_list_dropdown_after.htm}-->

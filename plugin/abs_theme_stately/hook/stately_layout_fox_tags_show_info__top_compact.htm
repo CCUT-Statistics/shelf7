@@ -1,0 +1,38 @@
+<div class="card p-3 mb-3" data-style="foruminfo-compact_v1">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="media align-items-center">
+            <img loading="lazy" decoding="async" class="card-img w-px-50" src="<?= $this_tag_cover_url ?>">
+            <div class="media-body ml-3">
+                <h2 class="h5 m-0">
+                    <?= $tagname ?>
+                </h2>
+                <div class="small mt-2">
+                    <?= $this_tag_brief ?>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center flex-shrink-0">
+            <div class="d-none d-lg-inline-flex mx-2">
+                <div class="d-flex flex-column mr-2">
+                    <small class="text-muted"> 成员数 </small>
+                    <span>
+                        <?=  $query['fans']; ?>
+                    </span>
+                </div>
+            </div>
+            <?php if (!empty($group['allowtags2'])) { ?>
+            <div class="d-flex flex-column mr-1">
+                <a href="<?=  url('tag-edit-'.$tagid); ?>" role="button" class="btn btn-secondary btn-sm">
+                    <i class="la la-edit"></i>
+                    <?= lang('edit') ?>
+                </a>
+            </div>
+            <?php } ?>
+            <div class="follow_tag">
+                <a role="button" href="javascript:;" id="follow_tag" onclick="follow_tag('<?=  $query['tagid']; ?>')" class="btn <?=  !$is_follow ? 'btn-primary' : 'btn-secondary'; ?> btn-sm">
+                    <?=  !$is_follow ? '关注标签' : '已关注'; ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+<?php if($abs_theme_stately_setting['special']['quickthread_modal']['enable'] ):
+if($user): 
+$hook_modal_new_thread_exist = true;
+?>
+
+<div class="new-thread-prompt">
+	<!--{hook new_thread_prompt_before.htm}-->
+	<div class="card">
+		<div class="input-group">
+			<a href="<?php echo url('my'); ?>" class="input-group-text">
+				<img loading="lazy" decoding="async" src="<?php echo $user['avatar_url'];?>" class="img-fluid rounded-circle w-px-30">
+			</a>
+			<div class="form-control d-flex align-items-center justify-content-start" data-bs-toggle="modal" data-bs-target="#statelyNewThreadModal"><span class="text-muted">
+					<?php echo lang('thread_create_new');?>…
+				</span></div>
+			<span class="btn btn-primary p-3" data-bs-toggle="modal" data-bs-target="#statelyNewThreadModal">
+				<i class="la la-plus fs-big"></i>
+			</span>
+		</div>
+	</div>
+	<!--{hook new_thread_prompt_after.htm}-->
+</div>
+<div class="modal fade" id="statelyNewThreadModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body p-2">
+				<h2 class="sr-only"><?php echo lang('thread_create_new');?></h2>
+				<form id="quick_post_form" action="<?php echo url('thread-create'); ?>" method="post">
+					<div class="d-flex align-items-center">
+						<button type="button" class="btn px-2" data-bs-dismiss="modal" aria-hidden="true"><i class="la la-angle-left"></i></button>
+						<input class="form-control border-0" type="text" name="subject" id="subject" placeholder="<?php echo lang('subject');?>">
+						<a href="<?php echo url('thread-create-'.$fid);?>" class="btn btn-link px-2" tabindex="99" style="flex:1 0 auto">高级发帖</a>
+					</div>
+					<div class="card my-2">
+						<textarea class="form-control" name="message" id="message" placeholder="<?php echo lang('message');?>" data-emoji="true" style="height: 200px"></textarea>
+					</div>
+					<div>
+						<div class="d-flex justify-content-between">
+							<select class="form-select mr-1 w-auto" name="fid">
+								<?php 
+								$forumlist_sl = forum_list_access_filter($forumlist, $gid); //过滤没有权限访问的板块，必须要做
+								foreach ($forumlist_sl as $sl_forum) { ?>
+								<option value="<?php echo $sl_forum['fid']; ?>" <?php if($sl_forum['fid']==$fid) {echo 'selected="selected"' ; } ?>>
+									<?php echo $sl_forum['name']; ?>
+								</option>
+								<?php } ?>
+							</select>
+							<input type="hidden" name="doctype" value="1" />
+							<button class="btn btn-primary" type="submit" id="submit">
+								<?php echo lang('thread_create'); ?>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+<?php else: ?>
+<div class="new-thread-prompt">
+	<div class="card d-flex flex-row align-items-center justify-content-center gap-3 p-2">
+			<span class="badge bg-label-info badge-center rounded-pill"><i class="las la-user-plus"></i></span>
+			<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content'] ?>
+		<span class="m-0 btn-group w-auto">
+			<?php if(!empty($abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_login'])) : ?>
+			<a href="<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_login'] === '__login__' ? url('user-login')  : $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_login']?>" class="btn btn-primary"><i class="las la-user"></i>
+				<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_login'] ?>
+			</a>
+			<?php endif; ?>
+			<?php if(!empty($abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_register'])) : ?>
+			<a href="<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_register'] === '__register__' ? url('user-create') : $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['href_btn_register'] ?>" class="btn btn-outline-primary"><i class="las la-user-plus"></i>
+				<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_register'] ?>
+			</a>
+			<?php endif; ?>
+		</span>
+	</div>
+</div>
+
+<?php endif; ?>
+<?php endif; ?>

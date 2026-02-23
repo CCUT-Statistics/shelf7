@@ -1,0 +1,1 @@
+$till_thread_draft_setting = setting_get('till_thread_draft_setting');

@@ -1,0 +1,37 @@
+<div data-layout="classic_2col" class="row">
+    <div class="col-lg-9 main">
+        <!--{hook widget_sitestats_v4.htm}-->
+        <!--{hook mobile_index_main_start.htm}-->
+        <!--{hook index_main_start.htm}-->
+        <!--{hook stately_homepage_alltopthreads.htm}-->
+        <div class="card-threadlist">
+            <!--{hook stately_modal_newthread.htm}-->
+
+            <?php if($abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'outer'): ?>
+            <!--{hook stately_homepage_thread_list_nav.htm}-->
+            <?php endif; ?>
+
+            <!--{hook stately_threadlist_before.htm}-->
+            <div class="<?= $stately_threadlist_class_add ?>">
+
+            <?php if($abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'inner'): ?>
+            <!--{hook stately_homepage_thread_list_nav.htm}-->
+            <?php endif; ?>
+
+                <ul class="list-unstyled threadlist row g-0 mb-0" data-style="<?= $stately_threadlist_style ?>">
+                    <!--{hook index_threadlist_before.htm}-->
+                    <?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+                    <!--{hook index_threadlist_after.htm}-->
+                </ul>
+            </div>
+        </div>
+        <?php include _include(APP_PATH . 'view/htm/thread_list_mod.inc.htm'); ?>
+        <!--{hook index_page_before.htm}-->
+         <!--{hook stately_threadlist_pagination.htm}-->
+        <!--{hook mobile_index_page_end.htm}-->
+        <!--{hook index_page_end.htm}-->
+    </div>
+    <div class="<?= $abs_stetely_sidebar_class ?>">
+        <!--{hook widget_slot_homepage.htm}-->
+    </div>
+</div>

@@ -1,0 +1,5 @@
+<?php if( isset($_user['deprecated']) && $_user['deprecated']): ?>
+<span class="badge badge-danger">
+    <?= lang("user_is_deprecated") ?>
+</span>
+<?php endif; ?>

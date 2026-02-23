@@ -1,0 +1,100 @@
+<div class="card-body ajax-body">
+    <form action="<?php echo url("feedback"); ?>" method="post" id="ob_form">
+        <input name="to_uid" type="hidden" class="to_uid" value="0" />
+
+        <input name="ob_thread_subject" class="ob_thread_subject" type="hidden" value="0" />
+        <input name="ob_thread_url" class="ob_thread_url" type="hidden" value="0" />
+
+        <div class="form-group row">
+            <div class="col-12">
+                <span>你觉得这个帖子&内容有什么问题？</span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12" style="flex: 1 0 50%;">
+                <label class="custom-input custom-radio"><input type="radio" name="feedback" value="涉嫌违法举报" checked="checked"> 涉嫌违法举报</label>
+            </div>
+            <div class="col-12">
+                <label class="custom-input custom-radio"><input type="radio" name="feedback" value="敏感话题举报" checked="checked"> 敏感话题举报</label>
+            </div>
+            <div class="col-12">
+                <label class="custom-input custom-radio"><input type="radio" name="feedback" value="违规内容举报" checked="checked"> 违规内容举报</label>
+            </div>
+            <div class="col-12">
+                <label class="custom-input custom-radio"><input type="radio" name="feedback" value="涉黄漏点举报" checked="checked"> 涉黄漏点举报</label>
+            </div>
+            <div class="col-12">
+                <label class="custom-input custom-radio"><input type="radio" name="feedback" value="给管理反馈" checked="checked"> 给管理反馈</label>
+            </div>
+            <div class="col-12">
+                <label class="custom-input custom-radio"><input type="radio" name="feedback" value="链接失效" checked="checked"> 链接失效</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12">
+                <span>为帮助审核人员更快处理，建议您补充违规帖子链接以及详细信息</span>
+                <textarea placeholder="填写反馈内容描述" name="ob_message" class="form-control axinput" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12">
+                <button type="submit" class="btn btn-block btn-primary axbutton" data-loading-text="<?php echo lang('submiting'); ?>...">点我投递信息</button>
+            </div>
+        </div>
+        <div class="figure-caption mt-2">
+            <div style="text-align: center;">
+                <img src="plugin/ob_feedback/img/gt.png" width="100%" height="30px" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script ajax-eval="true">
+    // 接受传参
+    var args = args || {
+        jmodal: null,
+        callback: null,
+        arg: null,
+    };
+    var jmodal = args.jmodal;
+    var callback = args.callback;
+
+    str = args.arg;
+    var strs = new Array(); //定义一数组
+    strs = str.split("[|]"); //字符分割
+
+    $('.to_uid').val(strs[0]);
+    $('.ob_thread_url').val(strs[1]);
+    $('.ob_thread_subject').val(strs[2]);
+    // $('.axinput').val(args.arg);
+
+
+
+    var jform = $('#ob_form');
+    var jsubmit = jform.find('button[type="submit"]');
+    var jcancel = jform.find('button[type="button"]');
+
+    jform.on('submit', function() {
+        jform.reset();
+        jsubmit.button('loading');
+        var postdata = jform.serializeObject();
+        $.xpost(jform.attr('action'), postdata, function(code, message) {
+            if (code == 0) {
+                jsubmit.button(message);
+                setTimeout(function() {
+                    if (jmodal) jmodal.modal('dispose');
+                    if (callback) callback(message);
+                    window.location.reload();
+                }, 1000);
+            } else {
+                $.alert(message);
+                jsubmit.button('reset');
+            }
+        });
+
+        return false;
+    });
+    jcancel.on('click', function() {
+        if (jmodal) jmodal.modal('dispose');
+    });
+</script>

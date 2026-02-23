@@ -1,0 +1,89 @@
+<form action="<?= $form_action;?>" method="post" id="form">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h3 m-0">
+                    <?= $form_title; ?>
+                </h2>
+                <div>
+                    <?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'top'): ?>
+                    <button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>...">
+                        <i class="las la-paper-plane"></i>
+                        <?= $form_submit_txt;?>
+                    </button>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <input type="hidden" name="doctype" value="<?= $form_doctype;?>" />
+            <input type="hidden" name="quotepid" value="<?= $quotepid;?>" />
+            <!--{hook post_fid_before.htm}-->
+            <?php if($isfirst) { ?>
+            <!--{hook post_subject_before.htm}-->
+            <div class="input-group">
+                <!--{hook post_fid_select_before.htm}-->
+                <select class="form-select w-auto flex-grow-0" name="fid">
+                    <?php foreach ($forumlist_allowthread as $forum) { ?>
+                    <option value="<?= $forum['fid']; ?>">
+                        <?= $forum['name']; ?>
+                    </option>
+                    <?php } ?>
+                </select>
+                <!--{hook post_fid_select_after.htm}-->
+                <input type="text" class="form-control" placeholder="<?= lang('subject');?>" name="subject" value="<?= $form_subject;?>" id="subject" autofocus>
+            </div>
+            <!--{hook post_subject_after.htm}-->
+            <?php } ?>
+            <div class="card my-3">
+                <textarea class="form-control" placeholder="<?= lang('message');?>" name="message" id="message" rows="25" autofocus><?= $form_message;?></textarea>
+            </div>
+
+            <?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'bottom'): ?>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>...">
+                    <i class="las la-paper-plane"></i>
+                    <?= $form_submit_txt;?>
+                </button>
+            </div>
+            <?php endif; ?>
+        </div>
+        <div class="col-lg-4">
+            <aside >
+                <ul class="nav nav-tabs nav-fill" id="postTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="function-tab" data-bs-toggle="tab" data-bs-target="#postTabFunction" type="button" role="tab" aria-controls="postTabFunction" aria-selected="true">功能</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="postTabAttachment-tab" data-bs-toggle="tab" data-bs-target="#postTabAttachment" type="button" role="tab" aria-controls="postTabAttachment" aria-selected="false">附件</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="postTabContent">
+                    <section class="tab-pane fade show active" id="postTabFunction" role="tabpanel" aria-labelledby="postTabFunction-tab">
+                        <!--{hook post_message_after.htm}-->
+
+                        <!--{hook post_bottom_left.htm}-->
+
+                        <!--{hook post_bottom_right.htm}-->
+                    </section>
+                    <section class="tab-pane fade" id="postTabAttachment" role="tabpanel" aria-labelledby="postTabAttachment-tab">
+                        <div class="attachlist_parent">
+                            <a class="small text-left" href="javascript:void(0)">
+                                <label class="addattach" id="addattach">
+                                    <i class="la la-folder-open-o"></i>
+                                    <?= lang('add_attach');?>
+                                    <input type="file" multiple="multiple" class="invisible" />
+                                </label>
+                            </a>
+                            <?= post_file_list_html($filelist, TRUE);?>
+
+                            <?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'top'): ?>
+                            <!--{hook post_bottom_right.htm}-->
+                            <?php endif; ?>
+                        </div>
+                    </section>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+</form>

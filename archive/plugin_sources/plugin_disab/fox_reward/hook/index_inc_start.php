@@ -1,0 +1,1 @@
+<?php exit; $fox_reward_arr = kv_cache_get('fox_reward');?>

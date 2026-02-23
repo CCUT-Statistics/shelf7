@@ -1,0 +1,1 @@
+$arr['deprecated'] = $_deprecated;

@@ -1,0 +1,7 @@
+<?php if($uid && $abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['enable']): ?>
+<?php switch($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['style']): case 'v2': ?>
+<!--{hook widget_myinfo_v2.htm}-->
+<?php break; default: ?>
+<!--{hook widget_myinfo_v1.htm}-->
+<?php break; endswitch; ?>
+<?php endif; ?>

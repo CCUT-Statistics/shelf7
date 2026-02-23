@@ -1,0 +1,11 @@
+<div class="tag col-lg-12 small text-muted mt-1 mb-2">
+    <?php if($thread['tag']){?>
+    <i class="icon-tags mr-2"></i>
+    <?php foreach($thread['tag_text'] as $key => $_tag) {?>
+            <a class="rounded bg-label-secondary d-inline-block p-1 mr-2" href="<?php echo url('tag-'.$key);?>">
+                <?php echo $_tag;?>
+            </a>
+    </span>
+    <?php } /* endforeach */ ?>
+    <?php } /* endif */ ?>
+</div>

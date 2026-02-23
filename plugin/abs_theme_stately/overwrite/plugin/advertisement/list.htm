@@ -1,0 +1,101 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<div class="card">
+<div class="card-header">
+	<ul class="nav nav-tabs card-header-tabs">
+		<li class="nav-item">
+			<a class="nav-link" href="<?php echo url('plugin-setting-advertisement');?>">广告位</a>
+		</li>
+		<?php if($action && $action != 'list'){?>
+		<li class="nav-item">
+			<a class="nav-link <?php echo $action != 'list' ? 'active' : '';?>" href="<?php echo url("plugin-setting-advertisement-$action");?>"><?php echo lang($action);?></a>
+		</li>
+		<?php }?>
+		<li class="nav-item">
+			<a class="nav-link <?php echo $action == 'list' ? 'active' : '';?>" href="<?php echo url('plugin-setting-advertisement-list');?>">所有广告</a>
+		</li>
+	</ul>
+</div>
+<div class="card-body">
+				<form action="<?php echo url('plugin-setting-advertisement-list');?>" method="post" id="form">
+					<div class="table-responsive arrlist">
+						<table class="table" style="min-width: 800px">
+							<thead>
+								<tr align="center">
+									<th width="30"></th>
+									<th width="80">显示顺序</th>
+									<th width="50">可用</th>
+									<th width="300">标题</th>
+									<th>类型</th>
+									<th>起始时间</th>
+									<th>终止时间</th>
+									<th></th>
+								</tr>
+							<thead>
+							<tbody id="advlist">
+								<?php foreach($adlist as $_adv) { ?>
+								<tr align="center" rowid="<?php echo $_adv['adid']; ?>">
+									
+									<td><input type="checkbox" name="modtid" value="<?php echo $_adv['adid']; ?>"/></td>
+									<td><input type="text" class="form-control" name="displayorder[<?php echo $_adv['adid'];?>]" value="<?php echo $_adv['displayorder']; ?>"  placeholder="显示顺序" /></td>
+									<td><?php echo $_adv['available'] == 1 ? '是' : '否'; ?></td>
+									<td><?php echo $_adv['title']; ?></td>
+									<td><?php echo lang($_adv['type']);?></td>
+									<td><?php echo $_adv['starttime'] ? date($abs_theme_stately_setting['global']['datetime_format']['date_only'],$_adv['starttime']) : '无限制';?></td>
+									<td><?php echo $_adv['endtime'] ? date($abs_theme_stately_setting['global']['datetime_format']['date_only'],$_adv['endtime']) : '无限制';?></td>
+									<td><a href="<?php echo url("plugin-setting-advertisement-update-$_adv[adid]"); ?>"><?php echo lang('edit');?></a></td>
+								</tr>
+								<?php } ?>
+							</tbody>
+						</table>
+					</div>
+					<label>
+						<input type="checkbox" data-target='input[name="modtid"]' class="checkall" value="" aria-label="<?php echo lang('checkall');?>" /> <?php echo lang('checkall');?>
+					</label>
+					<button type="button" class="btn btn-secondary" id="confirm">删除</button>
+					<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('confirm');?></button>
+					<?php if(param(3) && param(3) != 'list'){?>
+					<a class="btn btn-primary" href="<?php echo url("plugin-setting-advertisement-create-$action"); ?>" role="button">添加</a>
+					<?php }?>
+					<nav class="float-right"><ul class="pagination"><?php echo $pagination;?></ul></nav>
+				</form>
+				
+</div>
+</div>
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+<script>
+var jform = $("#form");
+var jsubmit = $("#submit");
+var jconfirm = $("#confirm");
+var juserlist = $('#advlist');
+jform.on('submit', function(){
+	jform.reset();
+	var postdata = jform.serialize();
+	jsubmit.button('loading');
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.text(message).delay(1000).location();
+			return;
+		} else {
+			alert(message);
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+
+// 删除选中的用户
+jconfirm.on('click', function(){
+	var jchecked = juserlist.find('input[name="modtid"]').filter(function(){ return this.checked; });
+	if(jchecked.length < 1) return alert("请勾选您要删除的广告");
+	if(!window.confirm("确定删除广告？")) return false;
+	jchecked.each(function() {
+		jtr = $(this).parents('tr');
+		var advid = jtr.attr('rowid');
+		$.xpost(xn.url('plugin-setting-advertisement-delete'), {advid:advid}, function(code, message) {
+			if(code != 0) return $.alert(message);
+			jconfirm.text(message).delay(1000).location();
+		});
+	});
+});
+</script>

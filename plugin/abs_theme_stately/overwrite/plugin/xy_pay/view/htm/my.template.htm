@@ -1,0 +1,41 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.common.template.htm">
+	<slot name="my_nav">
+		<ul class="nav nav-pills ">
+
+			<li class="nav-item">
+				<a class="nav-link " href="<?php echo url("my-pay");?>" data-active="my-pay"><?php echo lang('pay_user_pay');?></a>
+			</li>
+
+			<?php if(!empty($conf['exchange']) || !empty($conf['disexchange'])){?>
+			<li class="nav-item">
+				<a class="nav-link " href="<?php echo url("my-exchange");?>" data-active="my-exchange"><?php echo lang('pay_user_exchange');?></a>
+			</li>
+			<?php } ?>
+			
+			<?php if(!empty($conf['payout'])){?>
+			<li class="nav-item">
+				<a class="nav-link " href="<?php echo url("my-payout");?>" data-active="my-payout"><?php echo lang('pay_user_payout');?></a>
+			</li>
+			<?php } ?>
+			
+			<li class="nav-item">
+				<a class="nav-link " href="<?php echo url("my-payinfo");?>" data-active="my-payinfo"><?php echo lang('pay_user_payinfo');?></a>
+			</li>
+			<?php if(!empty($conf['exchange']) || !empty($conf['disexchange'])){?>
+			<li class="nav-item">
+				<a class="nav-link " href="<?php echo url("my-exchangeinfo");?>" data-active="my-exchangeinfo"><?php echo lang('pay_user_exchange_info4');?></a>
+			</li>
+			<?php } ?>
+			<?php if(!empty($conf['payout'])){?>
+			<li class="nav-item">
+				<a class="nav-link " href="<?php echo url("my-outinfo");?>" data-active="my-outinfo"><?php echo lang('pay_user_outinfo');?></a>
+			</li>
+			<?php } ?>
+
+		</ul>
+	</slot>
+</template>
+
+<script>
+$('a[data-active="menu-my-pay"]').addClass('active');
+</script>

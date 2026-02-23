@@ -1,0 +1,30 @@
+<?php if(empty($wish_gowild)){$wish_gowild = setting_get('wish_gowild');}?>
+<?php if(!empty($countlist)){ ?>
+
+    <table class="table">
+        <thead>
+        <tr style="color: #484b4e;">
+            <th scope="col"><?php echo lang('my_gowild_jump_link');?></th>
+            <th scope="col"><?php echo lang('my_gowild_jump_times');?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach($countlist as $url=>$item){ ?>
+        <tr>
+            <td style="word-break: break-all;min-width: 80px;"><?php echo $url;?></td>
+            <td style="min-width: 80px;">
+                <?php if(empty($wish_gowild['is_count_detail']) || $wish_gowild['is_count_detail'] == 'yes'){ ?>
+                    <?php $wish_t = !empty($item['count'])?$item['count']:0;?>
+                    <a href="<?php echo url('my-count').'?act=detail&t='.$wish_t.'&url='.xn_urlencode($url);?>"><?php echo $wish_t;?></a>
+                <?php } else { ?>
+                    <?php echo !empty($item['count'])?$item['count']:0;?>
+                <?php } ?>
+            </td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+
+<?php } else { ?>
+    <div><?php echo lang('my_gowild_no_data');?></div>
+<?php } ?>

@@ -1,0 +1,36 @@
+<?php include _include(APP_PATH . 'view/htm/header.inc.htm');  ?>
+<!--{hook stately_cta_homepage_top.htm}-->
+<!--{hook index_start.htm}-->
+<?php 
+$stately_homepage_thread_list_nav_extra_class = '';
+switch($abs_theme_stately_setting['ui_style']['homepage']['layout']) { ?>
+<?php case 'classic_1col': ?>
+<!--{hook stately_layout_homepage__classic_1col.htm}-->
+<?php break; 
+case 'portal_v1': ?>
+<!--{hook stately_layout_homepage__portal_v1.htm}-->
+<?php break; 
+case 'portal_v2': ?>
+<!--{hook stately_layout_homepage__portal_v2.htm}-->
+<?php break; 
+case 'portal_v3': ?>
+<!--{hook stately_layout_homepage__portal_v3.htm}-->
+<?php break; 
+case 'bbs_v1':  ?>
+<!--{hook stately_layout_bbs__v1.htm}-->
+<?php break; 
+case 'bbs_v2':  ?>
+<!--{hook stately_layout_bbs__v2.htm}-->
+<?php break; 
+case 'classic_3col': ?>
+<!--{hook stately_layout_homepage__classic_3col.htm}-->
+<?php break; 
+default: /* classic_2col */ ?>
+<!--{hook stately_layout_homepage__classic_2col.htm}-->
+<?php } /* end switch */ ?>
+<!--{hook index_end.htm}-->
+<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>
+<script>
+    $('li[data-active="fid-0"]').addClass('active');
+</script>
+<!--{hook index_js.htm}-->

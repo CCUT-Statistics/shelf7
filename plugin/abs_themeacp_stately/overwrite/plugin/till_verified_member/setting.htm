@@ -1,0 +1,578 @@
+<?php 
+$header['mobile_title'] = $PLUGIN_PROFILE['name']. ' ' .lang('setting') ;
+include _include(ADMIN_PATH.'view/htm/header.inc.htm'); ?>
+<style id="till_verified_member">
+    @import url("../plugin/till_verified_member/view/css/v_badge.css");
+
+    #vform_config ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    #vform_config ::-webkit-scrollbar-track {
+        background-color: var(--light, #eee);
+        border-radius: 4px;
+    }
+
+    #vform_config ::-webkit-scrollbar-thumb {
+        background-color: var(--primary, #007bff);
+        border-radius: 4px;
+    }
+
+    .card {
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        transition: all .2s linear;
+        margin-bottom: 1rem;
+    }
+
+    .card:target {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /*
+    .card:not(:target) .card-body {
+        max-height: 100vh;
+        overflow: hidden;
+    }
+*/
+    .card .card-header {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+
+    /*
+    .card:not(:target) .card-footer {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .card:not(:target) .card-header:after {
+        content: "←点击展开";
+        opacity: .5;
+    }
+*/
+    .card .card-footer {
+        position: sticky;
+        bottom: 0;
+        z-index: 2;
+    }
+
+    .list-inline {
+        padding-left: 0;
+        list-style: none;
+        margin-left: -5px;
+        margin-bottom: 0;
+    }
+
+    .list-inline>li {
+        display: inline-block;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    @media (min-width: 768px) {
+        .dl-horizontal:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .dl-horizontal dt {
+            float: left;
+            width: 160px;
+            overflow: hidden;
+            clear: left;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0.5rem 0;
+        }
+
+        .dl-horizontal dd {
+            margin-left: 180px;
+        }
+    }
+
+    label {
+        margin: 0.5rem 0;
+    }
+
+    p.help-block {
+        padding: .5rem 0;
+        margin: 0;
+        opacity: .6;
+    }
+
+    .input-group>select.custom-select {
+        flex: 0 0 8em;
+    }
+
+    #vform_config h3,
+    #c0ffee h3 {
+        text-align: center;
+        font-size: 1.33em;
+    }
+
+    #vform_config h3:before,
+    #vform_config h3:after {
+        content: "~";
+        margin: 0 .5em;
+        opacity: .25
+    }
+
+    #vform_config h4 {
+        font-size: 1.2em;
+    }
+
+    .nav-scroller {
+        overflow-x: auto;
+        margin: 0 0 .5em 0;
+        position: sticky;
+        top: var(--kumquat-navbar-height);
+        background: var(--light);
+        z-index: 3;
+    }
+
+    .nav-scroller .nav-pills {
+        width: max-content;
+        padding-bottom: .25em;
+    }
+
+    .nav-scroller .nav-pills .nav-link {
+        width: fit-content !important;
+    }
+
+    .tab-content {
+        padding: 0;
+    }
+
+    .datatable .card-body {
+        overflow: auto;
+        padding: 0;
+    }
+
+    .datatable table {
+        min-width: 64em;
+    }
+</style>
+<?php
+    $num_pid = db_count('user',array('v'=>array('!='=>'0')));
+    $page = param(1,1);
+    $data =  db_find('user',array('v'=>array('!='=>'0')), array('uid'=>-1), $page, $pagesize = 20);
+    $pagination = pagination(url("till_verified_member-{page}"), $num_pid, $page, $pagesize);
+  
+    $settings = setting_get('till_verified_member_setting');
+
+    $applying_count = db_count('till_v_apply',array('status'=>0)); 
+    $applyed_count = db_count('till_v_apply',array('status'=>1)); 
+?>
+<div class="card" id="top">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-10">
+                <h2 class="h3">
+                    <span class="verified-badge v_badge-bg-rainbow"><i class="icon-check"></i></span>
+                    <?php echo $PLUGIN_PROFILE['name']. ' ' .lang('setting'); ?>
+                </h2>
+                <ul class="list-inline">
+                    <li><b>快速跳转</b></li>
+                    <li><a href="#v_config">参数配置</a></li>
+                    <li><a href="#v_add_user">手动授予认证</a></li>
+                    <li><a href="#v_applying_list">等待审核用户</a></li>
+                    <li><a href="#v_applyed_list">已审核通过用户</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 text-right">
+                <p>作者：
+                    <?= $PLUGIN_PROFILE['username'] ?><br>版本：
+                    <?= $PLUGIN_PROFILE['version'] ?>
+                </p>
+                <p>感谢：biwawa、瑾天AP、坚持吧、XIU·NO、腾悦网、金鼎</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <section class="card" id="v_config">
+            <form action="<?php echo url('plugin-setting-till_verified_member');?>" method="post" id="vform_config">
+                <input type="hidden" name="op" value="update_settings">
+                <header class="card-header">
+                    <a href="#v_config">参数配置</a>
+                </header>
+                <section class="card-body">
+                    <h3>通用设置</h3>
+                    <dl class="dl-horizontal">
+                        <dt>允许用户申请认证？</dt>
+                        <dd>
+                            <?= $input['v_allow_user_apply'] ?>
+                        </dd>
+                        <dt>用户申请成功后<wbr>锁定前台申请状态</dt>
+                        <dd>
+                            <?= $input['v_lock_user_apply'] ?>
+                            <p class="help-block">选择“是”：用户申请成功后，再次访问申请访问页面将会看到提示信息，不可再次申请认证或修改申请内容，直到申请成功或失败。</p>
+                        </dd>
+                        <dt>审核拒绝时<wbr>返还对应积分</dt>
+                        <dd>
+                            <?= $input['v_return_credits_when_reject'] ?>
+                            <p class="help-block">根据贵站需求开启</p>
+                        </dd>
+                    </dl>
+                    <h3>显示位置</h3>
+                    <h4>头像附近</h4>
+                    <p class="help-block"><b>需修改你当前使用的主题方可看到效果！</b></p>
+                    <dl class="dl-horizontal">
+                        <dt>用户页面</dt>
+                        <dd>
+                            <?= $input['v_show_user_profile_avatar_after'] ?>
+                        </dd>
+                        <dt>个人页面</dt>
+                        <dd>
+                            <?= $input['v_show_my_common_avatar_after'] ?>
+                        </dd>
+                        <dt>帖子列表</dt>
+                        <dd>
+                            <?= $input['v_show_thread_list_inc_avatar_after'] ?>
+                        </dd>
+                        <dt>帖子页面-主楼用户名<wbr>与楼主用户卡</dt>
+                        <dd>
+                            <?= $input['v_show_thread_user_avatar_after'] ?>
+                        </dd>
+                        <dt>帖子页面-回帖列表</dt>
+                        <dd>
+                            <?= $input['v_show_post_list_inc_avatar_after'] ?>
+                        </dd>
+                    </dl>
+                    <h4>用户名附近</h4>
+                    <p class="help-block">若在某些看不到认证徽章，可能是主题不支持。</p>
+                    <dl class="dl-horizontal">
+                        <dt>导航栏</dt>
+                        <dd>
+                            <?= $input['v_show_header_nav_username_after'] ?>
+                        </dd>
+                        <dt>用户页面</dt>
+                        <dd>
+                            <?= $input['v_show_user_profile_username_after'] ?>
+                        </dd>
+                        <dt>个人页面</dt>
+                        <dd>
+                            <?= $input['v_show_my_common_username_after'] ?>
+                        </dd>
+                        <dt>帖子列表</dt>
+                        <dd>
+                            <?= $input['v_show_thread_list_inc_username_before'] ?>
+                        </dd>
+                        <dt>帖子页面-主楼用户名</dt>
+                        <dd>
+                            <?= $input['v_show_thread_username_before'] ?>
+                        </dd>
+                        <dt>帖子页面-回帖列表</dt>
+                        <dd>
+                            <?= $input['v_show_post_list_inc_username_after'] ?>
+                        </dd>
+                        <dt>帖子页面-楼主用户卡</dt>
+                        <dd>
+                            <?= $input['v_show_thread_user_username_after'] ?>
+                        </dd>
+                    </dl>
+                    <h3>前台申请认证页面设置</h3>
+                    <dl class="dl-horizontal">
+                        <dt>选择认证类型之前-标题</dt>
+                        <dd>
+                            <?= $input['v_page_my_apply_before_select_title'] ?>
+                        </dd>
+                        <dt>选择认证类型之前-简介</dt>
+                        <dd>
+                            <?= $input['v_page_my_apply_before_select_text' ] ?>
+                        </dd>
+                        <dt>选择认证类型之后-标题</dt>
+                        <dd>
+                            <?= $input['v_page_my_apply_after_select_title' ] ?>
+                        </dd>
+                        <dt>选择认证类型之后-简介</dt>
+                        <dd>
+                            <?= $input['v_page_my_apply_after_select_text'  ] ?>
+                        </dd>
+                        <dt>填写认证信息之前-标题</dt>
+                        <dd>
+                            <?= $input['v_page_my_apply_before_form_title'  ] ?>
+                        </dd>
+                    </dl>
+                    <h3>认证级别设置</h3>
+                    <nav class="nav-scroller" role="tablist">
+                        <div class="nav nav-pills" role="tablist">
+                            <?php for( $i=1; $i<=5; $i++ ): ?>
+                            <a class="nav-link <?php if($i === 1){echo 'active';} ?>" data-toggle="tab" href="#v_type_<?= $i ?>" role="tab">
+                                <?= v_show_badge($i, lang('test'),$PLUGIN_SETTING ) ?>
+                                <?= $PLUGIN_SETTING['v_type_'.$i.'_name'] ?>
+                            </a>
+                            <?php endfor; ?>
+                        </div>
+                    </nav>
+                    <div class="tab-content">
+                        <?php for( $i=1; $i<=5; $i++ ): ?>
+                        <dl class="tab-pane dl-horizontal card-body border <?php if($i === 1){echo 'active';} ?>" id="v_type_<?= $i ?>">
+                            <dd>
+                                <h4>
+                                    <?= v_show_badge($i, lang('test'),$PLUGIN_SETTING ) ?> 认证级别
+                                    <?= $i ?>
+                                </h4>
+                            </dd>
+                            <dt>允许用户申请？</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_activated'] ?>
+                            </dd>
+                            <dt>名称</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_name'] ?>
+                            </dd>
+                            <dt>简介</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_description'] ?>
+                            </dd>
+                            <dt>图标</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_icon'] ?>
+                                <p class="help-block"> 请输入<a href="http://www.fontawesome.com.cn/icons-ui/">Font Awesome</a>图标名称。（如fa-check，输入check即可）所有种类皆使用一种图标。 </p>
+                            </dd>
+                            <dt>形状</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_shape'] ?>
+                            </dd>
+                            <dt>颜色</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_color'] ?>
+                            </dd>
+                            <dt>自定义颜色</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_color_custom'] ?>
+                                <p class="help-block"> 当上一项为“自定义颜色”时才会使用这里的颜色！ </p>
+                            </dd>
+                            <dt>认证要求</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_requirement'] ?>
+                                <p class="help-block">显示在用户申请认证页面中。实际要求请自行制定和遵守。</p>
+                            </dd>
+                            <dt>消耗积分？</dt>
+                            <dd>
+                                <?= $input['v_type_'.$i.'_credit_use'] ?>
+                                <p class="help-block">请确保积分插件已安装并启用，否则可能会出现问题。</p>
+                            </dd>
+                            <dt>消耗积分数量和类型</dt>
+                            <dd>
+                                <div class="input-group">
+                                    <?= $input['v_type_'.$i.'_credit_amount'] ?>
+                                    <?= $input['v_type_'.$i.'_credit_type'] ?>
+                                </div>
+                                <p class="help-block"> 如不需要消耗积分，上一项请选“否”。 </p>
+                            </dd>
+                        </dl>
+                        <?php endfor; ?>
+                    </div>
+                </section>
+                <footer class="card-footer">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <?= lang('save') ?>
+                    </button>
+                </footer>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-6">
+        <section class="card" id="v_add_user">
+            <header class="card-header">
+                <a href="#v_add_user">手动授予/更新认证</a>
+            </header>
+            <section class="card-body">
+                <form action="" method="post" id="vform_add">
+                    <p class="help-block"></p>
+                    <dl class="dl-horizontal">
+                        <dt>使用方法</dt>
+                        <dd>输入用户名或UID后，<b>先点击查询</b>，再更新认证级别。</dd>
+                        <dt>用户名/UID</dt>
+                        <dd>
+                            <?= $input['v_edit_username'] ?>
+                        </dd>
+                        <dt>认证级别</dt>
+                        <dd>
+                            <?= $input['v_edit_level'] ?>
+                        </dd>
+                        <dt>认证头衔</dt>
+                        <dd>
+                            <?= $input['v_edit_title'] ?>
+                        </dd>
+                        <dt>操作</dt>
+                        <dd>
+                            <div class="d-flex"><button type="button" class="btn btn-primary btn-block" id="v_edit_find">查询</button><i>&emsp;</i><button type="button" class="btn btn-success btn-block" id="v_edit_submit">更新</button></div>
+                        </dd>
+                    </dl>
+                </form>
+            </section>
+        </section>
+        <section class="card" id="c0ffee">
+            <details open>
+                <summary class="card-header">☕️</summary>
+                <div class="card-body">
+                    <h3>如果你认为本插件对你有帮助，可以请我一杯咖啡，谢谢</h3>
+                    <img src="<?= $the_donate_img ?>" alt="支付宝" style="display:block;image-rendering:pixelated;width:50vmax;max-width:8em;height:auto;margin:1em auto">
+                </div>
+            </details>
+        </section>
+    </div>
+</div>
+<section class="card datatable" id="v_applying_list">
+    <header class="card-header">
+        <a href="#v_applying_list">等待审核用户 </a>
+        <b class="badge badge-secondary">
+            <?= $applying_num ?>
+        </b>
+    </header>
+    <section class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>UID</th>
+                    <th>用户名</th>
+                    <th>认证级别</th>
+                    <th>认证头衔</th>
+                    <th>证明信息</th>
+                    <th>申请时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="attachpages">
+                <?php echo $applying_list; ?>
+            </tbody>
+        </table>
+        <nav class="text-center">
+            <ul class="pagination pagination-sm">
+                <?php echo $applying_pagination; ?>
+            </ul>
+        </nav>
+    </section>
+</section>
+<section class="card datatable" id="v_applyed_list">
+    <header class="card-header">
+        <a href="#v_applyed_list">已审核通过用户</a>
+        <b class="badge badge-secondary">
+            <?= $applyed_num ?>
+        </b>
+    </header>
+    <section class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>UID</th>
+                    <th>用户名</th>
+                    <th>认证级别</th>
+                    <th>认证头衔</th>
+                    <th>证明信息</th>
+                    <th>申请时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="attachpages">
+                <?php echo $applyed_list; ?>
+            </tbody>
+        </table>
+        <nav class="text-center">
+            <ul class="pagination pagination-sm">
+                <?php echo $applyed_pagination; ?>
+            </ul>
+        </nav>
+    </section>
+</section>
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+<script>
+    $('#nav li.nav-item-v').addClass('active');
+
+    var vconfig_form = $("#vform_config");
+    var vconfig_submit = $("#submit");
+
+    var vedit_username = $("#v_username");
+    var vedit_level = $("#v_level");
+    var vedit_title = $("#v_title");
+    var vedit_find_btn = $("#v_edit_find");
+    var vedit_submit_btn = $("#v_edit_submit");
+
+    /* =====查询用户认证===== */
+    vedit_find_btn.on('click', function () {
+        vedit_find_btn.button('loading');
+        var postdata = "op=check_user&username=" + vedit_username.val();
+        $.xpost("<?php echo url('plugin-setting-till_verified_member');?>", postdata, function (code, message) {
+            if (code == 0) {
+                //vedit_level.val(message.v_level);
+                vedit_title.val(message.v_title);
+                vedit_level.find("option").each(function (index, dom) {
+                    if ($(this).val() == message.v_level) {
+                        $(this).attr("selected", "selected");
+                        return false;
+                    } else {
+                        $(this).removeAttr("selected");
+                    }
+                })
+                //console.log(message);
+            } else {
+                $.alert(message);
+            }
+            vedit_find_btn.button('reset');
+        });
+    });
+
+    /* =====更新用户认证===== */
+    vedit_submit_btn.on('click', function () {
+        vedit_submit_btn.button('loading');
+        var postdata = "op=update_user&username=" + vedit_username.val() + "&v_level=" + vedit_level.val() + "&v_title=" + vedit_title.val();
+        $.xpost("<?php echo url('plugin-setting-till_verified_member');?>", postdata, function (code, message) {
+            if (code == 0) {
+                $.alert(message);
+                setTimeout(function () { location.reload(); }, 1000);
+            } else {
+                $.alert(message);
+            }
+            vedit_submit_btn.button('reset');
+        });
+    });
+
+    /**
+     * 通过认证请求
+     * @param int uid
+     */
+    function pass(uid) {
+        //xn.url('admin/plugin-setting-till_verified_member-pass'), 
+        var postdata = "uid=" + uid;
+        $.xpost("<?php echo url('plugin-setting-till_verified_member-pass');?>", postdata, function (code, message) {
+            if (code == 0) {
+                $.alert(message);
+                setTimeout(function () { location.reload(); }, 1000);
+                return;
+            }
+            $.alert(message);
+
+        });
+    }
+
+    /**
+     * 拒绝认证请求
+     * @param int uid
+     */
+    function reject(uid) {
+        // xn.url('admin/plugin-setting-till_verified_member-reject'), 
+        var the_reason = prompt('请输入拒绝理由（无理由请按空格）');
+        if (the_reason === null) {
+            return;
+        }
+        var postdata = "uid=" + uid + "&reason=" + the_reason;
+        $.xpost("<?php echo url('plugin-setting-till_verified_member-reject');?>", postdata, function (code, message) {
+            if (code == 0) {
+                $.alert(message);
+
+                setTimeout(function () { location.reload(); }, 1000);
+                return;
+            }
+            $.alert(message);
+
+        });
+    }
+</script>

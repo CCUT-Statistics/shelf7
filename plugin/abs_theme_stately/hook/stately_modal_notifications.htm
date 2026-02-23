@@ -1,0 +1,91 @@
+<?php if ($uid != 0): ?>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="statelyNotificationModal" aria-labelledby="statelyNotificationModalLabel" style="visibility: hidden;" aria-hidden="true">
+    <div class="offcanvas-header">
+        <h2 id="statelyNotificationModalLabel" class="offcanvas-title h5">
+            <?= lang('notice_my_update_unread').lang('notice') ?>
+            <?php if($user['unread_notices'] > 0) : ?>
+            <small class="badge badge-center badge-danger">
+                <?= $user['unread_notices'] ?>
+            </small>
+            <?php endif; ?>
+        </h2>
+        <div>
+            <?php if($user['unread_notices'] > 0) : ?>
+            <button type="button" class="btn btn-sm py-0 mt-n1 btn-link" id="statelyNotificationModalClearAllBtn">
+                <i class="las la-check-double" aria-hidden="true"></i>
+                全部已读
+            </button>
+            <?php endif; ?>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+    </div>
+    <div class="offcanvas-body p-0 m-0 flex-grow-0">
+        <?php if($user['unread_notices'] > 0) : 
+        if(!isset($notice_menu)) {
+            $notice_menu = include _include(APP_PATH.'plugin/huux_notice/conf/notice_menu.conf.php');
+        }
+        $noticelist = notice_find(array('recvuid' => $uid, 'isread' => 0), 1, 20);
+        ?>
+        <?php if($noticelist): ?>
+        <div class="noticelist">
+            <ol class="p-0 m-0">
+                <?php include _include(APP_PATH.'plugin/huux_notice/view/htm/my_notice_list.inc.htm');?>
+            </ol>
+        </div>
+        <?php unset($notice_menu); ?>
+        <?php endif; ?>
+        <?php else: ?>
+        <div class="noticelist">
+            <div class="empty card-body text-center my-0 pb-1">
+                <div>
+                    <span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+                        <i class="las la-bell fs-1"></i>
+                    </span>
+                    <p class="m-0">
+                        <?= lang('notice_my_nomessage');?>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+        <a href="<?= url('my-notice') ?>" class="btn btn-link btn-block">
+            <?= lang('viewmore').lang('notice') ?>
+        </a>
+        <script>
+            if (document.getElementById('statelyNotificationModalClearAllBtn') !== null) {
+
+                document.getElementById('statelyNotificationModalClearAllBtn').addEventListener('click', function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', "<?= url('my-notice') ?>?act=readall", true);
+                    xhr.send();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                console.log(xhr.responseText);
+                                document.querySelectorAll('#statelyNotificationModal .offcanvas-body ol li.notice').forEach(element => { element.remove(); });
+                                if (document.querySelector('#statelyNotificationModalLabel .badge') !== null) {
+                                    document.querySelector('#statelyNotificationModalLabel .badge').remove();
+                                }
+                                if (document.querySelector('.layout-navbar .nav-item[data-bs-target="#statelyNotificationModal"] .badge') !== null) {
+                                    document.querySelector('.layout-navbar .nav-item[data-bs-target="#statelyNotificationModal"] .badge').remove();
+                                }
+                                if (document.querySelector('.layout-appbar .nav-item[data-bs-target="#statelyNotificationModal"] .badge') !== null) {
+                                    document.querySelector('.layout-appbar .nav-item[data-bs-target="#statelyNotificationModal"] .badge').remove();
+                                }
+                                document.getElementById('statelyNotificationModalClearAllBtn').setAttribute('hidden', '');
+                                if (document.querySelector('#statelyNotificationModal .btn-close') !== null) {
+                                    document.querySelector('#statelyNotificationModal .btn-close').click();
+                                }
+                            } else {
+                                document.getElementById('statelyNotificationModalClearAllBtn').setAttribute('hidden', '');
+                                console.error('发生错误：' + xhr.status);
+                            }
+                        }
+                    };
+                });
+            }
+
+        </script>
+    </div>
+</div>
+<?php endif; ?>

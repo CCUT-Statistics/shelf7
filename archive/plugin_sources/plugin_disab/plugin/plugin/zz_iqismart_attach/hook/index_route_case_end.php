@@ -1,0 +1,1 @@
+case 'attach_buy': include _include(APP_PATH . 'plugin/zz_iqismart_attach/route/buy.php');break;

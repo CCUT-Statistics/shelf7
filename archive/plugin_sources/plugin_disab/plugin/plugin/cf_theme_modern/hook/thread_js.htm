@@ -1,0 +1,29 @@
+
+<?php $cf_theme_modern = setting_get('cf_theme_modern');
+if(isset($cf_theme_modern['thread_img_click']) && $cf_theme_modern['thread_img_click']) {
+?>
+<script>
+	$("div.message img").css("cursor","pointer");
+	$("div.message img").on("click",function() {
+		if (window.innerWidth > 768) {
+			var img_src = $(this).attr("src");
+			var img = new Image();
+			img.src = img_src;  
+			img.onload = function () {
+				window.open(img_src);
+			};  
+			// img.onerror = function () {
+			// 	alert("error!")
+			// };  
+			
+		}
+	})
+	setTimeout(function() {
+		$("div.message img").each(function(index, element) {
+			if ($(element).width() >= 100) {
+				$(element).addClass("div_message_boxShadow");
+			}
+		})
+	}, 2000);
+</script>
+<?php } ?>

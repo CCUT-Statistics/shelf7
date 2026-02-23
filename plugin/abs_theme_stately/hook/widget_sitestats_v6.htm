@@ -1,0 +1,75 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['homepage_stats']['enable'] && $abs_theme_stately_setting['ui_tweek']['homepage_stats']['style'] === 'v6' ):
+
+//获取购买记录
+    $payz = db_count('paylist');
+    $payli =  db_find_one('paylist',array('type'=>1), array('paytime'=>-1));
+    $late = db_find_one('user',array(),array('create_date'=>-1)); 
+    
+    function subject($tid)
+    {$r = db_find_one('thread',array("tid"=>$tid));
+    return $r['subject'];}
+    function username($uid)
+    {$r = db_find_one('user',array("uid"=>$uid));
+    return $r['username'];}
+    
+//今日主题、回帖、用户数
+    $today = strtotime('today');
+	$new_threads_num = db_count('post',array('isfirst'=>1,'create_date'=>array('>'=>$today)));
+	$new_posts_num = db_count('post',array('isfirst'=>0,'create_date'=>array('>'=>$today)));
+	$new_menber_num = db_count('user',array('create_date'=>array('>'=>$today))); 
+?>
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div>
+                <i class="las la-chart-bar text-primary" title="<?= lang('site_stat_info'); ?>" data-bs-toggle="tooltip"></i>
+                <span class="card-title fs-6" id="greeting_text">Hello!</span>
+                <script>
+                    function getGreeting(hour) {
+                        if (hour >= 0 && hour <= 4) { return '深夜好，万籁俱静，愿你有个安心的睡眠。'; }
+                        else if (hour >= 4 && hour <= 6) { return '清晨好，新的一天开始了，愿你有一个美好的开始。'; }
+                        else if (hour >= 6 && hour <= 8) { return '早上好，希望你度过一个充满活力和成功的上午。'; }
+                        else if (hour >= 8 && hour <= 12) { return '上午好，午餐时间到啦，记得补充能量哦。'; }
+                        else if (hour >= 12 && hour <= 13) { return '中午好，午餐时间到啦，记得补充能量哦。'; }
+                        else if (hour >= 13 && hour <= 16) { return '下午好，精力充沛的午后，加油完成剩下的任务。'; }
+                        else if (hour >= 16 && hour <= 17) { return '傍晚好，太阳渐渐西下，一天的努力即将收获。'; }
+                        else if (hour >= 17 && hour <= 21) { return '晚上好，天色已晚，放松心情，享受宁静的夜晚。'; }
+                        else if (hour >= 21 && hour <= 22) { return '晚安，希望你有个美好的夜晚。'; }
+                        else if (hour >= 22 && hour <= 23) { return '深夜好，万籁俱静，愿你有个安心的睡眠。'; }
+                    }
+
+                    document.getElementById("greeting_text").innerText = getGreeting(new Date().getHours());
+                </script>
+            </div>
+            <div>
+
+                <?php if($runtime['onlines'] > 0) { ?>
+                当前 <span class="text-info"><?php echo $runtime['onlines'];?></span> 人在线
+                <?php } ?>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <p>
+
+            最新注册会员：<a class="tt" href="<?php echo url("user-$late[uid]");?>">
+                <img style="border-radius:50%;width:25px;height:25px;" src="<?= ($late['avatar'] != 0) ? 'upload/avatar/000/'.$late['uid'].'.png?' : 'view/img/avatar.png'?>" />
+                <?php echo $late['username'];?></a>
+        </p>
+        <p>
+            当前站内共有
+            <?php echo $runtime['threads'];?> 篇主题,
+            <?php echo $runtime['posts'];?> 条评论。
+        </p>
+        <p class="mb-0">
+            因为您的贡献, 今日新增
+            <?php echo $new_threads_num;?> 篇主题
+            <?php if($new_posts_num != 0){echo ', '.$new_posts_num.' 条评论';}?>
+            <?php if($new_menber_num != 0){echo ', '.$new_menber_num.' 个用户';}?>。
+        </p>
+    </div>
+</div>
+<?php endif; ?>

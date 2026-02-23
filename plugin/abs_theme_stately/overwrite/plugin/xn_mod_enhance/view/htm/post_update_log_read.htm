@@ -1,0 +1,99 @@
+<?php 
+$header['title'] = $thread['subject'] . ' - 编辑版本比较';
+include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<div class="row">
+	<div class="col-12">
+		<h4 class="py-3 mb-4">
+			<span class="text-muted">
+				<a href="<?= url('thread-'.$tid);?>" title="返回主题第一页">
+					<i class="la la-arrow-circle-left" data-bs-toggle="tooltip" title="<?= lang('back') ?>"></i>
+					<?= $thread['subject'];?>
+				</a> &mdash; </span>编辑版本比较
+		</h4>
+		<div class="row g-0 post_update_log_view" id="post_update_log_view">
+			<div class="col-lg-6">
+				<div class="card border border-success">
+					<h6 class="card-header">当前版本</h6>
+					<div class="card-body message">
+						<?= $post['message_fmt'];?>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="card">
+					<h6 class="card-header">
+						<time datetime="<?= $log['create_date'] ?>" data-bs-toggle="tooltip" title="<?= date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'],$log['create_date']); ?>">
+							<?= $log['create_date_fmt'];?>
+						</time> 版本
+					</h6>
+					<div class="card-body message">
+						<?= $log['message'];?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+
+	$('#nav li[fid="<?= $fid;?>"]').addClass('active');
+
+	/*
+	var s1 = 'create a SequenceMatcher \r\n	\r\n instance that diffs the two sets of lines';
+	var s2 = 'create a SequenceMatcher \r\n	 \r\n instance that diffs the three sets of lines yes.';
+
+	var TextDiff = function (left_str, right_str, result_div) {
+		// 首先按照行切分
+		this.j = 0; // 工作进度，逐行扫描
+		this.result_div = result_div;
+
+		this.left_str = xn.str_replace("\r\n", "\n", left_str);
+		this.right_str = xn.str_replace("\r\n", "\n", right_str);
+		this.left_lines = xn.explode("\n", this.left_str);
+		this.right_lines = xn.explode("\n", this.right_str);
+	}
+
+	// 发现右侧内容近似的行
+	TextDiff.prototype.find_right = function () {
+
+	}
+
+	// 判断是否大致相等
+	TextDiff.prototype.is_equal = function (left, right, i, j) {
+		var left_words = xn.explode(' ', left_line);
+		var right_words = xn.explode(' ', right_line);
+	}
+
+	// 开始扫描
+	TextDiff.prototype.scan = function () {
+		var left_line_status = []; // deleted|modified
+		var right_line_status = []; // new|modified
+		var left_word_status = []; // deleted|modified
+		var right_word_status = []; // new|modified
+		var i = 0;
+		for (var i = 0; i < this.left_lines.length; i++, this.j++) {
+			var left_line = this.left_lines[i];
+			var right_line = this.right_lines[this.j];
+			if (this.is_equal(left_line, right_line, i, this.j)) {
+				left_line_status[i] = 'equal';
+				left_line_status[i] = 'equal';
+			} else {
+				// 右侧向下扫描，从第 work_line 开始；
+				while (this.j++ < right_lines.length) {
+
+				}
+
+			}
+			line_status[k] = ''; // new|modified|deleted
+
+		};
+		// 结果输出到
+	}
+
+	// 比较的结果在指定的区域显示
+	var diff = new TextDiff(s1, s2, 'post_update_log_view');
+	diff.scan();
+	//*/
+
+</script>

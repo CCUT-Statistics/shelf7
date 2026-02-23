@@ -1,0 +1,18 @@
+<?php include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/view/htm/header.inc.htm');?>
+
+<!--{hook website_index_flat_start.htm}-->
+
+<?php switch($abs_theme_stately_setting['wellcms_ui_style']['homepage_flat']['layout']): case 'classic_1col': ?>
+<!--{hook stately_layout_wellcms_homepage_flat__classic_1col.htm}-->
+<?php break; default: ?>
+<!--{hook stately_layout_wellcms_homepage_flat__classic_2col.htm}-->
+<?php break; endswitch; ?>
+
+<!--{hook website_index_flat_end.htm}-->
+
+<?php include _include(APP_PATH . 'plugin/abs_theme_stately/overwrite/view/htm/footer.inc.htm');?>
+
+<script>
+    $('#nav li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+</script>
+<!--{hook website_index_flat_js.htm}-->

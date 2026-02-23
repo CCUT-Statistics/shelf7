@@ -1,0 +1,11 @@
+{
+    "name": "云端插件",
+    "brief": "后台自带云端插件中心，安装后可在后台下载插件</br>更多插件访问 <a href='https://xiuno.zerun.asia'>xiuno交流论坛</a>",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

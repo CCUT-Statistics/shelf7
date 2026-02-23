@@ -1,0 +1,19 @@
+<style>
+.card-body .list-unstyled .post .mr-3 {display:none;}
+
+.media-body .text-grey  .mr-3 {display:inline !important;}
+
+</style>
+<div style="text-align:center; padding:0; margin:0;width:65px;">
+    <div style="padding-top:0;margin-top:0;text-align:center;">			
+		<a href="<?php echo url("user-$_post[uid]");?>"  tabindex="-1" style="margin:0 !important;">
+			<img class="avatar-3" src="<?php echo $_post['user_avatar_url'];?>" >
+		</a>
+    </div >
+	<div style="padding-bottom:0;margin-bottom:0;text-align:center;">
+        <span title="<?php echo $thread['user']['groupname'];?>" tabindex="-1" style="display: block !important; margin-top:-2.67rem !important;">
+			<img src="<?php echo "./plugin/xn_king/img/" . $_post['user']['gid'] . ".png"; ?> "  style="width:3.18rem; border-radius:0 !important;" />
+		</span>
+    </div>
+</div>	
+						

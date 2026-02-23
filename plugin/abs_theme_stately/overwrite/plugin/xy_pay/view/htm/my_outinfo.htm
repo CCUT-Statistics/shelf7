@@ -1,0 +1,86 @@
+<template include="plugin/xy_pay/view/htm/my.template.htm">
+	<slot name="my_body">
+<style type="text/css">
+@media screen and (max-width:1200px){table{border:0}
+table thead{display:none}
+table tr{margin-bottom:10px;display:block;border-bottom:2px solid #ddd}
+table td{display:block;text-align:right;font-size:13px;border-bottom:1px dotted #ccc}
+table td:last-child{border-bottom:0}
+table td:before{content:attr(data-label);float:left;text-transform:uppercase;font-weight:700}
+}
+</style>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>
+							<?php echo lang('pay_user_out_info11');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_out_info1');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_out_info2');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_out_info8');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_out_info3');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_out_info4');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_out_info9');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_out_info5');?>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach($infolist as $val){?>
+					<tr>
+						<td data-label="<?php echo lang('pay_user_out_info11');?>">
+							<?php echo $val['payout_name'];?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_out_info1');?>">
+							<?php echo $val['payout_num'];?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_out_info2');?>">
+							<?php echo "-".$val['money'].lang('pay_user_cue5');?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_out_info8');?>">
+							<?php echo $val['money'] * ($conf['payout_service'] / 100).lang('pay_user_cue5');?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_out_info3');?>">
+							<?php echo $val['money'] - $val['money'] * ($conf['payout_service'] / 100).lang('pay_user_cue5');?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_out_info4');?>">
+							<?php echo date("Y-m-d",strtotime($val['paytime']));?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_out_info9');?>">
+							<?php echo empty($val['admin_paytime']) ? "---" : date("Y-m-d",strtotime($val['admin_paytime']));?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_out_info5');?>">
+							<?php echo !$val['state']? lang('pay_user_out_info6'): lang('pay_user_out_info7');?>
+						</td>
+					</tr>
+				<?php } ?>
+				</tbody>
+			</table>
+		<?php if($pagination) { ?>
+		<nav><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+		<?php } ?>
+		</div>
+	</div>
+</div>
+	</slot>
+</template>
+
+<script>
+$('a[data-active="my-outinfo"]').addClass('active');
+</script>

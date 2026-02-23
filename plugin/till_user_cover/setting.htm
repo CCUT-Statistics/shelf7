@@ -1,0 +1,66 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+<div class="card">
+	<div class="card-body">
+		<form action="<?php echo url('plugin-setting-till_user_cover');?>" method="post" id="form">
+			<h4 class="card-title">用户封面图设置</h4>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">允许前台选择、更新、删除封面图：</label>
+						<div class="col-sm-10">
+							<?php echo $input['allow_frontend_update']; ?>
+							<p class="help-block">若只需要本插件的功能函数，可以将本项设置为“否”。</p>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">允许自定义封面图URL：</label>
+						<div class="col-sm-10">
+							<?php echo $input['allow_custom_cover_url']; ?>
+							<p class="help-block">便于二次开发。</p>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label"></label>
+						<div class="col-sm-10">
+							<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>...">
+								<?php echo lang('confirm');?>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<h2>常见问题</h2>
+					<h3>如何更改预设封面图</h3>
+					<p>更改本插件目录内的<code>covers</code>里的图片即可。你可以删除图片，或添加新的图片，皆会在前台的封面图设置中同步。</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+
+	var jform = $("#form");
+	var jsubmit = $("#submit");
+	var referer = '<?php echo http_referer();?>';
+	jform.on('submit', function () {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serialize();
+		$.xpost(jform.attr('action'), postdata, function (code, message) {
+			if (code == 0) {
+				$.alert(message);
+				jsubmit.text(message).delay(2000).button('reset').location(referer);
+				return;
+			} else {
+				$.alert(message);
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+
+</script>

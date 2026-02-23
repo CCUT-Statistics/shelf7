@@ -1,0 +1,140 @@
+<?php if (isset($forum_nav)): /* for WellCMS */ ?>
+
+<section id="sidebar_menu_legacy">
+    <!--{hook sidebar_header_nav_user_after.htm}-->
+    <ul class="menu-inner">
+        <!--{hook header_nav_forum_before.htm}-->
+        <li class="menu-block">
+            <ul class="nav flex-column">
+                <li class="nav-item home" data-active="fid-0">
+                    <a class="nav-link" href="./"><i class="la la-home"></i>
+                        <?php echo lang('index_page');?>
+                    </a>
+                </li>
+                <!--{hook header_nav_home_link_after.htm}-->
+                <?php if($uid): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo url('thread-create-'.$fid);?>">
+                        <span class="la la-edit"></span>
+                        <?php echo lang('thread_create_new');?>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <!--{hook header_nav_forum_start.htm}-->
+                <!--{hook header_nav_forum_end.htm}-->	
+            </ul>
+        </li>
+        <!--{hook header_nav_forum_after.htm}-->
+        <li class="d-lg-none">
+            <ul class="p-0">
+                <!--{hook header_nav_2_my_before.htm}-->
+                <li class="menu-block">
+                    <ul class="nav flex-column">
+                        <!--{hook header_nav_user_start.htm}-->
+                        <?php if($gid == 1) { ?>
+                        <a class="nav-link" href="admin/"><i class="la la-cog"></i>
+                            <?php echo lang('admin_page');?></a>
+                        <?php } ?>
+                        <!--{hook header_nav_user_end.htm}-->
+                    </ul>
+                </li>
+                <!--{hook header_nav_2_my_after.htm}-->
+            </ul>
+        </li>
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text"><?= lang('all_forums') ?></span>
+        </li>
+        <li class="menu-block">
+            <!--{hook header_nav_2_forumlist_before.htm}-->
+            <div class="forumlist">
+                <ul class="list-unstyled">
+                    <!--{hook header_nav_forum_start.htm}-->
+                    <?php if (isset($forum_nav)) { foreach($forum_nav as $_forum) { ?>
+                    <!--{hook header_nav_forumlist_loop_start.htm}-->
+                    <li class="nav-item" fid="<?php echo $_forum['fid'];?>" data-active="fid-<?php echo $_forum['fid'];?>">
+                        <!-- a标签格式 重新定义或添加新 class -->
+                        <a class="nav-link" href="<?php echo $_forum['url'];?>">
+                            <i class="icon-circle-o d-md-none"></i>
+                            &nbsp;<?php echo $_forum['name'];?>
+                        </a>
+                    </li>
+                    <!--{hook header_nav_forumlist_loop_end.htm}-->
+                    <?php }} ?>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</section>
+<?php else: ?>
+<section id="sidebar_menu_legacy">
+    <!--{hook sidebar_header_nav_user_after.htm}-->
+    <ul class="menu-inner">
+        <!--{hook header_nav_forum_before.htm}-->
+        <li class="menu-block">
+            <ul class="nav flex-column">
+                <li class="nav-item home" data-active="fid-0">
+                    <a class="nav-link" href="./"><i class="la la-home"></i>
+                        <?php echo lang('index_page');?>
+                    </a>
+                </li>
+                <!--{hook header_nav_home_link_after.htm}-->
+                <?php if($uid): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo url('thread-create-'.$fid);?>">
+                        <span class="la la-edit"></span>
+                        <?php echo lang('thread_create_new');?>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <!--{hook header_nav_forum_start.htm}-->
+                <!--{hook header_nav_forum_end.htm}-->	
+            </ul>
+        </li>
+        <!--{hook header_nav_forum_after.htm}-->
+        <li class="d-lg-none">
+            <ul class="p-0">
+                <!--{hook header_nav_2_my_before.htm}-->
+                <li class="menu-block">
+                    <ul class="nav flex-column">
+                        <!--{hook header_nav_user_start.htm}-->
+                        <?php if($gid == 1) { ?>
+                        <a class="nav-link" href="admin/"><i class="la la-cog"></i>
+                            <?php echo lang('admin_page');?></a>
+                        <?php } ?>
+                        <?php if($uid) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo url('user-logout');?>">
+                                <i class="la la-sign-out"></i> <?php echo lang('logout');?>
+                            </a>
+                        </li>
+                        <?php } ?>
+                        <!--{hook header_nav_user_end.htm}-->
+                    </ul>
+                </li>
+                <!--{hook header_nav_2_my_after.htm}-->
+            </ul>
+        </li>
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text"><?= lang('all_forums') ?></span>
+        </li>
+        <li class="menu-block">
+            <!--{hook header_nav_2_forumlist_before.htm}-->
+            <div class="forumlist">
+                <ul class="nav list-unstyled">
+                    <!--{hook header_nav_2_forumlist_loop_before.htm}-->
+                    <?php foreach($forumlist_show as $_forum) : ?>
+                        <!--{hook header_nav_forumlist_loop_start.htm}-->
+                    <li id="fid-<?php echo $_forum['fid'];?>" class="nav-item" data-active="fid-<?php echo $_forum['fid'];?>">
+                        <a class="nav-link" href="<?php echo url('forum-'.$_forum['fid']);?>">
+                            <img loading="lazy" decoding="async" class="avatar-1 mr-1 rounded" src="<?php echo $_forum['icon_url'];?>">
+                            <span><?php echo $_forum['name'];?></span>
+                        </a>
+                    </li>
+                    <!--{hook header_nav_forumlist_loop_end.htm}-->
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</section>
+<?php endif; ?>

@@ -1,0 +1,65 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['user_cover']['style'] === 'v2'): ?>
+<script id="random_art_js">
+  class RandomArt {
+    constructor() {
+      this.schemes = {
+        bw: ["var(--base00,var(--bs-gray-900))", "var(--base07,var(--bs-gray-100))"],
+        monochrome: ["var(--base00,var(--bs-gray-900))", "var(--base07,var(--bs-gray-100))", "var(--base05,var(--bs-gray-500))"],
+        candy: ["var(--base0d,var(--bs-primary))", "var(--base07,var(--bs-gray-100))"],
+        strong: ["var(--base08,var(--bs-red))", "var(--base0B,var(--bs-green))", "var(--base0D,var(--bs-blue))", "var(--base0A,var(--bs-yellow))"],
+        neon: ["var(--base0C,var(--bs-cyan))", "var(--base0F,var(--bs-pink))", "var(--base0A,var(--bs-yellow))", "var(--base0B,var(--bs-blue))", "var(--base07,var(--bs-gray-100))",],
+        neon_full: ["var(--base08,var(--bs-red))", "var(--base09,var(--bs-orange))", "var(--base0A,var(--bs-yellow))", "var(--base0B,var(--bs-green))", "var(--base0C,var(--bs-cyan))", "var(--base0D,var(--bs-blue))", "var(--base0E,var(--bs-purple))", "var(--base0F,var(--bs-pink))"],
+        tri_color: ["var(--base08,var(--bs-red))", "var(--base0D,var(--bs-blue))", "var(--base07,var(--bs-gray-100))"],
+        coffee: ["var(--base00,var(--bs-gray-900))", "var(--base03,var(--bs-gray-700))", "var(--base01,var(--bs-gray-800))"],
+        silk: ["var(--base07,var(--bs-gray-100))", "var(--base05,var(--bs-gray-300))", "var(--base06,var(--bs-gray-200))"]
+      };
+      this.colorscheme = this.schemes["monochrome"];
+    }
+
+    setScheme(scheme) {
+      this.colorscheme = this.schemes[scheme];
+    }
+
+    redraw(theQuerySelector = '.random-art') {
+      for (var i = 0; i < 6; i++)
+        for (var j = 0; j < 6; j++) {
+          var l = this.colorscheme.length;
+          var c1 = Math.floor(Math.random() * l);
+          var c2 = Math.floor(Math.random() * (l - 1));
+          if (c2 >= c1) c2++;
+          var d = Math.floor(Math.random() * 2);
+          var elem = document.querySelector(theQuerySelector + "> .ra_line > #ra_b" + i + j);
+          elem.style.borderWidth = d ? "25em 0px 0px 25em" : "25em 25em 0px 0px";
+          elem.style.borderColor = this.colorscheme[c1] + " " + this.colorscheme[c2];
+        }
+    }
+
+    generateRandomArtHtml() {
+      var random_art_html = "";
+      for (var i = 0; i < 6; i++) {
+        random_art_html += "<div class=\"ra_line\">";
+        for (var j = 0; j < 6; j++) {
+          random_art_html += "<div id=\"ra_b" + i + j + "\" class=\"ra_borderdraw ra_dash\" style=\"border-color:black;\"><\/div>";
+        }
+        random_art_html += "<\/div>\n";
+      }
+      return random_art_html;
+    }
+
+    drawRandomArt(theQuerySelector = '.random-art', theScheme = 'monochrome') {
+      document.querySelector(theQuerySelector).innerHTML = this.generateRandomArtHtml();
+      this.setScheme(theScheme);
+      this.redraw(theQuerySelector);
+    }
+  }
+</script>
+<script id="random_art_init_js">
+  if (document.querySelector('.user-profile-header-banner').style.backgroundImage.length === 0) {
+    document.querySelector('.user-profile-header-banner').style.cssText = "background: unset; font-size: 1.25vmax; overflow: hidden; opacity: 0.25;";
+    var userProfileCoverArt = new RandomArt();
+    userProfileCoverArt.drawRandomArt('.user-profile-header-banner', "<?= $abs_theme_stately_setting['ui_tweek']['user_cover']['v2_color_scheme'] ?>");
+  } else {
+
+  }
+</script>
+<?php endif; ?>

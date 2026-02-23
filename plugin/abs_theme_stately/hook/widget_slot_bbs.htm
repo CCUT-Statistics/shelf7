@@ -1,0 +1,22 @@
+<!----> <?php if(!empty($abs_theme_stately_setting['ui_tweek']['bbs']['hot_forums_fid'])): ?> <div class="card card-hot-forums mb-3">
+    <h5 class="card-header">
+        <i class="la la-fire fs-big text-danger"></i> 热门板块
+    </h5>
+    <div class="">
+        <ul class="list-unstyled m-0"> 
+            <?php foreach($abs_theme_stately_setting['ui_tweek']['bbs']['hot_forums_fid'] as $hot_forum_fid): 
+            if(!isset($forumlist[$hot_forum_fid])) {
+                continue;
+            }
+            ?> 
+            <li class="py-2 px-4 list-group-item-action">
+                <div class="media"><img loading="lazy" decoding="async" src="<?= $forumlist[$hot_forum_fid]['icon_url'] ?>" class="img-fluid w-px-50 img-fluid rounded">
+                    <div class="media-body ml-3">
+                        <h5 class="my-2"><a href="<?= url('forum-' . $hot_forum_fid) ?>"><?= $forumlist[$hot_forum_fid]['name'] ?></a></h5>
+                        <p class="text-muted m-0 small forum-brief"><?= $forumlist[$hot_forum_fid]['brief'] ?></p>
+                    </div>
+                </div>
+            </li> 
+            <?php endforeach; ?> </ul>
+    </div>
+</div> <?php endif; ?> 

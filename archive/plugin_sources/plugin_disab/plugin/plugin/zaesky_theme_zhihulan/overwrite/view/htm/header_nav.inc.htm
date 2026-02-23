@@ -1,0 +1,155 @@
+
+	<!-- 
+		轻论坛导航：默认头部
+		Bootstrap 4.0 推荐的 PC/Mobile 公共写法 
+		优点：公用性强
+		缺点：结构稍微有点复杂
+	-->
+	
+	<!--{hook header_nav_start.htm}-->
+	<header class="navbar navbar-expand-lg navbar-dark bg-dark" id="header">
+		<div class="container">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav" aria-controls="navbar_collapse" aria-expanded="false" aria-label="<?php echo lang('toggler_menu');?>" style="color: #bdbdbd;">
+				<span class="navbar-toggler-icon"></span> 
+			</button>
+			
+			<!--{hook header_nav_logo_before.htm}-->
+			
+			<a class="navbar-brand text-truncate"  href="<?php echo $header['mobile_link'];?>">
+				<img src="<?php echo $conf['logo_mobile_url'];?>" class="logo-2">
+			</a>
+			
+			<!--{hook header_nav_logo_after.htm}-->
+			
+				<a class="navbar-brand hidden-lg" style="color: #bdbdbd;" data-toggle="modal" data-target="#search"><i class="icon-search icon"></i></a>
+			
+			<div class="modal fade" id="search" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" style="min-height:0;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="modal-title">搜索</span>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="top-search hidden-lg">
+					<div class="form-group" style="margin-bottom:0px">
+						<form action="<?php echo url('search');?>" id="search_form">
+							<div class="input-group">								
+								<input type="text" class="form-control" name="keyword" placeholder="search...">
+								<div class="input-group-append">
+									<button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+			<!--{hook header_nav_user_icon_after.htm}-->
+			
+			<div class="collapse navbar-collapse" id="nav">
+				<!-- 左侧：版块 -->
+
+
+
+
+				<ul class="navbar-nav mr-auto hidden">
+					<!--{hook header_nav_forum_start.htm}-->
+					
+					<li class="nav-item home" fid="0" data-active="fid-0"><a class="nav-link" href="."><i class="icon-home d-md-none"></i> <?php echo lang('index_page');?></a></li>
+					<!--{hook header_nav_home_link_after.htm}-->
+					<?php foreach($forumlist_show as $_forum) { ?>
+					<!--{hook header_nav_forumlist_loop_start.htm}-->
+					<li class="nav-item hidden-md hidden-sm" fid="<?php echo $_forum['fid'];?>" data-active="fid-<?php echo $_forum['fid'];?>">
+						<a class="nav-link" href="<?php echo url("forum-$_forum[fid]");?>"><i class="icon-comments d-md-none"></i> <?php echo $_forum['name'];?></a>
+					</li>
+					<!--{hook header_nav_forumlist_loop_end.htm}-->
+					<?php } ?>
+					<!--{hook header_nav_forum_end.htm}-->
+					<?php if($gid == 1) { ?>
+					<li class="nav-item"><a class="nav-link hidden-lg" href="admin/"><i class="icon-home"></i> 管理后台</a></li>
+					<?php } ?>
+					<!--{hook header_nav_admin_page_after.htm}-->
+					<?php if(empty($uid)) { ?>
+					<li class="nav-item hidden-lg"><a class="nav-link" href="<?php echo url('user-login');?>"><i class="icon-user"></i> <?php echo lang('login');?></a></li>
+					<?php } else { ?>
+					<li class="nav-item "><a class="nav-link hidden-lg" style="color:red;" href="<?php echo url('user-logout');?>"><i class="icon-sign-out"></i> <?php echo lang('logout');?>登录</a></li>
+					<?php } ?>
+				</ul>
+				
+				
+				
+				
+				<!-- 右侧：用户 -->
+				<ul class="navbar-nav hidden-md hidden-sm">
+				<li class="nav-item"><a class="nav-link" href="<?php echo url('search');?>" title="<?php echo lang('search');?>"><i class="iconfont iconSearchOutline" style="font-size:18px"></i></a></li>
+					<!--{hook header_nav_user_start.htm}-->
+				<?php if(empty($uid)) { ?>
+				<ul style="margin-top:2px; display: flex;">
+					<li class="nav-item "><a class="nav-link" href="<?php echo url('user-login');?>"><?php echo lang('login');?></a></li>
+					<li class="hidden-sm"><a class="nav-link" href="<?php echo url('user-create');?>"><?php echo lang('register');?></a></li></ul>
+				<?php } else { ?>
+						<li class="nav-item"><a class="nav-link"  href="<?php echo url('thread-create-'.$fid);?>" title="<?php echo lang('thread_create_new');?>"><i class="iconfont iconRedactOutline" style="font-size:18px"></i></a></li>
+					<li class="nav-item username mydropdownoc nav-link" onclick="myFunction()"><img class="avatar-2	 mydropdownoc" src="<?php echo $user['avatar_url'];?>"></li>
+					
+					<!-- 管理员 -->
+					
+					<div class="header-dropdown card" id="myDropdown" >
+					<div class="card-header my_jifen">
+					<?php echo $user['username'];?>
+					<span class="badge badge-yellow mb-2"><?php echo $user['groupname'];?></span><br/>
+					<span><i class="iconfont iconjingyanzhi" style="font-size:12px;color:#7CCD7C"></i> <?php echo $user['credits'];?></span>
+					<span>
+					<i class="iconfont iconqian2" style="font-size:12px;color:#f4ea2a"></i> <?php echo $user['golds'];?>
+					</span>
+					<span>
+					<i class="iconfont iconcoin-black" style="font-size:12px;color:#FFB90F"></i> <?php echo $user['rmbs']/100.0;?>
+					</span>
+					</div>
+					<div class="my_option text-center">
+					<ul>
+					<li ><a  href="<?php echo url('my');?>">个人中心</a></li>
+					<li ><a  href="<?php echo url('my-thread');?>">我的帖子</a></li>
+					<li ><a  href="<?php echo url('my-favorite');?>">我的收藏</a></li>
+					<li ><a  href="<?php echo url('my-credits');?>">我的积分</a></li>
+					<?php if($gid == 1) { ?>
+					<li ><a  href="admin/">管理后台</a></li>
+					<?php } ?>
+					<!--{hook header_nav_admin_page_after.htm}-->
+					<li><a style="color:red;" href="<?php echo url('user-logout');?>"><?php echo lang('logout');?>登录</a></li>
+				<?php } ?>
+				</ul>
+				</div>
+				    </div>
+					<!--{hook header_nav_user_end.htm}-->
+				</ul>
+				<!-------手机------->
+				
+			</div>
+		</div>
+	<script>
+    /* 点击按钮，下拉菜单在 显示/隐藏 之间切换 */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // 点击下拉菜单意外区域隐藏
+    window.onclick = function(e) {
+        if (!e.target.matches('.mydropdownoc')) {
+            var myDropdown = document.getElementById("myDropdown");
+            if (myDropdown.classList.contains('show')) {
+                myDropdown.classList.remove('show');
+            }
+        }
+    }
+</script>	
+		
+		
+		
+	</header>
+	
+	<!--{hook header_nav_end.htm}-->

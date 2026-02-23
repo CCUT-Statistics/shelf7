@@ -1,0 +1,74 @@
+<?php if($abs_theme_stately_setting['advanced']['selftest_js']['enable'] && ( isset($is_message_page) && !$is_message_page)): ?>
+<script id="selftest_js">
+    window.onload = function () {
+        var selftest_note = '请向站长反馈该问题。';
+        var selftest_result = '';
+        var __br = '\n';
+        if (typeof jQuery === "undefined") {
+            selftest_result += 'JQuery 加载失败，站内多数功能不可用' + __br;
+        } else {
+            if (typeof $.toast === "undefined") {
+                selftest_result += 'Toast.js 加载失败，将无法显示弹窗' + __br;
+            }
+            if (typeof $.ajax_modal === "undefined") {
+                selftest_result += 'Bootstrap-Plugin.js 加载失败，站内部分功能不可用' + __br;
+            }
+            if (typeof $.md5 === "undefined") {
+                if (typeof $.toast !== "undefined" && (
+                    window.location.href.search('user-login') !== -1
+                    || window.location.href.search('user-create') !== -1
+                    || window.location.href.search('user-resetpw') !== -1
+                    || window.location.href.search('user-resetpw_complete') !== -1
+                )) {
+                    selftest_result += 'md5.js 加载失败，站内登录功能可能不可用' + __br;
+                    console.warn('md5.js 加载失败，站内登录功能可能不可用' + __br + selftest_result);
+                    $.toast({
+                        title: selftest_note,
+                        subtitle: 'md5.js 加载失败',
+                        content: '您可能无法登录！',
+                        type: 'warning',
+                        pause_on_hover: false,
+                        delay: 50000
+                    });
+                }
+            }
+        }
+        if (typeof Popper === "undefined" || typeof Popper.hide === "undefined") {
+            selftest_result += 'Popper 加载失败，站内部分功能不可用' + __br;
+        }
+        if (typeof xn === "undefined" || typeof xn.max === "undefined") {
+            selftest_result += 'Xiuno.js 加载失败，站内多数功能不可用' + __br;
+        } else {
+            if (typeof xn.form_radio === "undefined") {
+                selftest_result += 'Form.js 加载失败，站内部分功能不可用' + __br;
+            }
+        }
+        if (typeof bootstrap === "undefined" || typeof bootstrap.Modal === "undefined") {
+            selftest_result += 'Bootstrap.js 加载失败，站内多数功能不可用' + __br;
+        }
+        if (typeof BSModal === "undefined") {
+            selftest_result += 'BS5Modal.js 加载失败，将无法显示弹窗' + __br;
+        }
+        if (typeof async === "undefined" || typeof async.detect === "undefined") {
+            selftest_result += 'Ajax.js 加载失败，站内部分功能不可用' + __br;
+        }
+        if (document.getElementById('layout-menu') !== null && (typeof menu === "undefined" || typeof menu.open === "undefined")) {
+            selftest_result += '；Stately 主题所需的JS文件加载失败，站内部分功能不可用' + __br;
+        }
+        if (selftest_result.length !== 0) {
+            console.error(selftest_result + selftest_note);
+            if (typeof jQuery !== "undefined" && typeof $.toast !== "undefined") {
+                $.toast({
+                    title: selftest_note,
+                    content: selftest_result.replace(__br, '<br>'),
+                    type: 'error',
+                    pause_on_hover: false,
+                    delay: 100000
+                });
+            } else {
+                alert(selftest_result + selftest_note);
+            }
+        }
+    }
+</script>
+<?php endif; ?>

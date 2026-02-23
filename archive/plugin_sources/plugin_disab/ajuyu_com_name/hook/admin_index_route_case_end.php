@@ -1,0 +1,1 @@
+case 'renamesetting':	include _include(APP_PATH.'plugin/ajuyu_com_name/route/admin_renamesetting.php'); 	break;

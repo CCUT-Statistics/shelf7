@@ -1,0 +1,1 @@
+include _include(APP_PATH.'plugin/till_thread_draft/model/thread_draft.func.php');

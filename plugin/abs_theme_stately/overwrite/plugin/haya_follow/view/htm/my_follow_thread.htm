@@ -1,0 +1,158 @@
+<?php 
+if(!isset($stately_threadlist_style)){ //双重保险
+if ($fid && isset($abs_theme_stately_setting['ui_style']['threadlist']['style_for_forum'][$fid])) {
+	if ($abs_theme_stately_setting['ui_style']['threadlist']['style_for_forum'][$fid] === '_inherit') {
+		$stately_threadlist_style = $abs_theme_stately_setting['ui_style']['threadlist']['style_global'];
+	} else {
+		$stately_threadlist_style = $abs_theme_stately_setting['ui_style']['threadlist']['style_for_forum'][$fid];
+	}
+} else {
+	$stately_threadlist_style = $abs_theme_stately_setting['ui_style']['threadlist']['style_global'];
+}
+}//endif
+if(!function_exists('stately_catch_post_imgs')){
+	/**
+	 * 获取文章内的图片 
+	 *
+	 * @param string $content 文章内容
+	 * @param bool $only_need_one_image 只需要一张图？
+	 * @return array|string|null 文章里缩略图的网址，如果有一张图，返回string，如果有超过两张图，返回array，如果没有图，返回null
+	 */
+	 function stately_catch_post_imgs($content, $only_need_one_image = false) {
+		// 短代码，指定宽高
+		$output = preg_match_all("/\[img width=(\d+),height=(\d+)\](.*?)\[\/img\]/is", $content, $matches);
+		if (empty($output)) {
+			// 短代码，无宽高
+			$output = preg_match_all("/\[img\](.*?)\[\/img\]/is", $content, $matches);
+			if (empty($output)) {
+				// HTML
+				$output = preg_match_all('/<img*.+src=[\'"]([^\'"]+)[\'"].*>/iU', $content, $matches);
+				if (empty($output)) {
+					// 实在没有了……
+					$result = NULL;
+				} else {
+					if (count($matches[1]) == 1 || $only_need_one_image) {
+						$result = $matches[1][0];
+					} else {
+						$result = $matches[1];
+					}
+				}
+			} else {
+				if (count($matches[1]) == 1 || $only_need_one_image) {
+					$result = $matches[1][0];
+				} else {
+					$result = $matches[1];
+				}
+			}
+		} else {
+			if (count($matches[3]) == 1 || $only_need_one_image) {
+				$result = $matches[3][0];
+			} else {
+				$result = $matches[3];
+			}
+		}
+		return $result;
+	}
+	}
+
+?>
+<?php 
+if ( !empty($haya_follow_user_post_list) ) {
+foreach ( $haya_follow_user_post_list as $_thread) {
+	post_format($_thread);
+	if( 
+		(isset($_thread['reply_hide']) && boolval($_thread['reply_hide'])) && ( intval($uid) !== intval($_thread['uid']) )
+		|| isset($_thread['user']['deprecated']) && boolval($_thread['user']['deprecated'])
+		) {
+		continue;
+	}
+	$threadlist_username_extra_class = '';
+	$haya_follow_post = array(
+		'message_fmt' => $_thread['message_fmt']
+	);
+	$_post_message_full = ''; //帖子内容
+	$_post_message_excerpt = ''; //帖子摘要
+	$_post_excerpt_length = $abs_theme_stately_setting['ui_tweek']['threadlist']['thread_excerpt_length']; //帖子摘要长度
+	$_post_message_image = NULL; //帖子里的第一张图片地址
+	$_post_excerpt_has_showmore = false; //帖子摘要是否需要折叠？
+
+	if ($abs_theme_stately_setting['ui_tweek']['threadlist']['show_thread_excerpt'] || $abs_theme_stately_setting['ui_tweek']['threadlist']['show_thread_thumbnail']) {
+		$_post_message_full = isset($_thread['message']) ? $_thread['message'] : $haya_follow_post['message_fmt'];
+	}
+	if ($abs_theme_stately_setting['ui_tweek']['threadlist']['show_thread_excerpt'] && $_post_excerpt_length !== 0) {
+		if( !( ( isset($group['see_check']) && $group['see_check']=='1') || $_thread['uid'] == $uid) && (isset($_thread['OK']) && in_array($_thread['OK'],[0,-1,-2])) || ( isset($_thread['readp']) && $group['readp'] < $_thread['readp'] ) || (isset($_thread['location_procode']) && intval($_thread['location_procode']) === 999999 ) ) {
+			// 如果帖子不能被用户查看，清空帖子内容
+			$_post_message_excerpt = '';
+		} elseif( (isset($_thread['reply_hide']) && boolval($_thread['reply_hide'])) && ( intval($uid) !== intval($_thread['uid']) ) ) {
+			$_post_message_excerpt = '<div class="alert alert-warning" role="alert">'
+				. '<i class="la la-lock"></i>'
+				. lang('This post is only visible for author')
+				. '</div>';
+		} elseif(isset($_thread['user']['deprecated']) && boolval($_thread['user']['deprecated'])) {
+			// 用户注销了，隐藏内容
+			$_post_message_excerpt = '<div class="alert alert-info">'
+				.lang("This user is deactivated and the content is not visible")
+				.'</div>';
+		}elseif ( stripos($_post_message_full,'[ttpay]') !== false ) {
+			// 付费帖子，隐藏内容
+			$_post_message_excerpt = '<div class="alert alert-warning" role="alert">'
+			. '<i class="la la-coins"></i>'
+			. lang('This post contains paid content')
+			. '</div>';
+		} else {
+			$_post_message_full = preg_replace(array("/\r\n/", "/\r/", "/\n/"), "", $_post_message_full);
+			$_post_message_full = preg_replace("/\[.*\]/i", "[…]", $_post_message_full);
+			if ($_post_excerpt_length === -1) {
+				if (mb_strlen($_post_message_full) > $abs_theme_stately_setting['ui_tweek']['threadlist']['thread_excerpt_length']) {
+					$_post_excerpt_has_showmore = true;
+				}
+				$_post_message_excerpt = $_post_message_full;
+			} else {
+				$_post_message_excerpt = strip_tags(mb_substr($_post_message_full, 0, $_post_excerpt_length));
+				if (mb_strlen($_post_message_excerpt) > $_post_excerpt_length) {
+					$_post_message_excerpt .= '&hellip;';
+				}
+			}
+			
+		}
+		if ($_post_excerpt_has_showmore) {
+			$_post_message_excerpt = '<input type="checkbox" class="showmore-toggle" id="showmore_' . $_thread['tid'] . '">'
+			. '<div class="showmore-container">'
+			. $_post_message_excerpt
+			. '</div>'
+			. '<label class="showmore-label" for="showmore_' . $_thread['tid'] . '">'
+			. lang('viewmore')
+			. '</label>';
+		}
+	}
+	if($abs_theme_stately_setting['ui_tweek']['threadlist']['show_thread_thumbnail'] && !in_array($_post_excerpt_length, [-1,0])){
+		if(in_array($stately_threadlist_style,array('sns_v1','sns_v2'))){
+			// SNS风格，取所有图
+			$_post_message_image = stately_catch_post_imgs($_post_message_full);
+		}else{
+			// 其他风格，只取一张
+			$_post_message_image = stately_catch_post_imgs($_post_message_full,true);
+		}
+	}
+
+	//var_dump($_thread);
+switch($stately_threadlist_style):
+case 'sns_v1' : ?>
+<!--{hook stately_layout_haya_follow_timeline_item__sns_v1.htm}-->
+<?php break; case 'sns_v2' : ?>
+<!--{hook stately_layout_haya_follow_timeline_item__sns_v2.htm}-->
+<?php break; default: ?>
+<!--{hook stately_layout_haya_follow_timeline_item__sns_v1.htm}-->
+<?php break; endswitch; /* end switch */ 
+} /* end foreach */
+} else { ?>
+<li class="card">
+	<div class="empty p-3 text-center">
+		<span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+			<i class="las la-stream fs-1"></i>
+		</span>
+		<p> 暂无帖子 </p>
+	</div>
+</li>
+<?php } /* endif */
+?>

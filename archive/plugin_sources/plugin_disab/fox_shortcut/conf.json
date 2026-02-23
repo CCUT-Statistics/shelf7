@@ -1,0 +1,13 @@
+{
+    "name": "奇狐快捷管理插件",
+    "brief": "奇狐快捷管理插件，勾选、提交之后的插件会出现在后台首页，以便快速配置插件。",
+    "version": "1.0",
+    "bbs_version": "4.0.4",
+    "uid": "20394",
+    "username": "༺凨影༻",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

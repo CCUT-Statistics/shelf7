@@ -1,0 +1,62 @@
+<template include="plugin/xy_pay/view/htm/my.template.htm">
+	<slot name="my_body">
+<style type="text/css">
+@media screen and (max-width:800px){table{border:0}
+table thead{display:none}
+table tr{margin-bottom:10px;display:block;border-bottom:2px solid #ddd}
+table td{display:block;text-align:right;font-size:13px;border-bottom:1px dotted #ccc}
+table td:last-child{border-bottom:0}
+table td:before{content:attr(data-label);float:left;text-transform:uppercase;font-weight:700}
+}
+</style>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>
+							<?php echo lang('pay_user_exchange_info');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_exchange_info1');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_exchange_info2');?>
+						</th>
+						<th>
+							<?php echo lang('pay_user_exchange_info3');?>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach($infolist as $val){?>
+					<tr>
+						<td data-label="<?php echo lang('pay_user_exchange_info');?>">
+							<?php echo $val['username'];?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_exchange_info1');?>">
+							<?php echo $val['fromnum'];?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_exchange_info2');?>">
+							<?php echo $val['tonum'];?>
+						</td>
+						<td data-label="<?php echo lang('pay_user_exchange_info3');?>">
+							<?php echo $val['exctime'];?>
+						</td>
+					</tr>
+				<?php } ?>
+				</tbody>
+			</table>
+		<?php if($pagination) { ?>
+		<nav><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+		<?php } ?>
+		</div>
+	</div>
+</div>
+	</slot>
+</template>
+
+<script>
+$('a[data-active="my-exchangeinfo"]').addClass('active');
+</script>

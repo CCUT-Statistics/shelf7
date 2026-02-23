@@ -1,0 +1,14 @@
+{
+    "name": "Stately 主题 - 后台管理部分",
+    "brief": "Stately 主题附属件，让后台管理页面的外观和前台主题同步，启用本插件可获得更完整的使用体验。",
+    "version": "1.1.1",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "nothing_to_see_here_move_along": "Made by Geticer 2022",
+    "dependencies": {
+        "abs_theme_stately": "1.0"
+    }
+}

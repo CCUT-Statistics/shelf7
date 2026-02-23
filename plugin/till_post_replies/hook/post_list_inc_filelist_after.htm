@@ -1,0 +1,9 @@
+<?php
+if ((param(0) !== 'my' && param(1) !== 'post')||(param(0) !== 'user' && param(1) !== 'post')){
+if($uid){
+	include _include(APP_PATH . 'plugin/till_post_replies/view/htm/post_replies_section_user.htm');
+}else{
+	include _include(APP_PATH . 'plugin/till_post_replies/view/htm/post_replies_section_guest.htm');
+}
+}
+?>

@@ -1,0 +1,11 @@
+<?php 
+if( function_exists("xn_nav_menu") ):
+xn_nav_menu(array(
+    'menu'            => 'bbspage',
+    'container'       => false,
+    'no_ul'           => true,
+    'no_li'           => true,
+));
+else: ?>
+<!--{hook stately_layout_bbs_legacy_forum_list.htm}-->
+<?php endif; ?>

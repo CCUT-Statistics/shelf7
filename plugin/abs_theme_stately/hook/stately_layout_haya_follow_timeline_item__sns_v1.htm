@@ -1,0 +1,59 @@
+<li class="card mb-3 style-sns_v1">
+    <div class="p-3">
+        <div class="row g-1">
+            <div class="col-auto w-px-50 flex-shrink-1">
+                <a href="<?= url('user-'.$_thread['uid']);?>" class="v_avatar v_avatar-post">
+                    <img loading="lazy" decoding="async" src="<?= $_thread['user_avatar_url'];?>" class="img-fluid rounded-circle" loading="lazy">
+                    <!--{hook thread_list_inc_avatar_after.htm}-->
+                </a>
+            </div>
+            <div class="col">
+                <div class="mx-2">
+                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-1">
+                        <div>
+                            <a href="<?= url('user-'.$_thread['uid']);?>" class="d-block">
+                                <!--{hook stately_threadlist_username.htm}-->
+                            </a>
+                            <time class="small text-muted">
+                                <?= $_thread['create_date_fmt'];?>
+                            </time>
+                        </div>
+                    </div>
+                    <h3 class="card-title h6 my-2">
+                        <?php if ($_thread['isfirst'] == 1) : ?> 发表了新主题 <a href="<?php echo url('thread-'.$_thread['tid']);?>">
+                            <?php echo isset($_thread['thread']['subject']) ? $_thread['thread']['subject'] : '<span class="text-danger">**主题已删除**</span>';?>
+                        </a>
+                        <?php else : ?> 对主题 <a target="_blank" href="<?php echo url('thread-'.$_thread['tid']) . '#post_' . $_thread['pid'] ;?>">《
+                            <?php echo $_thread['thread']['subject'];?> 》
+                        </a> 进行了回复
+                        <?php endif; ?>
+                        <?php if ($_thread['isfirst'] == 1) { ?>
+                        <?php } else { ?>
+                        <a class="text-dark" target="_blank" href="<?php echo url('thread-'.$_thread['tid']);?>#post_
+                            <?php echo $_thread['pid'];?>" title="主题回复">
+                        </a>
+                        <?php } ?>
+                    </h3>
+                    <div class="card-text my-2">
+                        <!--{hook follow_thread_before.htm}-->
+                        <?= $_post_message_excerpt ?>
+                    </div>
+                    <?php if(!is_null($_post_message_image)): ?>
+                        <!--{hook stately_threadlist_images_sns.htm}-->
+                    <?php endif; ?>
+                    <div class="mt-2 card-actions">
+                        <span class="likes-count mx-1">
+                            <i class="las la-thumbs-up"></i>
+                            <?= isset($_thread['likes']) ? $_thread['likes'] : ( isset($_thread['thread']['likes']) ? $_thread['thread']['likes'] : 0 ) ;?>
+                        </span>
+                        <span class="post-count mx-1">
+                            <i class="las la-comments"></i>
+                            <?= isset($_thread['posts']) ? $_thread['views'] : ( isset($_thread['thread']['posts']) ? $_thread['thread']['posts'] : 0 ) ;?>
+                        </span>
+                        <!--{hook stately_threadlist_views_count.htm}-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

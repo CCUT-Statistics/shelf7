@@ -1,0 +1,12 @@
+﻿{
+    "name": "用户封面图",
+    "brief": "提供用户封面图功能。需要主题支持。",
+    "version": "1.0.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": {
+        "my_nav_avatar_after.htm": 10
+    },
+    "dependencies": []
+}

@@ -1,0 +1,43 @@
+<li class="thread card mb-2 style-compact_v2 <?= $_thread['top_class'];?>" data-href="<?= url('thread-'.$_thread['tid']);?>" data-tid="<?= $_thread['tid'];?>">
+    <div class="p-3">
+        <div class="media d-flex">
+            <a href="<?= url('user-'.$_thread['uid']);?>">
+                <span class="v_avatar v_avatar-post">
+                    <img loading="lazy" decoding="async" class="img-fluid rounded-circle avatar-3" src="<?= $_thread['user_avatar_url'];?>" alt="">
+                    <!--{hook thread_list_inc_avatar_after.htm}-->
+                </span>
+            </a>
+            <div class="media-body">
+                <h3 class="mx-0 mt-0 mb-2 h5">
+                    <!--{hook stately_threadlist_subject.htm}-->
+                </h3>
+                <div class="card-text">
+                    <?= $_post_message_excerpt ?>
+                </div>
+                <div class="d-flex flex-wrap justify-content-between mt-2">
+                    <p class="mb-0">
+                        <a href="<?= url('user-'.$_thread['uid']);?>">
+                            <!--{hook stately_threadlist_username.htm}-->
+                        </a>
+                        <time class="date mr-2">
+                            <i class="las la-clock"></i>
+                            <?= $_thread['create_date_fmt'];?>
+                        </time>
+                        <?php if($fid == 0): ?>
+                        <a href="<?= url('forum-'.$_thread['fid']);?>" class="small">
+                            <i class="las la-comment"></i>
+                            <?= $_thread['forumname'] ?>
+                        </a>
+                        <?php endif; ?>
+                    </p>
+                    <div class="mb-0">
+                        <!--{hook stately_threadlist_views_count.htm}-->
+                        <!--{hook stately_threadlist_posts_count.htm}-->
+                        <!--{hook stately_threadlist_lastuid.htm}-->
+                        <!--{hook stately_threadlist_checkbox.htm}-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,31 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<div class="card mb-3 p-3">
+	<div class="d-flex align-items-center justify-content-between">
+		<h2 class="h3 m-0">
+			<i class="las la-stream"></i>
+			<a href="<?php echo url('my-follow-timeline');?>" class="text-body" data-active="my-follow-timeline">动态</a>
+		</h2>
+		<div>
+			<a class="btn btn-sm btn-link bg-label-primary" href="<?php echo url('my-follow-follows');?>" data-active="my-follow-follows">我关注的</a>
+			<a class="btn btn-sm btn-link bg-label-primary" href="<?php echo url('my-follow-fans');?>" data-active="my-follow-fans">关注我的</a>
+		</div>
+	</div>
+</div>
+<div class="nav-align-top mb-4">
+	<?php include _include(APP_PATH.'plugin/haya_follow/view/htm/my_follow_timeline_tab.htm'); ?>
+	<ul class="list-unstyled threadlist">
+	<?php include _include(APP_PATH.'plugin/haya_follow/view/htm/my_follow_thread.htm'); ?>
+	</ul>
+<?php if (!empty($haya_follow_user_post_pagination)) { ?>
+	<nav>
+		<ul class="pagination justify-content-center">
+			<?php echo $haya_follow_user_post_pagination; ?>
+		</ul>
+	</nav>
+	<?php } ?>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+	$('a[data-active="my-follow-timeline"]').addClass('active');
+	$('a[data-active="tab-my-follow-timeline-<?php echo $action3; ?>"]').addClass('active');
+</script>

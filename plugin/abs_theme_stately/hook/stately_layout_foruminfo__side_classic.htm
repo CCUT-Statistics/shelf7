@@ -1,0 +1,79 @@
+<?php if($abs_theme_stately_setting['ui_style']['forum']['style_forum_info'] === 'side_classic' && !(param(0,'') == 'tag')): ?>
+<div class="card card-forum-info mb-3">
+    <?php if(isset($forum['cover_url']) && !empty($forum['cover_url']) && $abs_theme_stately_setting['ui_style']['forum']['show_forum_cover_image']): ?>
+    <div class="card-header p-0 m-0">
+        <img loading="lazy" decoding="async" class="card-img-top" src="<?= $forum['cover_url'] ?>" alt="<?= $forum['name'];?>" style="max-height: 256px; width: 100%; object-fit: cover; object-position: top center;" >
+    </div>
+    <?php endif; ?>
+    <div class="card-body text-center">
+        <img loading="lazy" decoding="async" class="img-fluid w-px-100 mb-2" src="<?= $forum['icon_url'];?>">
+        <h2 class="h4">
+            <?= $forum['name'];?>
+        </h2>
+        <?php if($forum['brief']) : ?>
+        <!--{hook forum_brief_before.htm}-->
+        <div class="text-left line-height-2">
+            <?= $forum['brief'];?>
+        </div>
+        <!--{hook forum_brief_after.htm}-->
+        <?php endif; ?>
+    </div>
+    <div class="card-footer p-2">
+        <table class="w-100 small">
+            <tr align="center">
+                <td>
+                    <span class="text-muted">
+                        <?= lang('threads');?>
+                    </span><br>
+                    <b>
+                        <?= $forum['threads'];?>
+                    </b>
+                </td>
+                <td>
+                    <span class="text-muted">
+                        <?= lang('today_posts');?>
+                    </span><br>
+                    <b>
+                        <?= $forum['todayposts'];?>
+                    </b>
+                </td>
+                <td>
+                    <span class="text-muted">
+                        <?= lang('today_threads');?>
+                    </span><br>
+                    <b>
+                        <?= $forum['todaythreads'];?>
+                    </b>
+                </td>
+                <!--{hook forum_todaythreads_after.htm}-->
+            </tr>
+        </table>
+    </div>
+    <?php if($forum['announcement'] || $forum['modlist']) { ?>
+    <div class="card-mod-info card-body border-top">
+        <?php if($forum['announcement']) { ?>
+        <h3 class="card-title h6">
+            <?= lang('forum_anouncement');?>
+        </h3>
+        <p>
+            <?= $forum['announcement'];?>
+        </p>
+        <?php  } ?>
+        <?php if($forum['modlist']) { ?>
+        <h3 class="card-title h6">
+            <?= lang('forum_moderator');?>
+        </h3>
+        <ul class="list-unstyled m-0 d-flex align-items-center avatar-group my-3">
+            <?php foreach ($forum['modlist'] as $mod) : ?>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="<?= $mod['username'];?>" class="avatar pull-up">
+                <a href="<?= url('user-'.$mod['uid']);?>">
+                    <img loading="lazy" decoding="async" class="rounded-circle" src="<?= $mod['avatar_url'];?>">
+                </a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php  } ?>
+    </div>
+    <?php } ?>
+</div>
+<?php endif; ?>

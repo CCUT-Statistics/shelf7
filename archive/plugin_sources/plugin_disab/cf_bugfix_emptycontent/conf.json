@@ -1,0 +1,11 @@
+{
+    "name": "禁止空标题空内容",
+    "brief": "发帖或回帖时禁止空标题空内容。<br><br>更多插件请访问：<a target='_blank' href='https://cloudatabases.com/'>云库论坛</a>。",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

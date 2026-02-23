@@ -1,0 +1,45 @@
+<li class="thread d-flex align-items-stretch gx-3 <?= 'col-lg-' . $stately_threadlist_cols_count; ?> <?= $_thread['top_class'];?>" data-tid="<?= $_thread['tid'] ?>">
+    <article class="card w-100 mb-3 style-graphic-list-special_v1">
+        <div class="px-3 pt-3 pb-2"> <?php if(!is_null($_post_message_image)): ?> 
+        <a class="subject" href="<?= url('thread-'.$_thread['tid']);?>">
+            <img loading="lazy" decoding="async" class="card-img img-fluid mb-3" src="<?= $_post_message_image ?>"> 
+        </a>
+            <?php endif; ?> 
+            <div class="d-flex small justify-content-between align-items-center flex-wrap">
+                <div class="media align-items-center mb-0 h6">
+                    <span class="v_avatar v_avatar-post">
+                        <a href="<?= url('user-'.$_thread['uid']);?>">
+                            <img loading="lazy" decoding="async" src="<?= $_thread['user_avatar_url'];?>" class="w-px-30 img-fluid rounded-circle">
+                        </a>
+                        <!--{hook thread_list_inc_avatar_after.htm}-->
+                    </span>
+                    <div class="media-body ml-1">
+                        <a href="<?= url('user-'.$_thread['uid']);?>">
+                            <!--{hook stately_threadlist_username.htm}-->
+                        </a> <?php if($fid == 0): ?> <br>
+                        <a href="<?= url('forum-'.$_thread['fid']);?>" class="d-inline-block text-muted mt-1">
+                            <i class="las la-comment"></i> <?= $_thread['forumname'] ?> </a> <?php endif; ?>
+                    </div>
+                </div>
+                <div class="fs-5 text-warning">
+                    <!--{hook stately_threadlist_price.htm}-->
+                </div>
+            </div>
+            <h3 class="my-2 h6">
+                <!--{hook stately_threadlist_subject.htm}-->
+            </h3>
+        </div>
+        <div class="px-3 pb-3 pt-0 flex-grow-0 mt-auto">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <i class="text-primary las la-clock"></i>
+                    <time class="text-muted"> <?= $_thread['create_date_fmt'];?> </time>
+                </div>
+                <div class="card-actions small">
+                    <!--{hook stately_threadlist_views_count.htm}-->
+                    <!--{hook stately_threadlist_checkbox.htm}-->
+                </div>
+            </div>
+        </div>
+    </article>
+</li>

@@ -1,0 +1,113 @@
+<?php if(empty($uid)) die();
+
+	function getrandom($length) {
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		return substr(str_shuffle($chars),0,$length);
+	}
+	function get_user_name($uid){
+		$__user = user_read_cache($uid); 
+		return isset($__user) ? $__user['username'] : FALSE;
+	}
+	function get_msgstr($__credits,$__golds,$__rmbs){ 
+		global $credits1_name ,$credits2_name ,$credits3_name;
+		$rtn_str='';
+		if($__credits!='0') $rtn_str.= $credits1_name.'+'.$__credits.' ';
+		if($__golds!='0') $rtn_str.= $credits2_name.'+'.$__golds.' ';
+		if($__rmbs!='0') $rtn_str.= $credits3_name.'+'.$__rmbs/100.0.' ';
+		return $rtn_str;
+	}
+    $num_pid = db_count('promote_log',array('uid_from'=>$uid));
+	$page = param(2,1);
+	$data =  db_find('promote_log',array('uid_from'=>$uid), array('time'=>-1), $page, $pagesize = 20);
+	$pagination = pagination(url("my-promote-{page}"), $num_pid, $page, $pagesize);
+	if($user['promote']=='0') {
+		$random = getrandom(6);
+		db_update('user',array('uid'=>$uid),array('promote'=>$random));
+		$user['promote']=$random;
+	}
+	$set_promote = setting_get('tt_promote');
+	$open_visit = $set_promote['visit_credits']!=0 || $set_promote['visit_golds']!=0 || $set_promote['visit_rmbs']!=0;
+?> <template include="./plugin/abs_theme_stately/overwrite/plugin/tt_credits/view/htm/my_credits.template.htm">
+	<slot name="my_body">
+		<h4>向您的朋友推广本站</h4>
+		<section class="row">
+			<div class="col-lg-4">
+				<label class="form-label" for="promote_txt">您的邀请码</label>
+				<div class="input-group input-group-merge flex-nowrap">
+					<input type="text" class="input-group-text text-start" readonly value="<?php echo $user['promote'];?>" id="promote_txt" style="min-width:0">
+					<span class="input-group-text text-primary cursor-pointer" data-clipboard-action="copy" data-clipboard-target="#promote_txt" class="btn btn-outline-primary" id="cpy_1">复制</span>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<label class="form-label" for="reg_url">注册链接</label>
+				<div class="input-group input-group-merge flex-nowrap">
+					<input type="text" class="input-group-text text-start" readonly value="<?php echo http_url_path().url('user-create').'?promote='.$user['promote'];?>" id="reg_url" style="min-width:0">
+					<span class="input-group-text text-primary cursor-pointer" data-clipboard-action="copy" data-clipboard-target="#reg_url" id="cpy_2">复制</span>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<label class="form-label" for="visit_url">访问链接</label>
+				<div class="input-group input-group-merge flex-nowrap">
+					<input type="text" class="input-group-text text-start" readonly value="<?php echo http_url_path().url('index').'?promote='.$user['promote'];?>" id="visit_url" style="min-width:0">
+					<span class="input-group-text text-primary cursor-pointer" data-clipboard-action="copy" data-clipboard-target="#visit_url" id="cpy_3">复制</span>
+				</div>
+			</div>
+		</section>
+		<div class="form-text">您可以复制以上任意一个并发送给好友或在社交媒体上分享。</div>
+
+		<hr>
+		<h4>新用户使用您的推广码注册</h4>
+		<section class="row g-2">
+			<div class="col-6">
+				<div class="bg-primary text-white shadow-none card card-body">
+					<p class="fs-5"><i class="las la-user"></i> 您</p>
+					<p class="mb-0"><?php echo get_msgstr($set_promote['bonus_credits_from'],$set_promote['bonus_golds_from'],$set_promote['bonus_rmbs_from']);?></p>
+				</div>
+			</div>
+			<?php if(!empty(get_msgstr($set_promote['bonus_credits_to'],$set_promote['bonus_golds_to'],$set_promote['bonus_rmbs_to']))): ?>
+			<div class="col-6">
+				<div class="bg-label-primary shadow-none card card-body">
+					<p class="fs-5"><i class="las la-user-plus"></i> 被邀请人</p>
+					<p class="mb-0"><?php echo get_msgstr($set_promote['bonus_credits_to'],$set_promote['bonus_golds_to'],$set_promote['bonus_rmbs_to']);?></p>
+				</div>
+			</div>
+			<?php endif; ?>
+		</section>
+		<?php if($open_visit): ?>
+		<h4>新用户使用您的推广链接访问</h4>
+		<section class="row">
+			<div class="col-sm-6">
+				<div class="bg-primary text-white shadow-none card card-body">
+					<p class="fs-5"><i class="las la-user"></i> 您</p>
+					<p class="mb-0"><?php echo get_msgstr($set_promote['visit_credits'],$set_promote['visit_golds'],$set_promote['visit_rmbs']);?></p>
+				</div>
+			</div>
+		</section>
+		<?php endif; ?>
+		<hr>
+		<h4>推广记录</h4>
+		<div class="table-responsive text-nowrap">
+			<table class="table">
+				<tr>
+					<th>时间</th>
+					<th>被邀请人</th>
+				</tr> <?php foreach($data as $v) { ?><tr>
+					<td><time><?php echo date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'],$v['time']); ?></time></td>
+					<td><a href="/<?php echo url("user-$v[uid_to]"); ?>"><?php echo get_user_name($v['uid_to']);?></a></td>
+				</tr><?php } /* endforeach */ ?>
+			</table>
+		</div>
+		<nav class="text-center">
+			<ul class="pagination"><?php echo $pagination; ?></ul>
+		</nav>
+	</slot>
+</template>
+<script src="plugin/tt_promote/view/js/clipboard.min.js"></script>
+<script>
+	$('a[data-active="my-promote"]').addClass('active');
+</script>
+<script>
+	var clipboard1 = new ClipboardJS('#cpy_1');
+	var clipboard2 = new ClipboardJS('#cpy_2');
+	var clipboard3 = new ClipboardJS('#cpy_3');
+</script>

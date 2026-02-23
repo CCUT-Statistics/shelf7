@@ -1,0 +1,156 @@
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card" >
+            <?php if (!empty($slide)) { ?>
+                <div id="homepageCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <?php 
+                        $n = count($slide);
+                        for ($i = 0; $i < $n; ++$i) { ?>
+                        <li data-bs-target="#homepageCarousel" data-bs-slide-to="<?= $i; ?>" class="<?= $i === 0 ? 'active' : '' ?>" <?= $i === 0 ? 'aria-current="true"' : '' ?> ></li>
+                        <?php } ?>
+                    </ol>
+                    <div class="carousel-inner">
+                        <?php $i = 0;
+                        foreach($slide as &$_thread) { 
+                            $i++; ?>
+                            <div class="carousel-item <?= $i === 1 ? 'active' : '' ?>" >
+                                <img loading="lazy" decoding="async" class="d-block w-100" src="<?=  $_thread['icon_text']; ?>" alt="<?=  $_thread['subject'];?>">
+                                <div class="carousel-caption d-none d-md-block">
+                                  <h3 class="fs-4"><?=  $_thread['subject'];?></h3>
+                                </div>
+                              </div>
+                        <?php } /* endforeach */ ?>
+                    </div>
+                    <a class="carousel-control-prev" href="#homepageCarousel" role="button" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#homepageCarousel" role="button" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </a>
+                  </div>
+            <?php } ?>
+
+            <!--所有属性-->
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <ul class="list-unstyled threadlist ul_round nowrap">
+                        <?php if (!empty($arrlist['flag'])) {foreach($arrlist['flag'] as $_thread) { ?>
+                        <li class="tap ml-2" data-href="<?=  $_thread['url'];?>">
+                            <h2 class="h4">
+                                <a href="<?=  $_thread['url'];?>" title='<?=  $_thread['subject'];?>' aria-label='<?=  $_thread['subject'];?>'>
+                                <div class="ellipsis">
+                                    <?=  $_thread['subject'];?>
+                                </div>
+                                </a>
+                            </h2>
+                        </li>
+                        <?php }} ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--置顶-->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 threadlist">
+                    <?php if (!empty($arrlist['top'])) {foreach ($arrlist['top'] as $_thread) {if ($_thread['i'] <= 4 /* 4为显示数量，根据自己需要调整数字 */) { ?>
+                    <li class="thread">
+                        <h2 class="font-weight-bold break-all nowrap h4 mb-2">
+                            <a class="d-block ellipsis" href="<?=  $_thread['url'];?>" title='<?=  $_thread['subject'];?>' aria-label='<?=  $_thread['subject'];?>'>
+                            <?=  $_thread['subject'];?>
+                            </a>
+                        </h2>
+                            <p class="mt-1 mb-3 text-body break-all">
+                                <?=  $_thread['brief']?$_thread['brief']:lang('well_not_brief');?>
+                            </p>
+                    </li>
+                    <?php }}} ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="text-info card-header">
+                    <i class="las la-thumbs-up"></i>
+                    推荐
+            </div>
+            <div class="row nowrap mx-1 mt-3">
+                <?php if(!empty($first_flag)){foreach($first_flag as $_thread) { ?>
+                <div class="col-lg-12">
+                    <a class="d-block ellipsis" href="<?=  $_thread['url'];?>" title='<?=  $_thread['subject'];?>' aria-label='<?=  $_thread['subject'];?>'>
+                    <?=  $_thread['subject'];?>
+                    </a>
+                </div>
+                <?php }} ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--{hook website_portal_before.htm}-->
+<div class="row">
+    <?php if (!empty($arrlist['list'])) { $i=0; foreach ($arrlist['list'] as $_forum) { $i++; ?>
+    <div class="col-md-6">
+        <h2 class="h3">
+            <a href="<?=  $_forum['url'];?>" title='<?=  $_forum['name'];?>'>
+                <?=  $_forum['name']; ?>
+            </a>
+            
+            <a href="<?=  $_forum['url'];?>">
+                <i class="icon-angle-double-right"></i>
+            </a>
+        </h2>
+        <div class="card card-body">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <ul class="row list-unstyled threadlist nowrap pl-2 mb-0">
+                        <?php if (!empty($_forum['news'])) {$i=0; foreach ($_forum['news'] as &$_thread) {if ($_thread['icon_text'] && ++$i <= 2) { ?>
+                        <li class="col-6 col-md-12 mt-3">
+                            <a href="<?=  $_thread['url'];?>" title='<?=  $_thread['subject'];?>' aria-label='<?=  $_thread['subject'];?>'>
+                            <img loading="lazy" decoding="async" class="d-block w-100" src="<?=  $_thread['icon_text']; ?>" alt='<?=  $_thread['subject'];?>'>
+
+                            <div class="ellipsis">
+                                <?=  $_thread['subject'];?>
+                            </div>
+                            </a>
+                        </li>
+                        <?php }}}else{ ?>
+                        <li class="col-md-12">
+                            <img loading="lazy" decoding="async" class="main-pic" src="plugin/well_cms_x/view/image/nopic.png" width="170" height="128">
+                            <p class="p-2 m-0">
+                                <?=  lang('none');?>
+                            </p>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+
+                <div class="col-md-8">
+                    <ul class="row list-unstyled threadlist nowrap pt-3">
+                        <!--最新内容-->
+                        <?php if (!empty($_forum['news'])) { foreach ($_forum['news'] as $_thread) { ?>
+                        <li class="col-lg-12 tap" data-href='<?=  $_thread['url'];?>'>
+                        <h2 class="h4">
+                            <a class="ellipsis" href="<?=  $_thread['url'];?>" title='<?=  $_thread['subject'];?>' aria-label='<?=  $_thread['subject'];?>'>
+                            <?=  $_thread['subject'];?>
+                            </a>
+                        </h2>
+                        </li>
+                        <?php }} ?>
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <?php }} ?>
+</div>

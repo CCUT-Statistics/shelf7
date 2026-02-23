@@ -1,0 +1,37 @@
+<?php 
+if(!isset($abs_theme_stately_setting)) {
+	$abs_theme_stately_setting = ( !is_null(setting_get('abs_theme_stately_setting')) ? setting_get('abs_theme_stately_setting') : kv_get('setting')["abs_theme_stately_setting"] );
+}
+$header['title'] = $abs_theme_stately_setting['page']['privacy']['title'] . ' - ' . $conf['sitename'];
+$header['mobile_title'] = $abs_theme_stately_setting['page']['privacy']['title'];
+include _include(APP_PATH.'view/htm/header.inc.htm');
+?>
+<section class="page-heading fs-big">
+	<div class="d-flex mb-3 gap-3">
+		<div>
+			<span class="badge bg-label-primary rounded-2 fs-big">
+				<i class="<?= $abs_theme_stately_setting['page']['privacy']['icon'] ?> fs-1"></i>
+			</span>
+		</div>
+		<div>
+			<h1 class="fs-4 mb-1 h2 ">
+				<span class="align-middle">
+					<?= $abs_theme_stately_setting['page']['privacy']['title'] ?>
+				</span>
+			</h1>
+			<span>
+				<?= $abs_theme_stately_setting['page']['privacy']['subtitle'] ?>
+			</span>
+		</div>
+	</div>
+</section>
+<section class="card card-body">
+	<?php
+	if ($abs_theme_stately_setting['page']['privacy']['use_shortcode'] && class_exists('BBCode') && isset($Shortcode)) {
+		echo $Shortcode->toHTML(html_entity_decode( $abs_theme_stately_setting['page']['privacy']['content'] ));
+	} else {
+		echo html_entity_decode( $abs_theme_stately_setting['page']['privacy']['content'] );
+	}
+	?>
+</section>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>

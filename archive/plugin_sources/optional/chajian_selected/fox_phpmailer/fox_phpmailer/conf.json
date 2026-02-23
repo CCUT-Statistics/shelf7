@@ -1,0 +1,13 @@
+{
+    "name": "奇狐网_PHPMailer",
+    "brief": "主要是把系统的PHPMailer_5.2.1升级至PHPMailer_5.2.4。<a href='https://bbs.oddfox.cn' target='_blank' class='text-danger'>更多模版、插件请访问奇狐官网</a>",
+    "version": "1.0",
+    "bbs_version": "4.0.4",
+    "uid": "20394",
+    "username": "༺凨影༻",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

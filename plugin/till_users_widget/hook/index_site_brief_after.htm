@@ -1,0 +1,92 @@
+<!---->
+
+
+
+
+
+<?php
+if(!function_exists('get_site_new_user')) {
+
+function get_site_new_user($num=20){
+    //先获取用户列表
+    $userlist = cache_get('get_site_new_user');
+    if(empty($userlist)){
+        $userlist = db_find('user', array(), array('uid'=>-1), 1, $num, 'uid');
+        /*
+        foreach ($userlist as &$user) {
+            $username = $user['username'];
+            $create = $user['create_date_fmt'];
+            xn_strlen($username)>4 && $username = xn_substr($username, 0, 4);
+            $user['dname'] = $username;
+            $user['create'] = $create;
+        }
+        */
+        cache_set('get_site_new_user',$userlist,86400);//有效期1天
+    }
+    return $userlist;
+}
+}
+?> 
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h5 class="card-title m-0 me-2"><i class="la la-users text-primary"></i> 最新成员</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ul class="list-inline m-0"> 
+            <?php 
+        $new_user_list = get_site_new_user(16);
+        foreach ($new_user_list as $new_user) {
+            $new_user_avatar_url = 'view/img/avatar.png';
+            $new_user['avatar']!=0 && $new_user_avatar_url = $conf['upload_url'].'avatar/000/'.$new_user['uid'].'.png';
+        ?> 
+            <li class="list-inline-item mr-2 mb-2" data-bs-toggle="tooltip" title="<?php echo $new_user['username']; ?>">
+                <a href="<?php echo url('user-'.$new_user['uid']);?>">
+                    <img src="<?php echo $new_user_avatar_url; ?>" class="img-fluid w-px-40" alt="<?php echo $new_user['username'];?>">
+                </a>
+            </li> 
+            <?php } /* endforeach */ ?> 
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h5 class="card-title m-0 me-2"><i class="la la-user-plus text-primary"></i> 在线成员 (<?php echo $runtime['onlines'];?>)</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ul class="list-inline m-0"> 
+            <?php 
+        $online_user_list = online_list_cache();
+        $online_user_last_username = '';
+        foreach ($online_user_list as $online_user_key => $online_user_tmp) {
+            if($online_user_key > (16 + 1)) {
+                break;
+            }
+            
+            if($online_user_tmp['username'] === $online_user_last_username){
+                continue;
+            } else {
+                $online_user_last_username = $online_user_tmp['username'];
+            }
+            
+            $online_user = user_read_cache($online_user_tmp['uid']);
+            $online_user_avatar_url = 'view/img/avatar.png';
+            $online_user['avatar']!=0 && $online_user_avatar_url = $conf['upload_url'].'avatar/000/'.$online_user['uid'].'.png';
+        ?> 
+            <li class="list-inline-item mr-2 mb-2" data-bs-toggle="tooltip" title="<?php echo $online_user['username']; ?>">
+                <a href="<?php echo url('user-'.$online_user['uid']);?>">
+                    <img src="<?php echo $online_user_avatar_url; ?>" class="img-fluid w-px-40" alt="<?php echo $online_user['username'];?>">
+                </a>
+            </li> 
+            <?php } /* endforeach */ ?> 
+        </ul>
+    </div>
+</div>

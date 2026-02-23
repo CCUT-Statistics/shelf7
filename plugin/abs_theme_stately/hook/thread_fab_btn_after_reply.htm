@@ -1,0 +1,27 @@
+<?php if(function_exists('haya_post_like_find_by_uid_and_pid')) :
+$haya_post_like_thread_check = haya_post_like_find_by_uid_and_pid($uid, $first['pid']); 
+?>
+<a href="javascript:;" class="btn-light btn-fab add_func js-haya-post-like-thread-add" data-pid="<?php echo $first['pid'];?>" title="<?= lang('haya_post_like_like') ?>" data-bs-toggle="tooltip"><i class="icon la la-thumbs-up"></i></a>
+<span class="haya-post-like-thread-user-count">
+    <?= intval($first['likes']) ?>
+</span>
+<?php endif; ?>
+<?php if(function_exists('haya_favorite_find_by_uid_and_tid')):
+$haya_favorite_check_favorite = haya_favorite_find_by_uid_and_tid($uid, $tid); ?>
+<a href="javascript:;" class="btn-light btn-fab add_func js-haya-favorite-add" data-tid="<?php echo $first['tid'];?>" title="<?php echo lang('haya_favorite_add'); ?>" data-bs-toggle="tooltip"><i class="icon la la-star"></i></a>
+<span class="haya-favorite-user-count">
+    <?= intval($thread['favorites']) ?>
+</span>
+<?php endif; ?>
+
+<?php if($abs_theme_stately_setting['special']['share_card_modal']['enable'] && $abs_theme_stately_setting['special']['share_card_modal']['position'] === 'thread_fab'): $share_card_modal_exists = true; ?>
+<a href="javascript:;" class="btn-light btn-fab" data-bs-toggle="modal" data-bs-target="#share_card" ><i class="icon la la-share" data-bs-toggle="tooltip" title="<?php echo lang('share'); ?>"></i></a>
+<?php endif; ?>
+
+<?php if($abs_theme_stately_setting['special']['print_btn']['enable'] && $abs_theme_stately_setting['special']['print_btn']['position'] === 'thread_fab'): ?>
+<a href="javascript:;" class="btn-light btn-fab" onclick="window.print()" data-bs-toggle="tooltip" title="<?php echo lang('print'); ?>" ><i class="icon la la-print" ></i></a>
+<?php endif; ?>
+
+<?php if($abs_theme_stately_setting['special']['thread_reading_mode']['enable'] && $abs_theme_stately_setting['special']['thread_reading_mode']['position'] === 'thread_fab'): ?>
+<a href="javascript:;" class="btn-light btn-fab reading_mode_card_open_button" data-bs-toggle="modal" data-bs-target="#reading_mode_card"><i data-bs-toggle="tooltip" title="<?php echo lang('reading_mode'); ?>" class="icon la la-book-open" ></i></a>
+<?php endif; ?>

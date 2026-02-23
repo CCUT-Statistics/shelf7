@@ -1,0 +1,139 @@
+<?php
+if (!function_exists('kumquat_get_setting')) {
+    /**
+     * 金桔框架——获取设置
+     *
+     * @param string $plugin_id 插件ID
+     * @param string|null $setting_id 要获取的设置项；若不填写则获取全部设置（以多纬数组呈现）
+     * @return mixed 设置值或设置数组
+     */
+    function kumquat_get_setting($plugin_id, $setting_id = NULL) {
+        if (empty($plugin_id)) {
+            return NULL;
+        } else {
+            $plugin_settings = setting_get($plugin_id . '_setting');
+            $arr_option_name = explode('/', $setting_id);
+            //var_dump($arr_option_name);
+            if (
+                !is_null($plugin_settings)
+                && isset($settings[$arr_option_name[0]][$arr_option_name[1]][$arr_option_name[2]])
+            ) {
+                return $settings[$arr_option_name[0]][$arr_option_name[1]][$arr_option_name[2]];
+            } else {
+                return '[QUMQUAT][ERROR] The setting' . $setting_id . 'is not exist';
+            }
+        }
+    }
+}
+
+if (!function_exists('kumquat_css_font_assemble')) {
+    function kumquat_css_font_assemble(array $setting_value) {
+        return $setting_value['font-style'] . ' ' . $setting_value['font-weight'] . ' ' . $setting_value['font-size'] . $setting_value['font-size_unit'] . '/' . $setting_value['line-height'] . ' ' . $setting_value['font-family'];
+    }
+}
+if (!function_exists('kumquat_css_background_image_assemble')) {
+    function kumquat_css_background_image_assemble($setting_value) {
+        $result = 'url("'
+            . $setting_value['background-url']
+            . '") '
+            . $setting_value['background-repeat']
+            . ' ';
+        if ('initial' != $setting_value['background-attachment']) {
+            $result .= $setting_value['background-attachment'] . ' ';
+        }
+        $result .= $setting_value['background-position']
+            . ' / '
+            . $setting_value['background-size'];
+
+        return $result;
+    }
+}
+if (!function_exists('hexrgb')) {
+    /** 
+ * 十六进制颜色转换为RGB
+ * 
+ * @param string $color 颜色的十六进制代码（例如 #abcdef）
+ * @return string 171,205,239
+ */
+function hexrgb($color) {
+    if (isset($color[0]) && $color[0] == '#')
+        $color = substr($color, 1);
+
+    if (strlen($color) == 6)
+        list($r, $g, $b) = array(
+            $color[0] . $color[1],
+            $color[2] . $color[3],
+            $color[4] . $color[5]
+        );
+    elseif (strlen($color) == 3)
+        list($r, $g, $b) = array($color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]);
+    else
+        return false;
+
+    $r = hexdec($r);
+    $g = hexdec($g);
+    $b = hexdec($b);
+
+    return $r . ',' . $g . ',' . $b;
+}
+}
+
+if (!function_exists('hexToHsl')) {
+
+    /**
+     * 颜色转换为HSL
+     * @param string $color 颜色的十六进制代码（例如 #abcdef）
+     * @return string 210,68%,80.4%
+     */
+    function hexToHsl($hex, $return_array = false) {
+
+        if (function_exists('str_starts_with') && str_starts_with($hex, '#')) {
+            $hex = substr($hex, 1);
+        } elseif (strpos($hex, '#') === 0) {
+            // 兼容PHP 7~8的写法
+            $hex = substr($hex, 1);
+        }
+
+        $red = hexdec(substr($hex, 0, 2)) / 255;
+        $green = hexdec(substr($hex, 2, 2)) / 255;
+        $blue = hexdec(substr($hex, 4, 2)) / 255;
+
+        $cmin = min($red, $green, $blue);
+        $cmax = max($red, $green, $blue);
+        $delta = $cmax - $cmin;
+
+        if ($delta == 0) {
+            $hue = 0;
+        } elseif ($cmax === $red) {
+            $hue = (($green - $blue) / $delta);
+        } elseif ($cmax === $green) {
+            $hue = ($blue - $red) / $delta + 2;
+        } else {
+            $hue = ($red - $green) / $delta + 4;
+        }
+
+        $hue = round($hue * 60);
+        if ($hue < 0) {
+            $hue += 360;
+        }
+
+        $lightness = (($cmax + $cmin) / 2);
+        $saturation = $delta === 0 ? 0 : ($delta / (1 - abs(2 * $lightness - 1)));
+        if ($saturation < 0) {
+            $saturation += 1;
+        }
+
+        $lightness = round($lightness * 100);
+        $saturation = round($saturation * 100);
+        if ($return_array) {
+            return array(
+                'h' => $hue,
+                's' => $saturation,
+                'l' => $lightness,
+            );
+        } else {
+            return "$hue, $saturation%, $lightness%";
+        }
+    }
+}
+?>

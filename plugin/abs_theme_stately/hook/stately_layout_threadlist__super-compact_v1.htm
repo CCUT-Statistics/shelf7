@@ -1,0 +1,15 @@
+<li class="thread my-2 d-flex flex-wrap justify-content-between align-content-center p-0 <?= $_thread['top_class'];?>" data-tid="<?= $_thread['tid'];?>">
+    <div class="subject">
+        <p class="fs-6 m-0">
+            <!--{hook stately_threadlist_checkbox.htm}-->
+            <?php if($fid == 0): ?> <a href="<?= url('forum-'.$_thread['fid']);?>" class="badge bg-label-secondary">
+                <?= $_thread['forumname'] ?>
+            </a>
+            <?php endif; ?>
+            <!--{hook stately_threadlist_subject.htm}-->
+        </p>
+    </div>
+    <time class="text-muted flex-shrink-0">
+        <?= date($abs_theme_stately_setting['global']['datetime_format']['date_only'],$_thread['create_date']); ?>
+    </time>
+</li>

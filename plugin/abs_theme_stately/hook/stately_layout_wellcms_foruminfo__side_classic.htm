@@ -1,0 +1,54 @@
+<?php if($abs_theme_stately_setting['wellcms_ui_style']['forum']['style_forum_info'] === 'side_classic'): ?>
+<div class="card card-site-info">
+    <!--{hook well_index_site_brief_start.htm}-->
+    <div class="m-3">
+        <img hidden class="img-fluid w-px-100 mb-2" src="<?= $forum['icon_url'];?>">
+        <h5 class="h4 text-center">
+            <!-- 栏目名称 -->
+            <?php echo $forum['name'];?>
+        </h5>
+        <div class="line-height-2">
+            <!-- 栏目介绍 -->
+            <?php echo $forum['brief'];?>
+        </div>
+    </div>
+    <div class="card-footer p-2">
+        <table class="w-100 small">
+            <tr align="center">
+                <td>
+                    <!-- 栏目主题数 -->
+                    <span class="text-muted">
+                        <?php echo lang('threads');?>
+                    </span>
+                    <br>
+                    <b>
+                        <?php echo $forum['threads'];?>
+                    </b>
+                </td>
+                <td>
+                    <!-- 栏目今日回复数 -->
+                    <span class="text-muted">
+                        <?php echo lang('well_today_reply');?>
+                    </span>
+                    <br>
+                    <b>
+                        <?php echo $forum['todayposts'];?>
+                    </b>
+                </td>
+                <td>
+                    <!-- 栏目今日主题数 -->
+                    <span class="text-muted">
+                        <?php echo lang('today_threads');?>
+                    </span>
+                    <br>
+                    <b>
+                        <?php echo $forum['todaythreads'];?>
+                    </b>
+                </td>
+                <!--{hook forum_todaythreads_after.htm}-->
+            </tr>
+        </table>
+    </div>
+    <!--{hook well_index_site_brief_end.htm}-->
+</div>
+<?php endif; ?>

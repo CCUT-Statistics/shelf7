@@ -1,0 +1,11 @@
+{
+    "name": "乐客keywords",
+    "brief": "关键字插件。",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

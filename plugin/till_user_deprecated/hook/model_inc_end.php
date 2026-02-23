@@ -1,0 +1,1 @@
+include _include(APP_PATH.'plugin/till_user_deprecated/model/deprecate.func.php');

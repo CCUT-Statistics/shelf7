@@ -1,0 +1,8 @@
+'select_cover_image' => 'Select Cover Image',
+'cover_way_preset'=>'Preset',
+'cover_way_custom'=>'Custom',
+'cover_update' => 'Update cover image',
+'cover_image_url_placeholder' => 'https://Enter cover image URL',
+'cover_remove_title' => 'Remove cover image',
+'cover_remove_text' => 'If you don\'t want the cover image anymore, please click the button below to delete it.',
+'cover_remove' => 'Remove',

@@ -1,0 +1,14 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/user.template.htm">
+	<slot name="user_body">
+		<div class="d-flex justify-content-between align-items-center mb-2">
+			<h3 class="h5 m-0"><?= lang('my_extra_profile') ?></h3>
+		</div>
+		<div>
+			<?= $user_custom_field_data_html ?>
+		</div>
+	</slot>
+</template>
+
+<script>
+$('a[data-active="user-xprofile"]').addClass('active');
+</script>

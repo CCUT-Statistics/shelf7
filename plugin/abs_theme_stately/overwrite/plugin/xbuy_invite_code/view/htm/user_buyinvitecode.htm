@@ -1,0 +1,59 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+
+<div class="row">
+	<div class="col-lg-8 mx-auto">
+
+		<ul class="nav nav-pills justify-content-center">
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-buyinvitecode');?>" data-active="user-buyinvitecode"><?php echo lang('buyinvitecode');?></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-invitecode');?>" data-active="user-invitecode"><?php echo lang('invitecode');?></a>
+			</li>
+		</ul>
+
+		<div class="card mt-3">
+
+			<div class="card-body">
+				<form action="<?php echo url('user-buyinvitecode');?>" method="post" id="form">
+					<?php if($invitecode['invite_codeprompt']){?>
+					<div class="alert alert-info"><?php echo $invitecode['invite_codeprompt'];?></div>
+					<?php }?>
+
+					<div class="form-inline form-group">
+						<label class="mr-3"><?php echo lang('amount');?></label>
+						<input class="form-control" type="number" value="1" min="1" readonly>
+						<p><?php echo lang('desamount', array('inviteCodeprice'=>$invitecode['invite_codeprice']));?></p>
+					</div>
+
+					<div class="input-group align-items-center mb-3">
+						<div><?php echo lang('inviteEmail');?></div>
+						  <input type="email" class="form-control col-sm-5 mx-3 rounded" placeholder="<?php echo lang('email');?>" name="invite_email" id="invite_email" required>
+						  <div class="input-group-append">
+							<small class="text-muted">*必填</small>
+						  </div>
+						</div>
+					<div class="form-inline form-group">
+						<label class="mr-3">失效时间</label>
+						<span class="form-control"><?php echo date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'],$time+86400 * 10);?></span>
+					</div>
+
+					<div class="form-group row">
+						<label class="mr-3">支付方式</label>
+							<div class="mx-3">
+								<?php foreach ($invitecode['invite_pay'] as $key => $value) {
+										echo '<label class="custom-input custom-radio mr-2"><input class="mr-1" type="radio" name="invite_buy" value="'.$value.'">'.lang($value).'</label>';
+									}?>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary btn-block" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('payment');?></button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+	$('a[data-active="user-buyinvitecode"]').addClass('active');
+	$("input[name='invite_buy']:first").click();
+</script>

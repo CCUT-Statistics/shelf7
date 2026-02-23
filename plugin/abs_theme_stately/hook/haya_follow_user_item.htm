@@ -1,0 +1,111 @@
+<li class="d-block col-sm-6 col-md-4 col-lg-3 haya-follower-<?= $haya_follow_user['uid'];?>" data-uid="<?= $haya_follow_user['uid'];?>">
+    <div class="card mb-4">
+        <div class="user-profile-header-banner rounded-top h-px-100" style="">
+        </div>
+        <div class="user-profile-header d-flex flex-column text-center mb-4">
+            <div class="flex-shrink-0 mt-n2 mx-auto">
+                <div class="v_avatar v_avatar-user">
+                    <a href="<?= url('user-'.$haya_follow_user['uid']);?>">
+                        <img loading="lazy" decoding="async" src="<?= $haya_follow_user['follow_user']['avatar_url'];?>" alt="user image" class="d-block h-auto ms-0  rounded user-profile-img w-px-75">
+                    </a>
+                </div>
+            </div>
+            <div class="flex-grow-1 mt-3 ">
+                <div class="d-flex flex-column align-items-center justify-content-center gap-4">
+                    <div class="user-profile-info">
+                        <h4>
+                            <!--{hook plugin_haya_follow_my_follow_follows_username_before.htm}-->
+                            <?php if (!empty($haya_follow_user['comment'])) : ?>
+                            <a href="<?= url('user-'.$haya_follow_user['uid']);?>" data-bs-toggle="tooltip" title="<?= $haya_follow_user['follow_user']['username'];?>">
+                                <?= $haya_follow_user['comment'];?>
+                            </a>
+                            <?php else: ?>
+                            <a href="<?= url('user-'.$haya_follow_user['uid']);?>">
+                                <?= $haya_follow_user['follow_user']['username'];?>
+                            </a>
+                            <?php endif; ?>
+                            <!--{hook plugin_haya_follow_my_follow_follows_username_after.htm}-->
+                            <?php if ($user && $haya_follow_user['status'] == 2) : ?>
+                            <span class="small" data-bs-toggle="tooltip" title="双向关注">
+                                <i class="las la-user-friends text-info"></i>
+                            </span>
+                            <?php endif; ?>
+                        </h4>
+                        <!--{hook plugin_haya_follow_my_follow_follows_body_username_after.htm}-->
+                        <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-center gap-2">
+                            <!--{hook plugin_haya_follow_my_follow_follows_fans_before.htm}-->
+                            <li>
+                                <span class="haya-follower-fans"> 粉丝：
+                                    <?= intval($haya_follow_user['follow_user']['followeds']); ?>
+                                </span>
+                            </li>
+                            <!--{hook plugin_haya_follow_my_follow_follows_fans_after.htm}-->
+                        </ul>
+                        <!--{hook plugin_haya_follow_my_follow_follows_body_fans_after.htm}-->
+                        <div class="haya-follow-user-settings">
+                            <?php 
+                            if($uid){
+                    if ($haya_follow_user['uid'] != $uid) { 
+                        $haya_follow_check_user = haya_follow_find_by_uid_and_follow_uid($haya_follow_user['uid'], $uid);
+                    ?>
+                            <!--{hook plugin_haya_follow_my_follow_follows_remarks_before.htm}-->
+                            <?php if(in_array($route, array('my'))) { ?>
+                            <button class="btn btn-sm btn-outline-info mt-2 js-haya-follow-remarks"
+                                    data-uid="<?= $haya_follow_user['uid'];?>"
+                                    data-remarks="<?= $haya_follow_user['comment'];?>"
+                                    title="备注">
+                                <i class="icon icon-edit" aria-label="备注"></i>
+                                <span class="haya-follow-btn">备注</span>
+                            </button>
+                            <?php  }?>
+                            <!--{hook plugin_haya_follow_my_follow_follows_remarks_after.htm}-->
+                            
+                            <!--{hook plugin_haya_follow_my_follow_follows_dynamic_before.htm}-->
+                            <?php if(in_array($route, array('my'))) { ?>
+                            <button class="btn btn-sm btn-outline-success mt-2 ml-1 js-haya-follow-dynamic"
+                                    data-uid="<?= $haya_follow_user['uid'];?>"
+                                    data-dynamic="<?= intval($haya_follow_user['show_dynamic']);?>"
+                                    data-bs-toggle="tooltip"
+                                    title="更改接收动态">
+                                <?php if ($haya_follow_user['show_dynamic'] == 0) { ?>
+                                <i class="icon icon-remove" aria-label="动态"></i>
+                                <?php } else { ?>
+                                <i class="icon icon-check" aria-label="动态"></i>
+                                <?php } ?>
+                                <span class="haya-follow-btn">动态</span>
+                            </button>
+                            <?php  }?>
+                            <!--{hook plugin_haya_follow_my_follow_follows_dynamic_after.htm}-->
+                            
+                            <div>
+                                <!--{hook plugin_haya_follow_my_follow_follows_following_before.htm}-->
+                                <?php if (!empty($haya_follow_check_user)) { ?>
+                                <button class="btn btn-outline-primary mt-2 ml-1 js-haya-follow-del" data-uid="<?= $haya_follow_user['uid'];?>" title="已关注">
+                                    <i class="icon icon-check" aria-label="已关注"></i>
+                                    <span class="haya-follow-btn">已关注</span>
+                                </button>
+                                <?php } else { ?>
+                                <button class="btn btn-primary mt-2 ml-1 js-haya-follow-add" data-uid="<?= $haya_follow_user['uid'];?>" title="关注">
+                                    <i class="icon icon-plus" aria-label="关注"></i>
+                                    <span class="haya-follow-btn">关注</span>
+                                </button>
+                                <?php } ?>
+                                <!--{hook plugin_haya_follow_my_follow_follows_following_after.htm}-->
+                                <?php } else { ?>
+                                <!--{hook plugin_haya_follow_my_follow_follows_mine_before.htm}-->
+                                <button class="btn btn-secondary mt-2 js-haya-follow-me" disabled data-uid="<?= $haya_follow_user['uid'];?>" title="自己">
+                                    <i class="icon icon-check" aria-label="自己"></i>
+                                    <span class="haya-follow-btn">自己</span>
+                                </button>
+                                <!--{hook plugin_haya_follow_my_follow_follows_mine_after.htm}-->
+                                <?php } ?>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+

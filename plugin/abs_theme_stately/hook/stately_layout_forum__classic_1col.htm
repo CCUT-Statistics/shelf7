@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-12 main">
+        <?php if($abs_theme_stately_setting['ui_tweek']['global']['breadcrumb_position'] === 'default'): ?>
+        <!--{hook forum_breadcrumb_before.htm}-->
+        <!--{hook stately_breadcrumb.htm}-->
+        <!--{hook forum_breadcrumb_after.htm}-->
+        <?php else: ?>
+        <!--{hook forum_breadcrumb_before.htm}-->
+        <?php endif; ?>
+        <!--{hook stately_layout_foruminfo__top_v4.htm}-->
+        <div class="card-threadlist">
+            <!--{hook stately_modal_newthread.htm}-->
+        <?php if($abs_theme_stately_setting['ui_tweek']['global']['breadcrumb_position'] !== 'default'): ?>
+            <!--{hook forum_breadcrumb_after.htm}-->
+        <?php endif; ?>
+        <?php if($abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'outer'): ?>
+        <!--{hook stately_forum_thread_list_nav.htm}-->
+        <?php endif; ?>
+            
+            <!--{hook stately_threadlist_before.htm}-->
+            <div class="<?= $stately_threadlist_class_add ?>">
+                <?php if($abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'inner'): ?>
+            <!--{hook stately_forum_thread_list_nav.htm}-->
+            <?php endif; ?>
+                <ul class="list-unstyled threadlist row g-0 mb-0" data-style="<?= $stately_threadlist_style ?>">
+                    <!--{hook index_threadlist_before.htm}-->
+                    <?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+                    <!--{hook index_threadlist_after.htm}-->
+                </ul>
+            </div>
+        </div>
+        <?php include _include(APP_PATH.'view/htm/thread_list_mod.inc.htm');?>
+        <!--{hook forum_page_before.htm}-->
+        <!--{hook stately_threadlist_pagination.htm}-->
+        <!--{hook forum_page_after.htm}-->
+    </div>
+</div>

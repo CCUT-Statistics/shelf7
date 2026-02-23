@@ -1,0 +1,188 @@
+<?php 
+/* 全局几乎常量 */
+$conf = G('conf');
+$header = G('header');
+$user = G('user');
+$uid = G('uid');
+$gid = G('gid');
+$fid = G('fid');
+$tid = G('tid');
+$pid = G('pid');
+$route = G('route');
+$forumlist_show = G('forumlist_show');
+$static_version = $conf['static_version'];
+$browser = get__browser();
+$is_message_page = isset($code) && isset($message);
+
+/* 主题设置 */
+if(!isset($abs_theme_stately_setting)) {
+$abs_theme_stately_setting = ( !is_null(setting_get('abs_theme_stately_setting')) ? setting_get('abs_theme_stately_setting') : kv_get('setting')["abs_theme_stately_setting"] );
+//var_dump($abs_theme_stately_setting);
+if(empty($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'])) {
+    $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] = 'plugin/abs_theme_stately/';
+}
+}
+if($abs_theme_stately_setting['advanced']['minify']['enable'] && $abs_theme_stately_setting['advanced']['minify']['enable_html']) {
+    ob_start();
+}
+?>
+<!--{hook header_start.htm}-->
+<html lang="<?= $conf['lang']; ?>" class="<?= $abs_stately_body_class ?>" dir="ltr" data-theme="theme-default" data-bs-theme="<?= $abs_stately_color_mode ?>">
+
+    <head>
+        <!--{hook header_meta_before.htm}-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            <?= strip_tags($header['title']); ?>
+        </title>
+
+        <?php if (!empty($header['keywords'])) { ?>
+        <meta name="keywords" content="<?= strip_tags($header['keywords']); ?>" />
+        <?php } ?>
+        <meta name="description" content="<?= strip_tags($header['description']); ?>" />
+        <meta itemprop="name" content="<?= strip_tags($header['title']); ?>" />
+        <meta itemprop="description" content="<?= strip_tags($header['description']); ?>" />
+        <?php if($abs_theme_stately_setting['global']['settings']['enable_open_graph']): ?>
+        <meta property="og:title" content="<?php if ($route == 'thread' && (isset($action) && is_numeric($action) ) && isset($thread)) { echo $thread['subject']; } elseif (isset($header['mobile_title'])) { echo $header['mobile_title'];} else {echo strip_tags($header['title']);} ?>">
+        <meta property="og:site_name" content="<?= $conf['sitename']; ?>">
+        <meta property="og:type" content="website">
+        <meta property="og:author" content="<?= isset($thread) && isset($first) ? $thread['user']['username'] : user_read_cache(1)['username'] ?>">
+        <meta property="og:release_date" content="<?= isset($thread) && isset($first) ? date('c',$thread['create_date']) : date('c') ?>">
+        <?php 
+        $og_description = strip_tags($header['description']);
+        if(isset($thread) && isset($first)) {
+            if( !( ( isset($group['see_check']) && $group['see_check']=='1') || $thread['uid'] == $uid) && (isset($_post_message['OK']) && in_array($_post_message['OK'],[0,-1,-2])) || ( isset($thread['readp']) && $group['readp'] < $thread['readp'] ) ) {
+                $og_description = '...';
+            } else {
+            $og_description = strip_tags( $first['message_fmt'] );
+
+            //去掉换行
+            $og_description = str_replace( PHP_EOL, "", $og_description); 
+
+            //某些短代码不应该显示里面的内容
+            $og_description = preg_replace("/\[(music|netdisk|thread=(.*)|url)\]/i","[…]",$og_description); //单个
+            $og_description = preg_replace("/\[(login|reply|ttlogin|ttreply|tabs|tabs_pane(.*)|url)\](.*)\[\/(login|reply|ttlogin|ttreply|tabs|tabs_pane(.*)|url)\]/is","[…]",$og_description); //结对
+
+            //限制字数
+            //谷歌限制元描述标签在搜索结果页面中显示的长度。
+            //一般，他们倾向于只显示元描述的前155个字符。所以建议将你的元描述长度控制在低于155个字符。
+            //否则，你的元描述会被切断，或者干脆不会用你的元描述。
+            $og_description = mb_substr( $og_description, 0, max($abs_theme_stately_setting['ui_tweek']['thread']['showmore_excerpt_length'], 155) );
+            }
+    } ?>
+        <meta property="og:description" content="<?= $og_description ?>">
+        <meta property="og:url" content="<?= 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+        <?php if(isset($_post_message_image) && !empty($_post_message_image)): ?>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="<?= $_post_message_image ?>" />
+        <meta property="og:image" content="<?= $_post_message_image ?>">
+        <?php endif; ?>
+
+        <?php endif; ?>
+
+
+        <?php if($abs_theme_stately_setting['advanced']['pwa']['enable']) : ?>
+        <link rel="manifest" href="plugin/abs_theme_stately/manifest.php" />
+        <?php endif; ?>
+        <?= defined('BASE_HREF') ? '<base href="' . BASE_HREF . '" />' : ''; ?>
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="<?= $abs_theme_stately_setting['ui']['color']['theme'] ?>">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="<?= $abs_theme_stately_setting['ui']['background']['color_dark'] ?>">
+        <meta name="theme-color" content="<?= $abs_theme_stately_setting['ui']['color']['theme'] ?>">
+        <meta name="renderer" content="webkit">
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <!--{hook header_link_before.htm}-->
+        <link rel="shortcut icon" href="<?= $abs_theme_stately_setting['global']['icon']['favicon'] ?>" />
+        <link rel="icon" sizes="32x32" href="<?= $abs_theme_stately_setting['global']['icon']['favicon'] ?>">
+        <link rel="Bookmark" href="<?= $abs_theme_stately_setting['global']['icon']['favicon'] ?>" />
+        <!-- Core CSS -->
+        <?php $bootstrap_css = !empty($bootstrap_css) ? $bootstrap_css : $conf['view_url'] . "css/bootstrap.css" . $static_version; ?>
+        <link id="xiuno_core_css" rel="stylesheet" href="<?= $bootstrap_css; ?>">
+
+        <!--{hook header_bootstrap_bbs_before.htm}-->
+        <?php $bootstrap_bbs_css = !empty($bootstrap_bbs_css) ? $bootstrap_bbs_css : $conf['view_url'] . "css/bootstrap-bbs.css" . $static_version; ?>
+        <!-- <link rel="stylesheet" href="<?= $bootstrap_bbs_css; ?>"> -->
+
+        <link id="stately_core_css" rel="stylesheet" href="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . (
+    $abs_theme_stately_setting['ui']['color']['mode'] === 'dark' ||
+    ($abs_theme_stately_setting['ui']['color']['mode'] === 'auto' && 
+    checkIsBetweenTime($abs_theme_stately_setting['ui']['auto_dark_mode_config']['begin_time'],$abs_theme_stately_setting['ui']['auto_dark_mode_config']['end_time'],true)
+    )  ? 'view/css/core-dark.css' : 'view/css/core.css' ) ?>" data-light_mode_href="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/css/core.css" data-dark_mode_href="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/css/core-dark.css">
+
+        <!-- The current time is <?= date('H:i') ?> ; <?= $abs_stately_color_mode ?> -->
+         <?php $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/theme-default.css');  ?>
+        
+        <?php if(!$is_message_page): 
+        $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/bbs.css');
+        $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/theme-brands.css');
+        ?>
+        
+        <?php
+
+        if (!$is_message_page) {
+            // Vendors CSS  
+            $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/libs/perfect-scrollbar/perfect-scrollbar.css');
+            $stately_asset_css->addCssFileDirect($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/line-awesome.min.css');
+        
+            // Defer CSS  
+            if ($abs_theme_stately_setting['ui']['global']['bordered_card']) {
+                $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/theme-bordered.css');
+            }
+        
+            if ($route == 'user' && !is_numeric(param(1))) {
+                $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/pages/page-auth.css');
+            }
+        } else {
+            $stately_asset_css->addCssFileDirect($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/line-awesome.min.css');
+        }
+        
+        $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/print.css');
+        
+        if ($abs_theme_stately_setting['ui']['color']['mode'] === 'special_base16') {
+            $stately_asset_css->addCssFile($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/css/theme-base16.css');
+        }
+        ?>
+        
+
+        
+        <!--{hook header_bootstrap_before.htm}-->
+        <!--{hook header_bootstrap_after.htm}-->
+        <!--{hook header_bootstrap_bbs_after.htm}-->
+
+        <!--{hook footer_body_after.htm}-->
+
+        <!-- Helpers -->
+        <script src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/js/helpers.js"></script>
+        <!--{hook header_link_after.htm}-->
+
+        <?php else: 
+
+        $stately_asset_css->addCssCode('.card-message {width: fit-content;min-width: 15%;}');
+        
+        endif; ?>
+
+        <?php
+        
+        echo $stately_asset_css->Stylesheet('stately_h.min.css');
+        ?>
+    </head>
+
+    <body class="<?= $abs_stately_current_page_class ?>">
+<?php if ($abs_theme_stately_setting['global']['settings']['enable_page_transition'] ):
+?>
+
+        	<!-- 芭芭拉,闪耀登场~治疗就交给我吧,不会让你失望的! -->
+	<aside id="barbara_loading" style="opacity:1">
+		<div class="spinner-border spinner-border-lg text-primary" role="status">
+			<span class="sr-only visually-hidden">Loading...</span>
+		</div>
+	</aside>
+    <?php endif; ?>
+
+        <div class="<?= $abs_stetely_wrapper_class ?>">
+            <div id="top" class="layout-container" data-barba="wrapper">
+                <!--{hook stately_cta_inst.htm}-->

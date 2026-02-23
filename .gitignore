@@ -1,0 +1,26 @@
+# Local runtime config
+conf/conf.php
+
+# Runtime artifacts
+tmp/*
+!tmp/.gitignore
+log/*
+!log/.gitignore
+upload/*
+!upload/.gitignore
+
+# Common local files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# OS / tooling caches
+*.log
+*.tmp
+
+# Local prompt package archive
+cursor_init_pack.zip
+
+# Local release artifacts
+release/vps-test/

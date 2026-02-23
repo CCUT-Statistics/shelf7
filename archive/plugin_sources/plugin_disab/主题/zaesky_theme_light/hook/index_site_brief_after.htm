@@ -1,0 +1,39 @@
+<?php if (isset($light_config['index_userinfo']) && $light_config['index_userinfo'] == 1) { ?>  
+      <?php if($uid){?>
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <a href="<?php echo url('my');?>">
+              <img src="<?php echo $user['avatar_url'];?>" class="avatar-2 rounded-circle mr-2">
+              <span class="font-weight-bold"><?php echo $user['username'];?></span>
+            <!--{hook index_site_brief_profile_username_end.htm}-->
+            </a>
+            </div>
+            </div>
+            <div class="card-body">
+              <div class="row d-flex justify-content-center">
+                <div class="col-4">
+                  <a href="<?php echo url('my-thread');?>" class="nav-link text-muted d-flex justify-content-center align-items-center flex-column">
+                    <div><i class="iconfont icon-pinglun index_site_brief_profile_items" style="background: rgba(105,138,246,.1);
+                      color: #698af6;"></i></div>
+                    <div class="mt-3"><?php echo lang('mb_threads');?></div>
+                  </a>
+                </div>
+                <div class="col-4">
+                  <a href="<?php echo url('my-thread');?>" class="nav-link text-muted d-flex justify-content-center align-items-center flex-column">
+                    <div>
+                      <i class="iconfont icon-taolunqu index_site_brief_profile_items" style="background: rgba(79,201,230,.1);
+                    color: #4fc9e6;"></i>
+                    </div>
+                    <div class="mt-3"><?php echo lang('mb_posts');?></div>
+                  </a>
+                </div>
+                <!--{hook index_site_brief_profile_items_after.htm}-->
+              </div>
+              <a type="button" href="<?php echo url('my');?>" class="btn btn-light btn-block mt-3 text-muted">个人中心 <i class="si si-arrow-right"></i></a>
+            </div>
+          </div>
+          
+    <?php }?>
+   
+<?php }?>

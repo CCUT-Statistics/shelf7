@@ -1,0 +1,11 @@
+{
+    "name": "附件金币购买",
+    "brief": "1、含有金币功能的扣费功能</br>2、<span class='badge badge-danger'>运营狮修复版</span></br>3、已经修复跟屏蔽插件打不开问题</br> 4、修改了图标适配知乎1.7主题",
+    "version": "1.1",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

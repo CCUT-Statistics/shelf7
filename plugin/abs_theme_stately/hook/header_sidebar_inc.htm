@@ -1,0 +1,70 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme <?= ($abs_theme_stately_setting['ui']['global']['navbar_style'] === 'horizontal') ? 'd-xl-none' : ''; ?>">
+    <div class="app-brand demo <?= ( $abs_theme_stately_setting['ui_tweek']['navbar_vertical']['show_user_cover'] ? ' card-userinfo ' : ' ' ) ?><?= ( $abs_theme_stately_setting['ui_tweek']['navbar_vertical']['show_user_cover'] && $uid ? ' with-header-banner ' : ' ' ) ?>">
+        <?php switch($abs_theme_stately_setting['ui_tweek']['navbar_vertical']['replaces_sitename_with_user_info']): case 'yes': ?>
+        <!--{hook stately_user_info_side.htm}-->
+        <?php break; case 'auto': ?>
+        <div class="d-block d-lg-none w-100">
+        <!--{hook stately_user_info_side.htm}-->
+        </div>
+        <div class="d-none d-lg-block">
+        <!--{hook stately_navlogo_side.htm}-->
+        </div>
+        <?php break; default: ?>
+        <!--{hook stately_navlogo_side.htm}-->
+        <?php break; endswitch; ?>
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="las la-angle-left d-flex align-items-center justify-content-center"></i>
+        </a>
+    </div>
+    <div class="menu-inner-shadow"></div>
+    <nav class="menu-inner py-1">
+    <?php
+    if( function_exists("xn_nav_menu") ):
+    xn_nav_menu(array(
+       'menu'            => 'primary_menu',
+       'container'       => false,
+       'menu_class'      => 'menu-inner',
+       'item_class'      => 'menu-item',
+       'link_class'      => 'menu-link',
+       '_link_class_has_submenu' => 'menu-toggle',
+       'icon_class' => 'menu-icon',
+       'before'          => '<div>',
+       'after'           => '</div>',
+       'desc'            => false,
+       '_submenu_args'   => array( 
+         'container'       => false,
+         'menu_class'      => 'menu-sub',
+         'link_class'      => 'menu-link',
+         'item_class'      => 'menu-item',
+         'before'          => '<div>',
+         'after'           => '</div>',
+       ),
+    ));
+    else:
+    ?>
+    <!--{hook sidebar_menu_legacy.htm}-->
+    <?php endif; ?>
+    <section class="p-3 w-100 aside">
+    <!--{hook widget_slot_sidebar.htm}-->
+    </section>
+    </nav>
+    <?php if($abs_theme_stately_setting['ui']['global']['footer_info_position'] === 'sidebar_end'
+    && $abs_theme_stately_setting['ui']['global']['navbar_style'] === 'vertical'): ?>
+    <section class="footer menu-block small">
+          <div>
+            <!--{hook footer_footer_left_start.htm}-->
+            <?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global']['footer_left_content']) ?>
+            <!--{hook footer_footer_left_end.htm}-->
+          </div>
+          <div>
+            <!--{hook footer_footer_right_start.htm}-->
+            <?= htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['global']['footer_right_content']) ?>
+            <!--{hook footer_footer_right_end.htm}-->
+          </div>
+      </section>
+    <?php endif; ?>
+    <?php if($abs_theme_stately_setting['ui']['global']['navbar_use_background_image_vertical']): ?>
+    <div class="navigation-background" style="background-image: url(<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/img/' . $abs_theme_stately_setting['ui']['global']['navbar_background_image_vertical'] ?>)"></div>
+    <?php endif; ?>
+
+</aside>

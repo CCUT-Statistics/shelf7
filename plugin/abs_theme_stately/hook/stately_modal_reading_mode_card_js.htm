@@ -1,0 +1,44 @@
+<script id="reading_mode_card_js"> 
+	const reading_mode_card_open_button = document.querySelector('.reading_mode_card_open_button'); 
+	const reading_mode_card_modal_ele = document.getElementById('reading_mode_card'); 
+	const the_thread_subject = document.getElementById('the_thread_subject'); 
+	const the_thread_message = document.getElementById('the_thread_message'); 
+	const reading_mode_card_modal = reading_mode_card_modal_ele ? new bootstrap.Modal(reading_mode_card_modal_ele) : null; 
+	 
+	if (reading_mode_card_open_button) { 
+	  reading_mode_card_open_button.addEventListener('click', function () { 
+		if (reading_mode_card_modal) { 
+		  const reading_mode_subject = document.querySelector('#reading_mode_card #reading_mode_subject'); 
+		  const reading_mode_message = document.querySelector('#reading_mode_card #reading_mode_message'); 
+		   
+		  if (the_thread_subject && the_thread_message) { 
+			reading_mode_subject.innerText = the_thread_subject.innerText; 
+			reading_mode_message.innerHTML = the_thread_message.innerHTML; 
+		  } 
+		   
+		  if (reading_mode_subject.innerText.length !== 0) { 
+			reading_mode_card_modal.show(); 
+		  } 
+		} 
+	  }); 
+	} 
+	 
+	const closeButton = document.querySelector('#reading_mode_card .btn-close'); 
+	 
+	if (closeButton) { 
+	  closeButton.addEventListener('click', function () { 
+		const modalInstance = reading_mode_card_modal ? bootstrap.Modal.getInstance(reading_mode_card_modal_ele) : null; 
+		 
+		if (modalInstance) { 
+		  modalInstance.hide(); 
+		  const backdrop = document.querySelector('.modal-backdrop'); 
+		   
+		  if (backdrop) { 
+			backdrop.remove(); 
+			document.body.setAttribute('data-bs-overflow','initial'); 
+			document.body.setAttribute('data-bs-padding-right','initial'); 
+		  } 
+		} 
+	  }); 
+	} 
+  </script> 

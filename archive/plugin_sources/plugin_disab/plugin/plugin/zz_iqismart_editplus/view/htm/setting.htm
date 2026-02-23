@@ -1,0 +1,286 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm'); ?>
+
+<div class="row">
+	<div class="col-sm-12">
+		
+		<div class="card">
+			<div class="card-body">
+				<form action="<?php echo url('plugin-setting-zz_iqismart_editplus');?>" method="post" id="formcreate">
+					<h4 class="card-title mb-3">编辑器辅助设置</h4>
+					
+					<hr class="mt-0"/>
+					<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="on">
+							启用插件：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="on">
+								<?php if (isset($config['on']) && $config['on'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="on" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="on" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="on" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="on" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>		
+							 
+						</div>
+					</div>	
+                  	<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="save">
+							保存数据：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="save">
+								<?php if (isset($config['save']) && $config['save'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="save" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="save" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="save" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="save" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>		
+							 
+						</div>
+					</div>	
+					<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="auto_save">
+							自动保存：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="auto_save">
+								<?php if (isset($config['auto_save']) && $config['auto_save'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_save" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_save" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_save" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_save" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>		
+							<div class="figure-caption mt-2">
+								是否启用自动保存功能，以便误刷新、误点击导致的未保存数据的恢复。
+							</div>
+						</div>
+					</div>	
+                  	<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="restore">
+							恢复数据：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="restore">
+								<?php if (isset($config['save']) && $config['save'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="restore" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="restore" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="restore" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="restore" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>		
+							 
+						</div>
+					</div>
+                  	<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="auto_restore">
+							自动恢复：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="auto_restore">
+								<?php if (isset($config['auto_restore']) && $config['auto_restore'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_restore" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_restore" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_restore" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_restore" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>		
+							<div class="figure-caption mt-2">
+								是否启用自动恢复功能，自动加载上次的未发布的内容。
+							</div>
+						</div>
+					</div>	
+					<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="localimg">
+							本地化图片：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="localimg">
+								<?php if (isset($config['localimg']) && $config['localimg'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="localimg" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="localimg" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="localimg" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="localimg" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>	 
+						</div>
+					</div>
+                  	<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="auto_localimg">
+							自动本地化图片：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="auto_localimg">
+								<?php if (isset($config['auto_localimg']) && $config['auto_localimg'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_localimg" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_localimg" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_localimg" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="auto_localimg" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>	
+                          	<div class="figure-caption mt-2">
+								粘贴后自动执行本地化，如果失败可以尝试手动点击本地化突破
+							</div>
+						</div>
+					</div>
+                  	<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="fromword">
+							从word粘贴：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="fromword">
+								<?php if (isset($config['fromword']) && $config['fromword'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="fromword" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="fromword" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="fromword" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="fromword" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>	 
+						</div>
+					</div> 
+                  	<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="clear">
+							清除内容：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="restore">
+								<?php if (isset($config['clear']) && $config['clear'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="clear" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="clear" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="clear" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="clear" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>		
+							 
+						</div>
+					</div>
+                  	<div class="form-group row mb-3 mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="resize">
+							放大缩小：
+						</label>
+						<div class="col-md-8">
+							<div class="custom-redio" id="resize">
+								<?php if (isset($config['resize']) && $config['resize'] == 1) { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="resize" value="1" checked="checked"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="resize" value="0"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } else { ?>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="resize" value="1"> <?php echo lang('enable'); ?>
+									</label>
+									<label class="custom-input custom-radio mr-3">
+										<input type="radio" name="resize" value="0" checked="checked"> <?php echo lang('disable'); ?>
+									</label>
+								<?php } ?>
+							</div>	 
+						</div>
+					</div> 
+			
+					<div class="form-group row mt-4">
+						<label class="col-md-2 form-control-label text-md-right pr-0" for="user_favorite"></label>
+						<div class="col-md-2">
+							<button type="submit" class="btn btn-primary btn-block mr-2 mb-2" id="submit">保存</button>
+						</div>
+						<div class="col-md-2">
+							<a role="button" class="btn btn-secondary btn-block" href="javascript:history.back();">返回</a>
+						</div>
+					</div>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm'); ?>
+
+<script>
+$('#nav li.nav-item-plugin').addClass('active');
+</script>

@@ -1,0 +1,184 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<style type="text/css">
+@media screen and (max-width:1000px){table{border:0}
+table thead{display:none}
+table tr{margin-bottom:10px;display:block;border-bottom:2px solid #ddd}
+table td{display:block;text-align:right;font-size:13px;border-bottom:1px dotted #ccc}
+table td:last-child{border-bottom:0}
+table td:before{content:attr(data-label);float:left;text-transform:uppercase;font-weight:700}
+}
+.xyfrom{border:1px dashed #008CFF;padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px;line-height: 2em;color: #6D6D6D;}
+</style>
+
+<div class="modal fade" id="modal-container-814200" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+			
+				<div class="xyfrom">
+						<div class="m-3">
+						<?php if($uid){?>
+							<h5 class="text-center"><?php echo $conf['reward_from_title'];?></h5>
+							<Iframe name="payframe" id="payframe" src="" width="100%" height="190" frameborder="0" scrolling="no" style="display:none"></iframe> 
+								<link rel="stylesheet" href="plugin/xy_pay/view/css/jquery-labelauty.css">
+								<form role="form" id="payform" action="<?php echo url('pay-paynow');?>" method="get" target="_blank">
+								<div class="form-group">
+									<div class="form-group input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="icon icon-cny icon-fw"></i></span>
+										</div>
+										<input type="number" class="form-control" placeholder="<?php echo lang('reward_info6');?>" name="money" id="money" required="" oninvalid="setCustomValidity('<?php echo lang('pay_user_pay_msg_error');?>')" oninput="setCustomValidity('')" minlength="1">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-group input-group">
+										<textarea name="messagebox" id="messagebox" placeholder="<?php echo lang('reward_info7');?>" class="form-control" style="width: 100%; height: 100px; "></textarea>
+									</div>
+								</div>
+								<div class="checkbox xypd dowebok">
+									<?php if(!empty($conf['alipay'])){?>
+									<li><input type="radio" name="paytype" <?php if($conf['pay_type']){echo 'onclick="check_client();"';}?> value="1" checked="checked" data-labelauty="<?php echo lang('pay_alipay');?>"></li>
+									<?php }?>
+									<?php if(!empty($conf['wechar'])){?>
+									<li><input type="radio" name="paytype" <?php if($conf['pay_type']){echo 'onclick="check_client();"';}?> value="3" data-labelauty="<?php echo lang('pay_wechar');?>"></li>
+									<?php }?>
+									<?php if(!empty($conf['qqpay'])){?>
+									<li><input type="radio" name="paytype" <?php if($conf['pay_type']){echo 'onclick="check_client();"';}?> value="2" data-labelauty="<?php echo lang('pay_qq');?>"></li>
+									<?php }?>
+									
+								</div>
+								<div class="form-group">
+									<small><?php if(!$conf['pay_type']) {echo lang('pay_user_pay_msg_info');}?></small>
+								</div>
+								<button type="submit" id="submit" class="btn btn-default btn-block" ><?php echo lang('pay_user_pay_button');?></button>
+							</form>
+						<?php }else{echo '<h4 class="text-center">做好事，要留名，请先<a href="'.url('user-login').'">登录</a>~</h4>';}?>
+						</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				 <button type="button" class="btn btn-block btn-outline-secondary" data-bs-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+					<div class="row">
+						<div class="col-md-2">
+							 <button type="button" href="#modal-container-814200" class="btn btn-block btn-default btn-info" data-bs-toggle="modal"><?php echo $conf['reward_button_title'];?></button>
+						</div>
+						<div class="col-md-10">
+							<?php echo $conf['reward_info']?>
+						</div>
+					</div>
+			<?php if($infolist){?>
+				<table class="table table-hover table-condensed table-bordered text-center">
+					<thead>
+						<tr>
+							<th>
+								<?php echo lang('reward_info1');?>
+							</th>
+							<th>
+								<?php echo lang('reward_info3').$conf['reward_title'];?>
+							</th>
+						<th>
+								<?php echo lang('reward_info4');?>
+							</th>
+							<th>
+								<?php echo lang('reward_info5');?>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+				<?php foreach($infolist as $val){?>
+					<tr>
+						<td data-label="<?php echo lang('reward_info1');?>">
+							<?php echo $val['username'];?>
+						</td>
+						<td data-label="<?php echo lang('reward_info3').$conf['reward_title'];?>">
+							<?php echo $val['num'].lang('pay_user_cue5');?>
+						</td>
+						<td data-label="<?php echo lang('reward_info4');?>" min-width="500px">
+							<?php echo $val['message'];?>
+						</td>
+						<td data-label="<?php echo lang('reward_info5');?>">
+							<?php echo $val['paytime'];?>
+						</td>
+					</tr>
+				<?php } ?>
+					</tbody>
+				</table>
+			<?php } else{ echo "<hr><h3 class='text-center'>暂无记录</h3>";}?>
+		<?php if($pagination) { ?>
+		<nav><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+		<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+$(function(){
+	$(':input').labelauty();
+});
+function is_mobile() {
+	var sUserAgent = navigator.userAgent.toLowerCase();
+	return (
+		sUserAgent.match(/ipad/i) == "ipad" ||
+		sUserAgent.match(/iphone os/i) == "iphone os" ||
+		sUserAgent.match(/midp/i) == "midp" ||
+		sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4" ||
+		sUserAgent.match(/ucweb/i) == "ucweb" ||
+		sUserAgent.match(/android/i) == "android" ||
+		sUserAgent.match(/windows ce/i) == "windows ce" ||
+		sUserAgent.match(/windows mobile/i) == "windows mobile"
+	);
+}
+function is_weixn(){  
+	var ua = navigator.userAgent.toLowerCase();  
+	if(ua.match(/MicroMessenger/i)=="micromessenger") {  
+		return true;  
+	} else {  
+		return false;  
+	}  
+} 
+
+<?php if($conf['pay_type']){?>
+$("#submit").click(function(){
+var pid = $("input[name='paytype']:checked").val();
+	if(pid == 3 && is_mobile() == false){
+  $("#payframe").show();
+  }else{
+  $("#payframe").hide();
+  }
+});
+
+function check_client(){
+var pid = $("input[name='paytype']:checked").val();
+var mobile = is_mobile();
+	if(pid == 1){
+			$("#payform").attr("target","_blank");
+	}else if(pid==2){
+		if(mobile){
+			$("#payform").attr("target","payframe");
+		}else{
+			$("#payform").attr("target","_blank");
+		}
+	}else if(pid==3){
+		if(mobile){
+				$("#payform").attr("target","_blank");
+		}else{
+			$("#payform").attr("target","payframe");
+		}
+	}
+}
+check_client();
+<?php }?>
+</script>
+<script src="plugin/xy_pay/view/js/jquery-labelauty.js"></script>

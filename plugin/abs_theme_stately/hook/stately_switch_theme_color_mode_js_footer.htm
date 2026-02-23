@@ -1,0 +1,15 @@
+<script id="statelyToggleThemeColorMode_js_f">
+
+    const stately_toggle_theme_color_mode_btn = document.getElementById('statelyToggleThemeColorMode');
+    if (stately_toggle_theme_color_mode_btn !== null) {
+        
+        stately_toggle_theme_color_mode_btn.addEventListener('click', function () {
+            stately_switch_theme_color_mode();
+            stately_apply_theme_color_mode();
+        });
+    }
+    
+    stately_apply_theme_color_mode(stately_get_theme_color_mode(), true, true);
+
+    stately_apply_theme_color(stately_get_theme_color());
+</script>

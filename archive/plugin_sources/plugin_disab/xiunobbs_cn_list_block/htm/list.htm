@@ -1,0 +1,184 @@
+					<!--{hook thread_list_inc_start.htm}-->
+					<?php 
+					if($threadlist) { 
+						$have_allowtop = 0;
+						foreach($threadlist as &$_thread) {
+							$_thread['allowtop'] = forum_access_mod($_thread['fid'], $gid, 'allowtop');
+							if($_thread['allowtop']) $have_allowtop = 1;
+						}
+					}
+					?>
+<div class="row justify-content-center">
+	<div class="cols noma ktm-cont ktm-show" style="margin:0 auto;padding-inline-start: 0px;">
+					<?php if($threadlist) { foreach($threadlist as &$_thread) { ?>
+<?php  
+$imglist = ax_imglist($_thread['tid']);
+$num = count($imglist);
+$img = $imglist[0];
+?>					
+	<style>
+	    .user-group-icon{display:none;}
+	</style>
+	<?php if($_thread['top'] > 0) { ?>
+        
+		<?php if(in_array(e,$_fid)){ ?>
+			
+		<?php }else{ ?>
+		
+			<?php if(in_array(c,$_fid)){ ?>
+				<li class="plugin_list card media thread tap" data-href="<?php echo url("thread-$_thread[tid]");?>" style="border-radius: 6px;vertical-align:top;padding:0px 0px;width: 23.9%;">
+			<?php }else{ ?>
+				<li class="plugin_list card media thread tap" data-href="<?php echo url("thread-$_thread[tid]");?>" style="border-radius: 6px;vertical-align:top;padding:0px 0px;width: 23.4%;">
+			<?php  }  ?>
+					
+			
+				<a href="<?php echo url("thread-$_thread[tid]");?>" title="<?php echo $_thread['subject'];?>" style="text-decoration: none;">
+					<div class="img_wap">
+						<img src="<?php echo $img;?>" draggable="false" alt="<?php echo $_thread['subject'];?>" onerror="onerror=null;src='./plugin/xiunobbs_cn_list_block/img/icon.png'" class="kandyCover kandyFrame" style="border-radius:2px;">
+					</div>
+					<p style="width:100%;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top: 6px;margin-bottom: 0px;font-size: 12px;text-indent:2px;font-weight:bold;color:#284a6c;" title="<?php echo $_thread['subject'];?>"><i class="icon-bullhorn"></i>&nbsp;<?php echo $_thread['subject'];?></p>
+				</a>
+				<p style="width:100%;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top: 6px;margin-bottom: 0px;font-size: 12px;text-indent:2px;font-weight:bold;">
+					<?php if(in_array(j,$_fid)){ ?>
+						
+					<?php }else{ ?>
+						<?php if($have_allowtop) { ?>
+							<?php if($_thread['allowtop']) { ?>
+							<input type="checkbox" name="modtid" value="<?php echo $_thread['tid']; ?>" <?php echo empty($mod_input_checked) ? '' : 'checked disabled';?> />
+							<?php } ?>
+						
+						<?php } ?>
+					<?php  }  ?>
+					
+					
+					<?php if(in_array(g,$_fid)){ ?>
+						
+						
+					<?php }else{ ?>
+						<a href="<?php echo url("user-$_thread[uid]");?>" tabindex="-1" class="ml-1 mt-1" style="text-decoration: none;">
+							<img class="avatar-3" src="<?php echo $_thread['user_avatar_url'];?>" style="width:16px;height:16px;">
+							<!--{hook thread_list_inc_username_before.htm}-->
+							<span class="username text-grey mr-1 " uid="<?php echo $_thread['uid'];?>"
+							 style="color:#284a6c !important;"> <?php echo $_thread['username'];?></span>
+							 
+							
+						</a>
+					<?php  }  ?>
+					<?php if(in_array(h,$_fid)){ ?>
+						
+					<?php }else{ ?>
+						<span class="date text-grey"> <?php echo $_thread['create_date_fmt'];?></span>
+						<!--{hook thread_list_inc_username_after.htm}-->
+					<?php  }  ?>
+					
+					
+					<?php if(in_array(d,$_fid)){ ?>
+						
+					<?php }else{ ?>
+						<div style="position: absolute; right: 10px; margin-top: -21px;">
+							<!--{hook thread_list_inc_view_before.htm}-->
+							<span class="ml-2 d-none"><i class="icon-eye"></i> <?php echo $_thread['views'];?></span>
+							<!--{hook thread_list_inc_view_after.htm}-->
+							
+							<!--{hook thread_list_inc_posts_before.htm}-->
+							<span class="ml-2"><i class="icon-comment-o"></i> <?php echo $_thread['posts'];?></span>
+							<!--{hook thread_list_inc_posts_after.htm}-->
+						</div>
+					<?php  }  ?>
+					<?php if(in_array(f,$_fid)){ ?>
+						
+					<?php }else{ ?>
+						<div style="position: absolute;right: -2px;margin-top: -18px;">
+							<!--{hook thread_list_inc_subject_after.htm}-->
+						</div>
+					<?php  }  ?>
+					
+				</p>
+			</li>
+			
+		<?php  }  ?>
+		
+	<?php  }else{ ?>
+
+				<?php if(in_array(c,$_fid)){ ?>
+					<li class="plugin_list card media thread tap" data-href="<?php echo url("thread-$_thread[tid]");?>" style="border-radius: 6px;vertical-align:top;padding:0px 0px;width: 23.9%;">
+				<?php }else{ ?>
+					
+					<li class="plugin_list card media thread tap" data-href="<?php echo url("thread-$_thread[tid]");?>" style="border-radius: 6px;vertical-align:top;padding:0px 0px;width: 23.4%;">
+				<?php  }  ?>
+	<a href="<?php echo url("thread-$_thread[tid]");?>" title="<?php echo $_thread['subject'];?>" style="text-decoration: none;">
+		
+		
+		<div class="img_wap">
+			<img src="<?php echo $img;?>" draggable="false" alt="<?php echo $_thread['subject'];?>" onerror="onerror=null;src='./plugin/xiunobbs_cn_list_block/img/icon.png'" class="kandyCover kandyFrame" style="border-radius:2px;">
+		</div>
+		<p style="width:100%;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top: 6px;margin-bottom: 0px;font-size: 12px;text-indent:2px;font-weight:bold;color:#284a6c;" title="<?php echo $_thread['subject'];?>">&nbsp;<?php echo $_thread['subject'];?></p>
+	</a>
+	<p style="width:100%;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top: 6px;margin-bottom: 0px;font-size: 12px;text-indent:2px;font-weight:bold;">
+		<?php if(in_array(j,$_fid)){ ?>
+			
+		<?php }else{ ?>
+			<?php if($have_allowtop) { ?>
+				<?php if($_thread['allowtop']) { ?>
+				<input type="checkbox" name="modtid" value="<?php echo $_thread['tid']; ?>" <?php echo empty($mod_input_checked) ? '' : 'checked disabled';?> />
+				<?php } ?>
+			
+			<?php } ?>
+		<?php  }  ?>
+		<?php if(in_array(g,$_fid)){ ?>
+			
+		<?php }else{ ?>
+			<a href="<?php echo url("user-$_thread[uid]");?>" tabindex="-1" class="ml-1 mt-1" style="text-decoration: none;">
+				<img class="avatar-3" src="<?php echo $_thread['user_avatar_url'];?>" style="width:16px;height:16px;">
+				<!--{hook thread_list_inc_username_before.htm}-->
+				<span class="username text-grey mr-1 " uid="<?php echo $_thread['uid'];?>"
+				 style="color:#284a6c !important;"> <?php echo $_thread['username'];?></span>
+				 
+				
+			</a>
+		<?php  }  ?>
+		<?php if(in_array(h,$_fid)){ ?>
+			
+		<?php }else{ ?>
+			<span class="date text-grey"> <?php echo $_thread['create_date_fmt'];?></span>
+			<!--{hook thread_list_inc_username_after.htm}-->
+		<?php  }  ?>
+
+		<?php if(in_array(d,$_fid)){ ?>
+			
+		<?php }else{ ?>
+			<div style="position: absolute; right: 10px; margin-top: -21px;">
+				<!--{hook thread_list_inc_view_before.htm}-->
+				<span class="ml-2 d-none"><i class="icon-eye"></i> <?php echo $_thread['views'];?></span>
+				<!--{hook thread_list_inc_view_after.htm}-->
+				
+				<!--{hook thread_list_inc_posts_before.htm}-->
+				<span class="ml-2"><i class="icon-comment-o"></i> <?php echo $_thread['posts'];?></span>
+				<!--{hook thread_list_inc_posts_after.htm}-->
+			</div>
+		<?php  }  ?>
+		<?php if(in_array(f,$_fid)){ ?>
+			
+		<?php }else{ ?>
+		<div style="position: absolute;right: -2px;margin-top: -18px;">
+			<!--{hook thread_list_inc_subject_after.htm}-->
+		</div>
+		<?php  }  ?>
+	</p>
+</li>
+        
+        
+	<?php  } ?>
+					
+
+
+
+          
+
+
+
+					<?php }} else { ?>
+						<?php echo lang('none');?>
+					<?php } ?>
+					<!--{hook thread_list_inc_end.htm}-->
+					  </div></div>

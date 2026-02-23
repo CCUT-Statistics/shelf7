@@ -1,0 +1,29 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['thread']['show_thread_navigation']): ?>
+<nav class="card mb-3 navigation post-navigation" aria-label="Posts">
+    <div class="px-4 py-2 nav-links clearfix">
+        <?php
+			$arrlist_n = db_find_one('thread', array('fid' => $fid, 'tid' => array('>' => $tid)), array('tid' => 1));
+			$arrlist_p = db_find_one('thread', array('fid' => $fid, 'tid' => array('<' => $tid)), array('tid' => -1));
+			if ($arrlist_p) {
+				echo '<div class="nav-previous float-start">'
+					. '<a href="'
+					. url("thread-" . $arrlist_p['tid'])
+					. '" rel="next">'
+					. '<span class="nav-subtitle">上一篇：</span> '
+					. '<span class="nav-title">'
+					. $arrlist_p['subject']
+					. '</span>' . '</a>' . '</div>';
+			}
+			if ($arrlist_n) {
+				echo '<div class="nav-next float-end">'
+					. '<a href="'
+					. url("thread-" . $arrlist_n['tid'])
+					. '" rel="next">'
+					. '<span class="nav-subtitle">下一篇：</span> '
+					. '<span class="nav-title">'
+					. $arrlist_n['subject']
+					. '</span>' . '</a>' . '</div>';
+			} ?>
+    </div>
+</nav>
+<?php endif; ?>

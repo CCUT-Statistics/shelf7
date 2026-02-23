@@ -1,0 +1,7 @@
+<?php 
+//这个文件是PC端显示，如果需要开启请把后缀改为htm
+$_medallist=medal_user_read_fmt($thread['uid']);
+echo "<br>";
+foreach($_medallist as $_m){?>
+<img width="20px" height="35px" src="plugin/tt_medal/img/<?php echo $_m['filename'];?>" title="<?php echo $_m['fmt_description'];?>"/>
+<?php }?>

@@ -1,0 +1,63 @@
+</main>
+
+<div class="container px-0 px-lg-4 mt-n7 mt-lg-n4 mt-xxl-n5" data-style="modern_v3">
+
+        <div class="card mb-4">
+            <div class="user-profile-header-banner">
+                <?php if(function_exists('cover_get_cover_url_by_uid') && isset($user['cover_url']) && !empty($user['cover_url'])): ?>
+                <img loading="lazy" decoding="async" src="<?= cover_get_cover_url_by_uid($user['uid']) ?>" alt="Banner image" class="rounded-top">
+                <?php endif; ?>
+            </div>
+            <div class="user-profile-header d-flex flex-column flex-lg-row text-start mb-4">
+                <div class="flex-shrink-0 mt-n2 mx-lg-0 mr-auto">
+                    <img loading="lazy" decoding="async" src="<?php echo $user['avatar_url'];?>" alt="user image" class="d-block h-auto ms-0 ms-4 rounded user-profile-img">
+                </div>
+                <div class="flex-grow-1 mt-3 mt-lg-5">
+                    <div class="d-flex align-items-lg-end align-items-lg-start align-items-between  justify-content-start mx-4 flex-lg-row flex-column gap-4">
+                        <div class="user-profile-info">
+                            <h4><?php echo $user['username'];?></h4>
+                            <!--{hook my_common_username_after.htm}-->
+
+                            <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-start gap-2">
+                                <li class="list-inline-item">
+                                    <span class="badge bg-label-primary ">UID:<?php echo $user['uid'];?></span>
+                                    </span>
+                                </li>
+                                <li class="list-inline-item">
+                                    <span class="badge bg-label-info "><?php echo $user['groupname'];?></span>
+                                    <!--{hook my_common_groupname_after.htm}-->
+                                </li>
+                            </ul>
+
+                            <!--{hook my_common_info_after.htm}-->
+
+                            <!--{hook my_profile_header_right.htm}-->
+
+                            <!--{hook stately_hero_my_stats_modern_v3.htm}-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card d-lg-none" id="my_aside_mobile" data-style='modern_v3'>
+
+            <div class="list-group list-group-flush">
+                <!--{hook my_common_my_before.htm}-->
+                <a href="<?php echo url('my');?>" class="list-group-item list-group-item-action" data-active="menu-my">个人资料</a>
+                <!--{hook my_common_my_after.htm}-->
+        
+                <!--{hook my_common_my_thread_before.htm}-->
+                <a href="<?php echo url('my-thread');?>" class="list-group-item list-group-item-action" data-active="menu-my-thread">论坛帖子</a>
+                <!--{hook my_common_my_thread_after.htm}-->
+            </div>
+        
+        </div>
+
+</div>
+
+
+
+<main class="container flex-grow-1 container-p-y pt-0">

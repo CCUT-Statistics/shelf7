@@ -1,0 +1,26 @@
+<?php 
+if(function_exists("xn_nav_menu")){
+    try {
+        $stately_contextmenu__normal = xn_nav_menu(array(
+            'menu' => 'stately_contextmenu__normal', 
+            'container' => false, 
+            'container_class' => 'menu-container', 
+            'link_class' => 'dropdown-item', 
+            'before' => ' <span class="text">', 
+            'after' => '</span>', 
+            'desc' => 'small', 
+            'desc_class' => 'text-muted', 
+            'no_ul' => true, 
+            'no_li' => false, 
+            'submenu' => false, 
+            '_bs_version' => 5, 
+            'echo' => false)
+            ); 
+        if(!empty($stately_contextmenu__normal)) {
+            echo '<li class="dropdown-divider optgroup-1div"></li>' . $stately_contextmenu__normal;
+        }
+    } catch (\Throwable $th) {
+        //throw $th;
+    }
+}
+?>

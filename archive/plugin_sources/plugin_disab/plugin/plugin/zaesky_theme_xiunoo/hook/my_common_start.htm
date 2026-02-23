@@ -1,0 +1,27 @@
+<div class="row justify-content-center">
+<div class="col-lg-10">
+		<div class="card user_header">
+			<div class=" rounded-top" id="bgcolor">
+				<canvas id="canvas"></canvas>
+			</div>
+			<div class="card-body">
+				<div class="user_page_header text-center">
+					<!--{hook my_common_avatar_before.htm}-->
+				<img class="logo-5 avatar-5 user_page_avatar" src="<?php echo $user['avatar_url'];?>">
+				<div class="mt-2">
+				 <span class="h4 font-weight-bold"><?php echo $user['username'];?></span> 
+				<!--{hook my_common_username_after.htm}-->
+				<div>
+				<div class="mt-2">
+				<span class="badge badge-primary mr-1">UID:<?php echo $user['uid'];?></span><span class="badge badge-info"><?php echo $user['groupname'];?></span>
+				<!--{hook my_common_groupname_after.htm}-->
+				</div>
+				</div>
+				</div>
+			</div>
+			<!--{hook my_common_header_after.htm}-->
+			</div>
+		</div>
+	</div>
+	</div>
+	<script src="<?php echo 'plugin/zaesky_theme_xiunoo/view/js/background.min.js';?>"></script>

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	
+		
+	
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+	<meta name="description" content="创意，灵感，热爱——开发者创意社区。欢迎小伙伴将自己的作品发布在这里。" />
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+
+	<title>NOTEWEB</title>
+	
+	<style type="text/css"> 
+@import url("//at.alicdn.com/t/font_1764591_8hj4d6vg63t.css");
+.icon-v1{
+color:#f50601; 
+}
+.icon-v2{
+color:#f50601; 
+}
+.icon-v3{
+color:; 
+}
+.icon-v4{
+color:#f50601; 
+}
+.icon-v5{
+color:#f50601; 
+}
+.icon-v6{
+color:#bfbfbf; 
+}
+.icon-v8{
+color:#FFC125; 
+}
+.icon-v9{
+color:#d81e06;
+}
+.icon-v101{
+color:#bfbfbf; 
+}
+.icon-v102{
+color:#91e2b7; 
+}
+.icon-v103{
+color:#96d2ec; 
+}
+.icon-v104{
+color:#f4b58a; 
+}
+.icon-v105{
+color:#fc6500; 
+}
+.icon-v106{
+color:#f50601; 
+}
+</style> 
+	
+	<link rel="shortcut icon" href="view/img/favicon.ico" />
+	<link rel="icon" sizes="32x32" href="view/img/favicon.ico">
+	<link rel="Bookmark" href="view/img/favicon.ico" />
+	
+	<style>
+table.nav_tag_list {margin-bottom: 0.2rem;}
+table.nav_tag_list td {padding: 0.3rem;line-height: 26px;}
+table.nav_tag_list td a{margin-right: 0.2rem;border: 1px solid var(--gray-200);padding: 2px 10px;border-radius: 12px;}
+.nav_tag_list .active {font-weight: normal !important;color: #FFFFFF;background-color: var(--primary);border:none;}
+.tag_option {
+        border: 1px solid #bbb; padding: 1px 10px; border-radius: 10px; text-decoration: none;
+}
+.tag_option:active, .tag_option.active {
+        font-weight: normal !important;color: #FFFFFF;background-color: var(--primary);border:none;
+}
+</style>
+		<link rel="stylesheet" href="view/css/bootstrap.css?1.2.0.1">
+	
+	
+	
+		<link rel="stylesheet" href="view/css/bootstrap-bbs.css?1.2.0.1">
+	<style>
+@import url("//at.alicdn.com/t/font_2761470_tlx2y0ikedl.css");
+.bottom-nav {
+    /* display: none; */
+    background-color: white;
+}
+
+.nav_font{
+	font-size:12px;
+	color:#8590a6;
+	margin-top:2px;
+}
+
+
+.bottom-nav{
+    position: relative;
+    display: inline-block;
+    /* padding-top: 6px; */
+    line-height: 20px;
+    color: #9e9e9e;
+    cursor: pointer;
+}
+@media screen and (min-width: 992px) {
+    .bottom-nav {
+        display: none !important;
+		}
+    }
+	
+@media screen and (max-width: 992px) {
+		#footer{margin-bottom: 4rem};
+    }
+</style><link rel="stylesheet" href="plugin/huux_notice/view/css/huux-notice.css" name="huux_notice"><link rel="stylesheet" href="plugin/zaesky_scroll/view/css/style.min.css?1.2.0.1">
+<link rel="stylesheet" href="plugin/zaesky_theme_xiunoo/view/css/bootstrap.css?1.2.0.1">
+<link rel="stylesheet" href="plugin/zaesky_theme_xiunoo/view/css/bootstrap-bbs.css?1.2.0.1">
+<link rel="stylesheet" href="plugin/zaesky_theme_xiunoo/view/fonts/fontawesome/icon.css?1.2.0.1">
+<link rel="stylesheet" href="plugin/zaesky_theme_xiunoo/view/css/zaesky-theme-xiunoo.min.css?1.2.0.1">
+
+	
+	<link rel="stylesheet" href="plugin/a8c5_rank_member/css/style.css?1.2.0.1">
+
+<link rel="stylesheet" href="plugin/oddfox_attach/css/style.css">
+<link rel="stylesheet" href="plugin/oddfox_tools/css/white.css?1.3" />
+<style>
+@import url("//at.alicdn.com/t/font_1706592_83vcpalnto3.css");
+/*
+box-shadow: 0 0 5px red;
+*/
+@keyframes xndigest {
+	0% { color: red; text-shadow: 0 0 3px #FF8D8D;} 
+	20% { color: orange; text-shadow: 0 0 3px #FFE1AD;} 
+	40% { color: green; text-shadow: 0 0 3px #B3FFAF;} 
+	65% { color: blue; text-shadow: 0 0 3px #AFE4FF;} 
+	80% { color: purple; text-shadow: 0 0 3px #FFC9F3;} 
+	100% { color: red; text-shadow: 0 0 3px #FF8D8D;} 
+}
+
+/*水晶闪烁效果 占内存*/
+i.icon-diamond.flash{color: #D53D38;  /*animation: xndigest 5s linear infinite;*/ }
+
+/* i.icon-digest-1 {  text-shadow: 0 0 3px #AFE4FF; }
+i.icon-digest-2 {  text-shadow: 0 0 3px #FFF177; }
+i.icon-digest-3 {  text-shadow: 0 0 3px #FF8D8D; } */
+.icon-digest-1:before {color: #5BC0DE;} /* "\f0a5" */
+.icon-digest-2:before {color: #ECA541;}
+.icon-digest-3:before {color: #D53D38;}
+</style><style>
+/*
+.toggle_more {
+	max-height: 100px;
+}
+*/
+.update_log_list a.update_log_history, 
+.update_log_list a.update_log_delete {
+	display: none;
+}
+
+.update_log_list > li:hover {
+	background: var(--gray-300);
+}
+.update_log_list > li:hover > a.update_log_history, 
+.update_log_list > li:hover > a.update_log_delete {
+	display: inline-block;
+}
+
+</style><!-- 大白链接CSS -->
+<!-- <link rel="stylesheet" href="plugin/huux_os_link/view/css/style.css"> -->
+
+	
+</head>
+
+<body>
+	
+	
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script><div class="scrollBar1"><span></span></div>
+	
+	<!-- 
+		轻论坛导航：默认头部
+		Bootstrap 4.0 推荐的 PC/Mobile 公共写法 
+		优点：公用性强
+		缺点：结构稍微有点复杂
+	-->
+
+
+<header id="header">
+
+	<!-- PC Navigation start -->
+	<div class="navbar navbar-light navbar-expand-lg hidden-sm hidden-md">
+		<div class="container" id="pc_nav">
+
+			<!-- PC: logo -->
+			
+			<a class="navbar-brand text-truncate" href="./">
+				<img src="plugin/zaesky_theme_xiunoo/img/logo.png" class="logo-2">
+			</a>
+			
+
+			<!-- PC: 左侧：主要导航菜单 -->
+			<ul class="navbar-nav mr-auto">
+
+				
+				<li class="nav-item home" data-active="index"><a class="nav-link" href=".">
+					<span class="iconfont icon-shenghuo"></span>
+					首页</a></li>
+				<li class="nav-item links" data-active="links"><a class="nav-link" href="links.htm"><span class="iconfont icon-lianjie"></span> 邻居</a></li><li class="nav-item ranklist" data-active="ranklist"><a class="nav-link" href="ranklist.htm"><i class="iconfont icon-huiyuan1"></i> 排行榜</a></li><div class="form-group nav-item mb-0 hidden-sm hidden-md ml-4" style="margin-top: 10px;">
+	<form action="search.htm" id="search_form">
+		<div class="input-group ">
+			<input type="text" class="form-control" style="border-radius: 100px;width: 200px;background-color: var(--light);border: 0;" placeholder="关键词" name="keyword">
+			<div class="input-group-append">
+				<button class="btn btn-light" style="border-radius: 100px; margin-left: -38px;z-index: 999;" type="submit"><span class="iconfont icon-sousuo1"></span></button>
+			</div>
+		</div>
+	</form>
+</div>
+
+			</ul>
+
+			<!-- PC: 右侧：用户 -->
+			<ul class="navbar-nav">
+					<li class="nav-item usernotice " id="nav-usernotice" data-active="nav-usernotice">
+		<a class="nav-link" href="my-notice.htm"><span class="iconfont icon-xiaoxi" data-toggle="tooltip" data-placement="top" title="消息"></span> <span class="hidden-lg">消息</span> <span class="d-none unread badge badge-danger badge-pill" id="nav-usernotice-unread-notices">0</span>			
+		</a>
+	</li>
+			<li class="nav-item">
+	<a class="nav-link" href="search.htm"><span class="iconfont icon-sousuo1" data-toggle="tooltip" data-placement="top" title="搜索"></span> <span class="hidden-lg">搜索</span></a>
+</li>
+
+									<li class="nav-item">
+						<a  class="nav-link" href="thread-create-5.htm"><span class="iconfont icon-bianji" data-toggle="tooltip" data-placement="top" title="发新帖"></span></a>
+					</li>
+				<div class="dropdown">
+					<li class="nav-item username"><a class="nav-link" id="profileDropdown"
+							data-toggle="dropdown" href="#"><img class="avatar-2"
+								src="view/img/avatar.png">
+							
+						</a>
+						<div class="dropdown-menu  dropdown-menu-right" aria-labelledby="profileDropdown"
+							style="margin-top: -8px;">
+							<div class="media dropdown-item">
+								<img class="avatar-3 mr-2 mt-1" src="view/img/avatar.png">
+							
+						<div class="media-body pr-5">
+							<span class="font-weight-bold">本频道asd</span>
+							
+							<div class="small">
+								<span class="badge badge-pill badge-primary">UID:1185</span>
+								<span class="badge badge-pill badge-info">Lv.1 菜鸟</span>
+															</div>
+						</div>
+							</div>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="my.htm"><i class="fa fa-user"></i>
+								个人中心</a>
+							<!-- 管理员 -->
+														
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item text-danger" href="user-logout.htm"><i
+									class="fa fa-sign-out-alt"></i> 退出</a>
+						</div>
+					</li>
+					
+				</div>
+				
+				
+				
+			</ul>
+
+		</div>
+	</div>
+
+
+	
+
+
+	<!-- Mobile Navigation start -->
+	<div class="navbar navbar-light  navbar-expand-lg  hidden-lg">
+		<div class="container" id="mobile_nav">
+
+			<!-- 左侧：菜单按钮 -->
+			
+			<span class="fa fa-bars MobilemenuBtn js-sidebar--open MobilemenuBtn-text" 
+				aria-label="展开菜单"></span>
+			
+
+			<!-- 中间的 LOGO、网站标题 -->
+			
+			<a class="navbar-brand text-truncate" href="./">
+									<img src="plugin/zaesky_theme_xiunoo/img/logo.png" class="logo-2">
+								</a>
+			
+
+			<!-- 右侧的用户登录、发帖图标 -->
+			
+						<a class="navbar-brand nav-dark MobilemenuBtn-text" href="thread-create-5.htm"
+				aria-label="发表主题"><i class="far fa-edit"></i></a>
+						
+
+
+					
+		</div>
+	</div>
+	<!-- Mobile Navigation end -->
+	<!--侧边栏菜单-->
+	<aside class="js-sidebar">
+		<div class="js-sidebar--container">
+			<div class="sidebar--title p-4">
+					<div class="media">
+												<a class="mr-3" href="my.htm"><img class="avatar-3"
+										src="view/img/avatar.png" style="width: 3.5rem;height: 3.5rem;"> </a>
+						<div class="media-body">
+						  <span class="h5">本频道asd</span>
+						  <div class="mt-2">
+							<a href="my.htm">
+						  <span class="badge badge-pill badge-primary">UID:1185</span>
+						  <span class="badge badge-pill badge-info ml-1">Lv.1 菜鸟</span>
+											</a>
+						</div>  
+						</div>
+						<div style="position: absolute;top: 10px;right: 10px;"><a class="badge badge-danger badge-pill p-2"
+							href="user-logout.htm"><i class="fa fa-sign-out-alt"></i></a>
+						</div>
+							
+				</div>
+			</div>
+	
+			<div class="sidebar_menu p-4">
+				<div class="form-group nav-item hidden-lg ">
+	<form action="search.htm" id="search_form">
+		<div class="input-group">
+			<input type="text" class="form-control" style="border-radius: 100px;background-color: var(--light);border: 0;" placeholder="关键词" name="keyword">
+			<div class="input-group-append">
+				<button class="btn btn-light" style="border-radius: 100px; margin-left: -38px;z-index: 999;" type="submit"><span class="iconfont icon-sousuo1"></span></button>
+			</div>
+		</div>
+	</form>
+</div>
+				<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+					
+					<li class="nav-item home" data-active="index">
+						<a class="nav-link" href="./" data-active="index"><i class="iconfont icon-shouye"></i>
+							首页</a>
+					</li>
+					<li class="nav-item " data-toggle="collapse" data-target="#pages" aria-expanded="false" aria-controls="pages">
+						<a class="nav-link dropdown-toggle"><i class="iconfont icon-dingdan"></i>
+							页面</a>
+					</li>
+					<div class="collapse multi-collapse pl-3" id="pages">
+				<li class="nav-item links" data-active="links"><a class="nav-link" href="links.htm"><span class="iconfont icon-lianjie"></span> 邻居</a></li><li class="nav-item ranklist" data-active="ranklist"><a class="nav-link" href="ranklist.htm"><i class="iconfont icon-huiyuan1"></i> 排行榜</a></li><div class="form-group nav-item mb-0 hidden-sm hidden-md ml-4" style="margin-top: 10px;">
+	<form action="search.htm" id="search_form">
+		<div class="input-group ">
+			<input type="text" class="form-control" style="border-radius: 100px;width: 200px;background-color: var(--light);border: 0;" placeholder="关键词" name="keyword">
+			<div class="input-group-append">
+				<button class="btn btn-light" style="border-radius: 100px; margin-left: -38px;z-index: 999;" type="submit"><span class="iconfont icon-sousuo1"></span></button>
+			</div>
+		</div>
+	</form>
+</div>
+					</div>
+					<li class="nav-item " data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
+						<a class="nav-link dropdown-toggle"><i class="iconfont icon-shezhi1"></i>
+							我的</a>
+					</li>
+					<div class="collapse multi-collapse pl-3" id="multiCollapseExample2">
+				
+			<div class="my_option ">
+					<li class="nav-item usernotice " id="nav-usernotice" data-active="nav-usernotice">
+		<a class="nav-link" href="my-notice.htm"><span class="iconfont icon-xiaoxi" data-toggle="tooltip" data-placement="top" title="消息"></span> <span class="hidden-lg">消息</span> <span class="d-none unread badge badge-danger badge-pill" id="nav-usernotice-unread-notices">0</span>			
+		</a>
+	</li>
+			<li class="nav-item">
+	<a class="nav-link" href="search.htm"><span class="iconfont icon-sousuo1" data-toggle="tooltip" data-placement="top" title="搜索"></span> <span class="hidden-lg">搜索</span></a>
+</li>
+				<!-- 管理员 -->
+								<!--li id="tt_sign_mobile">
+    <a class="nav-link" href="#"><i class="icon-calendar-check-o"></i> 签到</a>
+</li-->
+				</div>
+			
+					</div>
+					
+	
+					
+				</div>
+				
+				
+			</div>
+			<div class="divide"></div>
+			<div class="sidebar_forumList p-4">
+			
+			<div class="nav navbar-nav forumlist px-4">
+				<div class="row">
+				
+								
+				<li class="nav-item col-6 p-1" fid="1"
+					data-active="fid-1">
+					<a class="nav-link py-2 rounded small forumlist-bg mr-0" href="forum-1.htm">
+						<div class="text-center">
+						<img class="avatar-1 mr-1 rounded" src="upload/forum/1.png">
+						
+							<span>学习笔记</span>
+					</div>
+					</a>
+				</li>
+				
+								
+				<li class="nav-item col-6 p-1" fid="2"
+					data-active="fid-2">
+					<a class="nav-link py-2 rounded small forumlist-bg mr-0" href="forum-2.htm">
+						<div class="text-center">
+						<img class="avatar-1 mr-1 rounded" src="upload/forum/2.png">
+						
+							<span>经验交流</span>
+					</div>
+					</a>
+				</li>
+				
+								
+				<li class="nav-item col-6 p-1" fid="4"
+					data-active="fid-4">
+					<a class="nav-link py-2 rounded small forumlist-bg mr-0" href="forum-4.htm">
+						<div class="text-center">
+						<img class="avatar-1 mr-1 rounded" src="upload/forum/4.png">
+						
+							<span>开发日志</span>
+					</div>
+					</a>
+				</li>
+				
+								
+				<li class="nav-item col-6 p-1" fid="5"
+					data-active="fid-5">
+					<a class="nav-link py-2 rounded small forumlist-bg mr-0" href="forum-5.htm">
+						<div class="text-center">
+						<img class="avatar-1 mr-1 rounded" src="upload/forum/5.png">
+						
+							<span>插件共享</span>
+					</div>
+					</a>
+				</li>
+				
+								
+				<li class="nav-item col-6 p-1" fid="6"
+					data-active="fid-6">
+					<a class="nav-link py-2 rounded small forumlist-bg mr-0" href="forum-6.htm">
+						<div class="text-center">
+						<img class="avatar-1 mr-1 rounded" src="upload/forum/6.png">
+						
+							<span>日常分享</span>
+					</div>
+					</a>
+				</li>
+				
+							</div>
+		</div>
+		</div>
+		</div>
+		<div class="js-sidebar--background"></div>
+	</aside>
+</header>
+
+
+ 
+
+
+
+
+	<main id="body">
+		<div class="container">
+	
+		
+
+
+
+<div class="row">
+	<div class="col-lg-8 mx-auto">
+		<div class="card mt-4">
+			<div class="card-body">
+				<h4 class="card-title text-center mb-0">
+					<i class="icon-warning-sign"></i> 
+					
+					<a href="my-credits.htm">您的积分不足，无法执行此操作!</a><script>setTimeout(function() {window.location='my-credits.htm'}, 2000);</script>					
+				</h4>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+				
+					
+				
+		</div>
+	</main>
+	
+	
+	
+	<footer class="text-muted small bg-dark py-4 mt-3" id="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				
+				Powered by <a href="#" target="_blank" class="text-muted"><b>Xiuno BBS <span>4.0.4</span></b></a>
+				<div class="text-muted">Theme By <a href="https://www.noteweb.top/" data-toggle="tooltip" data-placement="top" title="xiuno" target="_blank" class="text-muted"> NOTEWEB</a></div>			</div>
+			<div class="col text-right">
+				
+				Processed: <b>0.025</b>, SQL: <b>35</b>
+							</div>
+		</div>
+	</div>
+</footer>	
+	
+	
+	<!--[if ltg IE 9]>
+	<script>window.location = 'browser.htm';</script>
+	<![endif]-->
+	
+	
+	
+			<script src="lang/zh-cn/bbs.js?1.2.0.1"></script>
+	<script src="view/js/jquery-3.1.0.js?1.2.0.1"></script>
+	<script src="view/js/popper.js?1.2.0.1"></script>
+	<script src="view/js/bootstrap.js?1.2.0.1"></script>
+	<script src="view/js/xiuno.js?1.2.0.1"></script>
+	<script src="view/js/bootstrap-plugin.js?1.2.0.1"></script>
+	<script src="view/js/async.js?1.2.0.1"></script>
+	<script src="view/js/form.js?1.2.0.1"></script>
+	<script>
+	var debug = DEBUG = 0;
+	var url_rewrite_on = 1;
+	var forumarr = {
+    "1": "学习笔记",
+    "2": "经验交流",
+    "4": "开发日志",
+    "5": "插件共享",
+    "6": "日常分享"
+};
+	var fid = 5;
+	var uid = 1185;
+	var gid = 101;
+	xn.options.water_image_url = 'view/img/water-small.png';	// 水印图片 / watermark image
+	</script>
+	<script src="view/js/bbs.js?1.2.0.1"></script>
+	<div class="gotop d-none d-md-flex">
+    <ul>        
+        <li><a href="javascript:void(0)" id="goToBottom"><i class="icon-arrow-down"></i><em>直达页尾</em></a></li>        <li><a href="." ><i class="icon-home"></i><em>返回首页</em></a></li>        <li><a href="https://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=zaesky123@qq.com" target="_blank"><i class="icon-envelope-o"></i><em>留言反馈</em></a></li>        <li><a href="javascript:void(0)" id="goTopBtn"><i class="icon-arrow-up"></i><em>返回顶部</em></a></li>
+     </ul>
+</div>
+<script>$("#goTopBtn").click(function(){$("html,body").animate({scrollTop:0},500)});$('#goToBottom').click(function(){$('html,body,.footer').animate({scrollTop:$(document).height()},900);return false});</script>
+<script src="plugin/tt_credits/view/js/tt_credits.js?1.2.0.1"></script><script>
+// 版主管理：精华
+
+// $('.mod-button button.digest').on('click', function() {
+// 	var modtid = $('input[name="modtid"]').checked();
+// 	if(modtid.length == 0) return $.alert(lang.please_choose_thread);
+// 	var radios = xn.form_radio('digest', {"0": "取消精华", "1": "推荐","2": "精华", "3": "热门"});
+// 	$.confirm("设置主题为精华", function() {
+// 		var tids = xn.implode('_', modtid);
+// 		var digest = $('input[name="digest"]').checked();
+// 		var postdata = {digest: digest};
+// 		$.xpost(xn.url('mod-digest-'+tids), postdata, function(code, message) {
+// 			if(code != 0) return $.alert(message);
+// 			$.alert(message).delay(1000).location('');
+// 		});
+// 	}, {'body': '<p>'+"精华等级"+'：'+radios+'</p>'});
+// })
+</script><script src="plugin/zaesky_scroll/view/js/script.min.js"></script><script type="text/javascript">
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	});
+	$(function () {
+	  $('[data-toggle="popover"]').popover()
+	})
+</script>
+<script src="plugin/zaesky_theme_xiunoo/view/js/sidebar.js"></script>
+<script type="text/javascript">
+	var sidebarjs = new SidebarJS();
+</script>
+<script>
+	function fuckyou() {
+		window.close(); //关闭当前窗口(防抽)
+		window.location = "about:blank"; //将当前窗口跳转置空白页
+	}
+	function ck() {
+		console.profile();
+		console.profileEnd();
+		//我们判断一下profiles里面有没有东西，如果有，肯定有人按F12了，没错！！
+		if (console.clear) { console.clear() };
+		if (typeof console.profiles == "object") {
+			return console.profiles.length > 0;
+		}
+	}
+	function hehe() {
+		if ((window.console && (console.firebug || console.table && /firebug/i.test(console.table()))) || (typeof opera == 'object' && typeof 
+
+opera.postError == 'function' && console.profile.length > 0)) {
+			fuckyou();
+		}
+		if (typeof console.profiles == "object" && console.profiles.length > 0) {
+			fuckyou();
+		}
+	}
+	hehe();
+	window.onresize = function () {
+		if ((window.outerHeight - window.innerHeight) > 200)
+			//判断当前窗口内页高度和窗口高度，如果差值大于200，那么呵呵
+			fuckyou();
+	}
+</script>
+	
+</body>
+
+</html>
+<div class="position-fixed w-100 header_fiexd bottom-nav" style="width: 100%; height: 55px; bottom: 0; z-index: 1000;border-top: 1px solid rgb(239, 239, 239);">
+
+    <div class="row mx-0 text-center align-items-center" style="height: 55px;">
+        <a href="./" class="col" data-active="index">
+            <div>
+                <i class="iconfont icon-zhuye"></i>
+            </div>
+            <div class="nav_font">
+                首页            </div>
+        </a>
+        <a  class="col" data-toggle="modal" data-target="#forum">
+            <div>
+                <i class="iconfont icon-gengduo text-dark"></i>
+            </div>
+            <div class="nav_font">
+                分类            </div>
+        </a>
+        <a href="my-notice.htm" class="col">
+            <div>
+                <i class="iconfont icon-xiaoxi"></i>
+				            </div>
+            <div class="nav_font">
+                消息            </div>
+        </a>
+        <a href="my.htm" class="col">
+            <div>
+                <i class="iconfont icon-wode"></i>
+            </div>
+            <div class="nav_font" >
+                我的            </div>
+        </a>
+    </div>
+</div> 
+
+<div class="modal fade" id="forum" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">分类导航</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+					<div class="row row-cols-2 justify-content-between">
+												
+					    <div class="col py-2">
+							<a class="nav-link rounded media w-100 bg-light"
+								href="forum-1.htm">
+							<div class="media">
+							  <img class="avatar-3 mr-3 mt-1 rounded" src="upload/forum/1.png">
+							  <div class="media-body">
+							    <span class="font-weight-bold">学习笔记</span>
+							    <span class="d-block text-muted mt-2 w-100 text-truncate"><span><i
+							    			class="far fa-comment-alt"></i> :
+							    		<b>26</b></span>
+							    	<span><i class="far fa-comments"></i> :
+							    		<b>0</b></span>
+							    </span>
+							  </div>
+							</div>
+							</a>
+						</div>
+						
+												
+					    <div class="col py-2">
+							<a class="nav-link rounded media w-100 bg-light"
+								href="forum-2.htm">
+							<div class="media">
+							  <img class="avatar-3 mr-3 mt-1 rounded" src="upload/forum/2.png">
+							  <div class="media-body">
+							    <span class="font-weight-bold">经验交流</span>
+							    <span class="d-block text-muted mt-2 w-100 text-truncate"><span><i
+							    			class="far fa-comment-alt"></i> :
+							    		<b>274</b></span>
+							    	<span><i class="far fa-comments"></i> :
+							    		<b>0</b></span>
+							    </span>
+							  </div>
+							</div>
+							</a>
+						</div>
+						
+												
+					    <div class="col py-2">
+							<a class="nav-link rounded media w-100 bg-light"
+								href="forum-4.htm">
+							<div class="media">
+							  <img class="avatar-3 mr-3 mt-1 rounded" src="upload/forum/4.png">
+							  <div class="media-body">
+							    <span class="font-weight-bold">开发日志</span>
+							    <span class="d-block text-muted mt-2 w-100 text-truncate"><span><i
+							    			class="far fa-comment-alt"></i> :
+							    		<b>13</b></span>
+							    	<span><i class="far fa-comments"></i> :
+							    		<b>0</b></span>
+							    </span>
+							  </div>
+							</div>
+							</a>
+						</div>
+						
+												
+					    <div class="col py-2">
+							<a class="nav-link rounded media w-100 bg-light"
+								href="forum-5.htm">
+							<div class="media">
+							  <img class="avatar-3 mr-3 mt-1 rounded" src="upload/forum/5.png">
+							  <div class="media-body">
+							    <span class="font-weight-bold">插件共享</span>
+							    <span class="d-block text-muted mt-2 w-100 text-truncate"><span><i
+							    			class="far fa-comment-alt"></i> :
+							    		<b>14</b></span>
+							    	<span><i class="far fa-comments"></i> :
+							    		<b>1</b></span>
+							    </span>
+							  </div>
+							</div>
+							</a>
+						</div>
+						
+												
+					    <div class="col py-2">
+							<a class="nav-link rounded media w-100 bg-light"
+								href="forum-6.htm">
+							<div class="media">
+							  <img class="avatar-3 mr-3 mt-1 rounded" src="upload/forum/6.png">
+							  <div class="media-body">
+							    <span class="font-weight-bold">日常分享</span>
+							    <span class="d-block text-muted mt-2 w-100 text-truncate"><span><i
+							    			class="far fa-comment-alt"></i> :
+							    		<b>2</b></span>
+							    	<span><i class="far fa-comments"></i> :
+							    		<b>0</b></span>
+							    </span>
+							  </div>
+							</div>
+							</a>
+						</div>
+						
+							
+					  </div>
+					
+			</div>
+		</div>
+	</div>
+</div>  <script>
+    var jmsign = $("#tt_sign_mobile");
+    jmsign.on("click",function(){
+        $.xpost(xn.url("my-sign"),"",function(code,message){
+            $.alert(message);});
+    });
+</script>
+
+<script>
+    var jmsign = $("#tt_sign_mobile2");
+    jmsign.on("click",function(){
+        $.xpost(xn.url("my-sign"),"",function(code,message){
+            $.alert(message);});
+    });
+</script>
+<div id="scroll_to_top" class="d-fixed hidden-lg" style="position: fixed; _position: absolute; bottom: 70px; right: 20px; width: 38px; height: 38px;display: none;z-index:9999">
+	<a href="javascript:void(0);" style="width: 70px; height: 70px; display: inline-block; background: url(plugin/wr_direct/top.png) no-repeat; outline: none;" title="回到顶部"></a>
+</div>
+<!--<div id="scroll_to_end" class="d-fixed" style="position: fixed; _position: absolute; bottom: 40px; right: 10px; width: 70px; height: 70px;display: none;">
+	<a href="javascript:void(0);" style="width: 70px; height: 70px; display: inline-block; background: url(plugin/wr_direct/end.png) no-repeat; outline: none;" title="直达底部"></a>-->
+</div>
+
+<script>
+//回到顶部
+var jscroll_to_top = $('#scroll_to_top');
+$(window).scroll(function() {
+	if ($(window).scrollTop() > 0) {
+	   jscroll_to_top.fadeIn('slow');
+	} else {
+		jscroll_to_top.fadeOut('slow');
+	}
+});
+jscroll_to_top.on('click', function() {
+	$('html,body').animate({scrollTop: 0}, 'slow');
+});
+//直达底部
+var jscroll_to_end = $('#scroll_to_end');
+$(window).scroll(function() {
+	if ($(window).scrollTop() < ($(document).height()-$(window).height()) ) {
+	   jscroll_to_end.fadeIn('slow');
+	} else {
+		jscroll_to_end.fadeOut('slow');
+	}
+});
+jscroll_to_end.on('click', function() {
+	$('html,body').animate({scrollTop: $(document).height() }, 'slow');
+});
+</script>
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id: "JPpIBvqJkB1CXSd7",ck: "JPpIBvqJkB1CXSd7"})</script>
+
+

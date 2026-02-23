@@ -1,0 +1,168 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/till_verified_member/view/htm/my_v.template.htm">
+    <slot name="my_body">
+        <?php
+		$apply = v_apply_read($user['uid']);
+
+		if (intval(param('v_level')) > 0) {
+			$type  = $till_v_settings['v_type_' . intval(param('v_level')) . '_credit_type'];
+			$count = $till_v_settings['v_type_' . intval(param('v_level')) . '_credit_amount'];
+
+			$typeString = '';
+
+			if ($type == 'credits') $typeString = $credits1_name;
+			if ($type == 'golds') $typeString = $credits2_name;
+			if ($type == 'rmbs') $typeString = $credits3_name;
+
+			$using = $count . ' ' . $typeString;
+		}
+		?>
+        <div class="row">
+            <div class="col">
+                <?php if ($till_v_settings['v_lock_user_apply'] && $current_apply && intval($current_apply['status']) === 0) : ?>
+                <div class="text-center">
+                    <h3>我们已收到您的认证申请，请耐心等待审核。</h3>
+                </div>
+                <?php else : ?>
+                <?php if ( param('v_level') == 'apply_new' || ($user['v'] == 0 && empty(param('v_level'))) ) :
+				?>
+                <div class="text-center">
+                    <h3>
+                        <?php echo $till_v_settings['v_page_my_apply_before_select_title']; ?>
+                    </h3>
+                    <p>
+                        <?php echo $till_v_settings['v_page_my_apply_before_select_text']; ?>
+                    </p>
+                </div>
+                <form action="<?php echo url('my-vapply'); ?>" method="get" id="v_select_form">
+                    <?php for ($i = 1; $i <= 5; $i++) : ?>
+                    <?php if ($till_v_settings['v_type_' . $i . '_activated']) : ?>
+                    <label>
+                        <input type="radio" name="v_level" value="<?= $i ?>">
+                        <div class="card">
+                            <div class="fs-6 mb-1">
+                                <span class="h4 d-block">
+                                    <?php echo v_show_badge($i, '', $till_v_settings); ?>
+                                </span>
+                                <?php echo $till_v_settings['v_type_' . $i . '_name']; ?>
+                            </div>
+                            <p class="small">
+                                <?php echo $till_v_settings['v_type_' . $i . '_description']; ?>
+                            </p>
+                        </div>
+                    </label>
+                    <?php endif; ?>
+                    <?php endfor; ?>
+                    <button type="submit" class="btn btn-primary btn-block ">下一步</button>
+                </form>
+                <div class="mt-4">
+                    <h3>
+                        <?php echo $till_v_settings['v_page_my_apply_after_select_title']; ?>
+                    </h3>
+                    <p>
+                        <?php echo $till_v_settings['v_page_my_apply_after_select_text']; ?>
+                    </p>
+                </div>
+                <?php elseif (!empty(param('v_level')) && $till_v_settings['v_type_' . intval(param('v_level')) . '_activated'] == false ) : ?>
+                <div class="text-center">
+                    <p class="lead">该类型的认证已暂停申请。请考虑<a href="<?= url('my-vapply') ?>">申请其他类型</a>。</p>
+                </div>
+                <?php elseif (!empty(param('v_level')) && is_int(param('v_level', 1))) : ?>
+                <h3 class="h5 text-center">您正在申请 <b>
+                        <?php echo v_show_badge(param('v_level', 0), '', $till_v_settings); ?>
+                        <?= $till_v_settings['v_type_' . param('v_level', 0) . '_name'] ?>
+                    </b> <a href="<?php echo url('my-vapply'); ?><?= boolval($conf['url_rewrite_on']) ? '?' : '&' ?>v_level=apply_new" class="small">重新选择</a></h3>
+                <h4 class="h6 font-weight-bold">
+                    <?= $till_v_settings['v_page_my_apply_before_form_title'] ?>
+                </h4>
+                <p>
+                    <?= $till_v_settings['v_type_' . param('v_level', 0) . '_requirement'] ?>
+                </p>
+                <hr>
+                <form action="<?php echo url('my-vapply'); ?>" method="post" class="my-2" id="v_apply_form">
+                    <input type="hidden" name="v_level" value="<?= param('v_level', 0) ?>">
+                    <input type="hidden" name="username" value="<?= user_read_cache($uid)['username'] ?>">
+                    <div class="form-group">
+                        <label for="v_title">认证头衔</label>
+                        <input type="text" class="form-control" name="v_title" id="v_title" placeholder="建议2-20字左右">
+                        <p class="help-block small">将鼠标移动到认证徽章上，将会显示这里的文字。</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="v_info">认证信息</label>
+                        <textarea name="v_info" id="v_info" class="form-control" placeholder="填写认证资料信息等"></textarea>
+                        <p class="help-block small"></p>
+                    </div>
+                    <?php if ($till_v_settings['v_type_' . param('v_level', 0) . '_credit_use']) : ?>
+                    <h4 class="h6 text-center text-primary"> 需要
+                        <?= $using ?>
+                    </h4>
+                    <?php endif; ?>
+                    <button type="submit" class="btn btn-primary btn-block ">提交</button>
+                </form>
+                <?php elseif (empty(param('v_level'))) : ?>
+                <?php if ($user['v'] == 0) : ?>
+                <div class="text-center">
+                    <h3>您还未进行认证！</h3>
+                    <a href="<?php echo url('my-vapply'); ?><?= boolval($conf['url_rewrite_on']) ? '?' : '&' ?>v_level=apply_new" class="btn btn-primary">
+                        <?php echo $till_v_settings['v_page_my_apply_before_select_title']; ?>
+                    </a>
+                    <hr>
+                    <h4>
+                        <?php echo $till_v_settings['v_page_my_apply_after_select_title']; ?>
+                    </h4>
+                    <p>
+                        <?php echo $till_v_settings['v_page_my_apply_after_select_text']; ?>
+                    </p>
+                </div>
+                <?php elseif ($user['v'] != 0) : ?>
+                <div class="text-center">
+                    <h3>您已完成认证！</h3>
+                    <ul class="list-unstyled">
+                        <li>认证等级：
+                            <?php echo v_show_badge($user['v'], $user['v_title'], $till_v_settings); ?>
+                            <?= $till_v_settings['v_type_' . $user['v'] . '_name'] ?>
+                        </li>
+                        <li>认证头衔：
+                            <?= $user['v_title'] ?>
+                        </li>
+                    </ul>
+                    <a href="<?php echo url('my-vapply'); ?><?= boolval($conf['url_rewrite_on']) ? '?' : '&' ?>v_level=apply_new" class="btn btn-primary"> 更新认证信息 </a>
+                </div>
+                <?php endif; ?>
+                <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </slot>
+</template>
+<script>
+    var jform = $('#v_apply_form');
+    var jsubmit = $('#submit');
+    jform.on('submit', function () {
+        jform.reset();
+        jsubmit.button('loading');
+        var postdata = jform.serializeObject();
+        postdata.username_new = postdata.username_new;
+        $.xpost(jform.attr('action'), postdata, function (code, message) {
+            if (code == 0) {
+                $.alert(message);
+                jsubmit.button('reset');
+                setTimeout(function () { location.reload(); }, 3000);
+            } else if (code < 0) {
+                $.toast({
+                    title: lang.tips_title,
+                    content: message,
+                    type: 'warning',
+                    pause_on_hover: true,
+                    delay: 5000
+                });
+                jsubmit.button('reset');
+            } else {
+                jform.find('[name="' + code + '"]').alert(message).focus();
+                jsubmit.button('reset');
+            }
+        });
+        return false;
+    });
+
+    $('a[data-active="my-vapply"]').addClass('active');
+</script>

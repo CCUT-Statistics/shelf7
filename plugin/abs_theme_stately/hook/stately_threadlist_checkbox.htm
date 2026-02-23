@@ -1,0 +1,3 @@
+<?php if($have_allowtop) : if($_thread['allowtop']): ?>
+<input type="checkbox" name="modtid" class="form-check-input position-relative ml-0 mr-1" value="<?= $_thread['tid']; ?>" <?=empty($mod_input_checked) ? '' : 'checked disabled' ;?> aria-hidden="true" />
+<?php endif; endif; ?>

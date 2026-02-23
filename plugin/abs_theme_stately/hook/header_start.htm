@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<?php
+
+if (!function_exists('checkIsBetweenTime')) {
+	/**
+	 * 判断当前的时分是否在指定的时间段内
+	 * 
+	 * 重制版，使用DateTime类消除潜在时间差异
+	 * 
+	 * @param string $startTimeStr 开始时间，格式为 'H:i'  
+	 * @param string $endTimeStr 结束时间，格式为 'H:i'  
+	 * @param bool $nextDay 是否跨天，如果为 true，则 endTime 是第二天的时间  
+	 * @param string $custom_timezone 当地时区
+	 * @return bool 如果当前时间在指定时间段内，返回 true；否则返回 false  
+	 * @throws Exception 如果时间范围不正确，或如果 endTime 比 startTime 更早且 nextDay 为 false 会扔出异常
+	 */
+	function checkIsBetweenTime($startTimeStr, $endTimeStr, $nextDay = false, $custom_timezone = '') {
+		// 设置时间
+		$currentTime = new DateTime(); // 现在
+		$startTime = DateTime::createFromFormat('H:i', $startTimeStr);
+		$endTime = DateTime::createFromFormat('H:i', $endTimeStr);
+
+		// 设置时区；如果不指定的话则使用服务器默认时区
+		if (empty($custom_timezone)) {
+			$custom_timezone = date_default_timezone_get();
+		}
+		$tz = new DateTimeZone($custom_timezone);
+		$currentTime->setTimezone($tz);
+		$startTime->setTimezone($tz);
+		$endTime->setTimezone($tz);
+
+		// 防呆机制：如果 endTime 比 startTime 更早且 nextDay 为 false，则抛出异常  
+		if (!$nextDay && $endTime < $startTime) {
+			throw new Exception("endTime 不能早于 startTime，若确定这样做，请让 nextDay = true");
+		}
+
+		// 设置日期为当前日期
+		$startTime->setDate($currentTime->format('Y'), $currentTime->format('m'), $currentTime->format('d'));
+		$endTime->setDate($currentTime->format('Y'), $currentTime->format('m'), $currentTime->format('d'));
+
+		// 跨天
+		if ($nextDay) {
+			// 当天午夜
+			$midnight = clone $currentTime;
+			$midnight->setTime(0, 0, 0);
+
+			// 如果当前时间在开始时间之后且在当前天午夜之前，或者在当前天午夜之后且在结束时间之前
+			if (
+				($currentTime >= $startTime && $currentTime < $midnight->modify('+1 day'))
+				|| ($currentTime >= $midnight && $currentTime < $endTime)
+			) {
+				return true;
+			}
+		} else {
+			// 不跨天，则直接比较时间
+			if ($currentTime >= $startTime && $currentTime < $endTime) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
+$abs_stately_color_mode = 'light';
+$abs_stately_body_class = 'light-style';
+$abs_stately_app_brand_text_class = 'h3';
+$abs_stetely_sidebar_class = 'col-lg-3 aside';
+
+if ($abs_theme_stately_setting['ui']['global']['disable_widget_sidebar_on_mobile'] == 1) {
+	$abs_stetely_sidebar_class = 'col-lg-3 d-none d-lg-block aside';
+}
+
+if (
+	$abs_theme_stately_setting['ui']['color']['mode'] === 'dark' ||
+	($abs_theme_stately_setting['ui']['color']['mode'] === 'auto' &&
+		checkIsBetweenTime($abs_theme_stately_setting['ui']['auto_dark_mode_config']['begin_time'], $abs_theme_stately_setting['ui']['auto_dark_mode_config']['end_time'], true)
+	)
+) {
+	$abs_stately_color_mode = 'dark';
+	$abs_stately_body_class = 'dark-style';
+}
+$abs_stately_body_class .= ' ' . 'layout-navbar-fixed layout-menu-fixed';
+if ($abs_theme_stately_setting['ui']['global']['pull_up_card']) {
+	if (isset($abs_theme_stately_setting['ui']['global']['pull_up_card_style']) && $abs_theme_stately_setting['ui']['global']['pull_up_card_style'] !== 'v1') {
+		$abs_stately_body_class .= ' ' . 'card-rise-up-' . $abs_theme_stately_setting['ui']['global']['pull_up_card_style'];
+	} else {
+		$abs_stately_body_class .= ' ' . 'card-rise-up';
+	}
+}
+
+$abs_stetely_wrapper_class = 'layout-wrapper layout-content-navbar ';
+if ($abs_theme_stately_setting['ui']['global']['navbar_style'] === 'horizontal') {
+	$abs_stetely_wrapper_class .= 'layout-without-menu';
+}
+
+if (isset($abs_theme_stately_setting['ui']['global']['border-radius'])) {
+	$abs_stately_body_class .= ' ' . 'radius-' . $abs_theme_stately_setting['ui']['global']['border-radius'];
+}
+
+if (isset($abs_theme_stately_setting['ui']['global']['navbar_style_vertical'])) {
+	$abs_stately_body_class .= ' ' . 'layout-menu-style-' . $abs_theme_stately_setting['ui']['global']['navbar_style_vertical'];
+}
+
+if (isset($abs_theme_stately_setting['ui']['global']['navbar_active_color_vertical'])) {
+	$abs_stately_body_class .= ' ' . 'layout-menu-active-color-' . $abs_theme_stately_setting['ui']['global']['navbar_active_color_vertical'];
+}
+
+$page_background_gradient_color_map = [
+'gradient_Garden' => 'bg-gradient-1',
+'gradient_Peach' => 'bg-gradient-2',
+'gradient_Ocean' => 'bg-gradient-3',
+'gradient_Tangerine' => 'bg-gradient-4',
+'gradient_Pastel' => 'bg-gradient-5',
+'gradient_Autumn' => 'bg-gradient-6',
+'gradient_Meadow' => 'bg-gradient-7',
+'gradient_Twilight' => 'bg-gradient-8',
+'gradient_Book' => 'bg-gradient-9',
+'gradient_Fairy' => 'bg-gradient-10',
+];
+if(in_array($abs_theme_stately_setting['ui']['background']['style'], array_keys($page_background_gradient_color_map), true)) {
+	$abs_stately_body_class .= ' ' . $page_background_gradient_color_map[$abs_theme_stately_setting['ui']['background']['style']];
+}
+
+$abs_stetely_navbar_class = '';
+$abs_stetely_navbar_collapse_class_suffix = '';
+switch ($abs_theme_stately_setting['ui']['global']['navbar_style']) {
+	case 'horizontal':
+		switch ($abs_theme_stately_setting['ui']['global']['navbar_width_horizontal']) {
+			case 'fullwidth':
+				$abs_stetely_wrapper_class .= ' fullwidth-navbar';
+				$abs_stetely_navbar_class = 'layout-navbar container-fluid navbar navbar-expand-xl align-items-center bg-navbar-theme shadow-sm';
+				break;
+			case 'fullwidth_but_normal':
+				$abs_stetely_wrapper_class .= ' fullwidth-navbar';
+				$abs_stetely_navbar_class = 'layout-navbar container-fluid navbar navbar-expand-xl align-items-center bg-navbar-theme shadow-sm';
+				$abs_stetely_navbar_collapse_class_suffix = ' container-xxl';
+				break;
+			default:
+				$abs_stetely_navbar_class = 'layout-navbar container-xxl navbar navbar-expand-xl align-items-center bg-navbar-theme navbar-detached ';
+				break;
+		}
+		break;
+	default:
+		switch ($abs_theme_stately_setting['ui']['global']['navbar_width_horizontal']) {
+			case 'fullwidth':
+				$abs_stetely_wrapper_class .= ' fullwidth-navbar';
+				$abs_stetely_navbar_class = 'layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme shadow-sm';
+				break;
+				case 'fullwidth_but_normal':
+			$abs_stetely_wrapper_class .= ' fullwidth-navbar';
+				$abs_stetely_navbar_class = 'layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme shadow-sm';
+				$abs_stetely_navbar_collapse_class_suffix = ' container-xxl';
+				break;
+			default:
+				$abs_stetely_navbar_class = 'layout-navbar container-xxl navbar navbar-expand-xl align-items-center bg-navbar-theme navbar-detached ';
+				break;
+		}
+		break;
+}
+
+if (!function_exists('countChars')) {
+	/**
+	 * 计算字数
+	 * 两个英文算一个字，一个汉字算一个字
+	 * @param string $string 要计算字数的字符串
+	 * @return int 字数
+	 */
+	function countChars($string) {
+		// 如果输入为空，则返回 0
+		if (empty($string) || !is_string($string)) {
+			return 0;
+		}
+
+		$pattern = '/[\x{4e00}-\x{9fa5}]/u'; // 匹配中文字符
+		$matches = preg_match_all($pattern, $string, $chineseMatches);
+
+		$asciiCount = strlen(preg_replace('/[\x{4e00}-\x{9fa5}]/u', '', $string)) / 2; // 匹配英文字符
+		$chineseCount = count($chineseMatches[0]);
+
+		$totalCount = intval($asciiCount + $chineseCount); // 计算总字数，保留整数
+
+		return $totalCount;
+	}
+}
+
+if (!isset($abs_theme_stately_setting['global']['icon']['sitename']) || empty($abs_theme_stately_setting['global']['icon']['sitename'])) {
+	$abs_stately_sitename = $conf['sitename'];
+} else {
+	$abs_stately_sitename = $abs_theme_stately_setting['global']['icon']['sitename'];
+}
+
+// 网站标题自适应字数
+if (countChars($abs_stately_sitename) <= 3) {
+	$abs_stately_app_brand_text_class = 'h2';
+} elseif (countChars($abs_stately_sitename) <= 5) {
+	$abs_stately_app_brand_text_class = 'h3';
+} elseif (countChars($abs_stately_sitename) <= 6) {
+	$abs_stately_app_brand_text_class = 'h4';
+} elseif (countChars($abs_stately_sitename) <= 8) {
+	$abs_stately_app_brand_text_class = 'h5';
+} elseif (countChars($abs_stately_sitename) <= 10) {
+	// 没有人起一个超过10字的网站名吧？
+	$abs_stately_app_brand_text_class = 'h6';
+} elseif (countChars($abs_stately_sitename) <= 13) {
+	// 字数太多啦
+	$abs_stately_app_brand_text_class = 'text-small';
+}
+// 但如果用户没有登录的话，设置为h6
+if (empty($user) && in_array($abs_theme_stately_setting['ui_tweek']['navbar_vertical']['replaces_sitename_with_user_info'], ['yes', 'auto'])) {
+	$abs_stately_app_brand_text_class = 'h6';
+}
+/**
+ * @var string $abs_stately_current_page_class 当前页面的CSS类
+ * 
+ * - 第一层：路由：这里判断了变量 $route 是否为空，如果不为空，则返回 'route-具体路由'，否则返回空字符串。 
+ * - 第二层：主要操作：根据不同情况生成不同的字符串：
+ *   - a. 如果参数1不为空，或者[当前路由为'user' 且参数1不是数字【表示当前页面为登录、注册、找回密码】]，则返回  'action-' . param(1)  
+ *   - b. 否则，如果当前路由为'my'且参数1为空【表示当前页面为个人中心】，或者[当前路由为'user'且参数1是数字【表示当前页面为用户资料页】]，则返回'action-profile'
+ *   - c. 否则返回空字符串 
+ * - 第三层：次要操作：这里判断了参数2是否为空，如果不为空，则返回  'subaction-' . param(2) ，否则返回空字符串。 
+ */
+$abs_stately_current_page_class = implode(
+	' ',
+	[
+		!empty($route) ? 'route-' . $route : '', /* 第一层：路由 */
+		!empty(param(1)) || ($route === 'user' && !is_numeric(param(1))) ? 'action-' . param(1) : (($route === 'my' && empty(param(1))) || ($route === 'user' && is_numeric(param(1))) ? 'action-profile' : ''), /* 第二层：主要操作 */
+		!empty(param(2)) ? 'subaction-' . param(2) : '', /* 第三层：次要操作 */
+	]
+);
+
+// 对应 经验
+$credits1_name = lang('credits1');
+if ($credits1_name === 'lang[credits1]') {
+	if (isset($conf['exp_name'])) {
+		$credits1_name = $conf['exp_name'];
+	} else {
+		$credits1_name = 'Exp. ';
+	}
+}
+// 对应 金币
+$credits2_name = lang('credits2');
+if ($credits2_name === 'lang[credits2]') {
+	if (isset($conf['gold_name'])) {
+		$credits2_name = $conf['gold_name'];
+	} else {
+		$credits2_name = 'Golds';
+	}
+}
+// 对应 现金
+$credits3_name = lang('credits3');
+if ($credits3_name === 'lang[credits3]') {
+	if (isset($conf['rmb_name'])) {
+		$credits3_name = $conf['rmb_name'];
+	} else {
+		$credits3_name = 'Cash';
+	}
+}
+
+if ($abs_theme_stately_setting['global']['settings']['enable_open_graph']) {
+	if (!function_exists('stately_catch_post_imgs')) {
+		/**
+		 * 获取文章内的图片 
+		 * 
+		 * 会寻找HTML img标签、[img]短代码内容里的URL
+		 *
+		 * 如果帖子里有封面图字段，推荐用那个，然后将这个函数作为fallback
+		 * 
+		 * 如 
+		 * ```
+		 * $cover = $thread['cover']) ?? stately_catch_post_imgs($thread['message']);
+		 * ```
+		 * 
+		 * @param string $content 文章内容
+		 * @param bool $only_need_one_image 只需要一张图？
+		 * @return array|string|null 文章里缩略图的网址，如果有一张图，返回string，如果有超过两张图，返回array，如果没有图，返回null
+		 */
+		function stately_catch_post_imgs($content, $only_need_one_image = false) {
+			$images = [];
+  
+			if (preg_match_all("/\[img width=(\d+),height=(\d+)\](.*?)\[\/img\]/is", $content, $matches)) {  
+				// 匹配带宽度和高度的[img]短代码  
+				$images = $matches[3]; 
+			}  
+			elseif (preg_match_all("/\[img\](.*?)\[\/img\]/is", $content, $matches)) {  
+				// 匹配不带宽度和高度的[img]短代码  
+				$images = $matches[1]; 
+			}  
+			else {  
+				// 匹配HTML
+				if (preg_match_all('/<img\s+[^>]*src=[\'"]([^\'"]+)[\'"].*>/i', $content, $matches)) {  
+					$images = $matches[1]; 
+				}  
+			}  
+		  
+			// 根据需求返回一张图片或所有图片的数组，如果没有图片则返回null  
+			return empty($images) ? null : (($only_need_one_image || count($images) == 1) ? $images[0] : $images);  
+		}
+		
+		}
+	if ((isset($thread) && isset($first)) && !isset($_post_message_image)) {
+
+		$_post_message_image = stately_catch_post_imgs($first['message_fmt'], true);
+	}
+}
+
+
+if (!function_exists('stately_format_number')) {
+	/**
+	 * 将数字转换为k(kilo),m(million),b(billion),t(trillion)等的形式
+	 * @param int $number
+	 * @param int $precision 准确度（保留小数后几位）
+	 * @param bool $chinese_alter 使用中文单位？
+	 * @return string
+	 */
+	function stately_format_number($number = 0, $precision = 2, $chinese_alter = false) {
+		$number = intval($number);
+		$suffix = '';
+		if ($chinese_alter) {
+			if (PHP_INT_SIZE === 4 && $number >= 10000 and $number < 100000000) {
+				# 一万到一亿 32位 
+				$number = round($number / 10000, $precision);
+				$suffix = '万';
+			} elseif (PHP_INT_SIZE === 4 && ($number >= 100000000 && $number < 1000000000000) || $number >= 100000000 && $number < 2147483646) {
+				# 一亿到一兆(一万亿) 32位 从这个数量级开始就没什么实用价值了
+				$number = round($number / 100000000, $precision);
+				$suffix = '亿';
+			} elseif (PHP_INT_SIZE === 8 && $number >= 1000000000000 && $number < 1000000000000000) {
+				# 一兆到一京(一万兆) 64位
+				$number = round($number / 1000000000000, $precision);
+				$suffix = '兆';
+			} elseif (PHP_INT_SIZE === 8 && $number >= 1000000000000000 && $number < 1000000000000000000) {
+				# 一京到一垓(一万京) 64位
+				$number = round($number / 1000000000000000, $precision);
+				$suffix = '京'; 
+			} elseif (PHP_INT_SIZE === 8 && $number >= 1000000000000000000 && $number < PHP_INT_MAX) {
+				# 一垓到一秭(一万垓) 64位
+				$number = round($number / 1000000000000000000, $precision);
+				$suffix = '秭';
+			}
+		} else {
+			if ($number >= 1000 && $number < 1000000) {
+				// 一千到一百万
+				$number = round($number / 1000, $precision);
+				$suffix = 'k';
+			} elseif ($number >= 1000000 && $number < 1000000000) {
+				// 一百万到十亿
+				$number = round($number / 1000000, $precision);
+				$suffix = 'm';
+			} elseif (PHP_INT_SIZE === 8 && $number >= 1000000000 && $number < 1000000000000) {
+				// 十亿到一兆(一万亿)
+				$number = round($number / 1000000000, $precision);
+				$suffix = 'b';
+			} elseif (PHP_INT_SIZE === 8 && $number >= 1000000000000) {
+				// 一兆以上
+				$number = round($number / 1000000000000, $precision);
+				$suffix = 't';
+			}
+		}
+
+		return $number . $suffix;
+	}
+}
+
+/**
+ * 制造联系方式按钮
+ * 
+ * @param array #data 联系方式，键为联系方式类型（见`switch (key)`里的各个case），值为联系方式的具体内容。
+ * @return string 包含所有生成的联系方式按钮的 HTML 字符串。  
+ */
+function stately_generate_contacts_button($data) {
+	$r = '';
+	foreach ($data as $key => $value) {
+		if (empty($value)) {
+			continue;
+		}
+		$href = $value;
+		$btn_class = strtolower('btn-' . $key);
+		$icon_name = 'lab la-' . $key;
+		$icon_custom_html = '';
+		switch ($key) {
+			case 'phone':
+				$btn_class = 'btn-primary';
+				$href = 'tel:' . $value;
+				$icon_name = 'las la-phone';
+				break;
+			case 'email':
+				$btn_class = 'btn-primary';
+				$href = 'mailto:' . $value;
+				$icon_name = 'las la-envelope';
+				break;
+			case 'rss':
+				$btn_class = 'btn-warning';
+				$icon_name = 'las la-rss';
+				break;
+			case 'qq':
+			case 'QQ':
+				$href = 'tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=' . $value . '&website=www.oicqzone.com';
+				$btn_class = 'btn-twitter';
+			case 'skype':
+			case 'telegram':
+				$btn_class = 'btn-twitter';
+				break;
+			case 'mastodon':
+			case 'whatsapp':
+				$btn_class = 'btn-success';
+				break;
+			case 'snapchat':
+			case 'gitlab':
+				$btn_class = 'btn-warning';
+				break;
+			case 'twitter':
+				$icon_custom_html = '<span class="fs-large">&#x1D54F;</span>';
+				break;
+			case 'bilibili':
+			case 'BiliBili':
+				$icon_custom_html = '<svg class="icon" style="width: 1.5em;height: 1.5em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1599"><path d="M306.005333 117.632L444.330667 256h135.296l138.368-138.325333a42.666667 42.666667 0 1 1 60.373333 60.373333l-78.037333 77.952L789.333333 256A149.333333 149.333333 0 0 1 938.666667 405.333333v341.333334a149.333333 149.333333 0 0 1-149.333334 149.333333h-554.666666A149.333333 149.333333 0 0 1 85.333333 746.666667v-341.333334A149.333333 149.333333 0 0 1 234.666667 256h88.96L245.632 177.962667a42.666667 42.666667 0 0 1 60.373333-60.373334zM789.333333 341.333333h-554.666666a64 64 0 0 0-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0 0 57.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0 0 63.701334-57.813334L853.333333 746.666667v-341.333334A64 64 0 0 0 789.333333 341.333333zM341.333333 469.333333a42.666667 42.666667 0 0 1 42.666667 42.666667v85.333333a42.666667 42.666667 0 1 1-85.333333 0v-85.333333a42.666667 42.666667 0 0 1 42.666666-42.666667z m341.333334 0a42.666667 42.666667 0 0 1 42.666666 42.666667v85.333333a42.666667 42.666667 0 1 1-85.333333 0v-85.333333a42.666667 42.666667 0 0 1 42.666667-42.666667z" p-id="1600"></path></svg>';
+				break;
+			case 'douyin':
+				$icon_custom_html = '<svg class="icon" style="width: 1.5em;height: 1.5em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2498"><path d="M937.4 423.9c-84 0-165.7-27.3-232.9-77.8v352.3c0 179.9-138.6 325.6-309.6 325.6S85.3 878.3 85.3 698.4c0-179.9 138.6-325.6 309.6-325.6 17.1 0 33.7 1.5 49.9 4.3v186.6c-15.5-6.1-32-9.2-48.6-9.2-76.3 0-138.2 65-138.2 145.3 0 80.2 61.9 145.3 138.2 145.3 76.2 0 138.1-65.1 138.1-145.3V0H707c0 134.5 103.7 243.5 231.6 243.5v180.3l-1.2 0.1" p-id="2499"></path></svg>';
+				break;
+			default:
+				break;
+		}
+		$r .= '<a href="' . $href . '" class="btn btn-icon btn-lg ' . $btn_class . '" title="' . $key . '">'
+			. ((!empty($icon_custom_html)) ? $icon_custom_html : '<i class="fs-large ' . $icon_name . '" aria-hidden="true"></i>')
+			. '</a>';
+	}
+	return $r;
+}
+
+require_once(APP_PATH . 'plugin/abs_theme_stately/inc/asset.lib.php');
+$stately_asset_css = new Asset(APP_PATH . str_replace('.' . DIRECTORY_SEPARATOR,'',$conf['tmp_path']) . DIRECTORY_SEPARATOR);
+$stately_asset_js = new Asset(APP_PATH . str_replace('.' . DIRECTORY_SEPARATOR,'',$conf['tmp_path']) . DIRECTORY_SEPARATOR);
+$stately_asset_css->setDoMinify($abs_theme_stately_setting['advanced']['minify']['enable_css']);
+$stately_asset_js->setDoMinify($abs_theme_stately_setting['advanced']['minify']['enable_js']);
+?>
+<!--{hook kumquat_frontend_func.htm}-->

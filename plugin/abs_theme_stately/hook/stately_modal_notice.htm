@@ -1,0 +1,39 @@
+<?php
+if (
+    $abs_theme_stately_setting['special']['the_modal']['enable']
+) :
+    if (
+        (($uid != 0) && !$abs_theme_stately_setting['special']['the_modal']['do_not_show_after_login'])
+        || ($route != 'user' && !is_numeric(param(1)))
+    ) :
+?>
+<div class="modal fade" id="stately_notice_modal" tabindex="-1" role="dialog" aria-labelledby="stately_notice_modal_label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h4modal-title" id="stately_notice_modal_label"><i class="la la-bell"></i>
+                    <?= $abs_theme_stately_setting['special']['the_modal']['title'] ?>
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?= htmlspecialchars_decode($abs_theme_stately_setting['special']['the_modal']['content']) ?>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="isClose">
+                    <?= $abs_theme_stately_setting['special']['the_modal']['content_btn_close'] ?>
+                </button></div>
+        </div>
+    </div>
+</div>
+<script id="stately_notice_modal_show">
+    var stately_notice_modal = new bootstrap.Modal(document.getElementById('stately_notice_modal'));
+    if ($.cookie("stately_notice_modal_closeed") != 'true') {
+        stately_notice_modal.show();
+    }
+    $("#isClose").click(function (e) {
+        stately_notice_modal.hide();
+        $.cookie("stately_notice_modal_closeed", 'true', <?= $abs_theme_stately_setting['special']['the_modal']['duration'] != PHP_INT_MAX ? time() + ($abs_theme_stately_setting['special']['the_modal']['duration'] * 60) : $abs_theme_stately_setting['special']['the_modal']['duration'] ?>);
+    });
+</script>
+<?php endif;
+            endif; ?>

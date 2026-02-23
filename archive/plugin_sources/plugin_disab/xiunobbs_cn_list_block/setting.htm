@@ -1,0 +1,114 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<?php $ax_kv = kv_get('xiunobbs_cn_list_block');$_checkbox = $ax_kv['fid'];?>
+
+
+<div class="row">
+	<div class="col-lg-10 mx-auto">
+		<div class="card">
+			<div class="card-body">
+				
+				
+				<form action="<?php echo url("plugin-setting-xiunobbs_cn_list_block");?>" method="post" id="form">
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">选择板块</label>
+						<div class="col-sm-10">	
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="a" <?php if(in_array(a,$_checkbox)) {echo 'checked="checked"';}?> >网站首页</label>
+							<?php foreach($forumlist as $_fid=>$_froum){?>
+								<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="<?php echo $_froum['fid']?>" <?php if(in_array($_froum['fid'],$_checkbox)) {echo 'checked="checked"';}?> > <?php echo $_froum['name']?></label>
+							<?php }?>	
+						</div>
+					</div>	
+					
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">附加功能</label>
+						<div class="col-sm-10">	
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="b" <?php if(in_array(b,$_checkbox)) {echo 'checked="checked"';}?> >显示搜索(需要搜索插件)</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="c" <?php if(in_array(c,$_checkbox)) {echo 'checked="checked"';}?> >隐藏右侧</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="e" <?php if(in_array(e,$_checkbox)) {echo 'checked="checked"';}?> >隐藏置顶帖</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="i" <?php if(in_array(i,$_checkbox)) {echo 'checked="checked"';}?> >隐藏最新栏</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="g" <?php if(in_array(g,$_checkbox)) {echo 'checked="checked"';}?> >隐藏用户</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="h" <?php if(in_array(h,$_checkbox)) {echo 'checked="checked"';}?> >隐藏时间</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="j" <?php if(in_array(j,$_checkbox)) {echo 'checked="checked"';}?> >隐藏多选框</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="d" <?php if(in_array(d,$_checkbox)) {echo 'checked="checked"';}?> >隐藏留言数量</label>
+							<label class="custom-input custom-checkbox mr-4"><input type="checkbox" name="post_fid[]" value="f" <?php if(in_array(f,$_checkbox)) {echo 'checked="checked"';}?> >隐藏类型标签(需要标签插件)</label>
+						</div>
+					</div>	
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">每页显示</label>
+						<div class="col-sm-10">
+							<?php 
+							$pagesize = $conf['pagesize']; 
+							if($pagesize == 12){
+							?>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="z" checked="checked";>每页12帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="y";>每页24帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="x";>每页36帖</label>
+							<?php 
+							}else if($pagesize == 24){
+							?>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="z";>每页12帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="y" checked="checked";>每页24帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="x";>每页36帖</label>
+							<?php 
+							}else if($pagesize == 36){
+							?>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="z";>每页12帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="y";>每页24帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="x" checked="checked";>每页36帖</label>
+							<?php 
+							}else{
+							?>
+								<?php echo ('当前为每页'.$pagesize.'帖,推荐设置为每页12/24/36帖');?>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="z";>每页12帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="y";>每页24帖</label>
+								<label class="custom-input custom-checkbox mr-4"><input type="radio" name="post_fid[]" value="x";>每页36帖</label>
+								
+							<?php 
+							}
+							?>
+							
+							
+							
+							
+							
+							
+						</div>
+					</div>	
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label"></label>
+						<div class="col-sm-10">
+							<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('confirm');?></button>
+							<a role="button" class="btn btn-secondary btn-block mt-3" href="javascript:history.back();">
+								<?php echo lang('back');?>
+							</a>
+						</div>
+					</div>
+				</form>
+				
+				
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+var jform = $("#form");
+var jsubmit = $("#submit");
+var referer = '<?php echo url("plugin-setting-xiunobbs_cn_list_block");?>';
+jform.on('submit', function(){
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serialize();
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.text(message).delay(1000).button('reset').location(referer);
+		} else {
+			$.alert('提交失败');
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+</script>

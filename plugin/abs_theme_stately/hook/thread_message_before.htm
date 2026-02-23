@@ -1,0 +1,11 @@
+<?php
+if($abs_theme_stately_setting['special']['thread_toc']['enable']) {
+    if($abs_theme_stately_setting['special']['thread_toc']['position'] === 'in_thread'){
+        //echo article_toc($first['message_fmt'], 'thread');
+        $first['message_fmt'] = article_toc($first['message_fmt'],'thread');
+    }elseif($abs_theme_stately_setting['special']['thread_toc']['position'] === 'auto'){
+        //echo article_toc($first['message_fmt'], 'thread_auto');
+        $first['message_fmt'] = article_toc($first['message_fmt'],'thread_auto');
+    }
+}
+?>

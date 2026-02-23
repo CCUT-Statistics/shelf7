@@ -1,0 +1,10 @@
+{
+    "name": "论坛版块封面图",
+    "brief": "提供论坛版块封面图功能。需要主题支持。<b class=lead>请进入论坛板块设置，点击对应板块的编辑按钮，在封面图选项中上传图片。</b>",
+    "version": "1.0.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": []
+}

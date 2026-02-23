@@ -1,0 +1,114 @@
+<li class="card post <?= $_post['classname'];?>" data-pid="<?= $_post['pid'];?>" data-uid="<?= $_post['uid'];?>">
+    <div class="row g-0">
+        <div class="col-md-2">
+            <?php 
+            $this_user_credits_progress = -1; 
+            $this_user_credits_max=1; 
+            $this_user_credits_now=$thread['user']['credits'];
+                if($thread['user']['gid']>100){
+                    foreach($grouplist as $group) {
+                    if($group['gid'] < 100) continue;
+                    if($this_user_credits_now > $group['creditsfrom'] && $this_user_credits_now <= $group['creditsto']) {
+                        $this_user_credits_max=$group['creditsto'];
+                        break;
+                    }
+                }
+                $this_user_credits_progress = intval($this_user_credits_now/$this_user_credits_max * 100.0);
+            }
+            ?>
+            <div class="d-flex align-items-center flex-row flex-md-column text-md-center p-3 bg-light">
+                <div class="post-avatar flex-shrink-0">
+                    <a href="<?= url('user-'.$_post['uid']);?>" class="v_avatar v_avatar-post">
+                        <!--{hook post_list_inc_avatar_before.htm}-->
+                        <img loading="lazy" decoding="async" src="<?= $_post['user_avatar_url'];?>" class="w-px-50 img-fluid ">
+                        <!--{hook post_list_inc_avatar_after.htm}-->
+                    </a>
+                </div>
+                <div class="d-flex flex-row flex-md-column m-2 mx-md-0 col p-0">
+                    <div class="mb-lg-2">
+                        <h5 class="mb-0 h6">
+                            <a href="<?= url('user-'.$_post['uid']); ?>" class="username <?= $postlist_username_extra_class ?>">
+                                <?= $_post['username']; ?>
+                            </a>
+                        </h5>
+                        <small>
+                            <?= $_post['user']['groupname']; ?>
+                        </small>
+                        <?php if( $this_user_credits_progress !== -1 ): ?>
+                        <div class="progress mt-1" style="height:.25rem">
+                            <div class="progress-bar" role="progressbar" style="width: <?= $this_user_credits_progress ?>%" aria-valuenow="<?= $this_user_credits_progress ?>" aria-valuemin="0" aria-valuemax="100" title="
+                            <?= $this_user_credits_progress ?>%" data-bs-toggle="tooltip">
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php if( $abs_theme_stately_setting['ui_tweek']['thread_style_vintage_v1']['show_user_statistics'] === 'all'): ?>
+                    <div>
+
+
+
+                        <div class="d-none d-md-flex flex-md-column justify-content-center ml-3 mt-2 mx-md-auto border-top border-bottom py-md-2 mb-md-3" style="max-width: 8em">
+                            <div class="d-flex flex-md-row justify-content-between mr-1">
+                                <small class="text-muted">
+                                    <?= $credits1_name ?>
+                                </small>
+                                <span>
+                                    <?= $_post['user']['credits'] ?>
+                                </span>
+                            </div>
+                            <div class="d-flex flex-md-row justify-content-between mr-1">
+                                <small class="text-muted">
+                                    <?= $credits2_name ?>
+                                </small>
+                                <span>
+                                    <?= $_post['user']['golds'] ?>
+                                </span>
+                            </div>
+                            <div class="d-flex flex-md-row justify-content-between mr-1">
+                                <small class="text-muted">
+                                    <?= $credits3_name ?>
+                                </small>
+                                <span>
+                                    <?= $_post['user']['rmbs'] ?>
+                                </span>
+                            </div>
+                        </div>
+
+                        <?php if($stately_thread_style === 'vintage_v1'): ?>
+                        <div class="d-none d-md-block">
+                            <!--{hook post_list_inc_subject_before.htm}-->
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="p-3">
+                <div class="post-meta small mb-2 d-flex justify-content-between text-muted">
+                    <div>
+                        <!--{hook post_list_inc_create_date_before.htm}-->
+                        <!---->
+                        <time datetime="<?= $_post['create_date'];?>" class="date text-muted mr-2">
+                            <i class="las la-clock"></i>
+                            <?= date($abs_theme_stately_setting['global']['datetime_format']['date_and_time'],$_post['create_date']) ?>
+                        </time>
+                    </div>
+                    <div>
+                        <!--{hook post_list_inc_create_date_after.htm}-->
+                        <!--{hook stately_postlist_btn_quote.htm}-->
+                        <!--{hook stately_postlist_btn_update.htm}-->
+                        <!--{hook stately_postlist_btn_delete.htm}-->
+                        <!--{hook stately_postlist_floor_count.htm}-->
+                    </div>
+                </div>
+                <div class="message ">
+                    <!--{hook stately_postlist_subject.htm}-->
+                    <!--{hook stately_postlist_message.htm}-->
+                    <!--{hook stately_postlist_filelist.htm}-->
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

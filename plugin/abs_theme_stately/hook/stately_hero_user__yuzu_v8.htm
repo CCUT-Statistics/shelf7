@@ -1,0 +1,90 @@
+<div class="col-lg-3">
+    <section class="card mb-3" id="my_profile" data-style="yuzu_v8">
+
+        <section class="user-profile-inner">
+            <div class="user-profile-header-banner card-img-top with-shadow"
+                 <?php if(function_exists('cover_get_cover_url_by_uid') && isset($_user['cover_url']) && !empty($_user['cover_url'])): ?> style="background-image:url(
+      <?= cover_get_cover_url_by_uid($_user['uid']) ?>);background-size:cover"
+                 <?php endif; ?>>
+            </div>
+            <div class="card-body p-4">
+                <div class="user-profile-info d-flex flex-column align-items-center">
+                    <figure class="user-profile-photo ">
+                        <div class="v_avatar v_avatar-user">
+                            <!--{hook user_profile_avatar_before.htm}-->
+                            <img loading="lazy" decoding="async" src="<?= $_user['avatar_url'];?>" alt="user image" class="user-profile-img" loading="lazy">
+                            <!--{hook user_profile_avatar_after.htm}-->
+                        </div>
+                    </figure>
+                    <section class="text-center mx-3">
+
+                        <h1 class="h4 text-white">
+                            <!--{hook user_profile_username_before.htm}-->
+                            <?= $_user['username'];?>
+                            <!--{hook user_profile_username_after.htm}-->
+                        </h1>
+
+                        <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-center gap-2">
+                            <?php if($abs_theme_stately_setting['ui_tweek']['user']['show_usergroup_on_hero']): ?>
+                            <li>
+                                <span class="badge bg-primary"><?= $_user['groupname'];?></span>
+                            </li>
+                            <?php endif; ?>
+                            <?php if($abs_theme_stately_setting['ui_tweek']['user']['show_uid_on_hero']): ?>
+                            <li>
+                                <span class="badge bg-label-secondary">UID: <?= $_user['uid'];?></span>
+                            </li>
+                            <?php endif; ?>
+                            <!--{hook user_profile_groupname_after.htm}-->
+
+                            <!--{hook stately_user_online_status_label.htm}-->
+                        </ul>
+
+                    </section>
+
+
+
+                </div>
+            </div>
+
+        </section>
+
+        <div class="card-footer pt-3">
+
+            <?php if(isset($_user['signature'])): ?>
+            <div class="mt-2">
+                <i class="la la-pen text-info"></i>
+                <?= !empty($_user['signature']) ?htmlspecialchars_decode($_user['signature']) : htmlspecialchars_decode($abs_theme_stately_setting['ui_tweek']['user']['default_signature_self']) ?>
+            </div>
+            <?php endif; ?>
+            <!--{hook stately_hero_user_prison_status.htm}-->
+
+            <!--{hook user_profile_signature_after.htm}-->
+
+            <div class="d-inline-flex flex-wrap justify-content-center align-items-center mx-2">
+                <!--{hook user_profile_header_right.htm}-->
+                <!--{hook user_common_mobile_thread_after.htm}-->
+                <?php if(!empty($group['allowdeleteuser'])) { ?>
+                <a role="button" class="btn btn-danger confirm " data-confirm-text="<?= lang('confirm_delete_user');?>" data-method="post" href="<?= url('mod-deleteuser-'.$_user['uid']);?>">
+                    <?= lang('delete_user');?>
+                </a>
+                <?php } ?>
+                <!--{hook user_index_delete_user_button_after.htm}-->
+            </div>
+
+            <!--{hook stately_hero_user_stats.htm}-->
+        </div>
+    </section>
+
+    <div class="card d-none d-lg-block " id="user_aside" data-style="modern_v3">
+        <nav class="list-group list-group-flush text-center" id="user_nav">
+            <!--{hook user_common_user_before.htm}-->
+            <a href="<?php echo url("user-$_uid");?>" class="list-group-item list-group-item-action" data-active="menu-user">个人资料</a>
+            <!--{hook user_common_user_after.htm}-->
+            
+            <!--{hook user_common_thread_before.htm}-->
+            <a href="<?php echo url("user-thread-$_uid");?>" class="list-group-item list-group-item-action" data-active="menu-user-thread">论坛帖子</a>
+            <!--{hook user_common_thread_after.htm}-->
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<!--{hook post_list_inc_quote_before.htm}-->
+<?php if($allowpost) { ?>
+<a href="javascript:void(0)" data-tid="<?= $_post['tid'];?>" data-pid="<?= $_post['pid'];?>" class="text-primary post_reply mr-3"><i class="la la-reply" title="<?= lang('quote');?>"></i> <span class="d-none d-lg-inline">
+        <?= lang('quote');?>
+    </span></a>
+<?php } ?>
+<!--{hook post_list_inc_quote_after.htm}-->

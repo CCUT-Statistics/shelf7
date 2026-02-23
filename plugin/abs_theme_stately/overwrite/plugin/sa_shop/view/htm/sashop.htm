@@ -1,0 +1,51 @@
+<?php 
+$num_pid = db_count('sashop');
+$page = param(2,1);
+
+$sashop = db_find('sashop', array(), array('time'=>-1),$page, $pagesize = 20);
+$pagination = pagination(url("plugin-setting-sa_shop-{page}"), $num_pid, $page, $pagesize);
+
+include _include(APP_PATH . 'view/htm/header.inc.htm'); ?>
+
+<header>
+	<h1 class="h2 text-center">商城</h1>
+</header>
+<div class="">
+	<div class="row">
+		<?php foreach($sashop as $v){?>
+		<div class="col-md-6 col-lg-4 col-xl-3">
+			<article class="card">
+				<form action="<?php echo url('mod-sashop');?>" method="post" id="form">
+					<input type="hidden" name="id" value="<?php echo $v['id'];?>" />
+					<div class="card-body">
+						<div class="media d-flex">
+							<img src="<?php echo $v['saimg'];?>" loading="lazy">
+							<div class="media-body flex-grow-1 pl-2">
+								<h2 class="h3"><?php echo $v['title'];?></h2>
+								<p><?php echo $v['message'];?></p>
+								<div>
+									<span class="btn bg-label-warning">
+										<i class="icon-diamond" aria-hidden="true"></i>
+										金币:<?php echo $v['sum'];?>
+									</span>
+									<button type="submit" class="btn btn-primary" id="submit" data-loading-text="正在提交..."><i class="icon-download"></i>购买</button>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</article>
+
+		</div>
+
+		<?php }?>
+	</div>
+	<nav class="text-center">
+		<ul class="pagination"><?php echo $pagination; ?></ul>
+	</nav>
+</div>
+<script>
+	$('li[data-active="sashop"]').addClass('active');
+</script>
+<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>

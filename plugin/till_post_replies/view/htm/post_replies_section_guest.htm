@@ -1,0 +1,34 @@
+<?php
+	$_post_replies_count = $_post['r_f_c'];
+	if ($_post_replies_count > 0) :
+?>
+<section id="post_replies_container_<?= $_post['pid'] ?>" class="post_replies">
+    <button type="button" data-toggle="collapse" data-target="#post_replies_<?= $_post['pid'] ?>" data-bs-toggle="collapse" data-bs-target="#post_replies_<?= $_post['pid'] ?>" class="btn btn-secondary btn-sm d-block ml-auto">回复<?= $_post_replies_count > 0 ? '(' . $_post_replies_count . ')' : '' ?></button>
+
+    <div class="ml-auto col-lg-8 collapse card p-3 <?= ($_post_replies_count > 0 && $till_post_replies_setting['collapse_open_by_default']) ? 'open show' : '' ?>" id="post_replies_<?= $_post['pid'] ?>">
+
+        <section id="post_replies_list_<?= $_post['pid'] ?>" class="post_replies_list">
+            <?php
+					$_post_replies_array = json_decode($_post['repeat_follow'], true);
+					$_post_replies_array = array_slice($_post_replies_array, 0, $till_post_replies_setting['replies_per_page']);
+                    foreach ($_post_replies_array as $reply_item){
+                        $__user = user_read_cache($reply_item['uid']);
+                        if(intval($__user['gid']) === 7) {
+                            $reply_item['message'] = '*已移除*';
+                        }
+                    }unset($__user);
+					?>
+            <ul class="list-unstyled ">
+                <?php include _include(APP_PATH . 'plugin/till_post_replies/view/htm/post_reply_list.inc.htm'); ?>
+            </ul>
+        </section>
+        <?php if(($_post_replies_count - $till_post_replies_setting['replies_per_page']) >= 0): ?>
+        <section class="post_replies_write_form">
+            <p class="m-0 text-center ">
+                还有<?= $_post_replies_count - $till_post_replies_setting['replies_per_page'] ?>条回复，<a href="<?= url('user-login') ?>">登录</a>后查看更多!
+            </p>
+        </section>
+        <?php endif;?>
+    </div>
+</section>
+<?php endif; ?>

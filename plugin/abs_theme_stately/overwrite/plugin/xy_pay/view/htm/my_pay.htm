@@ -1,0 +1,131 @@
+<template include="plugin/xy_pay/view/htm/my.template.htm">
+	<slot name="my_body">
+<style>
+.xyfrom{border:1px dashed #008CFF;padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px;line-height: 2em;color: #6D6D6D;}
+</style>
+		
+
+	<div class="col-lg-6 mx-auto">
+<div class="xyfrom">
+		<div class="m-3">
+			<h5 class="text-center"><?php echo lang('pay_user_cue1');?></h5>
+			<h6 class="text-center text-muted">
+			<?php
+			echo lang('pay_user_cue2');
+			echo $conf['pay'];
+			echo !empty($conf['rmb_unit']) ? $conf['rmb_unit'] : '';
+			echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');
+			if(!empty($conf['exchange']) || !empty($conf['disexchange'])){
+			echo '，1';
+			echo !empty($conf['rmb_unit']) ? $conf['rmb_unit'] : '';
+			echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');
+			echo lang('pay_user_cue3');
+			echo $conf['exchange_bl'];
+			echo !empty($conf['gold_unit']) ? $conf['gold_unit'] : '';
+			echo !empty($conf['gold_name']) ? $conf['gold_name'] : lang('pay_gold');
+			} ?>
+			
+			</h6>
+			<Iframe name="payframe" id="payframe" src="" width="100%" height="190" frameborder="0" scrolling="no" style="display:none"></iframe> 
+				<link rel="stylesheet" href="plugin/xy_pay/view/css/jquery-labelauty.css">
+				<form role="form" id="payform" action="<?php echo url('pay-paynow');?>" method="get" target="_blank">
+				<input type="text" name="paystate" id="paystate" value="pay_for_user" readonly="readonly" style="display:none;">
+				<div class="form-group">
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="icon icon-cny icon-fw"></i></span>
+						</div>
+						<input type="number" class="form-control" placeholder="<?php echo lang('pay_user_pay_msg');?>" name="money" id="money" required="" oninvalid="setCustomValidity('<?php echo lang('pay_user_pay_msg_error');?>')" oninput="setCustomValidity('')" minlength="1">
+					</div>
+				</div>
+
+				<div class="checkbox xypd dowebok">
+					<?php if(!empty($conf['alipay'])){?>
+					<li><input type="radio" name="paytype" <?php if($conf['pay_type']){echo 'onclick="check_client();"';}?> value="1" checked="checked" data-labelauty="<?php echo lang('pay_alipay');?>"></li>
+					<?php }?>
+					<?php if(!empty($conf['wechar'])){?>
+					<li><input type="radio" name="paytype" <?php if($conf['pay_type']){echo 'onclick="check_client();"';}?> value="3" data-labelauty="<?php echo lang('pay_wechar');?>"></li>
+					<?php }?>
+					<?php if(!empty($conf['qqpay'])){?>
+					<li><input type="radio" name="paytype" <?php if($conf['pay_type']){echo 'onclick="check_client();"';}?> value="2" data-labelauty="<?php echo lang('pay_qq');?>"></li>
+					<?php }?>
+					
+				</div>
+				<div class="form-group">
+					<small><?php if(!$conf['pay_type']) {echo lang('pay_user_pay_msg_info');}?></small>
+				</div>
+				<button type="submit" id="submit" class="btn btn-default btn-block" ><?php echo lang('pay_user_pay_button');?></button>
+			</form>
+		</div>
+</div>
+	</div>
+
+
+
+	</slot>
+</template>
+<script>
+
+$(function(){
+	$(':input').labelauty();
+});
+$('a[data-active="my-pay"]').addClass('active');
+
+function is_mobile() {
+	var sUserAgent = navigator.userAgent.toLowerCase();
+	var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+	var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+	var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+	var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+	var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+	var bIsAndroid = sUserAgent.match(/android/i) == "android";
+	var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+	var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+	if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+			return true;
+	} else {
+			return false;
+	}
+}
+function is_weixn(){  
+	var ua = navigator.userAgent.toLowerCase();  
+	if(ua.match(/MicroMessenger/i)=="micromessenger") {  
+		return true;  
+	} else {  
+		return false;  
+	}  
+} 
+
+<?php if($conf['pay_type']){?>
+$("#submit").click(function(){
+var pid = $("input[name='paytype']:checked").val();
+	if(pid == 3 && is_mobile() == false){
+  $("#payframe").show();
+  }else{
+  $("#payframe").hide();
+  }
+});
+
+function check_client(){
+var pid = $("input[name='paytype']:checked").val();
+var mobile = is_mobile();
+	if(pid == 1){
+			$("#payform").attr("target","_blank");
+	}else if(pid==2){
+		if(mobile){
+			$("#payform").attr("target","payframe");
+		}else{
+			$("#payform").attr("target","_blank");
+		}
+	}else if(pid==3){
+		if(mobile){
+				$("#payform").attr("target","_blank");
+		}else{
+			$("#payform").attr("target","payframe");
+		}
+	}
+}
+check_client();
+<?php }?>
+</script>
+<script src="plugin/xy_pay/view/js/jquery-labelauty.js"></script>

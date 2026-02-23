@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'smileySans';
+  src: url('https://www.mox7.cn/upload/July/font/joe.woff2');
+}
+
+
+body{
+  font-family: 'smileySans' !important;
+}

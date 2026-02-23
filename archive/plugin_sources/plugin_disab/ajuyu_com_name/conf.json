@@ -1,0 +1,10 @@
+{
+    "name": "用户名修改",
+    "brief": "# 用户付费改名功能<br># 自定义币种（金币或人民币）、自定义积分金额<br>",
+    "version": "3.1.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": []
+}

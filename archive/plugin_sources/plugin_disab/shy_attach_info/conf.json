@@ -1,0 +1,11 @@
+{
+    "name": "附件信息拓展显示",
+    "brief": "内容页显示附件信息，增加大小、下载、时间显示，类似2.1效果",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

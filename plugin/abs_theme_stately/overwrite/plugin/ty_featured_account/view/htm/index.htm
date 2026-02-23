@@ -1,0 +1,111 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<?php if($featured_list): ?>
+<div class="card mb-3 p-3">
+    <h2 class="h3 m-0">
+        <i class="las la-user"></i>
+        购买账号
+    </h2>
+</div>
+<form action="<?php echo url('featured_account');?>" method="post" id="form">
+    <style scoped>
+        .btn-check:checked~label {
+            border-color: var(--bs-primary, var(--primary)) !important;
+            cursor: pointer
+        }
+
+        .btn-check:checked~label h4 {
+            color: var(--bs-primary, var(--primary))
+        }
+    </style>
+
+<div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic radio toggle button group">
+    <?php foreach($featured_list as $k=>$v): ?>
+
+
+    
+        <div class="w-50 w-md-25">
+            <input type="radio" class="btn-check" name="buy_type" pay_amount="<?= $v['amount'] ?>" id="buy_<?= $v['id'] ?>" value="<?= $v['id'] ?>" checked />
+            <label class="card border buy_account text-center" for="buy_<?= $v['id'] ?>">
+                <div class="card-footer">
+                        <div>
+                            <h4 class="h3"><?= $v['featured_uid'] ?></h4>
+                            <p class="lead">购买需要 <?= $v['amount'] ?> <?= $v['currency']==1?'RMB':'积分' ?>/月。</p>
+                            <p class="m-0">购买后您将可以通过账号：<samp><?= $v['featured_uid'] ?></samp> 进行登录。</p>
+                        </div>
+                </div>
+            </label>
+        </div>
+        
+        <?php endforeach; ?>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">购买份数</span></div>
+                <input type="number" class="form-control" min="1" step="1" max="999" maxlength="3" value="1" id="jnum" name="buy_num" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">需要支付</span></div>
+                <input type="text" class="form-control" id="jpay" disabled />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-block btn-lg btn-primary" id="jbutton">立即购买</button>
+    </div>
+</form>
+<?php else: ?>
+<div class="card-message card text-center my-4 mx-auto">
+    <div class="card-body">
+        <span class="badge rounded-pill bg-label-info fs-xlarge mb-4">
+            <i class="las la-info-circle fs-1"></i>
+        </span>
+        <div class="lead">
+            暂不可用
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script ajax-eval="true">
+
+    $(".buy_account").on('click', function () {
+        changeAmount();
+    });
+
+    $('#jnum').bind('input propertychange', function () {
+        changeAmount();
+    })
+
+    $(function () {
+        changeAmount();
+    });
+
+    function changeAmount() {
+        var pay_amount = $('input[name="buy_type"]:checked').attr('pay_amount');
+        var num = $('#jnum').val();
+        $('#jpay').val(parseInt(pay_amount) * parseInt(num));
+    }
+    var jinput = $("#jnum");
+    var jform = $("#form");
+    var jbutton = $("#jbutton");
+    jbutton.on('click', function () {
+        if (jinput.val() == '0') return;
+        if (confirm('您确定要购买吗?')) {
+            jbutton.button('loading');
+            var postdata = jform.serialize();
+            var id = $('input[name="buy_type"]:checked').val();
+            postdata += ('&id=' + id)
+            jform.reset();
+            $.xpost(jform.attr('action'), postdata, function (code, message) {
+                if (code == 0) location.reload();
+                else $.alert(message);
+                jbutton.button('reset');
+            });
+        }
+    });
+
+</script>

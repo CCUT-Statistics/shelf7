@@ -1,0 +1,1 @@
+'plugin_wechat_qrcode_pay'=>'（支付宝）扫码支付',

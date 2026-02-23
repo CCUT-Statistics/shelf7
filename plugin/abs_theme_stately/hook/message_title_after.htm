@@ -1,0 +1,8 @@
+<?php 
+if ( ($conf['runlevel'] === 2 || $conf['runlevel'] === 3) && !$user ) : ?>
+<div class="text-center mt-3">
+    <a href="<?= url('user-login') ?>" class="btn btn-primary">
+        <?= lang('login') ?>
+    </a>
+</div>
+<?php endif; ?>

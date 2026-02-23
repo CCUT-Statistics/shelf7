@@ -1,0 +1,16 @@
+<?php  
+if($abs_theme_stately_setting['special']['thread_toc']['enable'] ){
+    include _include(APP_PATH.'plugin/abs_theme_stately/inc/toc.lib.php');
+}
+$stately_read_time_str = '';
+if ($abs_theme_stately_setting['special']['thread_charcount_read_time']['enable']) {
+    $read_speed = is_numeric($abs_theme_stately_setting['special']['thread_charcount_read_time']['reading_speed']) ? $abs_theme_stately_setting['special']['thread_charcount_read_time']['reading_speed'] : 250; // 每分钟阅读字数
+    $read_char_count = mb_strlen(strip_tags($first['message_fmt']));
+    $read_time = round($read_char_count / $read_speed, 1); // 计算阅读时间
+    if($read_time == 0) {
+        $read_time = '<1';
+    }
+    $stately_read_time_str = sprintf($abs_theme_stately_setting['special']['thread_charcount_read_time']['template'], $read_char_count, $read_time);
+
+}
+?>

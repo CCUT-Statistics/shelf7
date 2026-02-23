@@ -1,0 +1,40 @@
+<div data-layout="classic_2col" class="row">
+    <div class="col-lg-9 main">
+        <!--{hook website_index_flat_main_start.htm}-->
+        <div class="card-threadlist">
+            <div class="mb-3">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $active == 'default' ? 'active' : ''; ?>" href="./<?= url($route); ?>">
+                            <?= lang('new_thread'); ?>
+                        </a>
+                    </li>
+                    <!--{hook website_index_flat_thread_list_nav_item_after.htm}-->
+
+                </ul>
+            </div>
+            <!--{hook stately_wellcms_threadlist_before.htm}-->
+            <div class="<?= $stately_threadlist_class_add ?>">
+                <ul class="list-unstyled threadlist row g-0 mb-0">
+                    <!--{hook website_index_flat_threadlist_before.htm}-->
+                    <?php include _include(APP_PATH . 'plugin/well_cms_x/view/htm/thread_list.inc.htm');?>
+                    <!--{hook website_index_flat_threadlist_after.htm}-->
+                </ul>
+            </div>
+        </div>
+        
+<!--{hook website_index_flat_mod_before.htm}-->
+
+<?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/thread_list_mod.inc.htm');?>
+
+<!--{hook website_index_flat_page_before.htm}-->
+<?php if ($pagination) { ?>
+<nav class="my-3"><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+<?php } ?>
+<!--{hook website_index_flat_page_end.htm}-->
+
+    </div>
+    <div class="col-lg-3 aside">
+        <!--{hook widget_slot_wellcms_homepage.htm}-->
+    </div>
+</div>

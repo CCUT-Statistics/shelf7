@@ -1,0 +1,64 @@
+<div class="card mb-3 card-userinfo" data-style="v1">
+    <div class="user-profile-header-banner rounded-top h-px-100" 
+    <?php if(function_exists('cover_get_cover_url_by_uid') && isset($user['cover_url']) && !empty($user['cover_url'])): ?> style="background-image:url(
+        <?= cover_get_cover_url_by_uid($uid) ?>);background-size:cover"
+        <?php endif; ?>>
+    </div>
+    <div class="user-profile-header">
+        <a class="v_avatar v_avatar-user" href="<?= url('user-'.$uid);?>">
+            <!--{hook my_common_avatar_before.htm}-->
+            <img loading="lazy" decoding="async" src="<?= $user['avatar_url'] ?>" class="user-profile-img d-block mx-auto w-px-100">
+            <!--{hook my_common_avatar_after.htm}-->
+        </a>
+        <div class="mt-2 mx-4 text-center">
+            <?php if (function_exists('vip__isvip') && vip__isvip($user['vip_end']) && function_exists('vip_read')) { $vip_info = vip_read($uid); /* 如果是VIP */ ?>
+                <a href="<?= url('my'); ?>" class="h5 text-danger isvip">
+                    <?= $user['username'] ?> <small class="fw-semibold d-block isvip"><span class="badge bg-label-warning">VIP Lv.<?= $vip_info['level'] ?></span></small>
+                </a>
+            <?php unset($vip_info); } else { /* 普通用户 */ ?>
+                <a href="<?= url('my'); ?>" class="h5">
+                    <?= $user['username'] ?>
+                </a>
+            <?php } /* endif */ ?>
+            <div class="mt-2">
+                <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_uid']): ?>
+                <span class="badge badge-pill bg-label-primary jb-blue">UID:
+                    <?= $uid ?>
+                </span>
+                <?php endif; ?>
+                <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_usergroup']): ?>
+                <span class="badge badge-pill bg-label-info jb-cyan">
+                    <?= $user['groupname'] ?>
+                </span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer pt-2">
+        <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_credits']): ?>
+        <div class="row row-cols-2 mt-2 g-0">
+            <div class="col" title="<?= $credits2_name ?>" data-bs-toggle="tooltip">
+                <span class="mr-1 badge badge-center rounded-pil bg-label-warning"><i class="la la-coins"></i></span>
+                <?= $user['golds'] ?>
+            </div>
+            <div class="col" title="<?= $credits3_name ?>" data-bs-toggle="tooltip">
+                <span class="mr-1 badge badge-center rounded-pil bg-label-info"><i class="la la-money-bill-alt"></i></span>
+                <?= $user['rmbs']*0.01 ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_progress']): ?>
+
+        <!--{hook widget_my_info_progress.htm}-->
+
+        <?php endif; ?>
+
+        <?php if($abs_theme_stately_setting['ui_tweek']['homepage_userinfo']['show_stats']): ?>
+
+        <!--{hook widget_my_info_stats.htm}-->
+
+        <?php endif; ?>
+
+    </div>
+</div>

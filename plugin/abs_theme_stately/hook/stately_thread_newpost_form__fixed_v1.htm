@@ -1,0 +1,83 @@
+<div class="layout-appbar layout-quick-reply-form col-lg-6 navbar align-items-center bg-navbar-theme navbar-detached" id="layout-appbar-quick_reply_form">
+    <?php if(!empty($user)) : ?>
+    <div class="newpost" title="<?php echo ($thread['posts'] + 2) . lang('floor'); ?>">
+		<div class="p-2 media ">
+			<a href="<?php echo url('user-'.$user['uid']);?>" tabindex="-1">
+				<img loading="lazy" decoding="async" class="img-fluid w-px-40" src="<?php echo $user['avatar_url'];?>" alt="<?php echo $user['username'];?>">
+			</a>
+			<div class="media-body">
+
+				<form action="<?php echo url('post-create-'.$tid.'-1');?>" method="post" id="quick_reply_form" class="d-block m-0">
+
+					<input type="hidden" name="doctype" value="1" />
+					<input type="hidden" name="return_html" value="1" />
+					<input type="hidden" name="quotepid" value="0" />
+					<div class="d-flex">
+						<section class="post-message">
+							<input type="text" placeholder="<?= empty($abs_theme_stately_setting['special']['quickpost_modal']['text']) ? lang('tap_here_to_reply') : $abs_theme_stately_setting['special']['quickpost_modal']['text'] ?>" readonly class="form-control quick_reply-prompt" />
+							<!--{hook thread_quick_reply_message_before.htm}-->
+							<div class="message">
+								<textarea class="form-control" placeholder="<?php echo lang('message');?>" name="message" id="message"></textarea>
+							</div>
+							<p class="text-right m-0">
+								<!--{hook thread_quick_reply_right_start.htm}-->
+								<a class="icon-mail-forward" href="<?php echo url('post-create-'.$tid);?>" id="advanced_reply">
+									<?php echo lang('advanced_reply');?>
+								</a>
+								<!--{hook thread_quick_reply_right_end.htm}-->
+							</p>
+							<!--{hook thread_quick_reply_message_after.htm}-->
+							<!--{hook thread_quick_reply_left_start.htm}-->
+							<!--{hook thread_quick_reply_left_end.htm}-->
+						</section>
+
+						<section class="post-submit">
+
+							<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?php echo lang('submiting');?>...">
+								<?php echo lang('post_create');?>
+							</button>
+
+							<!--{hook thread_quick_reply_submit_after.htm}-->
+						</section>
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+	</div>
+	<?php else: 
+    $stately_guest = user_guest();
+    ?>
+	<div class="newpost">
+		<div class="card-body media ">
+			<a tabindex="-1">
+				<img loading="lazy" decoding="async" class="img-fluid w-px-40" src="<?= $stately_guest['avatar_url']; ?>">
+			</a>
+			<div class="media-body">
+				<div id="quick_reply_form">
+
+				<div class="d-flex">
+					<section class="post-message">
+						<p class="form-control m-0">
+							<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content'] ?>
+						</p>
+					</section>
+
+					<section class="post-submit">
+						<?php if(!empty($abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_login'])) : ?>
+						<a href="<?= url('user-login') ?>" class="btn btn-primary"><i class="las la-user"></i>
+							<?= $abs_theme_stately_setting['custom_content']['thread_fastreply_notlogin']['content_btn_login'] ?>
+						</a>
+						<?php endif; ?>
+						
+					</section>
+				</div>
+			</div>
+
+			</div>
+		</div>
+	</div>
+    <?php endif; ?>
+
+</div>

@@ -1,0 +1,278 @@
+<html data-dpr="1" >
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<link rel="stylesheet" href="./plugin/axz_raffle/skin/normalize.css">
+		<link rel="stylesheet" type="text/css" href="./plugin/axz_raffle/skin/font.css">
+		<link href="./plugin/axz_raffle/skin/app.css" rel="stylesheet">
+		<script type="text/javascript" src="./plugin/axz_raffle/skin/flexible.js"></script>
+		<style>
+			.marquee6:before {
+				background-image: url(./plugin/axz_raffle/skin/bg.jpg);
+				background-size: 100% 100%;
+				content: '';
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: -1;
+			}
+
+			.marquee6 {
+				position: relative;
+				z-index: 1;
+			}
+
+			.activecj {
+				background-image: none !important;
+				background-color: #ee7a7b;
+			}
+
+			.prizebtn {
+				width: 2.24rem;
+				height: 1.92rem;
+				border-radius: 0.13333rem;
+				text-align: center;
+				overflow: hidden;
+				background-image: url(./plugin/axz_raffle/skin/prize1.png);
+				background-size: 100% 100%;
+				color: #51301d;
+			}
+
+			.activecj img,
+			.prizebtn img {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+	</head>
+
+	<body >
+		<div id="app">
+			<div class="marquee6">
+				<div class="public">
+					<div class="icons">
+					</div>
+					<div class="right_prize">
+						<a href="<?php echo url('my-cjinfo'); ?>" target="_blank"><img src="./plugin/axz_raffle/skin/prize.png"></a>
+					</div>
+					<div class="overlay van-overlay" style="display: none;">
+						<div class="loading van-loading van-loading--circular">
+							<span class="van-loading__spinner van-loading__spinner--circular" style="width: 24px; height: 24px;">
+								<svg viewBox="25 25 50 50" class="van-loading__circular">
+									<circle cx="50" cy="50" r="20" fill="none">
+									</circle>
+								</svg>
+							</span>
+							<span class="van-loading__text">
+								加载中...
+							</span>
+						</div>
+					</div>
+
+					<div class="apply_dialog van-overlay" style="display:none">
+						<div class="content">
+							<div class="top">
+								<img src="./plugin/axz_raffle/skin/zjtitle.png">
+							</div>
+							<div class="form">
+								<div class="van-cell-group van-hairline--top-bottom" style="text-align:center;padding: 20px 0px;">
+									<div>
+										<img id="czimg" src="./plugin/axz_raffle/skin/yuanbao2.png">
+									</div>
+									<div style="margin-top: 10px;">
+										<span id="cztxt">谢谢参与</span>
+									</div>
+								</div>
+								<div class="buts flex center ">
+
+									<div class="but cancle" style="margin-right: 20px;background-color: #ffb91b;">
+										确认
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="show_draw_code van-overlay" style="display: none;">
+						<div class="content">
+							<div class="top">
+								<img src="./plugin/axz_raffle/skin/draw_top1.png">
+							</div>
+							<div class="form">
+								<div class="van-cell-group van-hairline--top-bottom">
+									<div class="van-cell van-field">
+										<div class="van-cell__title van-field__label">
+											<span>
+												抽奖码
+											</span>
+										</div>
+										<div class="van-cell__value van-field__value">
+											<div class="van-field__body">
+												<input type="text" placeholder="必填" id="cjcode" value="" class="van-field__control">
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+								<div class="buts flex center "><a style="font-weight: bold;" href="<?php echo url('my-xzraffle'); ?>" target='_blank'>购买抽奖码</a></div>
+								<div class="buts flex center ">
+
+									<div class="but cjmcj" style="margin-right: 20px;">
+										确认
+									</div>
+									<div class="but cancle">
+										取消
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!---->
+				</div>
+				<div class="top">
+					<img src="./plugin/axz_raffle/skin/title.png">
+				</div>
+				<div class="jihui">
+					<?php if($ycjcs>0){ ?>
+					您还有<span><?php echo $ycjcs; ?></span>次机会
+					<?php }else{ ?>
+					今日免费抽奖次数已用完
+					<?php } ?>
+				</div>
+				<div class="border flex center">
+					<div class="prizes flex wrap space-between" id="prizes">
+						<?php
+							for($i=0;$i<4;$i++){
+						?>
+						<div class="prize">
+							<div class="img">
+								<img src="<?php echo $list[$i]['pimg'];?>">
+							</div>
+							<div class="text">
+								<?php echo $list[$i]['pname'];?>
+							</div>
+						</div>
+						<?php  } ?>
+						<div class="prizebtn ">
+							<img src="./plugin/axz_raffle/skin/btn.png" class="choujiang-btn">
+						</div>
+						<?php for($i=4;$i<8;$i++){ ?>
+						<div class=" prize ">
+							<div class="img">
+								<img src="<?php echo $list[$i]['pimg'];?>">
+							</div>
+							<div class="text">
+								<?php echo $list[$i]['pname'];?>
+							</div>
+						</div>
+						<?php } ?>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+		</div>
+
+
+
+		<script src="./view/js/jquery-3.1.0.js?1.0"></script>
+		<!-- <link rel="stylesheet" href="view/css/bootstrap.css?1.0">
+		<script src="lang/zh-cn/bbs.js?1.0"></script>
+		<script src="view/js/bootstrap.js?1.0"></script>
+		<script src="view/js/xiuno.js?1.0"></script>
+		<script src="view/js/bootstrap-plugin.js?1.0"></script> -->
+		<script type="text/javascript">
+
+			$(function () {
+				var isclick = 0;
+				var shunxu = [0, 1, 2, 4, 7, 6, 5, 3];
+				var prizes = document.getElementById('prizes');
+				var list = prizes.getElementsByClassName('prize');
+				$(".choujiang-btn").click(function () {
+					kaishichoujiang();
+				});
+				$(".cjmcj").click(function () {
+					kaishichoujiang();
+					$(".show_draw_code").attr('style', 'display: none');
+				});
+				function kaishichoujiang() {
+					var url = "./<?php echo url('xzraffle-choujiang');?>";
+					if (isclick == 0) {
+						isclick = 1;
+						$.post(url, { 'cjcode': $("#cjcode").val() }, function (data) {
+							data = JSON.parse(data);
+							console.log(data);
+							if (data['code'] == 0) {
+								startinit(data['datas']);
+							} else {
+								alert(data['message']);
+								isclick = 0;
+								if (data['code'] == -2) {
+									$(".show_draw_code").attr('style', 'display: block');
+								}
+							}
+						});
+
+					}
+				}
+
+				//抽奖初始化
+				function startinit(datas) {
+					num = datas['zjnum'];
+					var i = 0;  //定义一个i 用来计算抽奖跑动的总次数
+					var t = 100;  //抽奖跑动的速度 初始为200毫秒
+					var rounds = 3;  //抽奖转动的圈数
+					var rNum = rounds * 8;  //标记跑动的次数（这是一个条件判断分界线）
+					timer = setTimeout(startscroll, t);//每t毫秒执行startscroll函数
+					//抽奖滚动的函数
+					function startscroll() {
+						//每次滚动抽奖将所有li的class都设为空
+						for (var j = 0; j < list.length; j++) {
+							list[j].className = 'prize';
+						}
+						var prizenum = shunxu[i % list.length];  //通过i余8得到此刻在prize数组中的数字，该数字就是mask标记出现的位置
+						console.log(prizenum);
+						if (prizenum == undefined) {
+							return;
+						}
+						list[prizenum].className = "activecj prize ";
+						i++;
+
+						if (i < rNum - 8) {  //当i小于转(rNum-8次)的数量，t不变还是200毫秒
+							timer = setTimeout(startscroll, t);//继续执行抽奖滚动
+						} else if (i >= rNum - 8 && i < rNum + num) {
+							//t时间变长，此时计时器运行速度降低，同时标签刷新速度也降低
+							t += (i - rNum + 8) * 5;
+							timer = setTimeout(startscroll, t);//继续执行抽奖滚动
+						}
+						if (i >= rNum + num) {//当i大于转rNum加随机数字num次计时器结束，出现提示框提示中奖信息
+							console.log(num);
+							$("#czimg").attr('src', datas['jpimg']);
+							$("#cztxt").html(datas['jpname']);
+							$(".apply_dialog").attr('style', 'display: block');
+							var timer2 = null;
+							timer2 = setTimeout(function () {
+								clearTimeout(timer2);
+							}, 1000);
+							isclick = 0;//当计时器结束后让span标签变为抽奖状态
+							clearTimeout(timer);
+						}
+
+					}
+				}
+				$(".cancle").click(function () {
+					$(".show_draw_code").attr('style', 'display: none');
+					$(".apply_dialog").attr('style', 'display: none');
+				});
+			})
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,1 @@
+case 'kami':	include _include(APP_PATH.'plugin/kami/route/admin_kami.php'); 	break;

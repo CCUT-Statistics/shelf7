@@ -1,0 +1,15 @@
+{
+    "name": "备案号展示",
+    "brief": "填入备案号，底部左侧或者右侧显示,xiuno非官方，www.xiuno.top",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": {
+        "footer_footer_left_end.htm": -100,
+        "footer_footer_right_end.htm": -100,
+        "thread_user_after.htm": -100
+    },
+    "overwrites_rank": [],
+    "dependencies": []
+}

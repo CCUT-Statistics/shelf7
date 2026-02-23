@@ -1,0 +1,20 @@
+/* Molokai by Tomas Restrepo (https://github.com/tomasr/molokai) */
+/* Note: Based on the monokai theme for textmate by Wimer Hazenberg and its darker variant  by Hamish Stuart Macpherson */
+:root {
+  --base00: #272822;
+  --base01: #3B3A32;
+  --base02: #49483e;
+  --base03: #75715E;
+  --base04: #BCBCBC;
+  --base05: #F8F8F2;
+  --base06: #f5f4f1;
+  --base07: #f9f8f5;
+  --base0E: #F92672; 
+  --base08: #FD971F; 
+  --base0B: #E6DB74; 
+  --base0D: #A6E22E; 
+  --base0A: #66D9EF; 
+  --base0C: #7070F0; 
+  --base09: #AE81FF; 
+  --base0F: #ef5939; 
+}

@@ -1,0 +1,10 @@
+<div class="card mb-4" id="my_aside">
+    <div class="list-group list-group-horizontal text-center">
+        <!--{hook my_common_my_before.htm}-->
+        <a href="<?= url('my');?>" class="list-group-item list-group-item-action" data-active="menu-my"><?= lang('user_profile') ?></a>
+        <!--{hook my_common_my_after.htm}-->
+        <!--{hook my_common_my_thread_before.htm}-->
+        <a href="<?= url('my-thread');?>" class="list-group-item list-group-item-action" data-active="menu-my-thread">论坛帖子</a>
+        <!--{hook my_common_my_thread_after.htm}-->
+    </div>
+</div>

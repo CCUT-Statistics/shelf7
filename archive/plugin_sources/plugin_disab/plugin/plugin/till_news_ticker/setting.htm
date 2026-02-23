@@ -1,0 +1,147 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');
+$rowid = 0;
+?>
+
+<div class="container">
+
+		<h2><?php echo($profile['name'] . lang('setting'));?></h2>
+		<div class="card">
+			<div class="card-body">
+				<form action="<?php echo url('plugin-setting-till_news_ticker');?>" method="post" id="form">
+					<div class="table-responsive arrlist">
+						<style>
+							.dataTable input {
+								border: none;
+							}
+
+							.dataTable tr td {
+								padding: .25rem;
+							}
+						</style>
+						<table class="table table-bordered dataTable" style="min-width:48em">
+							<thead>
+								<tr align="center">
+									<th style="width:10%">ID</th>
+									<th style="width:35%">文字</th>
+									<th style="width:35%">链接</th>
+									<th>图标</th>
+									<th><abbr title="删除"><i class="icon-trash-o"></i></abbr></th>
+								</tr>
+								<thead>
+									<tbody>
+										<?php foreach($linklist as $arr) { 
+											$rowid = $arr['linkid'];
+											?>
+										<tr align="center" rowid="<?php echo $rowid; ?>">
+											<td><input type="text" class="form-control" name="rowid[<?php echo $rowid;?>]" value="<?php echo $rowid; ?>" placeholder="ID" /></td>
+											<td><input type="text" class="form-control" name="name[<?php echo $rowid;?>]" value="<?php echo $arr['name']; ?>" placeholder="显示文字" /></td>
+											<td><input type="text" class="form-control" name="url[<?php echo $rowid;?>]" value="<?php echo $arr['url']; ?>" placeholder="https://" /></td>
+											<td><input type="text" class="form-control" name="icon[<?php echo $rowid;?>]" value="<?php echo $arr['icon']; ?>" placeholder="icon-" /></td>
+											<td><a class="btn btn-link text-danger row_delete" role="btn" href>×</a></td>
+										</tr>
+										<?php }/* endforeach */ ?>
+										<tr align="center" rowid="<?php echo !empty($rowid) ? $rowid+=1 : 0; ?>" class="d-none">
+											<td><input type="text" class="form-control" name="rowid[<?php echo $rowid;?>]" value="" placeholder="ID" /></td>
+											<td><input type="text" class="form-control" name="name[<?php echo $rowid;?>]" value="" placeholder="显示文字" /></td>
+											<td><input type="text" class="form-control" name="url[<?php echo $rowid;?>]" value="" placeholder="https://" /></td>
+											<td><input type="text" class="form-control" name="icon[<?php echo $rowid;?>]" value="" placeholder="icon-" /></td>
+											<td><a class="btn btn-link text-danger row_delete" role="btn" href>×</a></td>
+										</tr>
+									</tbody>
+						</table>
+					</div>
+					<p class="text-center"><a role="button" class="btn btn-primary row_add text-white" >+ 增加一行</a></p>
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group row">
+			<label class="col-12 form-control-label">每一条的显示时间（秒）</label>
+			<div class="col-md-12">
+				<?php echo $input['single_time']; ?>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+	<details>
+		<summary class="text-danger">危险区域</summary>
+<div class="form-group row">
+			<label class="col form-control-label ">卸载时删除插件设置</label>
+			<div class="col">
+				<?php echo $input['delete_setting_on_uninstall']; ?>
+			</div>
+		</div>
+		</details>
+	</div>
+</div>
+<p>
+						<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>...">
+							<?php echo lang('confirm');?>
+						</button>
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+	var maxid = <?php echo $maxid;?>;
+
+	var jform = $("#form");
+	var jsubmit = $("#submit");
+	var jarrlist = $('.arrlist');
+	jform.base64_encode_file(); // 对文件进行 base64 编码，处理文件上传，很方便
+
+	jform.on('submit', function() {
+		jform.reset();
+		var postdata = jform.serialize();
+		jsubmit.button('loading');
+		$.xpost(jform.attr('action'), postdata, function(code, message) {
+			if (code == 0) {
+				$.alert(message);
+				jsubmit.text(message).location();
+				return;
+			} else {
+				alert(message);
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+
+	// 删除
+	var jdelete = $('a.row_delete');
+	jarrlist.on('click', 'a.row_delete', function() {
+		var jthis = $(this);
+		var jtr = jthis.parents('tr');
+		var rowid = jtr.attr('rowid');
+		if (jform.find('tbody').find('tr').length <= 2) {
+			$.alert('不能删除系统保留的版块。');
+			return;
+		}
+		jtr.remove();
+		return false;
+	});
+	// 增加
+	var jadd = $('a.row_add');
+	jadd.on('click', function() {
+		var jclone = jarrlist.find('tr').last().clone();
+		jclone.insertAfter(jarrlist.find('tr').last()).removeClass('d-none');
+		var jrowid = jclone.find('input[name^="rowid"]');
+		//var rowid = xn.intval(jrowid.val()) + 1;
+		var rowid = ++maxid;
+		jrowid.val(rowid);
+		jclone.attr('rowid', rowid);
+
+		// 清空值
+		jclone.find('input').not('[name^="rowid"]').val('');
+
+		// 修改 [] 中的值为 rowid
+		jclone.find('input').attr_name_index(rowid);
+
+		return false;
+	});
+
+	$('#nav_pc li.plugin, #nav_mobile li.plugin').addClass('active');
+</script>

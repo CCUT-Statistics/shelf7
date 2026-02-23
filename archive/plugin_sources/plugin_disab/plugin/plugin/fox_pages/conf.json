@@ -1,0 +1,13 @@
+{
+    "name": "奇狐上一篇下一篇插件",
+    "brief": "在帖子底部增加上一篇下一篇功能。",
+    "version": "1.0",
+    "bbs_version": "4.0.4",
+    "uid": "20394",
+    "username": "༺凨影༻",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

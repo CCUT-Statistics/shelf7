@@ -1,0 +1,20 @@
+/* Synthwave84 by Robb Owen (https://github.com/robb0wen/synthwave-vscode) */
+
+:root {
+  --base00: #262335;/*#181818*/
+  --base01: #2C2540;/*#282828*/
+  --base02: #3E3B4B;/*#383838*/
+  --base03: #495495;/*#585858*/
+  --base04: #888690;/*#b8b8b8*/
+  --base05: #ECEBED;/*#d8d8d8*/
+  --base06: #ECEBED;/*#e8e8e8*/
+  --base07: #ECEBED;/*#f8f8f8*/
+  --base08: #E55A5E;/*#ab4642*/
+  --base09: #FEDE5D;/*#dc9656*/
+  --base0A: #D884C7;/*#f7ca88*/
+  --base0B: #EA9652;/*#a1b56c*/
+  --base0C: #90DEB6;/*#86c1b9*/
+  --base0D: #EB8F82;/*#7cafc2*/
+  --base0E: #40ffff;/*#ba8baf*/
+  --base0F: #495495;/*#a16946*/
+}

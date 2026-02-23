@@ -1,0 +1,25 @@
+<!--在内容页增加上一篇和下一篇-->
+<div class="row">
+    <div class="col-lg-12 main">
+        <div class="card card-thread">
+            <div class="card-body">
+                <div class="updown">
+                <?php
+                $arrlist_n = db_find_one('thread', array('fid'=>$fid, 'tid'=>array('>'=>$tid)), array('tid'=>1));
+                $arrlist_p = db_find_one('thread', array('fid'=>$fid, 'tid'=>array('<'=>$tid)), array('tid'=>-1));
+                if($arrlist_p){
+                	echo '上一篇：<a href="'.url("thread-".$arrlist_p['tid']).'"><span>'.$arrlist_p['subject'].'</span></a><br>';
+                }else{
+                	echo '<span>上一篇：没了</span><br>';
+                }
+                if($arrlist_n){
+                	echo '下一篇：<a href="'.url("thread-".$arrlist_n['tid']).'"><span>'.$arrlist_n['subject'].'</span></a>';
+                }else{
+                	echo '<span>下一篇：没了</span>';
+                }?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--//可直接hook在帖子结尾-->

@@ -1,0 +1,127 @@
+<nav class="<?= $abs_stetely_navbar_class ?>" id="layout-navbar">
+	<div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+		<a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+			<i class="la la-bars"></i>
+		</a>
+	</div>
+	<div class="navbar-nav-right d-flex align-items-center <?= $abs_stetely_navbar_collapse_class_suffix ?>" id="navbar-collapse">
+		<?php if (function_exists("xn_nav_menu")) : ?>
+			<div class="navbar-nav flex-row align-items-center ">
+				<!--{hook stately_navlogo_top.htm}-->
+				<!--{hook header_nav_page_title.htm}-->
+				<?php if ($abs_theme_stately_setting['ui']['global']['navbar_style'] === 'horizontal') {
+					xn_nav_menu(
+						array(
+							'menu'            => 'primary_menu',
+							'container'       => false,
+							'menu_class'      => 'navbar-nav flex-row align-items-center ms-auto d-none d-xl-flex',
+							'item_class'      => 'nav-item',
+							'item_attr'       => '',
+							'icon_class'      => '',
+							'link_before'     => '',
+							'link_id'         => '',
+							'link_class'      => 'nav-link',
+							'link_attr'       => '',
+							'before'          => '',
+							'after'           => '',
+							'link_after'      => '',
+							'desc'            => 'span',
+							'desc_class'      => '',
+							'no_ul'           => false,
+							'no_li'           => false,
+							'_bs_version'     => 5,
+						)
+					);
+				} else {
+					if ($abs_theme_stately_setting['ui']['global']['show_top_left_menu']) {
+						xn_nav_menu(
+							array(
+								'menu'            => 'tertiary_menu',
+								'container'       => false,
+								'menu_class'      => 'navbar-nav flex-row align-items-center ms-auto d-none d-xl-flex',
+								'item_class'      => 'nav-item',
+								'item_attr'       => '',
+								'icon_class'      => '',
+								'link_before'     => '',
+								'link_id'         => '',
+								'link_class'      => 'nav-link',
+								'link_attr'       => '',
+								'before'          => '',
+								'after'           => '',
+								'link_after'      => '',
+								'desc'            => 'span',
+								'desc_class'      => '',
+								'no_ul'           => false,
+								'no_li'           => false,
+								'_bs_version'     => 5,
+							)
+						);
+					}
+				} //endif 
+				?>
+			</div>
+			<ul class="navbar-nav flex-row align-items-center ms-auto">
+				<!-- User -->
+				<?php xn_nav_menu(
+					array(
+						'menu'            => 'secondary_menu',
+						'container'       => false,
+						'item_class'      => 'nav-item',
+						'item_attr'       => '',
+						'icon_class'      => '',
+						'link_before'     => '',
+						'link_id'         => '',
+						'link_class'      => 'nav-link',
+						'link_attr'       => '',
+						'before'          => '',
+						'after'           => '',
+						'link_after'      => '',
+						'desc'            => 'span',
+						'desc_class'      => '',
+						'no_ul'           => true,
+						'no_li'           => false,
+						'_bs_version'     => 5,
+					)
+				); ?>
+				<!--/ User -->
+			</ul>
+		<?php else : ?>
+			<!--{hook header_nav_legacy.htm}-->
+		<?php endif; ?>
+		<?php if ($abs_theme_stately_setting['global']['settings']['show_read_progress']) : ?>
+			<div class="read-progress-parent">
+				<div id="read-progress" class="read-progress"></div>
+			</div>
+		<?php endif; ?>
+	</div>
+</nav>
+<?php if (function_exists("xn_nav_menu") && $abs_theme_stately_setting['ui']['global']['show_appbar']) : ?>
+	<nav class="layout-appbar container-xxl navbar align-items-center bg-navbar-theme navbar-detached d-md-none" id="layout-appbar">
+		<?php
+		xn_nav_menu(
+			array(
+				'menu'            => 'appbar_menu',
+				'container'       => false,
+				'menu_class'      => 'navbar-nav w-100 flex-row align-items-center justify-content-between',
+				'item_class'      => 'nav-item',
+				'item_attr'       => '',
+				'icon_class'      => '',
+				'link_before'     => '',
+				'link_id'         => '',
+				'link_class'      => 'nav-link',
+				'link_attr'       => '',
+				'before'          => '',
+				'after'           => '',
+				'link_after'      => '',
+				'desc'            => 'span',
+				'desc_class'      => '',
+				'no_ul'           => false,
+				'no_li'           => false,
+				'_bs_version'     => 5,
+			)
+		);
+		?>
+	</nav>
+<?php endif; ?>
+
+

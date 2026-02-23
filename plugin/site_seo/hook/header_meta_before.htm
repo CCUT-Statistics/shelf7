@@ -1,0 +1,117 @@
+<?php
+if (!function_exists('site_seo_plain_text')) {
+	function site_seo_plain_text($text, $max = 180) {
+		$text = strip_tags(strval($text));
+		$text = preg_replace('/\[[^\]]+\]/', ' ', $text);
+		$text = preg_replace('/\s+/u', ' ', $text);
+		$text = trim($text);
+		if ($max > 0) {
+			$text = xn_substr($text, 0, $max);
+		}
+		return $text;
+	}
+}
+
+if (!function_exists('site_seo_build_canonical_url')) {
+	function site_seo_build_canonical_url($route, $fid, $tid) {
+		$base_url = http_url_path();
+
+		if ($route == 'index') {
+			$page = intval(param(1, 1));
+			return $page > 1 ? ($base_url . url('index-' . $page)) : $base_url;
+		}
+
+		if ($route == 'forum' && $fid) {
+			$page = intval(param(2, 1));
+			$extra = array();
+			$orderby = param('orderby');
+			if (in_array($orderby, array('tid', 'lastpid'))) {
+				$extra['orderby'] = $orderby;
+			}
+			$route_url = $page > 1 ? "forum-$fid-$page" : "forum-$fid";
+			return $base_url . url($route_url, $extra);
+		}
+
+		if ($route == 'thread' && $tid) {
+			$page = intval(param(2, 1));
+			$route_url = $page > 1 ? "thread-$tid-$page" : "thread-$tid";
+			return $base_url . url($route_url);
+		}
+
+		if ($route == 'user') {
+			$action = param(1, 0);
+			$uid = intval($action);
+			if ($uid > 0) {
+				return $base_url . url('user-' . $uid);
+			}
+		}
+
+		return '';
+	}
+}
+
+if (!function_exists('site_seo_should_noindex')) {
+	function site_seo_should_noindex($route) {
+		if (in_array($route, array('my', 'mod', 'post', 'attach'))) {
+			return true;
+		}
+
+		if ($route == 'user') {
+			$action = strval(param(1, ''));
+			if ($action !== '' && !preg_match('/^\d+$/', $action)) {
+				$noindex_actions = array('login', 'create', 'sendinitpw', 'resetpw', 'resetpw_sendcode', 'resetpw_complete', 'logout');
+				return in_array($action, $noindex_actions);
+			}
+		}
+
+		return false;
+	}
+}
+
+// Build better default meta for major pages.
+if ($route == 'index') {
+	if (empty($header['keywords'])) {
+		$header['keywords'] = $conf['sitename'] . ',论坛,社区,话题';
+	}
+	if (empty($header['description'])) {
+		$header['description'] = site_seo_plain_text($conf['sitebrief'], 180);
+	}
+} elseif ($route == 'forum' && !empty($forum)) {
+	$seo_parts = array($forum['name'], $conf['sitename'], '论坛');
+	if (!empty($forum['seo_keywords'])) {
+		array_unshift($seo_parts, $forum['seo_keywords']);
+	}
+	$seo_parts = array_unique(array_filter($seo_parts));
+	$header['keywords'] = implode(',', $seo_parts);
+
+	$forum_brief = !empty($forum['brief']) ? $forum['brief'] : ($forum['name'] . ' - ' . $conf['sitename']);
+	$header['description'] = site_seo_plain_text($forum_brief, 180);
+} elseif ($route == 'thread' && !empty($thread) && !empty($forum)) {
+	$seo_parts = array($thread['subject'], $forum['name'], $conf['sitename'], '论坛');
+	if (!empty($forum['seo_keywords'])) {
+		$seo_parts[] = $forum['seo_keywords'];
+	}
+	$seo_parts = array_unique(array_filter($seo_parts));
+	$header['keywords'] = implode(',', $seo_parts);
+
+	$raw_message = '';
+	if (!empty($first['message_fmt'])) {
+		$raw_message = $first['message_fmt'];
+	} elseif (!empty($first['message'])) {
+		$raw_message = $first['message'];
+	} else {
+		$raw_message = $thread['subject'] . ' - ' . $forum['name'];
+	}
+	$header['description'] = site_seo_plain_text($raw_message, 180);
+}
+
+$canonical_url = site_seo_build_canonical_url($route, intval($fid), intval($tid));
+$robots_directive = site_seo_should_noindex($route)
+	? 'noindex,nofollow'
+	: 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+$sitemap_url = rtrim(http_url_path(), '/') . '/sitemap.xml';
+?>
+<?php if ($canonical_url) { ?><link rel="canonical" href="<?php echo htmlspecialchars($canonical_url); ?>" /><?php } ?>
+<meta name="robots" content="<?php echo $robots_directive; ?>" />
+<link rel="sitemap" type="application/xml" title="Sitemap" href="<?php echo htmlspecialchars($sitemap_url); ?>" />
+

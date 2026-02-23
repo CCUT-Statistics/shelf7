@@ -1,0 +1,100 @@
+<div class="modal fade" id="share_card" tabindex="-1" aria-labelledby="share_card_label" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<style scoped>
+					#share_card_qr>img,
+					#share_card_qr>canvas {
+						width: 100%;
+						height: auto;
+						image-rendering: pixelated;
+					}
+				</style>
+				<div class="d-flex justify-content-end mt-n2 mr-n2" style="height:0">
+					<button type="button" class="btn-close d-sm-none" data-bs-dismiss="modal" aria-label="关闭"></button>
+				</div>
+
+				<h2 class="sr-only" id="share_card_label">分享</h2>
+				<div class="row g-2 mb-n2">
+					<div class="col-sm-8">
+						<div class="text-center">
+							<h3 class="lead h4 mt-2 mb-0"><?= isset($thread)?$thread['subject']:$header['title'] ?></h3>
+							<button type="button" class="btn btn-link btn-sm bg-label-primary mt-3 mb-1 btn-block" onclick="copyToClipboard()"><i class="la la-copy"></i> 点击复制本页地址</button>
+
+							<script>
+								function copyToClipboard() {
+									var url = window.location.href;
+
+									// 检查 navigator.clipboard 是否可用  
+									if (navigator.clipboard) {
+										navigator.clipboard.writeText(url)
+											.then(function () {
+												// 复制成功  
+												if (typeof $.toast !== 'undefined') {
+													$.toast({ title: '复制成功!', content: '转载请保留原文链接!点击屏幕其他区域关闭', type: 'success' });
+												} else {
+													alert('复制成功!转载请保留原文链接!点击屏幕其他区域关闭');
+												}
+											})
+											.catch(function () {
+												// 复制失败  
+												if (typeof $.toast !== 'undefined') {
+													$.toast({ title: '复制失败', content: '请点击地址栏，然后全选，然后复制。', type: 'warning' });
+												} else {
+													alert('复制失败。请点击地址栏，然后全选，然后复制。');
+												}
+											});
+									} else {
+										// navigator.clipboard 不可用，使用回退方案  
+										var textarea = document.createElement("textarea");
+										textarea.value = url;
+										document.body.appendChild(textarea);
+										textarea.select();
+										document.execCommand("copy");
+										document.body.removeChild(textarea);
+
+										// 显示复制成功的消息  
+										if (typeof $.toast !== 'undefined') {
+											$.toast({ title: '复制成功!', content: '转载请保留原文链接!点击屏幕其他区域关闭', type: 'success' });
+										} else {
+											alert('复制成功!转载请保留原文链接!点击屏幕其他区域关闭');
+										}
+									}
+								}
+							</script>
+							<button type="button" class="btn btn-link btn-sm" onclick="window.open('https://connect.qq.com/widget/shareqq/index.html?url=' + window.location.href + '&title=' + document.title,'_blank')" title="分享到QQ" data-bs-toggle="tooltip"><i class="icon-qq fs-5" style="color:#3C8AFF"></i></button>
+							<button type="button" class="btn btn-link btn-sm" onclick="window.open('https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + window.location.href + '&sharesource=qzone&title=' + document.title,'_blank')" title="分享到Qzone" data-bs-toggle="tooltip"><i class="icon-star fs-5" style="color:#ff8741"></i></button>
+							<button type="button" class="btn btn-link btn-sm" onclick="window.open('https://service.weibo.com/share/share.php?sharesource=weibo&title=分享：' + document.title + '，原文链接：' + window.location.href,'_blank')" title="分享到微博" data-bs-toggle="tooltip"><i class="icon-weibo fs-5" style="color:#ff5656"></i></button>
+						</div>
+
+					</div>
+					<div class="col-sm-4">
+						<div class="d-flex align-items-center justify-content-center h-100">
+							<div id="share_card_qr_loading" class="spinner-grow text-secondary" role="status"><span class="sr-only">正在生成二维码</span></div>
+							<figure title="扫码在其他设备继续阅读" id="share_card_qr" class="img-fluid img-thumbnail mx-auto my-0" data-bs-toggle="tooltip" hidden>
+								<figcaption class="sr-only">本页面二维码</figcaption>
+							</figure>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script id="qr_js" src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/libs/jquery.qrcode.min.js" defer></script>
+
+<script defer>
+	document.querySelector('[data-bs-target="#share_card"]').addEventListener('click', function () {
+		if (typeof $.fn.qrcode === 'function') {
+			if (document.getElementById('share_card_qr').classList.contains('done') === false) {
+				$("#share_card_qr").qrcode({ width: 200, height: 200, text: window.location.href });
+				document.getElementById('share_card_qr').classList.add('done');
+				document.getElementById('share_card_qr').removeAttribute('hidden');
+				document.getElementById('share_card_qr_loading').setAttribute('hidden', 'true');
+			}
+		} else {
+			if (typeof $.toast !== 'undefined') { $.toast({ title: '二维码生成失败', content: '请稍后再试。', type: 'danger' }); } else { alert('二维码生成失败，请稍后再试。'); }
+		}
+	});
+</script>
+</div>

@@ -1,0 +1,70 @@
+<?php include _include(APP_PATH . 'view/htm/header.inc.htm'); ?>
+
+<div class="container-sm page-notice">
+	<?php if($user['notices'] != 0) { ?>
+<div class="card mb-3 p-3">
+	<div class="d-flex align-items-center justify-content-between">
+		<h2 class="h3 m-0">
+			<i class=" la la-bell"></i>
+			<?= lang('notice') ?>
+		</h2>
+		<div>
+			<button class="btn btn-outline-danger mb-1" data-confirm-text="<?php echo lang('notice_my_delete_thispagemessage')?>?" id="delete">
+				<i class="las la-trash-alt"></i>
+				<?php echo lang('notice_my_delete_thispagemessage')?>
+			</button>
+			<button class="btn mb-1 <?= $user['unread_notices'] == 0 ? 'btn-outline-primary disabled' : 'btn-primary readall';?>" id="readall" data-uid="<?= $uid; ?>">
+				<i class="las la-check-double"></i>
+				<?= $user['unread_notices'] == 0 ? lang('notice_my_update_allread'):lang('notice_my_marked_allread');?>
+			</button>
+		</div>
+	</div>
+</div>
+
+	<div class="nav-align-left mb-4">
+		<ul class="nav nav-pills mr-3 mb-3" role="tablist">
+			<?php foreach ($notice_menu as $k=>$v) { 
+				if(!isset($v['url']) || !isset($v['name'])) continue; //不安接入规范些直接不显示
+				?>
+			<li class="nav-item">
+				<a class="nav-link <?= $type == $k ? 'active' : '';?>" href="<?= $v['url'];?>">
+					<i class="las la-<?= $v['icon'];?>"></i>
+					<?= $v['name'];?>
+				</a>
+			</li>
+			<?php } ?>
+		</ul>
+		<div class="tab-content p-0">
+			<div class="noticelist" data-nidarr='<?php echo xn_json_encode(arrlist_values($noticelist, "nid"));?>'>
+				<ul class="list-group list-group-flush">
+					<?php include _include(APP_PATH.'plugin/huux_notice/view/htm/my_notice_list.inc.htm');?>
+				</ul>
+			</div>
+			<?php if($pagination) : ?>
+			<nav>
+				<ul class="pagination justify-content-center flex-wrap">
+					<?= $pagination;?>
+				</ul>
+			</nav>
+			<?php endif; ?>
+		</div>
+	</div>
+	<?php }else{ ?>
+	<h2>
+		<?= lang('notice') ?>
+	</h2>
+	<div class="card my-4">
+		<div class="empty card-body text-center ">
+			<span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+				<i class="las la-bell fs-1"></i>
+			</span>
+			<p class="m-0">
+				<?= lang('notice_my_nomessage');?>
+			</p>
+		</div>
+	</div>
+	<?php } ?>
+</div>
+<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>
+
+<!--{hook my_notice_js.htm}-->

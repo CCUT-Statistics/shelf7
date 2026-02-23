@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-lg-9 main">
+        <?php if($abs_theme_stately_setting['ui_tweek']['global']['breadcrumb_position'] === 'default'): ?>
+        <!--{hook stately_wellcms_breadcrumb.htm}-->
+        <?php endif; ?>
+        <div class="card-threadlist">
+            <div class="mb-3 d-flex justify-content-between">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $active == 'default' ? 'active' : '';?>" href="<?= url('forum-'.$fid);?>">
+                            <?= lang('new_thread');?>
+                        </a>
+                    </li>
+                    <!--{hook website_list_main_nav_item_after.htm}-->
+
+                </ul>
+                <!--{hook stately_forum_threadlist_dropdown_menu.htm}-->
+            </div>
+            <!--{hook stately_wellcms_threadlist_before.htm}-->
+            <div class="<?= $stately_threadlist_class_add ?>">
+                <ul class="list-unstyled threadlist row g-0 mb-0" data-style="<?= $stately_threadlist_style ?>">
+                    <!--{hook website_list_main_threadlist_before.htm}-->
+                    <?php include _include(APP_PATH . 'plugin/well_cms_x/view/htm/thread_list.inc.htm');?>
+                    <!--{hook website_list_main_threadlist_after.htm}-->
+                </ul>
+            </div>
+        </div>
+        <?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/thread_list_mod.inc.htm');?>
+        <!--{hook website_list_main_page_before.htm}-->
+        <?php if ($pagination) { ?>
+        <nav class="my-3"><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+        <?php } ?>
+        <!--{hook website_list_main_page_after.htm}-->
+    </div>
+    <div class="col-lg-3 aside">
+        <!--{hook widget_slot_wellcms_forum.htm}-->
+    </div>
+</div>

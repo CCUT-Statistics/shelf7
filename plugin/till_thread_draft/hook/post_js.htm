@@ -1,0 +1,106 @@
+<?php if($till_thread_draft_setting['need_toast'] ): ?>
+<script src="https://www.jq22.com/demo/Bootstrap4ts201912082026/dist/toast.min.js"></script>
+
+<div class="toast-wrapper"></div>
+
+<style id="till_thread_draft_toast">
+    .toast-wrapper {
+        position: fixed;
+        z-index: 1055;
+        top: 0;
+        right: 0;
+        margin: 5px
+    }
+</style>
+<?php endif; ?>
+<script id="till_thread_draft">
+    function draft_save(manual = false) {
+        if (typeof (tinymce) !== "undefined") {
+            tinymce.activeEditor.save();
+        }
+        if (typeof (UM) !== "undefined") {
+            UM.getEditor('message').sync();
+        }
+
+        if (manual) {
+            if ($("input[name=way]").val() === undefined) {
+                $('#form').append("<input type=hidden name=way value=manual>");
+            } else if ($("input[name=way]").val() === 'auto') {
+                $("input[name=way]").attr('value', 'manual');
+            }
+        } else {
+            if ($("input[name=way]").val() === undefined) {
+                $('#form').append("<input type=hidden name=way value=autol>");
+            } else if ($("input[name=way]").val() === 'manual') {
+                $("input[name=way]").attr('value', 'auto');
+            }
+        }
+
+        $.xpost(xn.url('my-draft-create'), jform.serialize(), function (code, message) {
+            if (manual) {
+                if (code == 0) {
+                    if ($.hasOwnProperty('toast')) {
+                        $.toast({
+                            title: '草稿',
+                            subtitle: code,
+                            content: message,
+                            type: 'info',
+                            pause_on_hover: false,
+                            delay: 2000
+                        });
+                    } else {
+                        $.alert(message);
+                    }
+                    return;
+                } else if (code == 2) {
+                    /*do nothing*/
+                } else if (code == 3) {
+                    $.alert(message);
+
+                    clearInterval(auto_save_draft);
+                } else {
+                    $.alert(message);
+                }
+            } else {
+                if (code == 0) {
+                    console.info('[Draft] ' + message);
+                    if ($.hasOwnProperty('toast')) {
+                        $.toast({
+                            title: '草稿',
+                            subtitle: code,
+                            content: message,
+                            type: 'info',
+                            pause_on_hover: false,
+                            delay: 2000
+                        });
+                    } else {
+                        $.alert(message);
+                    }
+                    return;
+                } else if (code == 2) {
+                    /*do nothing*/
+                } else if (code == 3) {
+                    if ($.hasOwnProperty('toast')) {
+                        $.toast({
+                            title: '草稿',
+                            subtitle: code,
+                            content: message,
+                            type: 'info',
+                            pause_on_hover: false,
+                            delay: 2000
+                        });
+                    } else {
+                        $.alert(message);
+                    }
+                    clearInterval(auto_save_draft);
+                } else {
+                    $.alert(message);
+                }
+            }
+        });
+    }
+    auto_save_draft = setInterval(function () { draft_save() }, <?= intval($till_thread_draft_setting['auto_save_draft_interval'] * 1000) ?>); //自动保存
+    $('#save_draft').on('click', function () {
+        draft_save(true); //手动保存
+    });
+</script>

@@ -1,0 +1,86 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/axz_raffle/view/htm/my_xzraffle.template.htm">
+	<slot name="my_body">
+		<div class="card-body">
+			<form action="<?php echo url('my-xzraffle');?>" method="post" id="formcreate">
+				<div class="form-group row">
+					<div class="col-sm-5 input-group">
+						<input type="text" class="form-control" id="number" name="number" placeholder="购买数量" maxlength="5" oninput="if(!/^[0-9]+$/.test(value)) value=value.replace(/\D/g,'');if(value>1000)value=1000;if(value<0)value=null" />
+						<div class="input-group-append">
+							<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?php echo lang('submiting');?>...">购买抽奖码</button>
+						</div>
+					</div>
+					<label for="number" class="text-info"><?php echo '抽奖码价格为'.$jcpz['cjmprice'].'金币，你当前的金币为'.$tempuser['golds'].'金币'; ?></label>
+				</div>
+			</form>
+			<div class="table-responsive ">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>抽奖码</th>
+							<th>购买时间</th>
+							<th>是否使用</th>
+							<th>使用时间</th>
+							<th>抽取奖品</th>
+						</tr>
+						<thead>
+						<tbody id="invitelist">
+							<?php foreach($codelist as $arr) { ?>
+							<tr>
+								<td style="cursor:pointer;" onclick="copy('<?php echo $arr['code']; ?>')"><?php echo $arr['code']; ?></td>
+								<td><?php echo $arr['gmtime']; ?></td>
+								<td><?php echo ($arr['is_use']==1)? '<span style="color:green">已使用</span>': '未使用'; ?></td>
+								<td><?php echo $arr['usetime']; ?></td>
+								<td><?php echo $arr['jpname']; ?></td>
+							</tr>
+							<?php } ?>
+						</tbody>
+				</table>
+			</div>
+		</div>
+		<nav class="my-3">
+			<ul class="pagination justify-content-center"><?php echo $pagination; ?></ul>
+		</nav>
+	</slot>
+</template>
+<script>
+	function copy(url) {
+		copyTextToClipboard(url);
+	}
+	function copyTextToClipboard(text) {
+		var textArea = document.createElement("textarea");
+		textArea.value = text;
+		document.body.appendChild(textArea);
+		textArea.select();
+		document.execCommand("copy");
+		document.body.removeChild(textArea);
+		$.toast({
+			type: 'default',
+			content: '复制成功',
+			delay: 1000,
+			pause_on_hover: false
+		});
+	}
+	var jform = $('#formcreate');
+	var jsubmit = $('#submit');
+	var juserlist = $('#invitelist');
+	var jconfirm = $("#confirm");
+
+	jform.on('submit', function () {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serialize();
+
+		$.xpost(jform.attr('action'), postdata, function (code, message) {
+			if (code == 0) {
+				$.alert(message).delay(1000).location(xn.url('my-xzraffle'));
+			} else {
+				$.alert(message);
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+</script>
+<script>
+	$('a[data-active="my-xzraffle"]').addClass('active');
+</script>

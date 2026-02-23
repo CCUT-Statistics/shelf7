@@ -1,0 +1,268 @@
+
+
+<section id="desktop_nav_menu_legacy" class="navbar navbar-expand-sm p-0 w-100 hidden-sm">
+    <!--{hook stately_navlogo_top.htm}-->
+    <!--{hook header_nav_page_title.htm}-->
+    <?php if (isset($forum_nav)): /* for WellCMS */ ?>
+    <ul class="navbar-nav mr-auto">
+        <!--{hook header_nav_forum_start.htm}-->
+        <li class="nav-item home" fid="0" data-active="fid-0">
+            <a class="nav-link" href=".">
+                <i class="la la-home"></i>
+                &nbsp;<?php echo lang('index_page');?>
+            </a>
+        </li>
+        <!--{hook header_nav_home_link_after.htm}-->
+        <!-- 遍历需要显示的导航 -->
+        <?php if (isset($forum_nav)) { foreach($forum_nav as $_forum) { ?>
+        <!--{hook header_nav_forumlist_loop_start.htm}-->
+        <!-- li 格式 重新定义或添加新 class -->
+        <li class="nav-item" fid="<?php echo $_forum['fid'];?>" data-active="fid-<?php echo $_forum['fid'];?>">
+            <!-- a标签格式 重新定义或添加新 class -->
+            <a class="nav-link" href="<?php echo $_forum['url'];?>">
+                <i class="icon-circle-o d-md-none"></i>
+                &nbsp;<?php echo $_forum['name'];?>
+            </a>
+        </li>
+        <!--{hook header_nav_forumlist_loop_end.htm}-->
+        <?php }} ?>
+        <!--{hook header_nav_forum_end.htm}-->
+    </ul>
+    <?php else: ?>
+    <ul class="navbar-nav mr-auto">
+        <?php if ($abs_theme_stately_setting['ui']['global']['navbar_style'] === 'horizontal'): ?>
+        <!--{hook header_nav_forum_start.htm}-->
+        <li class="nav-item home" data-active="index"><a class="nav-link" href=".">
+            <span class="la la-home"></span> <?php echo lang('index_page');?></a>
+        </li>
+        <!--{hook header_nav_home_link_after.htm}-->
+        <div class="dropdown">
+            <li class="nav-item cursor-pointer" id="stately_header_nav_all_forums_legacy" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle">
+                    <span class="la la-icons"></span> <?php echo lang('all_forums');?>
+                </a>
+            </li>
+                <div class="dropdown-menu" aria-labelledby="stately_header_nav_all_forums_legacy">
+                    <?php foreach($forumlist_show as $_forum) { ?>
+                    <!--{hook header_nav_forumlist_loop_start.htm}-->
+                    <li class="dropdown-item" fid="<?php echo $_forum['fid'];?>" data-active="fid-<?php echo $_forum['fid'];?>">
+                        <a class="text-body" href="<?php echo url('forum-'.$_forum['fid']);?>">
+                            <img loading="lazy" decoding="async" class="w-px-20 img-fluid mr-1 rounded" src="<?php echo $_forum['icon_url'];?>"> 
+                            <span><?php echo $_forum['name'];?></span>
+                        </a>
+                    </li>
+                    <!--{hook header_nav_forumlist_loop_end.htm}-->
+                    <?php } ?>
+                </div>
+        </div>
+        <!--{hook header_nav_forum_end.htm}-->
+        <?php endif; ?>
+    </ul>
+    <?php endif; ?>
+
+    <ul class="navbar-nav">
+        <!--{hook header_nav_user_start.htm}--> 
+        <?php if(empty($uid)) : ?> 
+            <!--{hook header_nav_user_login_before.htm}-->
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo url('user-login');?>"> 
+                <?php echo lang('login');?>/<?php echo lang('register');?>
+            </a>
+        </li>
+        <!--{hook header_nav_user_login_after.htm}--> 
+        <?php else: ?> 
+        <li class="nav-item" data-bs-toggle="modal" data-bs-target="#statelySearchModal">
+            <a href="#statelySearchModal" class="nav-link">
+                <i class=" la la-search" data-bs-toggle="tooltip" title="搜索"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="btn rounded-pill btn-icon btn-primary" href="<?php echo url('thread-create-'.$fid);?>">
+                <span class="la la-edit" data-toggle="tooltip" data-placement="top" title="<?php echo lang('thread_create_new');?>"></span>
+            </a>
+        </li>
+        <div class="dropdown">
+            <li class="nav-item username"><a class="nav-link" id="stately_header_nav_user_menu_legacy" data-bs-toggle="dropdown" href="#">
+                <?php if($abs_theme_stately_setting['ui_tweek']['menu_magichref_user_avatar_submenu']['show_username']): ?>
+                <span class="mr-1 d-sm-none d-md-inline"><?php echo $user['username'];?></span>
+                <?php endif; ?>
+                <img loading="lazy" decoding="async" class="img-fluid w-px-40" src="<?php echo $user['avatar_url'];?>">
+                    <!--{hook header_nav_user_avatar_after.htm}-->
+                </a>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="stately_header_nav_user_menu_legacy">
+                    <div class="dropdown-item">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 me-3 py-1">
+                                <div class="avatar">
+                                    <a href="<?= url('my') ?>" class="v_avatar v_avatar-post">
+                                        <img loading="lazy" decoding="async" src="<?= $user['avatar_url'] ?>" alt="<?= $user['username'] ?>" class="w-px-40 h-auto rounded-circle">
+                                        <?= ( function_exists('v_show_badge') ? v_show_badge($user['v'], $user['v_title'], $till_v_settings = setting_get('till_verified_member_setting')) : '') ?>
+                                    </a>
+                                </div>
+                            </div>
+                        <div class="flex-grow-1">
+                            <?php if (function_exists('vip__isvip') && vip__isvip($user['vip_end']) && function_exists('vip_read')) { /* 如果是VIP */ $vip_info = vip_read($uid); ?>
+                                <a href="<?= url('my') ?>" class="fw-semibold d-block text-danger isvip"><?= $user['username'] ?></a>
+                                <span class="fw-semibold d-inline-block isvip"><span class="badge bg-label-warning">VIP Lv. <?= $vip_info['level'] ?></span></span>
+                            <?php unset($vip_info); } else { /* 普通用户 */ ?>
+                                <a href="<?= url('my') ?>" class="fw-semibold d-block"><?= $user['username'] ?></a>
+                            <?php } /* endif */ ?>
+                            <!--{hook header_nav_user_name_after.htm}-->
+                            <?php if ($abs_theme_stately_setting['ui_tweek']['menu_magichref_user_brief']['show_uid']): ?>
+                                <small class="badge bg-label-primary mr-1">UID: <?= $user['uid'] ?></small>
+                            <?php endif; ?>
+                            <?php if($abs_theme_stately_setting['ui_tweek']['menu_magichref_user_brief']['show_usergroup']) : ?>
+                                <small class="badge bg-label-secondary"><?= $user['groupname'] ?></small>
+                            <?php endif; ?>
+                            </div>
+                        </div>
+                    
+                        <?php if(isset($user['credits']) && $abs_theme_stately_setting['ui_tweek']['menu_magichref_user_brief']['show_progress']){
+                        $progress = 100;
+                        $max = 1;
+                        if ($user['gid'] > 100) {
+                            foreach ($grouplist as $group) {
+                                if ($group['gid'] < 100) continue;
+                                $n = $user['credits'];
+                                if ($n > $group['creditsfrom'] && $n <= $group['creditsto']) {
+                                    $max = $group['creditsto'];
+                                    if ($user['groupname'] != $group['name']) {
+                                        $user['groupname'] = $group['name'];
+                                        user_update_group($uid);
+                                    }
+                                    break;
+                                }
+                            }
+                            $progress = min(intval($n / $max * 100.0),100.0);
+                        } ?>
+                        <div class="d-flex justify-content-between small mt-2">
+                            <span>
+                            <?= $credits1_name ?>：
+                            <?= $user['credits'] ?>
+                            </span>
+                            <span class="badge bg-label-primary">
+                            <?= $progress ?>%
+                            </span>
+                        </div>
+                        <div class="progress mt-2" style="height:5px">
+                            <div class="progress-bar" role="progressbar" style="<?= 'width: '. $progress .'%' ?>" aria-valuenow="'.$progress.'" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <?php unset($progress, $max); } /* endif */ ?>
+
+                        <?php if ($abs_theme_stately_setting['ui_tweek']['menu_magichref_user_brief']['show_stats']): ?>
+                        <div class="d-flex justify-content-between text-center mt-3">
+                            <div class="d-flex flex-column">
+                                <small class="text-muted">
+                                <?= lang('threads') ?>
+                                </small>
+                                <span>
+                                <?= $user['threads'] ?>
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <small class="text-muted">
+                                <?= lang('posts') ?>
+                                </small>
+                                <span>
+                                <?= $user['posts'] ?>
+                                </span>
+                            </div>
+                            <?php if (isset($user['follows'])): ?>
+                            <div class="d-flex flex-column">
+                                <small class="text-muted">
+                                    关注 
+                                </small>
+                                <span>
+                                <?= $user['follows'] ?>
+                                </span>
+                            </div>
+                            <?php endif; ?>
+                            <?php if (isset($user['followeds'])): ?>
+                            <div class="d-flex flex-column">
+                                <small class="text-muted">
+                                    粉丝
+                                </small>
+                                <span>
+                                <?= $user['followeds'] ?>
+                                </span>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if(isset($user['credits']) && $abs_theme_stately_setting['ui_tweek']['menu_magichref_user_brief']['show_credits']) : ?>
+                        <div class="row row-cols-2 mt-2 g-0">
+                            <div class="col" title="<?= $credits2_name ?>" data-bs-toggle="tooltip">
+                                <span class="mr-1 badge badge-center rounded-pil bg-label-warning"><i class="la la-coins"></i></span>
+                                <?= $user['golds'] ?>
+                            </div>
+                            <div class="col" title="<?= $credits3_name ?>" data-bs-toggle="tooltip">
+                                <span class="mr-1 badge badge-center rounded-pil bg-label-info"><i class="la la-money-bill-alt"></i></span>
+                                <?= $user['rmbs']*0.01 ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <a class="dropdown-item" href="<?php echo url('my');?>">
+                        <i class="la la-user"></i> 
+                        <?php echo lang('my_profile');?>
+                    </a>
+                    <a class="dropdown-item" href="<?php echo url('my-thread');?>">
+                        <i class="la la-comments"></i> 
+                        我的帖子
+                    </a>
+                    <?php if(isset($user['favorites'])): ?>
+                    <a class="dropdown-item" href="<?php echo url('my-favorite');?>">
+                        <i class="la la-star"></i> 
+                        我的收藏
+                    </a>
+                    <?php endif; ?>
+                    <?php if(isset($user['credits'])): ?>
+                    <a class="dropdown-item" href="<?php echo url('my-credits');?>">
+                        <i class="la la-coins"></i> 
+                        我的积分
+                    </a>
+                    <?php endif; ?>
+                    <div class="dropdown-divider"></div>
+                    <?php if($gid == 1) { ?> 
+                        <a class="dropdown-item" href="admin/" target="_blank">
+                            <i class="la la-cog"></i> 
+                            <?php echo lang('admin_page');?>
+                        </a> 
+                        <?php } /* endif */ ?> 
+                    <!--{hook header_nav_admin_page_after.htm}-->
+                    <a class="dropdown-item text-danger" href="<?php echo url('user-logout');?>">
+                        <i class="la la-sign-out-alt"></i> 
+                        <?php echo lang('logout');?>
+                    </a>
+                </div>
+            </li>
+        </div> 
+        <?php endif; ?> 
+        <!--{hook header_nav_2_user_pc_end.htm}-->
+    </ul>
+</section>
+<section id="mobile_nav_menu_legacy" class="navbar p-0 w-100 hidden-md hidden-lg navbar-expand align-items-center justify-content-between">
+    <div class="navbar-nav">
+        <!--{hook header_nav_2_toggler_before.htm}-->
+        <!--{hook header_nav_2_toggler_after.htm}-->
+    </div>
+    <div class="navbar-nav align-items-center">
+        <!--{hook header_nav_2_logo_before.htm}-->
+        <!--{hook stately_navlogo_top.htm}-->
+        <!--{hook header_nav_page_title.htm}-->
+        <!--{hook header_nav_2_logo_after.htm}-->
+    </div>
+    <div class="navbar-nav">
+        <!--{hook header_nav_2_user_icon_before.htm}-->
+        <?php if(empty($uid)) { ?>
+        <a class="btn rounded-pill btn-icon bg-label-primary" href="<?php echo url('user-login');?>"
+            aria-label="<?php echo lang('login');?>"> <i class="la la-user"></i></a>
+        <?php } else { ?>
+        <a class="btn rounded-pill btn-icon bg-label-secondary" href="<?php echo url("thread-create-$fid");?>"
+            aria-label="<?php echo lang('thread_create');?>"><i class="la la-edit"></i></a>
+        <?php } ?>
+        <!--{hook header_nav_2_user_icon_after.htm}-->
+    </div>
+</section>
+

@@ -1,0 +1,70 @@
+<style id="stately_page_auth_style">
+    body {
+        background-image: url(<?= $abs_theme_stately_setting['page']['user_login']['background_image'] ?>);
+        background-position: center;
+        background-size: cover;
+    }
+</style>
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Logo -->
+                    <div class="d-flex justify-content-center">
+                        <!--{hook stately_navlogo_top.htm}-->
+                    </div>
+                    <!-- /Logo -->
+                    <h1 class="mb-2 h4">
+                        <?= $abs_theme_stately_setting['page']['user_login']['title'] ?>
+                    </h1>
+                    <!--{hook user_login_title_after.htm}-->
+                    <p class="mb-4">
+                        <?= $abs_theme_stately_setting['page']['user_login']['subtitle'] ?>
+                    </p>
+                    <form action="<?= url('user-login');?>" method="post" id="form">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                <?= lang('email');?> /
+                                <?= lang('username');?>
+                            </label>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="" autofocus="">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <!--{hook user_login_email_after.htm}-->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">
+                                    <?= lang('password');?>
+                                </label>
+                                <?php if(!empty($conf['user_resetpw_on'])) : ?>
+                                <a href="<?= url('user-resetpw');?>">
+                                    <small>
+                                        <?= lang('forgot_pw');?>
+                                    </small>
+                                </a>
+                                <?php endif; ?>
+                            </div>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <!--{hook user_login_password_after.htm}-->
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit" id="submit" data-loading-text="<?= lang('submiting');?>...">
+                                <?= lang('login');?>
+                            </button>
+                        </div>
+                        <!--{hook user_login_submit_after.htm}-->
+                    </form>
+                    <!--{hook user_login_form_footer_left.htm}-->
+                    <p class="text-center">
+                        <?= sprintf( htmlspecialchars_decode($abs_theme_stately_setting['page']['user_login']['goto_register_text']), '<a href="' . url('user-create') . '">' . lang('user_create') . '</a>') ?>
+                    </p>
+                    <!--{hook user_login_form_footer_right_end.htm}-->
+                </div>
+            </div>
+        </div>
+        <!--{hook user_login_card_after.htm}-->
+        <!-- /Register -->
+    </div>
+</div>

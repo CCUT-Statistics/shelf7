@@ -1,0 +1,64 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/xh_xiuno_recharge/view/htm/my_money.template.htm">
+	<slot name="my_body">
+		<div class="">
+			<?php $ali_pay = kv_get('pay_setting'); $wx_pay = kv_get('wx_pay_setting'); $xh_ali_pay=kv_get('xh_ali_pay_setting'); $xh_wx_pay=kv_get('xh_wx_pay_setting');?>
+			<?php if($ali_pay['appid'] || $wx_pay['wx_appid'] || $xh_ali_pay['mchid'] || $xh_wx_pay['mchid']){?>
+			<form action="<?php echo url('my-recharge');?>" method="post" id="form1">
+				<div class="form-group input-group"> 当前账户余额：
+					<?php echo $user['golds']?> 金币
+				</div>
+				<div class="form-group input-group flex-column flex-md-row">
+					<select class="form-select w-fit flex-grow-0" name="pay_type">
+						<?php if($wx_pay['wx_appid']){?>
+						<option value="wechat">虎皮椒微信支付</option>
+						<?php }?>
+						<?php if($ali_pay['appid']){?>
+						<option value="alipay">虎皮椒支付宝支付</option>
+						<?php }?>
+						<?php if($xh_wx_pay['mchid']){?>
+						<option value="xh_wechat">迅虎微信支付</option>
+						<?php }?>
+						<?php if($xh_ali_pay['mchid']){?>
+						<option value="xh_alipay">迅虎支付宝支付</option>
+						<?php }?>
+					</select>
+					<input type="number" class="form-control w-auto" id="ax_pay_num" name="ax_pay_num" placeholder="输入充值金币数量 1金币=1元人民币" required="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+				</div>
+				<div class="invalid-feedback"></div>
+				<div>
+					<button type="submit" class="btn btn-primary btn-block" data-loading-text="充值中..." id="submit1">立即充值</button>
+				</div>
+			</form>
+			<?php }else{?>
+			<div class="empty text-center">
+				<span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+					<i class="las la-money-bill-alt fs-1"></i>
+				</span>
+				<p>未开通支付功能</p>
+			</div>
+			<?php }?>
+		</div>
+	</slot>
+</template>
+<script>
+	$('a[data-active="my-recharge"]').addClass('active');
+	$('a[data-active="my-recharge-nav"]').addClass('active');
+</script>
+<script type="text/javascript">
+	var jform = $('#form1');
+	var jsubmit = $('#submit1');
+	jform.on('submit', function () {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serializeObject();
+		var postpay = '';
+		$.xpost(jform.attr('action'), postdata, function (code, message) {
+			if (code == 1) {
+				window.location.href = message;
+			} else if (code == 2) {
+				window.location.href = message;
+			}
+		});
+		return false;
+	});
+</script>

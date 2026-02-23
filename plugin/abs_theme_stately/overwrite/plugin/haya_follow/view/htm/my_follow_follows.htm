@@ -1,0 +1,113 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/haya_follow/view/htm/my_follow.template.htm">
+	<slot name="my_body">
+		<ul class="row p-0">
+			<?php if (!empty($haya_follow_follows)) { foreach ($haya_follow_follows as $haya_follow_user) { ?>
+			<!--{hook haya_follow_user_item.htm}-->
+			<?php }} else { ?>
+			<li class="d-block haya-follower-empty">
+				<div class="empty p-3 text-center">
+					<span class="empty-icon badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+						<i class="las la-user fs-1"></i>
+					</span>
+					<p> 还没有关注的用户 </p>
+				</div>
+			</li>
+			<?php } ?>
+		</ul>
+		<?php if (!empty($haya_follow_post_pagination)) { ?>
+		<nav>
+			<ul class="pagination justify-content-center">
+				<?php echo $haya_follow_post_pagination; ?>
+			</ul>
+		</nav>
+		<?php } ?>
+	</slot>
+</template>
+<script>
+	$(function () {
+
+		$(document).on("click", ".js-haya-follow-user-setting", function () {
+			var settings = $(".haya-follow-user-settings");
+			if (settings.hasClass("d-none")) {
+				settings.removeClass("d-none");
+			} else {
+				settings.addClass("d-none");
+			}
+		});
+
+		$(document).on("click", ".js-haya-follow-remarks", function () {
+			var old_remarks = $(this).attr("data-remarks");
+			var uid = $(this).attr("data-uid");
+			var remarks_tpl = '<div class="form-group haya-follow-remarks-update">';
+			remarks_tpl += '<div class="text-grey">填写你需要更改的备注：</div>';
+			remarks_tpl += '<div><input class="haya-follow-remarks form-control" name="haya-follow-remarks" value="' + old_remarks + '" /></div>';
+			remarks_tpl += '</div>';
+			$.confirm('更改备注', function () {
+				var remarks = $(".haya-follow-remarks-update").find(".haya-follow-remarks").val();
+				var url = '<?php echo url("follow-remarks");?>';
+
+				$.xpost(url, { 'uid': uid, 'remarks': remarks }, function (code, msg) {
+					if (code == 1) {
+						$.toast({
+							title: lang.tips_title,
+							content: msg,
+							type: 'success',
+							pause_on_hover: true,
+							delay: 5000
+						});
+						location.reload();
+					} else {
+						$.toast({
+							title: lang.tips_title,
+							content: msg,
+							type: 'warning',
+							pause_on_hover: true,
+							delay: 5000
+						});
+					}
+				});
+
+			}, { 'body': remarks_tpl });
+		});
+
+		$(document).on("click", ".js-haya-follow-dynamic", function () {
+			var dynamic = $(this).attr("data-dynamic");
+			var uid = $(this).attr("data-uid");
+
+			if (dynamic == 1) {
+				dynamic = 0;
+			} else {
+				dynamic = 1;
+			}
+
+			var thiz = $(this);
+			var url = '<?php echo url("follow-dynamic");?>';
+			$.xpost(url, { 'uid': uid, 'dynamic': dynamic }, function (code, msg) {
+				if (code == 1) {
+					if (dynamic == 1) {
+						thiz.find(".icon")
+							.removeClass("icon-remove")
+							.addClass("icon-check");
+						thiz.attr("data-dynamic", 1);
+					} else {
+						thiz.find(".icon")
+							.removeClass("icon-check")
+							.addClass("icon-remove");
+						thiz.attr("data-dynamic", 0);
+					}
+				} else {
+					$.toast({
+						title: lang.tips_title,
+						content: msg,
+						type: 'warning',
+						pause_on_hover: true,
+						delay: 5000
+					});
+				}
+			});
+		});
+
+	});
+
+	$('a[data-active="my-follow-follows"]').addClass('active');
+</script>

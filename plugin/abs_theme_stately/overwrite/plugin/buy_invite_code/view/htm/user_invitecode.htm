@@ -1,0 +1,71 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<div class="row">
+	<div class="col-lg-6 mx-auto">
+		<ul class="nav nav-pills justify-content-center mb-3">
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-buyinvitecode');?>" data-active="user-buyinvitecode">购买邀请码</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('user-invitecode');?>" data-active="user-invitecode">查询订单</a>
+			</li>
+		</ul>
+		<div class="card">
+
+			<div class="card-body">	
+			<?php if($kv['invite_orderexplain']){?>
+				<div class="alert alert-info"><?php echo $kv['invite_orderexplain'];?></div>
+			<?php }?>
+	
+		<?php if($invitelist['invite_sid'] == $sid){?>
+		<table class="table table-bordered">
+		  <thead class="text-center">
+			<tr>
+			  <th scope="col">订单状态</th>
+			  <th scope="col">支付方式</th>
+			  <th scope="col">备注码</th>
+			  <th scope="col">创建时间</th>
+			  <th scope="col">失效时间</th>
+			</tr>
+		  </thead>
+		  <tbody class="text-center">
+		
+			<tr>
+			
+			  <td><?php echo $invitelist['invite_state'] == 1 ? '<span class="text-success">已通过</span>' : ($invitelist['invite_state'] == 2 ? '<span class="text-warning">未支付</span>' : '<span class="text-danger">审核中</span>');?></td>
+			  <td><?php echo $invitelist['invite_payway'] == 1 ? '支付宝' : ($invitelist['invite_payway'] == 2 ? '微信' : 'QQ钱包');?></td>
+			  <td><?php echo $invitelist['invite_remarkcode'];?></td>
+			  <td><?php echo date('Y-m-d H:i',$invitelist['invite_createtime']);?></td>
+			  <td><?php echo date('Y-m-d H:i',$invitelist['invite_createtime']+86400 * 10);?></td>
+			</tr>
+			<?php if($invitelist['invite_state'] == 1){ ?>
+			<tr>
+			  <td colspan="5">邀请码：<span class="text-danger"><?php echo $invitelist['invite_code']; ?></span></td>
+			</tr>
+			<?php }?>
+		  </tbody>
+		</table>
+		
+		<?php if($invitelist['invite_state'] == 1){ ?>
+			<button onclick="window.close()" class="btn btn-primary btn-block"><small>返回<?php echo lang('register');?></small></button>
+			<?php }elseif($invitelist['invite_state'] != 1){?>
+				<div class="text-center threadlist">
+					<?php
+						foreach ($kv['invite_pay'] as $key => $value) {
+							if($value == 1) $type ='支付宝';
+							if($value == 2) $type ='微信';
+							if($value == 3) $type ='QQ';
+					?>
+					<label class="custom-input custom-radio mr-2"><input class="mr-1" type="radio" name="invite_buy" value="<?php echo $value;?>" <?php echo $invitelist['invite_payway'] == $value ? 'checked' : '';?>><?php echo $type;?></label>
+					<?php }?>
+				</div>
+				<button class="btn btn-warning btn-block paidinvitecode" data-modal-url="<?php echo url("user-paidinvitecode");?>" data-modal-title="购买邀请码" data-modal-arg=".threadlist" data-modal-size="md"><small>继续支付</small></button>
+			<?php }?>
+			<?php }?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>
+$('a[data-active="user-invitecode"]').addClass('active');
+</script>

@@ -1,0 +1,13 @@
+{
+    "name": "奇狐网_公告通知窗口",
+    "brief": "支持自定义标题及关闭按钮，支持24小时只显示一次。<a href='https://bbs.oddfox.cn' target='_blank' class='text-danger'>更多精品模版插件请访问奇狐官网</a>",
+    "version": "1.0",
+    "bbs_version": "4.0.4",
+    "uid": "20394",
+    "username": "༺凨影༻",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

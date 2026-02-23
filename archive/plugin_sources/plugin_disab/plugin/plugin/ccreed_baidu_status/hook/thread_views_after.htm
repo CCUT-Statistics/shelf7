@@ -1,0 +1,24 @@
+<?php
+	function baidu($url){
+		$url='http://www.baidu.com/s?wd='.$url;
+		$curl=curl_init();
+		curl_setopt($curl,CURLOPT_URL,$url);
+		curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+		$rs=curl_exec($curl);
+		curl_close($curl);
+		if(!strpos($rs,'没有找到')){
+			return 1;
+		}else{
+			return 0;
+		}}
+	function baidustatus(){
+		$tid=$GLOBALS['tid'];
+		$url=http_url_path()."thread-$tid.htm";
+		if(baidu($url)==1){
+			echo "<a style=\"color:green;\" rel=\"external nofollow\" title=\"点击查看\" target=\"_blank\" href=\"https://www.baidu.com/s?wd=$url\">百度已收录</a>";
+		}else{
+			echo "<a style=\"color:red;\" rel=\"external nofollow\" title=\"点击提交收录！\" target=\"_blank\" href=\"https://ziyuan.baidu.com/linksubmit/url?sitename=$url\">百度未收录</a>";
+			}
+		}
+?>
+<span class="text-grey ml-2"><img src="plugin/ccreed_baidu_status/images/bdfavicon.png"/><?php baidustatus(); ?></span>

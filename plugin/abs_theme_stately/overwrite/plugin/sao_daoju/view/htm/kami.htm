@@ -1,0 +1,88 @@
+<?php 
+
+$num_pid = db_count('shopuser', array('uid'=>$uid));
+$page = param(2,1);
+$list = db_find('shopuser',array('uid'=>$uid), array('create_date'=>-1), $page, $pagesize = 999);
+$pagination = pagination(url("kami-{page}"), $num_pid, $page, $pagesize);
+
+include _include(APP_PATH . 'view/htm/header.inc.htm'); ?>
+
+<ul class="nav nav-pills justify-content-center">
+
+	<li class="nav-item">
+		<a class="nav-link" href="shop.htm" data-active="shop">道具</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link active" href="kami.htm" data-active="kami">购买卡密记录</a>
+	</li>
+</ul>
+
+<section>
+	<div class="card">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>商品</th>
+						<th>卡密</th>
+						<th>时间</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<?php foreach ($list as $v) {
+            $users = db_find_one('shoplist', array('id'=>$v['shopid']));
+                ?>
+					<tr>
+						<td><?php echo $users['title']; ?></td>
+						<td id="copyable-text" onclick="copyText(this)"><?php echo $v['text']; ?><span id="copy-button" style="display: none;"></span></td>
+						<td><?php echo date("Y-m-d",$v['create_date']); ?></td>
+					</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+
+
+		<div class="card-body">
+			<nav class="text-center">
+				<ul class="pagination"><?php echo $pagination; ?></ul>
+			</nav>
+
+		</div>
+	</div>
+</section>
+
+<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>
+
+<script>
+	function copyText(tdElement) {
+		// 创建一个新的textarea元素并设置其值为td元素的文本
+		var textArea = document.createElement("textarea");
+		textArea.value = tdElement.textContent || tdElement.innerText; // 考虑兼容性
+
+		// 将textarea添加到文档中（虽然是隐藏的）
+		document.body.appendChild(textArea);
+
+		// 选择textarea的文本
+		textArea.select();
+
+		try {
+			// 复制文本
+			var successful = document.execCommand('copy');
+			var msg = successful ? 'successful' : 'unsuccessful';
+			console.log('Copying text command was ' + msg);
+		} catch (err) {
+			// 如果浏览器不支持execCommand，则使用Clipboard API
+			navigator.clipboard.writeText(textArea.value).then(function () {
+				console.log('Text copied to clipboard');
+			}).catch(function (err) {
+				// 复制失败，处理错误
+				console.error('Could not copy text: ', err);
+			});
+		}
+
+		// 清理并移除textarea
+		document.body.removeChild(textArea);
+	}
+</script>

@@ -1,0 +1,10 @@
+{
+    "name": "快速屏蔽",
+    "brief": "在多处显要位置提供[<fontcolor=blue>屏蔽/解封</font>]用户的快捷按钮。<br>并可自定义开启哪些按钮以及内容屏蔽提示。<br><span class='badge badge-danger'>一起smart修改</span> <a href=http://www.iqismart.com>http://www.iqismart.com</a>，原作者网站：http://www.westping.com",
+    "version": "1.2",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,141 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<style id="till_thread_draft">
+	.card.bg-primary {
+		background-image: linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);
+		background-repeat: no-repeat;
+		box-shadow: 2px 2px 3px rgba(173, 181, 189, 0.25);
+		border: none;
+	}
+
+	.list-inline {
+		padding-left: 0;
+		list-style: none;
+		margin-left: -5px;
+		margin-bottom: 0;
+	}
+
+	.list-inline>li {
+		display: inline-block;
+		padding-right: 5px;
+		padding-left: 5px;
+	}
+
+	.text-white a {
+		color: var(--white, #ffffff);
+	}
+</style>
+<?php include _include(APP_PATH . 'plugin/till_thread_draft/setting_page_header.htm'); ?>
+
+<section class="card">
+	<form action="<?= url('plugin-setting-till_thread_draft') ?>" method="post">
+		<div class="card-header">
+			<div class="d-flex justify-content-between align-items-center">
+				<h3 class="h5 m-0">参数配置</h3>
+				<button type="submit" class="btn btn-primary btn-lg">保存</button>
+			</div>
+		</div>
+		<div class="card-body">
+			<h4>通用设置</h4>
+			<dl class="dl-horizontal">
+				<dt>草稿栏位数量</dt>
+				<dd>
+					<?= $input['thread_draft_slot_count'] ?>
+					<p class="help-block">影响全部用户。若用户的草稿数量大于该值，将不会保存新的草稿。</p>
+				</dd>
+				<dt>自动保存时间间隔</dt>
+				<dd>
+					<?= $input['auto_save_draft_interval'] ?>
+					<p class="help-block">单位为秒。从打开发帖页面开始计算，多少秒后保存一次，再过多少秒保存一次？</p>
+				</dd>
+				<dt>草稿保质期</dt>
+				<dd>
+					<?= $input['draft_shelf_life'] ?>
+					<p class="help-block">一篇草稿会在多久之后自动删除？单位为秒。<i>设为0（零）禁用该功能（不建议这么做）</i>。</p>
+					<details class="card">
+						<summary>选择常用时间</summary>
+						<p>点击数值即可快速填写。</p>
+						<dl class="help-block dl-horizontal">
+							<dt>1小时</dt>
+							<dd><data value="60" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">60</data></dd>
+							<dt>4小时</dt>
+							<dd><data value="14400" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">14400</data></dd>
+							<dt>8小时</dt>
+							<dd><data value="28800" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">28800</data></dd>
+							<dt>1天</dt>
+							<dd><data value="86400" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">86400</data></dd>
+							<dt>2天</dt>
+							<dd><data value="172800" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">172800</data></dd>
+							<dt>3天</dt>
+							<dd><data value="259200" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">259200</data></dd>
+							<dt>1周</dt>
+							<dd><data value="604800" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">604800</data></dd>
+							<dt>（30天）1月</dt>
+							<dd><data value="2592000" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">2592000</data></dd>
+							<dt>3月</dt>
+							<dd><data value="7257600" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">7257600</data></dd>
+							<dt>半年</dt>
+							<dd><data value="15768000" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">15768000</data></dd>
+							<dt>1年</dt>
+							<dd><data value="31536000" onclick="document.getElementById('draft_shelf_life').value = this.value" class="form-control">31536000</data></dd>
+						</dl>
+					</details>
+				</dd>
+				<dt>清理全部用户过期草稿</dt>
+				<dd><a href="<?= url('plugin-setting-' . param(2) . '-delete_expired_all') ?>" class="btn btn-primary">执行</a>
+					<p class="help-block">建议每月按一次</p>
+				</dd>
+			</dl>
+			<h4>兼容设置</h4>
+			<p>除非必要，否则不要改变这里的设置<del>，否则你的服务器会被魔理沙偷走</del>。</p>
+			<dl class="dl-horizontal">
+				<dt>插件兼容性</dt>
+				<dd>
+					<?= $input['plugin_compatibility'] ?>
+					<p class="help-block">如果你安装了“标签”等 在发帖页面新增设置项 的插件，请选择“是”。</p>
+				</dd>
+				<dt>使用吐司框提示</dt>
+				<dd>
+					<?= $input['need_toast'] ?>
+					<p class="help-block">在页面右上角显示的不打扰用户的提示。</p>
+				</dd>
+
+			</dl>
+		</div>
+		<div class="card-footer">
+			<details>
+				<summary><span class="text-danger">危险区域</span></summary>
+				<dl class="dl-horizontal">
+					<dt>卸载插件时，<wbr>删除全部草稿<wbr>和插件设置</dt>
+					<dd>
+						<?= $input['delete_all_settings_and_drafts_after_uninst'] ?>
+					</dd>
+				</dl>
+			</details>
+		</div>
+	</form>
+</section>
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+
+	var jform = $("#form");
+	var jsubmit = $("#submit");
+	jform.on('submit', function () {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serialize();
+		$.xpost(jform.attr('action'), postdata, function (code, message) {
+			if (code == 0) {
+				$.alert(message);
+				jsubmit.text(message).delay(2000).button('reset').location();
+				return;
+			} else {
+				$.alert(message);
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+
+</script>

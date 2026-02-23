@@ -1,0 +1,1 @@
+case 'till_verified_member': include APP_PATH.'plugin/till_verified_member/setting.php'; break;

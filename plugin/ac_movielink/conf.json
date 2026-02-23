@@ -1,0 +1,10 @@
+{
+    "name": "放映室",
+    "brief": "放映室<br>作者QQ1319188427",
+    "version": "2.0.2",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "dependencies": []
+}

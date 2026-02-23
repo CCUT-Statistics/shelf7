@@ -1,0 +1,70 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+
+<div class="card">
+	<div class="card-header"><?php echo lang('delete_thread');?></div>
+	<div class="card-body ajax-body">
+		<form action="<?php echo url("user-paidinvitecode");?>" method="post" id="user_paidinvitecode_form">
+			<div class="form-group row ">
+				<div class="modal-body text-center">
+							<span>请使用<span class="typearr text-danger"></span>扫一扫支付<b class="text-danger"><?php echo $kv['invite_codeprice'];?></b>元</span><br>
+							<span>注：请勿多付少付，支付完成后点击[我已支付]</span><br>
+							<span class="img"></span><br>
+							(付款备注码:<span class="badge badge-danger"><?php echo $invitelist['invite_remarkcode'];?></span>)<br>
+							<span class="text-muted small">
+								<span>手机用户长按二维码可保存到手机中</span><br>
+								<span>在<span class="typearr"></span>扫一扫中选择“相册”即可</span>
+							</span>
+						  </div>
+			
+	
+			</div>
+			<div class="form-group row">
+				<label class="col-4 form-control-label text-right"></label>
+				<div class="col-8">
+					<button type="button" class="btn btn-secondary" onclick="location.reload();"><?php echo lang('close');?></button>
+					<button type="submit" class="btn btn-primary mr-2" data-loading-text="<?php echo lang('submiting');?>...">我已支付</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script ajax-eval="true">
+
+// 接受传参
+var args = args || {jmodal: null, callback: null, arg: null};
+var jmodal = args.jmodal;
+var callback = args.callback;
+var arg = args.arg;
+var jthreadlist = $(arg);  // .threadlist
+var tidarr = jthreadlist.find('input:radio[name="invite_buy"]:checked').val();
+var typearr = jthreadlist.find('input:radio[name="invite_buy"]:checked')[0].nextSibling.nodeValue;
+var jform = $('#user_paidinvitecode_form');
+var jsubmit = jform.find('button[type="submit"]');
+var jtotal = jform.find('span.img');
+var jtypearr = jform.find('span.typearr');
+jtotal.html('<img src="plugin/buy_invite_code/view/img/'+ tidarr +'.png">');
+jtypearr.html(typearr);
+
+jform.on('submit', function() {
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serializeObject();
+	postdata.tidarr = tidarr;
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			jsubmit.button(message);
+			setTimeout(function() {
+				if(jmodal) jmodal.modal('dispose');
+				if(callback) callback(message);
+				window.location.reload();
+			}, 1000);
+		} else {
+			$.alert(message);
+            jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+	
+</script>

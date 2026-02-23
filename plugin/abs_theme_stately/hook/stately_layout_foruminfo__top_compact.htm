@@ -1,0 +1,56 @@
+<div class="card p-3 mb-3" data-style="foruminfo-compact_v1">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="media align-items-center">
+            <img loading="lazy" decoding="async" class="card-img w-px-50" src="<?= $forum['icon_url'];?>">
+            <div class="media-body ml-3">
+                <h2 class="h5 m-0">
+                    <?= $forum['name'];?>
+                </h2>
+                <?php if($forum['brief']) : ?>
+                <!--{hook forum_brief_before.htm}-->
+                <div class="small mt-2">
+                    <?= $forum['brief'];?>
+                </div>
+                <!--{hook forum_brief_after.htm}-->
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="d-flex align-items-center flex-shrink-0">
+            <div class="d-none d-lg-inline-flex mx-2">
+                <div class="d-flex flex-column mr-1">
+                    <small class="text-muted">
+                        <?= lang('threads');?>
+                    </small>
+                    <span>
+                        <?= $forum['threads'];?>
+                    </span>
+                </div>
+                <div class="d-flex flex-column mr-1">
+                    <small class="text-muted">
+                        <?= lang('today_posts');?>
+                    </small>
+                    <span>
+                        <?= $forum['todayposts'];?>
+                    </span>
+                </div>
+                <div class="d-flex flex-column mr-1">
+                    <small class="text-muted">
+                        <?= lang('today_threads');?>
+                    </small>
+                    <span>
+                        <?= $forum['todaythreads'];?>
+                    </span>
+                </div>
+                <!--{hook forum_todaythreads_after.htm}-->
+            </div>
+            <button type="button" class="btn btn-outline-primary mr-2 d-none d-md-inline-block " data-bs-toggle="modal" data-bs-target="#forumInfoModal"><i class="la la-comment"></i> 关于版块</button>
+            <button type="button" class="btn btn-outline-primary rounded-pill mr-2 d-inline-block d-md-none " data-bs-toggle="modal" data-bs-target="#forumInfoModal"><i class="la la-info" data-bs-toggle="tooltip " title="关于版块"></i> </button>
+            <a role="button" class="btn btn-primary" href="<?= url('thread-create-'.$fid);?>">
+                <i class="la la-edit"></i>
+                <?= lang('thread_create_new');?>
+            </a>
+        </div>
+    </div>
+</div>
+
+            <!--{hook stately_modal_foruminfo.htm}-->

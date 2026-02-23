@@ -1,0 +1,14 @@
+
+<div class="col-lg-3 d-none d-lg-block" id="user_aside" data-style="modern_v3">
+		<div class="card">
+			<nav class="list-group list-group-flush text-center" id="user_nav">
+				<!--{hook user_common_user_before.htm}-->
+				<a href="<?php echo url("user-$_uid");?>" class="list-group-item list-group-item-action" data-active="menu-user">个人资料</a>
+				<!--{hook user_common_user_after.htm}-->
+				
+				<!--{hook user_common_thread_before.htm}-->
+				<a href="<?php echo url("user-thread-$_uid");?>" class="list-group-item list-group-item-action" data-active="menu-user-thread">论坛帖子</a>
+				<!--{hook user_common_thread_after.htm}-->
+			</nav>
+		</div>
+	</div>

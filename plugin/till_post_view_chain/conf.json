@@ -1,0 +1,11 @@
+{
+    "name": "查看回帖链",
+    "brief": "查看回帖的完整的引用链（类似BiliBili的“查看对话”功能）",
+    "version": "1.0.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

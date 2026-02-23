@@ -1,0 +1,24 @@
+
+<div class="modal fade" id="reading_mode_card" tabindex="-1" aria-labelledby="reading_mode_cardLabel" aria-hidden="true">
+	<div class="modal-dialog modal-fullscreen">
+		<div class="modal-content">
+			<div class="modal-body container">
+				<button type="button" class="btn-close position-fixed top-0 end-0 m-5 fs-4" data-bs-dismiss="modal" aria-label="Close"></button>
+				<aside class="text-center">
+					<h2 id="reading_mode_subject"></h2>
+					<p id="reading_mode_reading_time"></p>
+					<?php if($abs_theme_stately_setting['ui_tweek']['thread']['show_font_size_btn']): ?>
+					<button type="button" class="btn btn-link text-secondary " onclick="document.getElementById('reading_mode_message').classList.toggle('fs-large');" title="文字大小" data-bs-toggle="tooltip"><i class="la la-text-height"></i></button>
+					<?php endif; ?>
+					<?php if($abs_theme_stately_setting['special']['print_btn']['enable'] && $abs_theme_stately_setting['special']['print_btn']['shows_on_reading_mode']): $print_button_exists = true; ?>
+					<button type="button" onclick="window.print()" class="print_button btn btn-link text-secondary " title="<?= lang('print') ?>" data-bs-toggle="tooltip"><i class="la la-print"></i></button>
+					<?php endif; ?>
+					<?php if($abs_theme_stately_setting['special']['share_card_modal']['enable'] &&  $abs_theme_stately_setting['special']['share_card_modal']['shows_on_reading_mode']): $share_card_modal_exists = true; ?>
+					<button type="button" class="btn btn-link text-secondary " data-bs-toggle="modal" data-bs-target="#share_card"><i class="la la-share" title="<?php echo lang('share'); ?>" data-bs-toggle="tooltip"></i></button>
+					<?php endif; ?>
+				</aside>
+				<article id="reading_mode_message" class="message"></article>
+			</div>
+		</div>
+	</div>
+</div>

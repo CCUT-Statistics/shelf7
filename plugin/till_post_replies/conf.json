@@ -1,0 +1,10 @@
+{
+    "name": "回复楼中楼【新版】",
+    "brief": "在论坛帖子的回复中添加了针对每条回复的评论功能 作者：Tillreetree 2024年4月",
+    "version": "1.0.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "dependencies": []
+}

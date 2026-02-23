@@ -1,0 +1,152 @@
+
+<div class="row gx-3" data-style="cards_v1">
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-info">
+                            <i class="las la-comments fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('threads'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $_user['threads'];?>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-success">
+                            <i class="las la-comment fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('posts'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $_user['posts'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php if(isset($_user['follows'])): ?>
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-danger">
+                            <i class="las la-user-plus fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('follows'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $_user['follows'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+    <?php if(isset($_user['followeds'])): ?>
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-danger">
+                            <i class="las la-users fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('followeds'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $_user['followeds'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+    <?php if(isset($_user['favorites'])): ?>
+    <div class="col-6 col-lg">
+        <div class="card d-none d-lg-block">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-warning">
+                            <i class="las la-star fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('haya_favorite_name'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $_user['favorites'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+</div>
+<?php if($abs_theme_stately_setting['ui_tweek']['user']['lv2_menu_location'] !== 'side'): ?>
+</div>
+    <?php endif;?>
+</div>
+<div class="card">
+    <details class="accordion-item ">
+        <summary class="accordion-button collapsed">
+            <?= lang('viewmore') . ' ' . lang('my_basic_profile');?>
+        </summary>
+    <div class="card-body">
+        <div class="row line-height-4">
+            <div class="col-md-6">
+                <span class="text-muted">
+                    <?= lang('user_group');?>：
+                </span>
+                <?= $_user['groupname'];?>
+                <!--{hook user_profile_posts_after.htm}-->
+            </div>
+            <div class="col-md-6">
+        <span class="text-muted">
+            <?= lang('create_date');?>：
+        </span>
+        <?= $_user['create_date_fmt'];?>
+        <br><span class="text-muted">
+            <?= lang('last_login_date');?>：
+        </span>
+        <?= $_user['login_date_fmt'];?>
+        <?php if(intval($gid) === 1 || intval($uid) === intval($_user['uid'])) { ?>
+            <br><span class="text-danger">
+                <?= lang('email');?>：
+            </span>
+            <?= $_user['email'];?><br>
+        <?php } ?>
+        <!--{hook user_profile_login_date_after.htm}-->
+    </div>
+</div>
+</details>

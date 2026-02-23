@@ -1,0 +1,35 @@
+<footer class="text-muted small bg-white py-4 mt-3" id="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 text-center text-lg-left">
+				<?php if (isset($light_config['config_exc_info']) && $light_config['config_exc_info'] == 1) { ?>
+				<div>
+					<!--{hook footer_footer_right_start.htm}-->
+					<span style="background-color: #02C39A;color: #fff;padding: 0 5px;border-radius: 3px;vertical-align: 2px;">时间: <b><?php echo substr(microtime(1) - $starttime, 0, 5);?></b></span>
+					<span style="background-color: #FF9F1C;color: #fff;padding: 0 5px;border-radius: 3px;vertical-align: 2px;">数据: <b><?php echo count($db->sqls);?></b></span>
+					<!--{hook footer_footer_right_end.htm}-->
+				</div>
+				<?php }?>
+				<div>
+				<!--{hook footer_footer_left_start.htm}-->
+				
+				<!--{hook footer_footer_left_end.htm}-->
+				<a href="./thread-1.htm" data-toggle="tooltip" data-placement="top" title="" target="_blank" class="badge badge-secondary" data-original-title="查看详细"> 免责申明</a>
+			</div>
+			
+			</div>
+			<div class="col-lg-6 text-center text-lg-right contact ">
+			<?php if (isset($light_config['contact_qq']) && $light_config['contact_qq'] == 1) { ?>
+				<a href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $light_config['contact_qq_number']?>&site=qq&menu=yes" target="_blank" class="text-muted" data-toggle="tooltip" data-placement="top" title="QQ"><i class="fab fa-qq"></i></a>
+				<?php }?>
+				
+				<?php if (isset($light_config['contact_wx']) && $light_config['contact_wx'] == 1) { ?>
+				<a href="JavaScript:;" data-toggle="tooltip" data-html="true" title="<img src='<?php echo $light_config['contact_wx_img']?>'/>" class="text-muted ml-2"><i class="fab fa-weixin"></i></a>
+				<?php }?>
+					<?php if (isset($light_config['contact_email']) && $light_config['contact_email'] == 1) { ?>
+				<a href="mailto:<?php echo $light_config['contact_email_number']?>" data-toggle="tooltip" data-placement="top" title="邮箱" class="text-muted ml-2"><i class="fas fa-envelope"></i></a>
+			<?php }?>
+			</div>
+		</div>
+	</div>
+</footer>

@@ -1,0 +1,6 @@
+<!--{hook post_list_inc_create_date_before.htm}-->
+<time datetime="<?= $_post['create_date'];?>" class="date text-muted ml-2">
+    <i class="las la-clock"></i>
+    <?= $_post['create_date_fmt'];?>
+</time>
+<!--{hook post_list_inc_create_date_after.htm}-->

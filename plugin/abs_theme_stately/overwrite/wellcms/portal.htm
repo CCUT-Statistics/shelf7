@@ -1,0 +1,15 @@
+<?php include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/view/htm/header.inc.htm');?>
+<!--{hook website_portal_start.htm}-->
+
+<?php switch($abs_theme_stately_setting['wellcms_ui_style']['homepage_portal']['layout']): case '': ?>
+<?php break; default: ?>
+<!--{hook stately_layout_wellcms_homepage_portal__classic.htm}-->
+<?php break; endswitch; ?>
+
+<!--{hook website_portal_end.htm}-->
+<?php include _include(APP_PATH . 'plugin/abs_theme_stately/overwrite/view/htm/footer.inc.htm');?>
+
+<script>
+    $('#nav li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+</script>
+<!--{hook website_portal_js.htm}-->

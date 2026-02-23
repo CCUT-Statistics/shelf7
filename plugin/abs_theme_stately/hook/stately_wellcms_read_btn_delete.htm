@@ -1,0 +1,6 @@
+<?php if ( in_array(intval($gid),array(1),true) || ( boolval($abs_theme_stately_setting['global']['thread']['show_delete_button']) && ($allowdelete || $first['allowdelete']) ) ): ?>
+<a data-href="<?= url('post-delete-'.$thread['firstpid']); ?>" href="javascript:void(0);" class="text-danger post_delete" isfirst="1"><i class="la la-remove"></i>
+    <?= lang('delete'); ?>
+</a>
+<?php endif; ?>
+<!--{hook thread_delete_after.htm}-->

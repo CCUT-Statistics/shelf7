@@ -1,0 +1,104 @@
+<div class="row" data-style="qa">
+    <div class="col-12">
+        <div class="card mb-3 d-flex flex-md-row justify-content-between ">
+            <div class="p-3">
+                <!--{hook thread_subject_before.htm}-->
+                <h1 id="the_thread_subject" class="h4 subject">
+                    <!--{hook thread_subject_start.htm}-->
+                    <?= $thread['subject']; ?>
+                    <!--{hook thread_subject_end.htm}-->
+                </h1>
+                <!--{hook thread_subject_after.htm}-->
+                <div id="the_thread_message" class="message break-all" isfirst="1">
+                    <!--{hook stately_thread_message.htm}-->
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a href="<?= url('user-'.$thread['uid']); ?>" tabindex="-1" class="v_avatar v_avatar-thread">
+                            <!--{hook thread_user_avatar_before.htm}-->
+                            <img loading="lazy" decoding="async" class="avatar-1 mr-1" src="<?= $thread['user_avatar_url']; ?>">
+                            <!--{hook thread_user_avatar_after.htm}-->
+                        </a>
+                        <!--{hook thread_username_before.htm}-->
+                        <span class="username username <?= $thread_username_extra_class ?>">
+                            <a href="<?= url('user-'.$thread['uid']);?>">
+                                <?= $thread['username'];?>
+                            </a>
+                        </span>
+                        <!--{hook thread_username_after.htm}-->
+                        <a class="badge bg-label-primary" href="<?= url('forum-'.$thread['fid']);?>">
+                            <?= $thread['forumname'] ?>
+                        </a>
+                    </div>
+                    <div>
+                        <!--{hook stately_thread_btn_update.htm}-->
+                        <!--{hook stately_thread_btn_delete.htm}-->
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 flex-shrink-0">
+                <div class="row text-center">
+                    <div class="col">
+                        <span class="text-muted">
+                            <?= lang('thread_reply');?>
+                        </span>
+                        <strong class="d-block h5">
+                            <?= $thread['posts'];?>
+                        </strong>
+                    </div>
+                    <div class="col">
+                        <span class="text-muted">
+                            <?= lang('thread_views');?>
+                        </span>
+                        <strong class="d-block h5">
+                            <?= $thread['views'];?>
+                        </strong>
+                    </div>
+                </div>
+                <div class="text-center text-lg-right">
+                    <!--{hook stately_thread_plugin_slot.htm}-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <!---->
+        <!--{hook thread_postlist_before.htm}-->
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <h3 class="h5">
+                        <?= lang('new_post');?>
+                    </h3>
+                    <!--{hook thread_post_list_title_middle.htm}-->
+                    <div>
+                        <!--{hook thread_post_list_title_right.htm}-->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled postlist">
+                    <?php include _include(APP_PATH.'view/htm/post_list.inc.htm'); ?>
+                    <?php if (!empty($user)) : ?>
+                    <!--{hook stately_thread_newpost_form.htm}-->
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+        <!--{hook thread_postlist_after.htm}-->
+        <div class="d-none threadlist"><input type="checkbox" name="modtid" value="<?= $thread['tid']; ?>"
+                   checked /></div>
+        <?php include _include(APP_PATH.'view/htm/thread_list_mod.inc.htm');?>
+        <?php if($pagination) { ?>
+        <nav>
+            <ul class="pagination mt-4 mb-5 justify-content-center flex-wrap">
+                <?= $pagination; ?>
+            </ul>
+        </nav>
+        <?php }?>
+        <!--{hook thread_page_after.htm}-->
+    </div>
+    <div class="<?= $abs_stetely_sidebar_class ?>">
+        <!--{hook widget_slot_thread.htm}-->
+    </div>
+</div>

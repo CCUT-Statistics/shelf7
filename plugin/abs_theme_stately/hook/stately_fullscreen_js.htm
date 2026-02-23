@@ -1,0 +1,28 @@
+
+
+<?php $stately_asset_js->addJsCode("
+if (document.getElementById('statelyToggleFullscreenMode')) {
+        
+    document.getElementById('statelyToggleFullscreenMode').addEventListener('click',function () {
+	const isFullScreen = document.fullscreenElement;
+    if (isFullScreen) {
+        
+        if (document.exitFullscreen) {document.exitFullscreen();}
+        else if (document.msExitFullscreen) {document.msExitFullscreen();} 
+        else if (document.mozCancelFullScreen){document.mozCancelFullScreen();} 
+        else if (document.webkitCancelFullScreen) {document.webkitCancelFullScreen();}
+        document.getElementById('statelyToggleFullscreenMode').querySelector('i').className = 'las la-expand-arrows-alt'; 
+    } else {
+        var fullscreen = document.documentElement;
+        if (fullscreen.requestFullscreen) {fullscreen.requestFullscreen();} 
+        else if (fullscreen.mozRequestFullScreen) {fullscreen.mozRequestFullScreen();} 
+        else if (fullscreen.webkitRequestFullscreen) {fullscreen.webkitRequestFullscreen();}
+        else if (fullscreen.msRequestFullscreen) {fullscreen.msRequestFullscreen();}
+        document.getElementById('statelyToggleFullscreenMode').querySelector('i').className = 'las la-compress-arrows-alt'; 
+
+    }
+});
+}
+");
+?>
+

@@ -1,0 +1,32 @@
+<?php if ($page == 1 || $abs_theme_stately_setting['ui_tweek']['thread']['show_thread_content_on_non_first_page']) : ?>
+<?php if($abs_theme_stately_setting['ui_tweek']['thread']['showmore'] && mb_strlen($first['message_fmt']) > $abs_theme_stately_setting['ui_tweek']['thread']['showmore_excerpt_length']): ?>
+<input type="checkbox" class="showmore-toggle" id="showmore_<?=$first['pid']?>">
+<div class="showmore-container">
+    <?php endif; ?>
+    <?php if ($abs_theme_stately_setting['special']['thread_charcount_read_time']['enable']): ?>
+    <?= htmlspecialchars_decode($stately_read_time_str) ?>
+    <?php endif; ?>
+
+    <!--{hook thread_message_before.htm}-->
+    <?= $first['message_fmt']; ?>
+    <!--{hook thread_message_after.htm}-->
+    <?php
+    if(!empty($abs_theme_stately_setting['custom_content']['thread']['content_after_thread_body'])){
+        echo htmlspecialchars_decode($abs_theme_stately_setting['custom_content']['thread']['content_after_thread_body']);
+    } ?>
+
+    <?php if($abs_theme_stately_setting['ui_tweek']['thread']['showmore'] && mb_strlen($first['message_fmt']) > $abs_theme_stately_setting['ui_tweek']['thread']['showmore_excerpt_length']): ?>
+    <label class="showmore-label" for="showmore_<?=$first['pid']?>">阅读全文</label>
+</div>
+<?php endif; ?>
+<?= post_file_list_html($first['filelist']); ?>
+<!--{hook thread_filelist_after.htm}-->
+<?php else : ?>
+<!--{hook thread_message_more_before.htm}-->
+<p>
+    <a href="<?= url('thread-'.$tid) ?>">
+        <?= lang('view_thread_message'); ?>
+    </a>
+</p>
+<!--{hook thread_message_more_after.htm}-->
+<?php endif; ?>

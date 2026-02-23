@@ -1,0 +1,13 @@
+{
+    "name": "点评主题/奖励（打赏）八彩修改版",
+    "brief": "本插件需要预先安装帖子付费插件！点评主题/奖励（打赏）插件，可以设置打赏消耗积分、不消耗积分。",
+    "version": "1.00",
+    "bbs_version": "4.0.4",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": {
+        "tt_credits": "1.2"
+    }
+}

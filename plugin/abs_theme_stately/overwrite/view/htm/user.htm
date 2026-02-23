@@ -1,0 +1,13 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/user.template.htm">
+	<slot name="user_body">
+		<?php switch($abs_theme_stately_setting['ui_tweek']['user']['stats_style']){
+			case 'card_v1': ?>
+			<!--{hook stately_layout_user_stats__cards_v1.htm}-->
+			<?php break;  default: ?>
+			<!--{hook stately_layout_user_stats__classic_v1.htm}-->
+		<?php break;} /* endswitch */ ?>
+	</slot>
+</template>
+<script>
+	$('a[data-active="user-profile"]').addClass('active');
+</script>

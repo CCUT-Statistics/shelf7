@@ -1,0 +1,11 @@
+{
+    "name": "私信",
+    "brief": "本插件依赖于官方消息插件，重要：安装此插件之前要先安装消息插件，否则报错！<br/>此版本为主题（xiuno Light）适配版。主题下载请访问><a class='text-danger' href='https://www.noteweb.top/'>NOTEWEB</a>",
+    "version": "1.0",
+    "bbs_version": "4.0.3",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

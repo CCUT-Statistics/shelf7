@@ -1,0 +1,358 @@
+<?php
+$config = setting_get('zz_iqismart_editplus'); 
+
+?>
+<?php if (isset($config['on']) && $config['on'] == 1) { ?>
+<link href="//cdn.bootcss.com/toastr.js/2.1.4/toastr.min.css" rel="stylesheet">
+<script src="//cdn.bootcss.com/toastr.js/2.1.4/toastr.min.js"></script> 
+<div id="e_bbar" class="bbar" style="display:none">
+ 
+  <?php if (isset($config['auto_save']) && $config['auto_save'] == 1) { ?>
+  <span class='hidden-sm' id="e_svdsecond"><a title="点击关闭自动保存" href="javascript:;" onclick="$.alert('暂不支持');">自动保存中</a> </span>
+  <em class='hidden-sm' id="e_tip">&nbsp;</em>
+  <?php } ?>
+  
+  <?php if (isset($config['save']) && $config['save'] == 1) { ?>
+  <a class='hidden-sm' href="javascript:;" onclick="$.alert('暂不支持');;return false;" id="e_svd">保存数据</a> <span class='hidden-sm'>|</span>
+   <?php } ?>
+  
+  <?php if (isset($config['restore']) && $config['restore'] == 1) { ?>
+  <a class='hidden-sm' href="javascript:;" onclick="$.alert('暂不支持');;return false;" id="e_rst">恢复数据</a> &nbsp;&nbsp;
+  <?php } ?>
+  
+  <?php if (isset($config['localimg']) && $config['localimg'] == 1) { ?>
+  <a id='localimg' href="javascript:;" onclick="localimg();return false;" id="e_chck">本地化图片</a> | 
+  <?php } ?>
+  <?php if (isset($config['fromword']) && $config['fromword'] == 1) { ?>
+  <a id='fromword' href="javascript:;" onclick="fromword();return false;" id="e_chck">从Word粘贴</a> |
+  <?php } ?>
+  
+  <a id='fromwx' href="javascript:;" onclick="fromwx();return false;" id="e_chck">一键获取公众号文章</a> |
+  
+  <?php if (isset($config['clear']) && $config['clear'] == 1) { ?>
+  <a href="javascript:;" onclick="$('#edit_textarea').text('');$('.edui-body-container').text('');$('body,html').scrollTop(0);$('.edui-body-container').focus();return false;" id="e_tpr">清除内容</a> &nbsp;&nbsp;
+  <?php } ?>
+  
+  <?php if (isset($config['resize']) && $config['resize'] == 1) { ?>
+  <span id="e_resize"><a class='hidden-sm' href="javascript:;" onclick="editorsize('+');return false;">加大编辑框</a><span class='hidden-sm'> | </span> <a class='hidden-sm' href="javascript:;" onclick="editorsize('-');return false;">缩小编辑框</a><img src="plugin/zz_iqismart_editplus/img/resize.gif" onmousedown="editorresize(event)" style="border: 0px;"></span>
+  <?php } ?>
+</div>
+<script>
+  	if(window.tinymce){
+    	$('#e_resize').hide();
+    }
+	toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "100",
+            "hideDuration": "1000",
+            "timeOut": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+  
+  var editorid = '#edit';
+  function editorsize(op, v) {
+	var obj = $(editorid + '_textarea');
+	var editorheight = obj.height();
+	if(!v) {
+		if(op == '+') {
+			editorheight += 200;
+		} else{
+			editorheight -= 200;
+		}
+	} else {
+		editorheight = v;
+	}
+	editorcurrentheight = editorheight > editorminheight ? editorheight : editorminheight;
+ 
+	$('#edit_textarea').height(editorheight);
+    $('.edui-body-container').height(editorheight);
+}
+var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
+var editorsizepos = [];
+function editorresize(e, op) {
+	op = !op ? 1 : op;
+	e = e ? e : window.event;
+	if(op == 1) {
+		framemObj = null;
+		editorsizepos = [e.clientY, editorcurrentheight, framemObj];
+		document.onmousemove = function(e) {try{editorresize(e, 2);}catch(err){}};
+		document.onmouseup = function(e) {try{editorresize(e, 3);}catch(err){}};
+		doane(e);
+	}else if(op == 2 && editorsizepos !== []) {
+		var dragnow = e.clientY;
+		editorsize('', editorsizepos[1] + dragnow - editorsizepos[0]);
+		doane(e);
+	}else if(op == 3) { 
+		editorsizepos = [];
+		document.onmousemove = null;
+		document.onmouseup = null;
+	}
+}
+  function isUndefined(variable) {
+	return typeof variable == 'undefined' ? true : false;
+}
+  function doane(event, preventDefault, stopPropagation) {
+	var preventDefault = isUndefined(preventDefault) ? 1 : preventDefault;
+	var stopPropagation = isUndefined(stopPropagation) ? 1 : stopPropagation;
+	e = event ? event : window.event;
+	if(!e) {
+		e = getEvent();
+	}
+	if(!e) {
+		return null;
+	}
+	if(preventDefault) {
+		if(e.preventDefault) {
+			e.preventDefault();
+		} else {
+			e.returnValue = false;
+		}
+	}
+	if(stopPropagation) {
+		if(e.stopPropagation) {
+			e.stopPropagation();
+		} else {
+			e.cancelBubble = true;
+		}
+	}
+	return e;
+}
+  
+  function localimg(){
+  	console.log('localimg');
+    
+    //var message = $('.edui-body-container').html();
+    
+    //console.log(message);
+    
+    var count = 1;
+    $('.edui-body-container').find('img').each(function(){
+    	var img = $(this);
+      	var src = img.attr('src');
+      	
+      	if(src.startsWith('http') || src.startsWith('//')){ 
+           
+
+          	//setTimeout(function() { toastr["warning"]('正在本地化第'+count+'张图片，请稍后...'); }, 100);
+            $('body,html').scrollTop(0);
+            $.ajax({
+              url: xn.url('iqismart_localimg'),//请求路径
+              async: false,
+              data: { url:src},
+              type: "POST",//GET
+              dataType: "JSON",//需要返回JSON对象(如果Ajax返回的是手动拼接的JSON字符串,需要Key,Value都有引号)
+              success: function(res) {
+                //处理 resp.responseText;
+                console.log(res);
+                img.attr('src',res.message);
+               
+              	 
+                //setTimeout(function() { toastr["success"]('第'+count+'张图片，本地化完成!'); }, 100);
+                //$('.edui-body-container').prop("scrollTop",0);
+               	
+                count++;
+                 
+              },
+              error: function(a, b, c) {
+                //a,b,c三个参数,具体请参考JQuery API
+              }
+            });
+            
+            
+ 
+        }
+    })
+    
+    
+  }
+  
+  function localimg_tiny(){
+  	console.log('localimg_tiny');
+    
+    //var message = $('.edui-body-container').html();
+    
+    //console.log(message);
+    
+    var count = 1;
+    $('#message_ifr').contents().find('.mce-content-body').find('img').each(function(){
+    	var img = $(this);
+      	var src = img.attr('src');
+      	
+      	if(src.startsWith('http') || src.startsWith('//')){ 
+           
+
+          	//setTimeout(function() { toastr["warning"]('正在本地化第'+count+'张图片，请稍后...'); }, 100);
+            $('body,html').scrollTop(0);
+            $.ajax({
+              url: xn.url('iqismart_localimg'),//请求路径
+              async: false,
+              data: { url:src},
+              type: "POST",//GET
+              dataType: "JSON",//需要返回JSON对象(如果Ajax返回的是手动拼接的JSON字符串,需要Key,Value都有引号)
+              success: function(res) {
+                //处理 resp.responseText;
+                console.log(res);
+                var val = $('#message').val();
+                for (i = 0; i < 100; i++) { 
+                      val = val.replace(img.attr('src'),res.message);
+                 }
+               
+                tinyMCE.editors['message'].setContent(val);
+                img.attr('src',res.message);
+              	 
+                //setTimeout(function() { toastr["success"]('第'+count+'张图片，本地化完成!'); }, 100);
+                //$('.edui-body-container').prop("scrollTop",0);
+               	
+                count++;
+                 
+              },
+              error: function(a, b, c) {
+                //a,b,c三个参数,具体请参考JQuery API
+              }
+            });
+            
+            
+ 
+        }
+    })
+    
+    
+  }
+  
+  function fromword(){
+  	console.log('fromword');
+    $.alert('暂不支持');
+  }
+  
+    $(function(){ 
+    //var localimg = $('#e_bbar');
+    //$('#e_bbar').remove();
+      	var inte = setInterval(function(){
+            if($('.tox-statusbar').length>0){
+              console.log("$('.tox-statusbar').length>0");
+
+                  if($('.tox-statusbar').find('#localimg').length>0){ clearInterval(inte); }else{
+                    $('#localimg').css('padding','0px 5px'); 
+                    $('#localimg').attr('onclick','localimg_tiny()');
+                    $('.tox-statusbar__text-container').append($('#localimg'));
+                    
+                    $('#fromwx').css('padding','0px 5px');  
+                    $('.tox-statusbar__text-container').append($('#fromwx'));
+ 					
+                    <?php if (isset($config['auto_localimg']) && $config['auto_localimg'] == 1) { ?>  
+                    $('#message_ifr').contents().find('.mce-content-body').bind('paste',function(){ 
+                        setTimeout(function() { localimg_tiny(); }, 2000);
+                    })
+                    $('#message').bind('paste',function(){
+                        setTimeout(function() { localimg_tiny(); }, 2000);
+                    }) 
+                    <?php } ?>  
+                  }
+
+
+            }
+       },1000);
+      {
+      	 $('.edui-editor-body').css('position','relative');
+        $('.edui-editor-body').append($('#e_bbar'));
+        $('#e_bbar').show();
+         $('.edui-editor-body').find('textarea').attr('id','edit_textarea');
+      
+       	<?php if (isset($config['auto_localimg']) && $config['auto_localimg'] == 1) { ?>  
+        $('.edui-body-container').bind('paste',function(){ 
+            setTimeout(function() { localimg(); }, 2000);
+        })
+        $('.edui-body-container').find('textarea').bind('paste',function(){
+            setTimeout(function() { localimg(); }, 2000);
+        })
+        <?php } ?>        
+    }
+   
+    
+                                                  
+  });
+          
+  function setTitle(title){
+  		$("#subject").val(title.trim());
+  }
+          
+  function setContent(content){
+    console.log('setContent:'+content);
+  		try{ $('.edui-body-container').html(content); localimg();}catch(e){console.error(e)}
+    	try{ $('#message').val(content); tinyMCE.editors['message'].setContent(content); localimg_tiny();}catch(e){console.error(e)}
+  }
+          
+  function fromwx(){
+        	var pro = prompt("请填写公众号文章URL:"); 
+          	if(pro && pro.length > 0){
+              console.log(pro); 
+              toastr["info"]("正在抓取请稍后");
+              $.post('//cloud.iqismart.com/crawler',{'url':pro,},function(res){
+                if(res.code == 0){
+                  	toastr["success"]("抓取成功");
+                  	setTitle(res.data.title);
+                  	setContent(res.data.content);
+                }else{
+                    alert(res.message);
+                }
+              },'json');
+            }
+       
+   }
+</script>
+<style>
+.bbar, .bbar a {
+    color: #999;
+}
+  
+  
+ .bbar {
+    height: 20px;
+    border-top: 1px solid #DDD;
+    text-align: right;
+    background: #F2F2F2;
+   font: 12px/1.5 Tahoma,'Microsoft Yahei','Simsun';
+}
+ .bbar em {
+    width: 200px;
+    height: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+}
+  
+  @media (min-width: 900px){
+	.bbar em { 
+	 float: left;
+  }
+}
+em, cite, i {
+    font-style: normal;
+}
+  #e_svd {
+    background-position: -160px -40px;
+}
+  #e_rst {
+    background-position: -180px -40px;
+}
+  #e_chck {
+    background-position: -100px -40px;
+}
+  #e_chck {
+    background-position: -100px -40px;
+}
+  
+  .toast-container{position:absolute;bottom:1px;}
+  
+</style>
+<?php } ?>

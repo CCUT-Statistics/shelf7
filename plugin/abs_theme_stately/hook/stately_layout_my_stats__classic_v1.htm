@@ -1,0 +1,32 @@
+<div class="row line-height-4">
+    <div class="col-md-6">
+        <span class="text-muted">
+            <?= lang('threads');?>：
+        </span>
+        <?= $user['threads'];?>
+        <br><span class="text-muted">
+            <?= lang('posts');?>：
+        </span>
+        <?= $user['posts'];?>
+        <!--{hook my_profile_posts_after.htm}-->
+    </div>
+    <div class="col-md-6">
+        <span class="text-muted">
+            <?= lang('user_group');?>：
+        </span>
+        <?= $user['groupname'];?>
+        <br><span class="text-muted">
+            <?= lang('create_date');?>：
+        </span>
+        <?= $user['create_date_fmt'];?>
+        <br><span class="text-muted">
+            <?= lang('last_login_date');?>：
+        </span>
+        <?= $user['login_date_fmt'];?>
+        <br><span class="text-danger">
+            <?= lang('email');?>：
+        </span>
+        <?= $user['email'];?>
+        <!--{hook my_profile_login_date_after.htm}-->
+    </div>
+</div>

@@ -1,0 +1,11 @@
+{
+    "name": "注册自动设置头像",
+    "brief": "<b>简介：</b>用户注册论坛后，会自动分配一个随机头像<br /><b>更多插件请访问：<b><a target = '_blank' href = 'https://xiu.no'>xiu.no</a></b>",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

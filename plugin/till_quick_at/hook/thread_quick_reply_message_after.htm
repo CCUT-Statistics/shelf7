@@ -1,0 +1,41 @@
+<aside id="till_quick_at" class="card card-body p-0">
+	<input id="input_username" type="search" placeholder="@" class="form-control">
+	<div id="till_quick_at_panel_result" class="p-0 clearfix" hidden>
+		<p id="till_quick_at_panel_result_message" class="px-1 mt-0 mb-1"></p>
+		<ul id="till_quick_at_result" class="dropdown-menu show position-relative w-100 shadow-none p-0 m-0" aria-labelledby="till_quick_at_panel_result_message">
+		</ul>
+		<div class="clearfix"></div>
+	</div>
+	<div id="till_quick_at_panel_message" class="text-info p-2 text-center" hidden>
+
+	</div>
+	<div id="till_quick_at_panel_placeholder" class="text-center p-2 " hidden>
+		<div class="spinner-border text-primary" role="status">
+			<span class="sr-only">正在搜索</span>
+		</div>
+	</div>
+	<div id="till_quick_at_panel_initial" class="p-2 text-center">
+		<p>输入您想提及的用户名</p>
+		<button type="button" class="btn btn-sm btn-xs btn-link btn-block" onclick="TQA_Dispose()">取消</button>
+	</div>
+</aside>
+
+<style>
+	#till_quick_at {
+		display: none;
+		position: absolute;
+		z-index: 1;
+	}
+
+	#till_quick_at_panel_result {
+		height: auto;
+		max-height: 25vh;
+		overflow: auto;
+	}
+
+	#till_quick_at .dropdown-menu {
+		background: transparent;
+	}
+</style>
+
+<script src="plugin/till_quick_at/js/till_quick_at.js"></script>

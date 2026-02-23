@@ -1,0 +1,65 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<?php include _include(APP_PATH.'plugin/zaesky_theme_zhihulan/overwrite/view/htm/userxx_pc.htm');?>
+<?php include _include(APP_PATH.'plugin/zaesky_theme_zhihulan/overwrite/view/htm/userxx.htm');?>
+<!--{hook user_index_start.htm}-->
+<!-- 手机导航 / Mobile navigation -->
+<!--div class="btn-group mb-3 d-lg-none" role="group" id="user_mobile_nav">
+	
+	<a role="button" class="btn btn-secondary" data-active="menu-user" href="<?php echo url("user-$_uid");?>">个人资料</a>
+	
+	
+	<a role="button" class="btn btn-secondary" data-active="menu-user-thread" href="<?php echo url("user-thread-$_uid");?>">论坛帖子</a>
+	
+</div-->
+
+<div class="row">
+
+	<!-- PC 导航 / Mobile navigation -->
+	
+	<div class="col-lg-10 user-thread-list" id="user_main" >
+		<!--{hook user_common_main_card_before.htm}-->
+		<div class="card" style="margin-left:-8px;margin-right:-8px;">
+			<div class="card-header">
+				<!--{hook user_common_user_nav_slot_before.htm}-->
+				<slot name="user_nav" />
+				<!--{hook user_common_user_nav_slot_after.htm}-->
+			</div>
+			<div class="card-body">
+				<!--{hook user_common_body_slot_before.htm}-->
+				<slot name="user_body" />
+				<!--{hook user_common_body_slot_after.htm}-->
+			</div>
+		</div>
+		<!--{hook user_common_main_card_after.htm}-->
+	</div>
+	
+	
+	
+	
+	<div class="col-lg-2 hidden-md hidden-sm" id="user_aside" style="flex: 0 0 27.666667%;
+    max-width: 27.666667%;">
+	<!--{hook userxx_dateinfo_before.htm}-->
+		<div class="card" style="margin-left:-8px;margin-right:-8px;padding:15px;">
+			<div class="userxx_info">
+			<ul>
+			<li><i class="iconfont iconuid" style="font-size:12px;color:#FFBBFF"></i>：<?php echo $_user['uid']; ?></li>
+			<li><i class="iconfont iconwsdzb_zzgzt_dwgl_lxgg_type" style="font-size:12px;color:#EECFA1"></i> 用户组：<?php echo $_user['groupname'];?></li>
+			<li><i class="iconfont iconjingyanzhi" style="font-size:12px;color:#7CCD7C"></i> <?php echo lang('credits1');?>：<?php echo $_user['credits'];?></li>
+			<li><i class="iconfont iconqian2" style="font-size:12px;color:#f4ea2a"></i> <?php echo lang('credits2');?>：<?php echo $_user['golds'];?></li>
+			</ul>
+			</div>
+			<!--{hook userxx_thread_date_before.htm}-->
+			<div class="text-grey mb-2 mt-2"	style="font-size:12px">
+			<span><?php echo lang('create_date');?>：</span><?php echo $_user['create_date_fmt'];?>
+				<span ><?php echo lang('last_login_date');?>：</span><?php echo $_user['login_date_fmt'];?>
+			</div>
+			<!--{hook userxx_thread_date_after.htm}-->
+		</div>
+		<!--{hook userxx_dateinfo_after.htm}-->
+	</div>
+</div>
+<!--{hook user_index_end.htm}-->
+
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+
+<!--{hook user_index_js.htm}-->

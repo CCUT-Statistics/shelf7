@@ -1,0 +1,1 @@
+<span style="color:#fff;font-size:<?php echo setting_get('huoyanju_vip_name_2_htm');?>%;" class="badge mr-1 <?php echo'v'. $_post['user']['gid'] ;?>"><?php $_user = db_find_one('user',array('uid'=>$_post['uid']));?><?php echo $grouplist[$_user['gid']]['name'];?></span>

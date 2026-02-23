@@ -1,0 +1,57 @@
+<?php if($isfirst):?>
+<script id="thread_cover_js">
+    let till_cover_upload = $('#cover_upload');
+    let till_cover_input = $('#cover');
+    till_cover_upload.on('change', function (e) {
+        var files = xn.get_files_from_event(e);
+        if (!files) { return; }
+        if ($.hasOwnProperty('toast')) {
+                        $.toast({
+                            title: '帖子封面图',
+                            subtitle: 0,
+                            content: '正在上传…',
+                            type: 'info',
+                            pause_on_hover: false,
+                            delay: 1000
+                        });
+                    }
+        xn.upload_file(
+            files[0],
+            xn.url('post-thread_cover'),
+            { is_image: 1, filetype: 'png' },
+            function (code, message) {
+                if (code == 0) {
+                    if ($.hasOwnProperty('toast')) {
+                        $.toast({
+                            title: '帖子封面图',
+                            subtitle: code,
+                            content: message.text,
+                            type: 'success',
+                            pause_on_hover: false,
+                            delay: 2000
+                        });
+                    }
+                    till_cover_input.val(message.url);
+                    $('#cover_preview').attr('src', message.url + '?' + Math.random());
+                } else {
+                    if ($.hasOwnProperty('toast')) {
+                        $.toast({
+                            title: '帖子封面图',
+                            subtitle: code,
+                            content: message,
+                            type: 'danger',
+                            pause_on_hover: false,
+                            delay: 2000
+                        });
+                    } else {
+                        $.alert(message); 
+                    }
+                    return false;
+                }
+            });
+    });
+    till_cover_input.on('change',function (e) {
+        $('#cover_preview').attr('src', e.target.value);
+    })
+</script>
+<?php endif; ?>

@@ -1,0 +1,20 @@
+/* Sonokai by Sainnhe Park (https://github.com/sainnhe/sonokai/) */
+
+:root {
+  --base00: #2c2e34;/* bg0 */
+  --base01: #33353f;/* bg1 */
+  --base02: #3b3e48;/* bg3 */
+  --base03: #414550;/* bg4 */
+  --base04: #7f8490;/* grey */
+  --base05: #e2e2e3;/* fg */
+  --base06: #e2e2e3;/* fg */
+  --base07: #e2e2e3;/* fg */
+  --base08: #fc5d7c;/* red */
+  --base09: #f39660;/* orange */
+  --base0A: #e7c664;/* yellow */
+  --base0B: #9ed072;/* green */
+  --base0C: #85d3f2;/* bg_blue */
+  --base0D: #76cce0;/* blue */
+  --base0E: #b39df3;/* purple */
+  --base0F: #595f6f;/* grey_dim */
+}

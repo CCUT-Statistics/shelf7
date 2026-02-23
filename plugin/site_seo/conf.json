@@ -1,0 +1,13 @@
+{
+  "name": "通用SEO增强",
+  "brief": "为搜索引擎提供 canonical/robots 元标签和 sitemap.xml，提升抓取与收录效率。",
+  "version": "1.0.0",
+  "bbs_version": "4.0.7",
+  "installed": 0,
+  "enable": 0,
+  "hooks_rank": {
+    "header_meta_before.htm": 90,
+    "index_route_case_end.php": 90
+  },
+  "dependencies": []
+}

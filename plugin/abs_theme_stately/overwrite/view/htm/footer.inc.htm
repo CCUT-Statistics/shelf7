@@ -1,0 +1,132 @@
+<?php $db = G('db');
+$starttime = G('starttime');
+$time = G('time');
+$ip = G('ip');
+$useragent = G('useragent');
+$forumlist = G('forumlist');
+$forumarr = G('forumarr');
+$fid = G('fid');
+$conf = G('conf');
+$static_version = $conf['static_version'];?>
+</main>
+<!-- / Content -->
+<!--{hook stately_modal_notifications.htm}-->
+<!--{hook footer_start.htm}-->
+<?php if(DEBUG === 1 || DEBUG === 2) : ?>
+<aside class="container-sm">
+	<details class="card p-1 bg-dark text-white">
+		<summary>NOTHING TO SEE HERE</summary>
+		<?= xn_debug_info(); ?>
+			<?php if(DEBUG >= 2): 
+$xn_debug_info_stats_js = <<<JSX
+var db_counter = {
+    "SELECT": 0,
+    "SELECT_CACHE": 0,
+    "INSERT": 0,
+    "INSERT_CACHE": 0,
+    "UPDATE": 0,
+    "UPDATE_CACHE": 0,
+    "DELETE": 0,
+    "DELETE_CACHE": 0
+};
+document.addEventListener('DOMContentLoaded',function(){
+document.querySelectorAll('fieldset.debug li').forEach(function (item) {
+
+    if (item.textContent.indexOf("SELECT") !== -1) {
+        if (item.textContent.indexOf("cache") !== -1 ) {
+            db_counter.SELECT_CACHE += 1;
+        } else {
+            db_counter.SELECT += 1;
+        }
+    }
+    if (item.textContent.indexOf("INSERT") !== -1) {
+        if (item.textContent.indexOf("cache") !== -1 ) {
+            db_counter.INSERT_CACHE += 1;
+        } else {
+            db_counter.INSERT += 1;
+        }
+    }
+    if (item.textContent.indexOf("REPLACE") !== -1) {
+        if (item.textContent.indexOf("cache") !== -1 ) {
+            db_counter.UPDATE_CACHE += 1;
+        } else {
+            db_counter.UPDATE += 1;
+        }
+    }
+    if (item.textContent.indexOf("DELETE") !== -1) {
+        if (item.textContent.indexOf("cache") !== -1 ) {
+            db_counter.DELETE_CACHE += 1;
+        } else {
+            db_counter.DELETE += 1;
+        }
+    }
+});
+
+/* 计算缓存命中率 */
+function calculateCacheHitRate (db_counter) {
+    let cacheHits = db_counter.DELETE_CACHE + db_counter.INSERT_CACHE + db_counter.SELECT_CACHE + db_counter.UPDATE_CACHE;
+    let totalQueries = db_counter.DELETE + db_counter.DELETE_CACHE + db_counter.INSERT + db_counter.INSERT_CACHE + db_counter.SELECT + db_counter.SELECT_CACHE + db_counter.UPDATE + db_counter.UPDATE_CACHE;
+    return cacheHits / totalQueries;
+  };
+  
+
+let db_report_html = document.createElement('dl');
+
+var dtElement = document.createElement('dt');
+dtElement.textContent = '缓存命中率';
+db_report_html.appendChild(dtElement);
+
+var ddElement = document.createElement('dd');
+ddElement.textContent =  calculateCacheHitRate(db_counter).toFixed(4) * 100 + "%";
+db_report_html.appendChild(ddElement);
+
+console.log('缓存命中率 ' + calculateCacheHitRate(db_counter).toFixed(4) * 100 + "%");
+
+var dtElement = document.createElement('dt');
+dtElement.textContent = 'SELECT（直读/缓存,下同）';
+db_report_html.appendChild(dtElement);
+
+var ddElement = document.createElement('dd');
+ddElement.textContent = db_counter.SELECT + "/" + db_counter.SELECT_CACHE;
+db_report_html.appendChild(ddElement);
+
+var dtElement = document.createElement('dt');
+dtElement.textContent = 'INSERT';
+db_report_html.appendChild(dtElement);
+
+var ddElement = document.createElement('dd');
+ddElement.textContent = db_counter.INSERT + "/" + db_counter.INSERT_CACHE;
+db_report_html.appendChild(ddElement);
+
+var dtElement = document.createElement('dt');
+dtElement.textContent = 'UPDATE';
+db_report_html.appendChild(dtElement);
+
+var ddElement = document.createElement('dd');
+ddElement.textContent = db_counter.UPDATE + "/" + db_counter.UPDATE_CACHE;
+db_report_html.appendChild(ddElement);
+
+var dtElement = document.createElement('dt');
+dtElement.textContent = 'DELETE';
+db_report_html.appendChild(dtElement);
+
+var ddElement = document.createElement('dd');
+ddElement.textContent = db_counter.DELETE + "/" + db_counter.DELETE_CACHE;
+db_report_html.appendChild(ddElement);
+
+document.querySelector('fieldset.debug').insertBefore(db_report_html,document.querySelector('fieldset.debug ul'));
+});
+JSX;
+$stately_asset_js->addJsCode( $xn_debug_info_stats_js ); ?>
+<?php endif; ?>
+	</details>
+</aside>
+<?php endif; ?>
+<!--{hook footer_nav_before.htm}-->
+<?php include _include(APP_PATH.'view/htm/footer_nav.inc.htm');?>
+<!--{hook footer_nav_after.htm}-->
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+<!--{hook stately_mastfoot.htm}-->

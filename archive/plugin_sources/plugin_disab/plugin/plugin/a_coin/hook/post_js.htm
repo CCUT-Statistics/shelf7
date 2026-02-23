@@ -1,0 +1,32 @@
+<script>
+
+$(function(){
+	if($(":radio[name='content_coin_status']:checked").val()==1){
+		$('#content_coin_input').show();
+	}else{
+		$('#content_coin_input').hide();
+	}
+
+	if($(":radio[name='attach_coin_status']:checked").val()==1){
+		$('#attach_coin_input').show();
+	}else{
+		$('#attach_coin_input').hide();
+	}
+
+	$(":radio[name='content_coin_status']").click(function(){
+		if($(this).val()==1){
+			$('#content_coin_input').show();
+		}else{
+			$('#content_coin_input').hide();
+		}
+	})
+
+	$(":radio[name='attach_coin_status']").click(function(){
+		if($(this).val()==1){
+			$('#attach_coin_input').show();
+		}else{
+			$('#attach_coin_input').hide();
+		}
+	})		
+})
+</script>

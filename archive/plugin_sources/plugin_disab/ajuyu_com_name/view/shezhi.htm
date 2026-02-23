@@ -1,0 +1,86 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<?php
+$kv = kv_cache_get('renamesetting');
+?>
+<div class="row">
+	<div class="col-lg-12">
+
+			<div class="card">
+				<div class="card-header"> 
+					<div class="row">
+						<div class="col-lg-4"><p class="m-y-xs text-muted fl"><i class="icon-cog m-r-sm"></i>昵称管理</p></div>
+						<div class="col-lg-8 text-right ">
+						    <div class="btn-group">
+								<a class="btn btn-default text-muted btn-sm" href="<?php echo url("renamesetting");?>" role="button"><i class="icon-refresh"></i></a>
+								<a class="btn btn-default text-muted btn-sm" href="<?php echo url("plugin");?>" role="button"><i class="icon-times"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- card-block start -->
+			    <div class="card-block">
+					<!-- tab -->
+					<div class="tab-content card-block">
+				        <div class="tab-pane active" id="tab1">
+				 	          <!-- 参数配置 -->
+							  <form action="<?php echo url("renamesetting");?>" method="post" id="form" style="padding: 1.25rem;">
+                               	<input type="hidden" name="op" value="0"/>
+								<div class="form-group row">
+									<label class="col-sm-2 form-control-label">消耗积分类型</label>
+                                  <div class="col-sm-10">
+                                      <select name="type" class="custom-select" id="sign9"> 
+                                        <option value="golds" <?php if($kv['type']=='golds') {?> selected="selected" <?php } ?> >金币</option> 
+                                        <option value="rmbs" <?php if($kv['type']=='rmbs') {?> selected="selected" <?php } ?> >人民币</option> 
+                                      </select>
+                                  </div>
+								</div>
+                                <div class="form-group row">
+                                  <label class="col-sm-2 form-control-label">消耗积分数量：</label>
+                                  <div class="col-sm-10">
+                                    	<input type="text" name="count" id="count" placeholder="" value="<?php echo $kv['count'];?>" class="form-control">
+                                    	<span>如不需要消耗积分请设置为0（人民币单位：分[ 1元=100分 ]）</span>
+                                  </div>
+                                  
+                                </div>
+                                
+								<p class="text-xs-right">
+					<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo '保存设置';?></button>
+				</p>
+							</form>
+				        </div>
+					  
+			             
+				        
+			        </div>
+			        <!-- tabcontent end -->
+			    </div>
+			    <!-- card-block end -->
+		</div>
+	</div>
+</div>
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+<script>
+var jform = $('#form');
+var jsubmit = $('#submit');
+
+$("#form").on('submit', function(){
+        $("#form").reset();
+        $("#submit").button('loading');
+        var postdata = $("#form").serialize();
+        console.log(postdata);
+        $.xpost($("#form").attr('action'), postdata, function(code, message) {
+              if(code == 0) {
+                  $.alert(message);
+                  $("#submit").text(message.a).delay(1000).button('reset');
+                    //.location(referer);
+                  return;
+              } else {
+                  $.alert(message);
+                  $("#submit").button('reset');
+              }
+          });
+      	return false;
+    });
+
+</script>

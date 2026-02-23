@@ -1,0 +1,64 @@
+<div class="card mb-4">
+    <div class="user-profile-header-banner rounded-top h-px-100" <?php if(function_exists('cover_get_cover_url_by_uid') && isset($thread['user']['cover_url']) && !empty($thread['user']['cover_url'])): ?> style="background-image:url(
+        <?= cover_get_cover_url_by_uid($thread['user']['uid']) ?>);background-size:cover"
+        <?php endif; ?>>
+    </div>
+    <div class="user-profile-header d-flex flex-column text-center mb-4">
+        <div class="mt-n2 mx-auto">
+            <a class="v_avatar v_avatar-user" href="<?= url('user-'.$thread['user']['uid']);?>">
+                <img loading="lazy" decoding="async" src="<?= $thread['user']['avatar_url'] ?>" alt="user image" class="d-block w-px-100 h-auto rounded user-profile-img">
+                <!--{hook thread_user_avatar_after.htm}-->
+            </a>
+        </div>
+        <div class="mt-3">
+            <div class="d-flex align-items-center justify-content-between mx-4 flex-column gap-4">
+                <div class="user-profile-info text-center">
+                    <h4 class="h5">
+                        <a href="<?= url('user-'.$thread['user']['uid']);?>">
+                            <?= $thread['user']['username'];?>
+                        </a>
+                    </h4>
+                    <!--{hook thread_user_username_after.htm}-->
+                    <div class="mt-3">
+                        <span class="badge bg-label-primary mx-1">
+                            <?= lang('user_uid');?>:
+                            <?= $thread['user']['uid'];?>
+                        </span><span class="badge bg-label-info mx-1">
+                            <?= $thread['user']['groupname'];?>
+                        </span>
+                        <!--{hook thread_user_groupname_end.htm}-->
+                    </div>
+                    <?php if(!empty($thread['user']['signature'])): ?>
+                    <div class="mt-2">
+                        <i class="la la-pen text-info"></i>
+                        <?= htmlspecialchars_decode($thread['user']['signature']) ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <table class="w-100 small">
+                    <tr class="text-center align-items-center justify-content-between d-flex">
+                        <td>
+                            <span class="text-muted">
+                                <?= lang('threads');?>
+                            </span><br>
+                            <b>
+                                <?= $thread['user']['threads'];?>
+                            </b>
+                        </td>
+                        <!--{hook thread_user_threads_after.htm}-->
+                        <td>
+                            <span class="text-muted">
+                                <?= lang('posts');?>
+                            </span><br>
+                            <b>
+                                <?= $thread['user']['posts'];?>
+                            </b>
+                        </td>
+                        <!--{hook thread_user_posts_after.htm}-->
+                        <!--{hook thread_user_uid_after.htm}-->
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

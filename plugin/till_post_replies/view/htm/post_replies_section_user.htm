@@ -1,0 +1,105 @@
+<section id="post_replies_container_<?= $_post['pid'] ?>" class="post_replies">
+	<?php
+	$_post_replies_count = $_post['r_f_c'];
+	?>
+	<button type="button" data-toggle="collapse" data-target="#post_replies_<?= $_post['pid'] ?>" data-bs-toggle="collapse" data-bs-target="#post_replies_<?= $_post['pid'] ?>" class="btn btn-secondary btn-sm d-block ml-auto">回复<?= $_post_replies_count > 0 ? '(' . $_post_replies_count . ')' : '' ?></button>
+
+	<div class="ml-auto col-lg-8 collapse card p-3 <?= ($_post_replies_count > 0 && $till_post_replies_setting['collapse_open_by_default']) ? 'open show' : '' ?>" id="post_replies_<?= $_post['pid'] ?>">
+
+		<section id="post_replies_list_<?= $_post['pid'] ?>" class="post_replies_list">
+			<?php
+			if ($_post_replies_count > 0) :
+				$n = 0;
+				$_post_replies_array = json_decode($_post['repeat_follow'], true);
+if(json_last_error() === JSON_ERROR_NONE){
+				$_post_replies_max_page = ceil($_post_replies_count / $till_post_replies_setting['replies_per_page']);
+				$_post_replies_array = array_slice($_post_replies_array, 0, $till_post_replies_setting['replies_per_page']);
+				/*
+				[
+					{
+						"fl":该回复的楼层,
+						"uid":发布者UID,
+						"username":发布者用户名,
+						"avatar_url":头像地址,
+						"t_uid":发布者回复给谁UID,
+						"t_username":发布者回复给谁用户名,
+						"message":回复内容,
+						"update":更新时间 时间戳
+					}
+				]
+				*/
+				foreach ($_post_replies_array as $reply_item){
+					$__user = user_read_cache($reply_item['uid']);
+					if(intval($__user['gid']) === 7) {
+						$reply_item['message'] = '*已移除*';
+					}
+				}unset($__user);
+} else {
+$_post_replies_array = [];
+$_post_replies_count = 0;
+}
+			?>
+				<ul class="list-unstyled ">
+					<?php include _include(APP_PATH . 'plugin/till_post_replies/view/htm/post_reply_list.inc.htm'); ?>
+				</ul>
+			<?php else : ?>
+				<ul class="list-unstyled ">
+					<li class="empty" hidden></li>
+				</ul>
+			<?php endif; ?>
+		</section>
+
+		<?php if ($_post_replies_count > 0 && (isset($_post_replies_max_page) && $_post_replies_max_page >= 1)) : ?>
+			<nav class="post_replies_list_pagination mb-2">
+				<ul class="pagination pagination-sm">
+					<li class="page-item first disabled " title="第一页">
+						<button class="page-link" onclick="post_reply__go_to_page(this.getAttribute('data-pid'),this.getAttribute('data-page'))" data-pid="<?= $_post['pid'] ?>" data-page="1"><i class="icon-angle-double-left" aria-hidden="true"></i></button>
+					</li>
+					<li class="page-item prev disabled " title="上一页">
+						<button class="page-link" onclick="post_reply__go_to_page(this.getAttribute('data-pid'),this.getAttribute('data-page'))" data-pid="<?= $_post['pid'] ?>" data-page="1"><i class="icon-angle-left" aria-hidden="true"></i></button>
+					</li>
+					<li class="page-item">
+						<data class="page-link">
+							<span id="post_replies_current_page_display_<?= $_post['pid'] ?>">1</span> / <span class="post_replies_max_page"><?= $_post_replies_max_page ?></span>
+						</data>
+					</li>
+					<li class="page-item next" title="下一页">
+						<button class="page-link" onclick="post_reply__go_to_page(this.getAttribute('data-pid'),this.getAttribute('data-page'))" data-pid="<?= $_post['pid'] ?>" data-page="<?= min(2, $_post_replies_max_page) ?>"><i class="icon-angle-right" aria-hidden="true"></i></button>
+					</li>
+					<li class="page-item last" title="最后一页">
+						<button class="page-link" onclick="post_reply__go_to_page(this.getAttribute('data-pid'),this.getAttribute('data-page'))" data-pid="<?= $_post['pid'] ?>" data-page="<?= $_post_replies_max_page ?>"><i class="icon-angle-double-right" aria-hidden="true"></i></button>
+					</li>
+					<li class="page-item disabled loading" hidden>
+						<span class="page-link d-flex align-items-center">
+							<span class="spinner-border spinner-border-sm" role="status"></span>
+						</span>
+					</li>
+
+				</ul>
+
+				<input type="hidden" id="post_replies_current_page_<?= $_post['pid'] ?>" value="1" />
+				<input type="hidden" id="post_replies_max_page_<?= $_post['pid'] ?>" value="<?= $_post_replies_max_page ?>" />
+			</nav>
+		<?php endif; ?>
+
+		<section class="post_replies_write_form">
+			<form action="<?= url('post-rfloor-' . $_post['pid']) ?>" method="post" id="post_replies_write_form_<?= $_post['pid'] ?>" onsubmit="event.preventDefault();post_reply__write_form_handler(this)">
+				<input type="hidden" name="ajax" value="1">
+				<input type="hidden" name="action" value="add">
+				<input type="hidden" name="return_html" value="1">
+				<input type="hidden" name="pid" value="<?= $_post['pid'] ?>">
+				<input type="hidden" name="to_reply_id" value="0">
+				<div class="d-flex">
+					<div class="flex-grow-1">
+						<textarea name="post_reply_content" id="post_reply_content_<?= $_post['pid'] ?>" class="form-control" style="min-height:75px"></textarea>
+					</div>
+					<div class="ml-2" style="width:6em">
+						<button type="button" class="btn btn-secondary btn-block post_reply_reset" onclick="post_reply__reply_reset(<?= $_post['pid'] ?>)" hidden>取消</button>
+						<button type="submit" class="btn btn-primary btn-block post_reply_submit">回复</button>
+					</div>
+				</div>
+			</form>
+		</section>
+
+	</div>
+</section>

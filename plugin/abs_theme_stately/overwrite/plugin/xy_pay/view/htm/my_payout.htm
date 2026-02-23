@@ -1,0 +1,85 @@
+<template include="plugin/xy_pay/view/htm/my.template.htm">
+	<slot name="my_body">
+<style>
+.xyfrom{border:1px dashed #008CFF;padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px;line-height: 2em;color: #6D6D6D;}
+.xypd label {margin-right:8px;}
+.xypd span {margin-right:8px;}
+</style>
+	<div class="col-lg-6 mx-auto">
+<div class="xyfrom">
+		<div class="m-3">
+			<h5 class="text-center"><?php echo lang('pay_user_cue4');?></h5>
+			<h6 class="text-center text-muted">
+			<?php
+			if(!empty($conf['payout'])){
+			echo '1';
+			echo !empty($conf['rmb_unit']) ? $conf['rmb_unit'] : '';
+			echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');
+			echo '=';
+			echo '1';
+			echo lang('pay_user_cue5');
+			echo ",";
+			echo lang('pay_user_cue6');
+			echo $user['rmbs'];
+			echo !empty($conf['rmb_unit']) ? $conf['rmb_unit'] : '';
+			echo !empty($conf['rmb_name']) ? $conf['rmb_name'] : lang('pay_rmb');
+			echo "<br>";
+			echo str_replace('%%',$conf['payout_min'],lang('pay_user_payout_msg11')) ;
+			if(!empty($conf['payout_service'])){
+				echo lang('pay_user_payout_service').$conf['payout_service']."%";
+			}
+			} ?>
+			<br>
+			<?php echo $conf['pay_out_info'];?>
+			</h6>
+			
+				<form role="form" action="<?php echo url('my-payout');?>" method="post" id="form">
+				<div class="form-group">
+					<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="icon icon-cny icon-fw"></i></span>
+						</div>
+						<input type="number" class="form-control" placeholder="<?php echo lang('pay_user_payout_msg6');?>" name="money" id="money" required="" oninvalid="setCustomValidity('<?php echo lang('pay_user_payout_msg7');?>')" oninput="setCustomValidity('')" minlength="1">
+					</div>
+				</div>
+			<?php if(empty($user['payout_num']) || empty($user['payout_name'])){?>
+			<div class="alert alert-dismissable alert-danger">
+			<?php echo lang('pay_user_payout_msg12');?> <a href="<?php echo url('my-payoutnum');?>" class="alert-link"><?php echo lang('pay_user_payout_msg13');?></a>
+			</div>
+			<?php }else{?>
+				<button type="submit" id="submit" class="btn btn-default btn-block"><?php echo lang('pay_user_pay_button');?></button>
+			<?php }?>
+			</form>
+		</div>
+</div>
+	</div>
+
+	</slot>
+</template>
+
+<script>
+$('a[data-active="my-payout"]').addClass('active');
+</script>
+
+<script>
+var jform = $('#form');
+var jsubmit = $('#submit');
+jform.on('submit', function() {
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serializeObject();
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.button(message).delay(3000).button('reset');
+		} else if(xn.is_number(code)) {
+			alert(message);
+			jsubmit.button('reset');
+		} else {
+			jform.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+</script>

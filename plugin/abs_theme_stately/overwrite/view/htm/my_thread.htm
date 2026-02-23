@@ -1,0 +1,28 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my_thread.template.htm">
+	<slot name="my_body">
+		<?php if (function_exists('search_type') && $abs_theme_stately_setting['special']['my_thread_search']['enable']) : ?>
+			<form action="<?= url('my-thread') ?>" method="get">
+				<div class="input-group mb-3">
+					<input type="text" class="form-control" placeholder="<?= lang('search_my_threads') ?>" name="search_subject" value="<?= param('search_subject', '') ?>">
+					<div class="input-group-append">
+						<button class="btn btn-primary" type="submit"><?= lang('search') ?></button>
+					</div>
+				</div>
+			</form>
+		<?php endif; ?>
+		<ul class="row list-unstyled threadlist">
+			<!--{hook stately_threadlist_before.htm}-->
+			<?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+		</ul>
+		<?php if ($pagination) { ?>
+			<nav>
+				<ul class="pagination justify-content-center flex-wrap">
+					<?= $pagination; ?>
+				</ul>
+			</nav>
+		<?php } ?>
+	</slot>
+</template>
+<script>
+	$('a[data-active="my-thread"]').addClass('active');
+</script>

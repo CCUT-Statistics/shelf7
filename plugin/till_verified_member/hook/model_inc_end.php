@@ -1,0 +1,1 @@
+include _include(APP_PATH.'plugin/till_verified_member/model/v.func.php');

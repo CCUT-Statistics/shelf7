@@ -1,0 +1,105 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<div class="card">
+	<div class="card-header">
+		<ul class="nav nav-tabs card-header-tabs">
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url('plugin-setting-advertisement');?>">广告位</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="<?php echo url("plugin-setting-advertisement-$_type");?>"><?php echo lang($_type);?></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active" href="<?php echo url("plugin-setting-advertisement-create-$_type");?>">添加广告</a>
+			</li>
+		</ul>
+	</div>
+	<div class="card-body">
+		<div class="bg-white">
+		  <div class="card-header">添加广告 - <?php echo lang($_type);?></div>
+			<div class="card-body">
+				<form action="<?php echo url("plugin-setting-advertisement-create-$_type");?>" method="post" id="form">
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">是否可用:</label>
+						<div class="col-sm-4">
+							<?php echo $input['available'];?>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">广告标题(必填):</label>
+						<div class="col-sm-4">
+							<?php echo $input['title'];?>
+						</div>
+						<div class="col-sm-6 text-grey small">注意: 广告标题只为识别辨认不同广告条目之用，并不在广告中显示</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">广告起始时间(选填):</label>
+						<div class="col-sm-4">
+							<?php echo $input['starttime'];?>
+						</div>
+						<div class="col-sm-6 text-grey small">设置广告起始生效的时间，格式 yyyy/mm/dd，留空为不限制起始时间</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">广告结束时间(选填):</label>
+						<div class="col-sm-4">
+							<?php echo $input['endtime'];?>
+						</div>
+						<div class="col-sm-6 text-grey small">设置广告广告结束的时间，格式 yyyy/mm/dd，留空为不限制结束时间</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 form-control-label">展现方式(<span class="text-grey">当前不可用</span>):</label>
+						<div class="col-sm-4">
+						
+							<label class="custom-input custom-radio"><input type="radio" name="advnew[style]" value="code" checked="checked" onclick="$('style_code').style.display = '';$('style_text').style.display = 'none';$('style_image').style.display = 'none';$('style_flash').style.display = 'none';">&nbsp;代码</label>
+							<label class="custom-input custom-radio"><input type="radio" name="advnew[style]" value="text" onclick="$('style_code').style.display = 'none';$('style_text').style.display = '';$('style_image').style.display = 'none';$('style_flash').style.display = 'none';">&nbsp;文字</label>
+							<label class="custom-input custom-radio"><input type="radio" name="advnew[style]" value="image" onclick="$('style_code').style.display = 'none';$('style_text').style.display = 'none';$('style_image').style.display = '';$('style_flash').style.display = 'none';">&nbsp;图片</label>
+							
+						</div>
+						<div class="col-sm-6 text-grey small">请选择所需的广告展现方式</div>
+					</div>
+					<div id="style_code" class="form-group row">
+						<label class="col-sm-2 form-control-label">广告内容:</label>
+						<div class="col-sm-4">
+							<?php echo $input['code'];?>
+						</div>
+						<div class="col-sm-6 text-grey small"><?php echo lang('sitebrief_tips');?></div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo lang('confirm');?></button>
+							<a role="button" class="btn btn-secondary btn-block mt-3" href="javascript:history.back();"><?php echo lang('back');?></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+
+<script>
+var jform = $('#form');
+var jsubmit = $('#submit');
+jform.on('submit', function() {
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serialize();
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.text(message).delay(1000).location(xn.url('plugin-setting-advertisement-<?php echo $_type;?>'));
+		} else if(xn.is_number(code)) {
+			alert(message);
+			jsubmit.button('reset');
+		} else {
+			alert(message);
+			jform.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+
+
+</script>

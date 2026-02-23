@@ -1,0 +1,14 @@
+<p class="text-center position-sticky bottom-0 pb-2">
+    <button class="btn btn-primary btn-lg bg-gradient " type="button" data-bs-toggle="offcanvas" data-bs-target="#statelyNewPostOffcanvasModal" aria-controls="statelyNewPostOffcanvasModal">
+        <i class="las la-reply"></i> <?= $abs_theme_stately_setting['special']['quickpost_modal']['text'] ?>
+    </button>
+</p>
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="statelyNewPostOffcanvasModal">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title"><?= lang('post_create') ?></h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+    <div class="offcanvas-body">
+      <!--{hook stately_thread_newpost_form__classic_v1.htm}-->
+    </div>
+  </div>

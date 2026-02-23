@@ -1,0 +1,29 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <?php echo lang('tran_credits');?>
+        </h5>
+    </div>
+    <div class="card-body">
+        <form method="post" id="form_trans" action="<?php echo url('my-trade');?>">
+            <input type="text" class="form-control" maxlength="36" id="trans_username" name="trans_username" placeholder="请输入对方用户名" />
+            <div class="input-group">
+                <input type="number" class="form-control" maxlength="36" id="trans_num" name="trans_num" min="0" step="1" placeholder="请输入转账的金额" />
+                <select name="trans_credits" class="form-select flex-grow-0 flex-shrink-1 w-fit">
+                    <option value="1">
+                        <?php echo $credits1_name;?>
+                    </option>
+                    <option value="2" selected>
+                        <?php echo $credits2_name;?>
+                    </option>
+                    <option value="3">
+                        <?php echo $credits3_name;?> (单位:分)
+                    </option>
+                </select>
+                <button type="button" class="btn btn-info" id="trans_use" data-loading-text="<?php echo lang('submiting');?>...">
+                    <?php echo lang('tran_credits');?>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

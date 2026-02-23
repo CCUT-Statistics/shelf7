@@ -1,0 +1,39 @@
+<?php 
+$stately_bg_art_image = '';
+$stately_bg_art_gridients = array(
+    'purpleRed' => ['#673AB7',  '#EC407A'],
+    'greenOrange' => ['#689F38',  '#FF8F00'],
+    'magenta' => ['#EC407A',  '#FFA000'],
+    'purple' => ['#AB47BC',  '#00BCD4'],
+    'blue' => ['#3F51B5',  '#03A9F4'],
+    'orange' => ['#EF6C00',  '#9C27B0'],
+    'cyan' => ['#009688',  '#689F38'],
+    'red' => ['#EF5350',  '#607D8B'],
+    'skyBlue' => ['#2196F3',  '#00BFA5'],
+    'grey' => ['#607D8B',  '#757575'],
+    'yellowBlue' => ['#039BE5',  '#FF9800'],
+    'pinkBlue' => ['#00BCD4',  '#F06292'],
+    'yellowCyan' => ['#F9A825',  '#00BCD4'],
+    'blueCyan' => ['#039BE5',  '#00BCD4'],
+    'greenPurple' => ['#7C4DFF',  '#00C853'],
+    'pinkGreen' => ['#689F38',  '#F06292'],
+    'gold' => ['#FF9100',  '#8D6E63'],
+);
+if($abs_theme_stately_setting['ui']['background']['style'] === 'art_image') {
+$stately_bg_art_image = '--bg-art-decoration-image: url('  . $abs_theme_stately_setting['ui']['background']['image']['background-url'] . ');'
+. '; background-position:' . $abs_theme_stately_setting['ui']['background']['image']['background-position'] 
+. '; background-repeat:' . $abs_theme_stately_setting['ui']['background']['image']['background-repeat']
+. '; background-size:' . $abs_theme_stately_setting['ui']['background']['image']['background-size'];
+} else {
+    if (array_key_exists($abs_theme_stately_setting['ui']['background']['art_gridient_colors'],$stately_bg_art_gridients)) {
+        $stately_bg_art_image = '--bg-art-decoration-color-1:'.$stately_bg_art_gridients[$abs_theme_stately_setting['ui']['background']['art_gridient_colors']][0] .';--bg-art-decoration-color-2:' .$stately_bg_art_gridients[$abs_theme_stately_setting['ui']['background']['art_gridient_colors']][1];
+    }
+    
+    
+}
+?>
+<aside class="bg-art-decoration" style="<?= $stately_bg_art_image ?>">
+    <svg version="1.1" id="bg-art-decoration_Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 47.1" xml:space="preserve">
+        <path class="st0" d="M300,46.9L0,47.1V8.9c0,0,21.1,14.3,65.2,14.1c40.6-0.2,76.4-23,128-23C243.3,0,300,16.4,300,16.4V46.9z"></path>
+    </svg>
+</aside>

@@ -1,0 +1,11 @@
+<div class="mb-3 d-flex justify-content-between <?= $abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'inner' ? 'card-header-pills' : '' ?>">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link <?= $active == 'default' ? 'active' : '';?>" href="<?= url('forum-'.$fid);?>">
+                <?= lang('new_thread');?>
+            </a>
+        </li>
+        <!--{hook forum_thread_list_nav_item_after.htm}-->
+    </ul>
+    <!--{hook stately_forum_threadlist_dropdown_menu.htm}-->
+</div>

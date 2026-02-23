@@ -1,0 +1,18 @@
+<table class="table">
+	<thead>
+	<tr style="color: #484b4e;">
+		<th scope="col"><?php echo lang('my_gowild_detail_date');?></th>
+		<th scope="col"><?php echo lang('my_gowild_detail_from');?></th>
+		<th scope="col"><?php echo lang('my_gowild_detail_ip');?></th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php foreach($wishlist as $item){ ?>
+	<tr>
+		<td style="min-width: 80px;"><?php echo $item['create_time'];?></td>
+		<td style="word-break: break-all;min-width: 80px;"><?php echo $item['from_url'];?></td>
+		<td style="min-width: 80px;"><?php echo $item['ip'];?></td>
+	</tr>
+	<?php } ?>
+	</tbody>
+</table>

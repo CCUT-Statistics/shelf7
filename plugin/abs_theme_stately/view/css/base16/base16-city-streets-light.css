@@ -1,0 +1,21 @@
+/* City Streets Light by dkeg */
+/* Ported to base16 by Tillreetree */
+
+:root {
+    --base00:#efe8dc; /* f */
+    --base01:#e3ddd2; /* e */
+    --base02:#a7a099; /* a */
+    --base03:#837c78; /* 8 */
+    --base04:#4e4a4b; /* 5 */
+    --base05:#413c3e; /* 3 */
+    --base06:#2d2b30; /* 1 */
+    --base07:#201e24; /* 0 */
+    --base08:#3f3d40; /* 2 */
+    --base09:#837e81; /* 7 */
+    --base0A:#6e6765; /* 6 */
+    --base0B:#423e41; /* 4 */
+    --base0C:#413c3e; /* 3 */
+    --base0D:#4e4a4b; /* 5 */
+    --base0E:#6e6765; /* 6 */
+    --base0F:#837e81; /* 7 */
+}

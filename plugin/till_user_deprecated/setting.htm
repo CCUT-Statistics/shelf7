@@ -1,0 +1,73 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+
+<div class="card">
+    <div class="card-body">
+        <form action="<?php echo url('plugin-setting-till_user_deprecated');?>" method="post" id="form">
+            <h4 class="card-title">了结（停用帐号插件）设置</h4>
+            <div class="form-group row">
+                <label class="col-sm-2 form-control-label">可以停用账号的用户组</label>
+                <div class="col-sm-10">
+                    <?php echo $input['usergroup_allowed']; ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 form-control-label">停用账号后，可以显示该用户发布的帖子和回帖吗？</label>
+                <div class="col-sm-10">
+                    <?php echo $input['display_posts_after_deprecate']; ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 form-control-label">停用账号等于直接删除账号？（慎用）</label>
+                <div class="col-sm-10">
+                    <?php echo $input['delete_account_directly']; ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 form-control-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>...">
+                        <?php echo lang('confirm');?>
+                    </button>
+                </div>
+            </div>
+            <h2>常见问题</h2>
+            <h3>查找所有被停用的账号</h3>
+            <p>搜索用户名“someone”或用户组“游客组”即可。</p>
+            <h3>如何手动恢复被停用的账号</h3>
+            <p>按照以下方式编辑用户即可：</p>
+            <ul>
+                <li>用户名：手动指定</li>
+                <li>用户组：一级用户组</li>
+                <li>密码：手动指定，如123456</li>
+                <li>已停用：否</li>
+            </ul>
+        </form>
+    </div>
+</div>
+
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+
+    var jform = $("#form");
+    var jsubmit = $("#submit");
+    jform.on('submit', function () {
+        jform.reset();
+        jsubmit.button('loading');
+        var postdata = jform.serialize();
+        $.xpost(jform.attr('action'), postdata, function (code, message) {
+            if (code == 0) {
+                $.alert(message);
+                jsubmit.text(message).delay(2000).button('reset').location('./');
+                return;
+            } else {
+                $.alert(message);
+                jsubmit.button('reset');
+            }
+        });
+        return false;
+    });
+
+</script>

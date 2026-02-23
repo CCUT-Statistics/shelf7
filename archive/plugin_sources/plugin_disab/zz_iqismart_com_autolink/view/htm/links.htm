@@ -1,0 +1,126 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<?php
+$kv = kv_cache_get('iqismart_com_autolink');
+ 
+$autolinks = cache_get('autolinks');
+if(empty($autolinks)){
+// 缓存10分钟更新一次
+$autolinks = db_find('autolink', array('status'=>1), array('id'=>-1), 1, 100);
+
+foreach($autolinks as $l){
+$str1 = $_SERVER['SERVER_NAME'];
+$str2 = 'from='.$l['uid'];
+
+$status = -1;
+
+if($l['uid'] == 0){
+$status = 1;
+}else{
+$status = auto_link_check($l['siteUrl'],$str1,$str2);
+}
+db_update('autolink',array('id'=>$l['id']),array('status'=>$status));
+}
+$autolinks = db_find('autolink', array('status'=>1), array('id'=>-1), 1, 100);
+cache_set('autolinks', $autolinks, 600);
+
+}
+ 
+/**
+ * 
+ * 中英混合的字符串截取
+ * @param unknown_type $sourcestr
+ * @param unknown_type $cutlength
+ */
+function cut_str($sourcestr, $cutlength) {
+  $returnstr = '';
+  $i = 0;
+  $n = 0;
+  $str_length = strlen ( $sourcestr ); //字符串的字节数 
+  while ( ($n < $cutlength) and ($i <= $str_length) ) {
+    $temp_str = substr ( $sourcestr, $i, 1 );
+    $ascnum = Ord ( $temp_str ); //得到字符串中第$i位字符的ascii码 
+    if ($ascnum >= 224) //如果ASCII位高与224，
+    {
+      $returnstr = $returnstr . substr ( $sourcestr, $i, 3 ); //根据UTF-8编码规范，将3个连续的字符计为单个字符   
+      $i = $i + 3; //实际Byte计为3
+      $n ++; //字串长度计1
+    } elseif ($ascnum >= 192) //如果ASCII位高与192，
+    {
+      $returnstr = $returnstr . substr ( $sourcestr, $i, 2 ); //根据UTF-8编码规范，将2个连续的字符计为单个字符 
+      $i = $i + 2; //实际Byte计为2
+      $n ++; //字串长度计1
+    } elseif ($ascnum >= 65 && $ascnum <= 90) //如果是大写字母，
+    {
+      $returnstr = $returnstr . substr ( $sourcestr, $i, 1 );
+      $i = $i + 1; //实际的Byte数仍计1个
+      $n ++; //但考虑整体美观，大写字母计成一个高位字符
+    } else //其他情况下，包括小写字母和半角标点符号，
+    {
+      $returnstr = $returnstr . substr ( $sourcestr, $i, 1 );
+      $i = $i + 1; //实际的Byte数计1个
+      $n = $n + 0.5; //小写字母和半角标点等与半个高位字符宽...
+    }
+  }
+  if ($str_length > $cutlength) {
+    $returnstr = $returnstr . "..."; //超过长度时在尾处加上省略号
+  }
+  return $returnstr;
+}
+?>
+<script>
+
+    function down(id){
+        var r=confirm("确认下线吗!");
+        if (r==true){
+            $.xget("<?php echo url('my-autolink'); ?>?act=down&ajax=1&id="+id,function (code, message) {
+                if (code == 0) {
+                    $.alert(message);
+                    setTimeout("history.go(-1);location.reload()", 2000);
+                }  else {
+                    $.alert(message);
+                }
+            });
+        }
+        else{
+
+        }
+        return false;
+
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="jumbotron ">
+              <h1 class="display-4"><i class="icon-link"></i> 网络邻居</h1>
+              <hr class="my-4">
+              <p>如果你也想成为我的邻居，点击下面的按钮申请吧，在申请之前请先添加本站链接哦~<i class="far fa-kiss-wink-heart"></i></p>
+             <a class="btn btn-primary btn-lg" href="<?php echo url('my-autolink'); ?>?act=add" data-modal-title="申请友链" data-modal-arg="1">申请友链</a>
+            </div>
+            <div class="row row-cols-2 row-cols-md-3 justify-content-between">
+               
+             <?php foreach ( $autolinks as $link ){ ?>
+                <div class="col mb-4">
+                    <div class="card card-body text-turncate">
+                        <div class="media">
+                            <img class="avatar-3 mr-3 mt-1" src="<?= !empty($link['siteImg'])?$link['siteImg']:'/view/img/logo.png' ?>">
+                            <div class="media-body">
+                                <a data-toggle="tooltip" data-placement="top" title="" href="<?php echo $link['siteUrl']; ?>" target="_blank" data-original-title="点击访问">
+                                    <span class="h6 font-weight-bold"><?php echo $link['siteTitle'] ?></span>
+                                    <span class="d-block text-muted small mt-1"><?= cut_str($link['siteDesc'],18,0,'UTF-8') ?></span>
+                                </a>
+                                 <?php if($gid == 1) { ?>
+                                   <span onclick="down(<?php echo $link['id'];?>)" style='color:red; cursor: pointer;'>(下线)</span>
+                                   <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>

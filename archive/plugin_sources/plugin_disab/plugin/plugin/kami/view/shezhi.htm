@@ -1,0 +1,93 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<div class="row line-height-3">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title"><?php echo '卡密设置';?></h5>
+				<form action="<?php echo url('kami-shengcheng');?>" method="post" id="form">
+					<div class="form-group input-group">
+						<input type="text" class="form-control" placeholder="<?php echo '位数';?>" id="weishu" name="weishu" maxlength="10">
+						<input type="text" class="form-control" placeholder="<?php echo '个数';?>" id="geshu" name="geshu">
+						<input type="text" class="form-control" placeholder="<?php echo '面值';?>" id="mianzhi" name="mianzhi">
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>"><?php echo '生成';?></button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>卡号：</th>
+							<th>卡密:</th>
+							<th>面值:</th>
+							<th>使用者UID</th>
+							<th>使用日期</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="kamilist">
+						<?php foreach($kamilist as &$_kami){ ?>
+						<tr kahao="<?php echo $_kami['kahao']; ?>">
+							<td style="vertical-align: middle;">
+								<?php echo $_kami['kahao']; ?>
+							</td>
+							<td style="vertical-align: middle;">
+								<?php echo $_kami['kami']; ?>
+							</td>
+							<td style="vertical-align: middle;">
+								<?php echo $_kami['mianzhi']; ?>
+							</td>
+							<td style="vertical-align: middle;">
+								<?php echo $_kami['uid']; ?>
+							</td>
+							<td style="vertical-align: middle;">
+								<?php echo $_kami['riqi']; ?>
+							</td>
+							<td style="vertical-align: middle;">
+								<a href=""><button class="btn btn-primary">删除</button></a>
+							</td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+<script>
+	var jform = $('#form');
+	var jsubmit = $('#submit');
+	var jweishu = $('#weishu');
+	var jgeshu = $('#geshu');
+	var jmianzhi = $('#mianzhi');
+	var jdaochu_quanbu = $('#daochu_quanbu');
+	jform.on('submit', function() {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serializeObject();
+		$.xpost(jform.attr('action'), postdata, function(code, message) {
+			if(code == 0) {
+				$.alert(message);
+				jsubmit.button('reset');
+			} else if(code == 'weishu') {
+				jweishu.alert(message).focus();
+				jsubmit.button('reset');
+			} else if(code == 'geshu') {
+				jgeshu.alert(message).focus();
+				jsubmit.button('reset');
+			} else if(code == 'mianzhi') {
+				jmianzhi.alert(message).focus();
+				jsubmit.button('reset');
+			} else {
+				alert(message);
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+</script>

@@ -1,0 +1,10 @@
+<!--{hook post_list_inc_delete_before.htm}-->
+<?php if ( in_array(intval($gid),array(1),true) || ( boolval($abs_theme_stately_setting['global']['reply']['show_delete_button']) && ($allowdelete || $_post['allowdelete']) ) ){ ?>
+<a data-href="<?= url('post-delete-'.$_post['pid']);?>" data-confirm-text="<?= lang('confirm_delete');?>" href="javascript:void(0);" class="text-danger post_delete _confirm mr-3">
+    <i class="la la-remove" title="<?= lang('delete');?>"></i>
+    <span class="d-none d-lg-inline">
+        <?= lang('delete');?>
+    </span>
+</a>
+<?php } ?>
+<!--{hook post_list_inc_delete_after.htm}-->

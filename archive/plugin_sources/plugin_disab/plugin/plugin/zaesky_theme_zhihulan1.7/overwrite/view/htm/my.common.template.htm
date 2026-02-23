@@ -1,0 +1,83 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<?php include _include(APP_PATH.'plugin/zaesky_theme_zhihulan/overwrite/view/htm/myxx.htm');?>
+<!--{hook my_common_start.htm}-->
+
+<div class="card d-lg-none functions">
+	<ul>
+	<a data-active="menu-my-notice" href="<?php echo url("user-thread-$uid");?>"><li><span class="functionsname">个人主页</span><span class="functionsname_2"><i class="iconfont iconright"></i></span></li></a>
+	<a  data-active="menu-my" href="<?php echo url('my-favorite');?>"><li><span class="functionsname">我的收藏</span><span class="functionsname_2"><i class="iconfont iconright"></i></span></li></a>
+	<a  data-active="menu-my-thread" href="<?php echo url('my-thread');?>"><li><span class="functionsname">论坛帖子</span><span class="functionsname_2"><i class="iconfont iconright"></i></span></li></a>
+	<a data-active="menu-my-credits" href="<?php echo url('my-credits');?>"><li><span class="functionsname">我的<?php echo lang('credits');?></span><span class="functionsname_2"><i class="iconfont iconjinbi" style="color:orange;width:5px;"></i> <?php echo $user['golds'];?><i class="iconfont iconright"></i></span></li></a>
+	</ul>
+</div>
+
+<div class="card d-lg-none functions">
+	<ul>
+	<!--{hook my_common_mobile_my_before.htm}-->
+	
+	<!--{hook myxx_common_mobile_my_after.htm}-->
+	
+	<li><span class="functionsname"><?php echo lang('create_date');?></span><span class="functionsname_2"><?php echo $user['create_date_fmt'];?></span></li>
+
+	<!--{hook myxx_common_mobile_my_thread_after.htm}-->
+	<?php if($gid == 1) { ?>
+					<a href="admin/"><li><span class="functionsname"><?php echo lang('admin_page');?></span><span class="functionsname_2"><i class="iconfont iconright"></i></span></li></a>
+					<?php } ?>
+	<a href="<?php echo url("my-password");?>"><li><span class="functionsname">账号设置</span><span class="functionsname_2"><i class="iconfont iconright"></i></span></li></a>
+	<!--{hook my_common_mobile_my_thread_before.htm}-->
+	<li><a class="btn btn-danger" style="color:white;width:100%;" href="<?php echo url('user-logout');?>"><?php echo lang('logout');?>登录</a></li>
+	</ul>
+</div>
+
+	
+	
+
+<div class="row">
+	<!-- 左侧菜单 -->
+	<div class="col-lg-2 hidden-md hidden-sm" id="my_aside">
+		<div class="card">
+			<div class="card-header text-center">
+				<!--{hook my_common_avatar_before.htm}-->
+				<img class="avatar-4" src="<?php echo $user['avatar_url'];?>">
+				<br><span class="mt-1" style="display:block"><?php echo $user['username'];?>
+				<!--{hook my_common_username_after.htm}-->
+				</span>
+				
+			</div>
+			<div class="list-group list-group-flush text-center">
+				<!--{hook my_common_my_before.htm}-->
+				<a href="<?php echo url('my');?>" class="list-group-item list-group-item-action" data-active="menu-my">个人资料</a>
+				<!--{hook my_common_my_after.htm}-->
+				
+				<!--{hook my_common_my_thread_before.htm}-->
+				<a href="<?php echo url('my-thread');?>" class="list-group-item list-group-item-action" data-active="menu-my-thread">论坛帖子</a>
+				
+				<!--{hook my_common_my_thread_after.htm}-->
+				
+			</div>
+		</div>
+	</div>
+	<!-- 右侧内容 -->
+	<div class="col-lg-10 hidden-md hidden-sm" id="my_main" style="padding-top:0">
+		<!--{hook my_common_main_card_before.htm}-->
+		<div class="card" >
+			<div class="card-header">
+				<!--{hook my_common_my_nav_slot_before.htm}-->
+				<slot name="my_nav" />
+				<!--{hook my_common_my_nav_slot_after.htm}-->
+			</div>
+			<div class="card-body">
+				<!--{hook my_common_my_body_slot_before.htm}-->
+				<slot name="my_body" />
+				<!--{hook my_common_my_body_slot_after.htm}-->
+			</div>
+		</div>
+		<!--{hook my_common_main_card_after.htm}-->
+	</div>
+</div>
+
+<!--{hook my_common_end.htm}-->
+
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+
+<!--{hook my_common_js.htm}-->

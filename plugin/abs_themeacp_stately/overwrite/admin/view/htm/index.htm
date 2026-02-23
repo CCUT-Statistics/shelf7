@@ -1,0 +1,307 @@
+<?php include _include(ADMIN_PATH . 'view/htm/header.inc.htm');
+
+$greeting_result_pc = '';
+$greeting_result_mobile = '';
+$greeting_random = mt_rand(0, 11);
+if (intval($greeting_random) > 10) {
+	$greeting_random = rand(1, 10);
+	$greeting_result_pc = lang('admin_lead_text_' . $greeting_random);
+	$greeting_result_mobile = lang('admin_lead_text_' . $greeting_random);
+} else {
+	$greeting_result_pc = lang('admin_lead_text_pc');
+	$greeting_result_mobile = lang('admin_lead_text_mobile');
+}
+
+?>
+<!--{hook admin_index_start.htm}-->
+<div class="row mb-3">
+    <div class="col">
+        <h2 class="display-3"> <?php echo lang('admin_welcomeback'); ?>， <?php echo isset($user['username']) ? $user['username'] : ''; ?>！ </h2>
+        <p class="d-none d-md-block lead"> <?php echo $greeting_result_pc; ?> </p>
+        <p class="d-block d-md-none lead"> <?php echo $greeting_result_mobile; ?> </p>
+    </div>
+</div>
+<!--{hook admin_index_site_stat_before.htm}-->
+<div class="row">
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <a href="<?php echo url('thread-list');?>" class="small-box-footer">
+                        <span class="badge bg-label-primary">
+                            <i class="las la-comment-dots fs-1"></i>
+                        </span>
+                        </a>
+                    </div>
+                </div>
+                <span> <?php echo lang('threads'); ?>： </span>
+                <samp class="card-title h3 d-block mb-1"> <?php echo $stat['threads']; ?> </samp>
+                <?php if($new_threads_num > 0): ?> 
+                <span class="badge bg-label-success">
+                    <?php echo lang('admin_today_add') . $new_threads_num; ?>
+                </span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <a href="<?php echo url('thread-list');?>">
+                            <span class="badge bg-label-warning">
+                                <i class="las la-comments fs-1"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <span> <?php echo lang('posts'); ?>： </span>
+                <samp class="card-title h3 d-block mb-1"> <?php echo $stat['posts']; ?> </samp>
+                <?php if($new_posts_num > 0): ?> 
+                <span class="badge bg-label-success">
+                    <?php echo lang('admin_today_add') . $new_posts_num; ?>
+                </span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <a href="<?php echo url('user-list');?>">
+
+                            <span class="badge bg-label-info">
+                                <i class="las la-users fs-1"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <span> <?php echo lang('users'); ?>： </span>
+                <samp class="card-title h3 d-block mb-1"> <?php echo $stat['users']; ?> </samp>
+                <?php if($new_menber_num > 0): ?> 
+                <span class="badge bg-label-success">
+                    <?php echo lang('admin_today_add') . $new_menber_num; ?>
+                </span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="badge bg-label-success">
+                            <i class="las la-user fs-1"></i>
+                        </span>
+                    </div>
+                </div>
+                <span> <?php echo lang('onlines'); ?>： </span>
+                <samp class="card-title h3 d-block mb-1"> <?php echo $runtime['onlines']; ?> </samp>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="badge bg-label-secondary">
+                            <i class="las la-file fs-1"></i>
+                        </span>
+                    </div>
+                </div>
+                <span> <?php echo lang('attachs'); ?>： </span>
+                <samp class="card-title h3 d-block mb-1"> <?php echo $stat['attachs']; ?> </samp>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <a href="<?php echo url('other');?>">
+                            <span class="badge bg-label-dark">
+                                <i class="las la-server fs-1"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <span> <?php echo lang('disk_free_space'); ?>： </span>
+                <samp class="card-title h3 d-block mb-1"> <?php echo $stat['disk_free_space']; ?> </samp>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--{hook admin_index_team_before.htm}-->
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <?php echo lang('user_chart');?>
+            </div>
+            <div class="card-body">
+                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <?php echo lang('admin_manage_group');?>
+            </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th hidden style="width: 2em"><?php echo lang('admin_group_id');?></th>
+                            <th style="width: 11em"><?php echo lang('admin_group_name');?></th>
+                            <th><?php echo lang('admin_group_users');?></th>
+                            <th class="text-center" style="width: 6.5em"><?php echo lang('admin_group_num');?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($grouplist as $_gid=>$_group) {
+                            if($_group['gid'] <= 7 && $_group['gid'] > 0){
+                                $admin_group_num = db_count('user',array('gid'=>$_group['gid']));
+                                $admin_group_user = db_find('user',array('gid'=>$_group['gid']),array('uid'=>-1));
+                                switch($_group['gid']){
+                                    case 1: $badge_color = 'bg-label-danger';break;
+                                    case 2: $badge_color = 'bg-label-warning';break;
+                                    case 4: $badge_color = 'bg-label-primary';break;
+                                    case 5: $badge_color = 'bg-label-success';break;
+                                    case 6: $badge_color = 'bg-label-info';break;
+                                    case 7: $badge_color = 'bg-label-dark';break;
+                                    default:$badge_color = 'bg-label-secondary';break;
+                                }
+                                
+                            ?>
+                        <tr>
+                            <td hidden><?php echo $_group['gid']; ?></td>
+                            <td> <a href="<?php echo url('user-list-gid-'.$_group['gid'].'-1');?>"><?php echo $_group['name']; ?></a></td>
+                            <td>
+                                <?php
+                                $user_num = 1;
+                                foreach($admin_group_user as $user){
+                                    if($user_num++ > 6) break;
+                                    $user_avatarimg = '../view/img/avatar.png';
+                                    $user['avatar']!=0 && $user_avatarimg = '../'.$conf['upload_url'].'avatar/000/'.$user['uid'].'.png?'.$user['avatar']; ?>
+                                <a href="<?php echo url('user-update-'.$user['uid'].'');?>" data-toggle="tooltip" data-placement="top" title="<?php echo $user['username'];?>"><img src="<?php echo $user_avatarimg; ?>" class="avatar-2"></a>
+                            <?php }	?>
+                            </td >
+                            <td class="text-center"><span class="badge <?php echo $badge_color;?>"><?php echo $admin_group_num;?></span></td>
+                        </tr>
+                        <?php }} ?>
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+<!--{hook admin_index_team_after.htm}-->
+
+<!--{hook admin_index_server_info_before.htm}-->
+<details class="card accordion-item">
+    <summary class="accordion-header accordion-button"> <?php echo lang('server_info'); ?> </summary>
+    <dl class="dl-horizontal card-body">
+        <dt> <?php echo lang('os'); ?>： </dt>
+        <dd> <?php echo PHP_OS; ?> </dd>
+        <dt>Web Server：</dt>
+        <dd> <?php echo $info['SERVER_SOFTWARE']; ?> </dd>
+        <dt>PHP：</dt>
+        <dd> <?php echo PHP_VERSION; ?> <a href="<?php echo url('index-phpinfo'); ?>">[PHPINFO]</a>
+        </dd>
+        <dt> <?php echo lang('database'); ?>： </dt>
+        <dd> <?php echo $conf['db']['type']; ?><small> ( <?php echo $info['dbversion']; ?>) </small>
+        </dd>
+        <dt> <?php echo lang('post_max_size'); ?>： </dt>
+        <dd> <?php echo $info['post_max_size']; ?> </dd>
+        <dt> <?php echo lang('upload_max_filesize'); ?>： </dt>
+        <dd> <?php echo $info['upload_max_filesize']; ?> </dd>
+        <dt> <?php echo lang('allow_url_fopen'); ?>： </dt>
+        <dd> <?php echo $info['allow_url_fopen']; ?> </dd>
+        <dt> <?php echo lang('safe_mode'); ?>： </dt>
+        <dd> <?php echo $info['safe_mode']; ?> </dd>
+        <dt> <?php echo lang('max_execution_time'); ?>： </dt>
+        <dd> <?php echo $info['max_execution_time']; ?> </dd>
+        <dt> <?php echo lang('memory_limit'); ?>： </dt>
+        <dd> <?php echo $info['memory_limit']; ?> </dd>
+        <dt> <?php echo lang('client_ip'); ?>： </dt>
+        <dd> <?php echo $ip; ?> </dd>
+        <dt> <?php echo lang('server_ip'); ?>： </dt>
+        <dd> <?php echo _SERVER('SERVER_ADDR'); ?> </dd>
+    </dl>
+</details>
+
+<!--{hook admin_index_end.htm}--> 
+
+<?php include _include(ADMIN_PATH . 'view/htm/footer.inc.htm'); ?>
+<script>
+    $('#nav li.home').addClass('active');
+</script> 
+
+<?php echo $lastversion; ?>
+
+<script src="../plugin/abs_themeacp_stately/view/js/Chart.min.js"></script>
+
+<script>
+    
+    //- DONUT CHART -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+        var donutData        = {
+          labels: [
+                <?php foreach($grouplist as $_gid=>$_group) {
+                    if($_group['gid'] > 100){
+                    ?>
+              '<?php echo $_group['name']; ?>',
+                        <?php }} ?>
+          ],
+          datasets: [
+            {
+              data: [
+                        <?php
+                    foreach($grouplist as $_gid=>$_group){
+                        if($_group['gid'] > 100){
+                        $group_num = db_count('user',array('gid'=>$_group['gid']));?>
+                        <?php echo $group_num;?>,
+                    <?php }} ?>
+                        ],
+              backgroundColor : [
+              '#5B8FF9',
+              '#61DDAA',
+              '#65789B',
+              '#F6BD16',
+              '#7262fd',
+              '#78D3F8',
+              '#9661BC',
+              '#F6903D',
+              '#008685',
+              '#F08BB4'
+              ],
+            }
+          ]
+        }
+        var donutOptions     = {
+          maintainAspectRatio : false,
+          responsive : true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        new Chart(donutChartCanvas, {
+          type: 'doughnut',
+          data: donutData,
+          options: donutOptions
+        })
+    
+    </script>
+
+
+<!--{hook admin_index_js.htm}-->

@@ -1,0 +1,169 @@
+.verified-badge {
+    display: inline-flex;
+    position: relative;
+    top: -.05em;
+    margin-left: .2em;
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: middle;
+    border-radius: 100%;
+    text-align: center;
+    color: var(--white, #fff);
+    font-size: 0.9em;
+    font-family: sans-serif;
+    align-items: center;
+    justify-content: center;
+}
+
+.verified-badge:before {
+    display: none !important;
+}
+
+.v_badge-square {
+    border-radius: .25em;
+}
+
+.verified-badge i {
+    font-size: 0.85em;
+    font-style: initial;
+}
+
+.v_badge-bg-blue {
+    background-color: var(--blue, #007bff);
+}
+
+.v_badge-bg-indigo {
+    background-color: var(--indigo, #6610f2);
+}
+
+.v_badge-bg-purple {
+    background-color: var(--purple, #6f42c1);
+}
+
+.v_badge-bg-pink {
+    background-color: var(--pink, #e83e8c);
+}
+
+.v_badge-bg-red {
+    background-color: var(--red, #dc3545);
+}
+
+.v_badge-bg-orange {
+    background-color: var(--orange, #fd7e14);
+}
+
+.v_badge-bg-yellow {
+    background-color: var(--yellow, #ffc107);
+}
+
+.v_badge-bg-green {
+    background-color: var(--green, #28a745);
+}
+
+.v_badge-bg-teal {
+    background-color: var(--teal, #20c997);
+}
+
+.v_badge-bg-cyan {
+    background-color: var(--cyan, #17a2b8);
+}
+
+.v_badge-bg-primary {
+    background-color: var(--primary, #007bff);
+}
+
+.v_badge-bg-secondary {
+    background-color: var(--secondary, #6c757d);
+}
+
+.v_badge-bg-success {
+    background-color: var(--success, #28a745);
+}
+
+.v_badge-bg-info {
+    background-color: var(--info, #17a2b8);
+}
+
+.v_badge-bg-warning {
+    background-color: var(--warning, #ffc107);
+}
+
+.v_badge-bg-danger {
+    background-color: var(--danger, #dc3545);
+}
+
+.v_badge-bg-rainbow {
+    background: linear-gradient(100deg, #ffe43c 0% 20%, #00f5d4 20% 40%, #01beff 40% 60%, #9a5ce5 60% 80%, #f15bb5 80% 100%);
+}
+
+.v_badge-bg-rainbow>*,
+.v_badge-bg-warning>*,
+.v_badge-bg-yellow>* {
+    text-shadow: 0 .1em .05em rgba(0, 0, 0, .25);
+}
+
+/* */
+#v_select_form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#v_select_form label {
+    text-align: center;
+    padding: 0 .5rem;
+    flex: 1 0 100%;
+}
+
+@media (min-width:768px) {
+    #v_select_form label {
+        flex: 1 0 33.33%;
+    }
+}
+
+#v_select_form input[type="radio"] {
+    display: none;
+}
+
+#v_select_form .card {
+    padding: .5rem;
+    border: 1px solid var(--light, #f8f9fa);
+    cursor: pointer;
+    transition: all .25s ease-in-out;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#v_select_form input[type="radio"]:checked~.card {
+    color: var(--white, #fff) !important;
+    background-color: var(--primary, #007bff);
+}
+
+#v_select_form input[type="radio"]:checked~.card h4 {
+    font-weight: bolder;
+}
+
+#v_select_form .card p {
+    margin: 0;
+}
+
+.v_avatar {
+    position: relative;
+    display: inline-flex;
+}
+
+.v_avatar .verified-badge {
+    position: absolute;
+    bottom: -.25em;
+    right: -.25em;
+    top: unset;
+}
+
+.v_avatar-thread .verified-badge,
+.v_avatar-post .verified-badge {
+    transform: scale(0.8);
+}
+
+.v_avatar-thread .verified-badge {
+    right: 1em;
+}

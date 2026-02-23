@@ -1,0 +1,54 @@
+<?php
+$stately_admin_primary = '#696cff';
+if (isset($abs_theme_stately_setting['ui']['color']['theme'])) {
+    $candidate = trim($abs_theme_stately_setting['ui']['color']['theme']);
+    if ($candidate !== '' && preg_match('/^#[0-9a-fA-F]{3,8}$/', $candidate)) {
+        $stately_admin_primary = $candidate;
+    }
+}
+?>
+<style id="stately_custom_css">
+	:root {
+		--bs-primary: <?= $stately_admin_primary ?>;
+		--primary: <?= $stately_admin_primary ?>;
+	}
+</style>
+
+<style id="stately_admin_css">
+:root {
+    --kumquat-navbar-height: 4.25rem !important;
+    --kumquat-card-header-height: calc(var(--kumquat-navbar-height) + 4.5rem - 1px) !important;
+    --kumquat-card-nav-height: calc(var(--kumquat-card-header-height) + 2.5rem - 2px) !important;
+}
+
+.kumquat-nav.kumquat-nav-secondary {
+    top: calc(var(--kumquat-card-header-height) * 1.28) !important;
+}
+
+.kumquat-nav-secondary ~ .tab-content .tab-pane .section-title {
+    top: calc(var(--kumquat-card-nav-height) * 1.28) !important;
+}
+
+.dark-style .kumquat-nav {
+    background-color: #2b2c40;
+}
+
+.kumquat-nav ~ .tab-content {
+    padding: 0;
+}
+
+@media (min-width: 768px) {
+    :root {
+        --kumquat-navbar-height: 4.5rem !important;
+        --kumquat-card-header-height: calc(var(--kumquat-navbar-height) + 5.5rem - 1px) !important;
+    }
+
+    .kumquat-nav.kumquat-nav-secondary {
+    top: calc(var(--kumquat-card-header-height) * 1.25) !important;
+}
+
+.kumquat-nav-secondary ~ .tab-content .tab-pane .section-title {
+    top: calc(var(--kumquat-card-nav-height) * 1.2) !important;
+}
+}
+</style>

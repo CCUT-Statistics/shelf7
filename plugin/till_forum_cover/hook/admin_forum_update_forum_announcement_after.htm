@@ -1,0 +1,34 @@
+<div class="form-group row">
+    <label class="col-sm-2 form-control-label" for="cover_url"><?php echo lang('select_cover_image');?>：</label>
+    <div class="col-sm-10">
+        <div class="custom-file mt-2">
+            <input type="file" class="custom-file-input" id="cover_file" aria-describedby="inputGroupFileAddon01" accept=".jpg,.jpeg,.png,.gif,.bmp">
+            <label class="custom-file-label" for="cover_file" id="inputGroupFileAddon01">选择文件</label>
+        </div>
+        <input type="text" name="cover_url" id="cover_url" class="form-control" placeholder="https://或者粘贴图片URL.png" value="<?= isset($_forum['cover_url']) ? $_forum['cover_url'] : '' ?>">
+        <p class="form-text help-block">若要去掉封面图，删除以上文本框内容即可。</p>
+    </div>
+</div>
+<script>
+    document.getElementById('cover_file').addEventListener('change', function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let formData = new FormData();
+            formData.append('file', file);
+            formData.append('ajax', '1'); 
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', "<?= url('forum-upload_cover') ?>", true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    response = JSON.parse(xhr.responseText);
+                    if (parseInt(response.code) === 0) {
+                        document.getElementById('cover_url').value = response.message;
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            };
+            xhr.send(formData);
+        }
+    });
+</script>

@@ -1,0 +1,32 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['user']['show_stats_on_hero']): ?>
+<div class="d-flex align-items-center justify-content-start flex-shrink-0 d-lg-none">
+    <div class="d-inline-flex flex-wrap justify-content-start mt-3 me-2 mw-n2 text-center ">
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold ">
+                <?= $user['threads'];?>
+            </span>
+            <small>
+                <?= lang('threads');?>
+            </small>
+        </div>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold ">
+                <?= $user['posts'];?>
+            </span>
+            <small>
+                <?= lang('posts');?>
+            </small>
+        </div>
+        <?php if(isset($user['digests'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <span class="fw-semibold ">
+                <?php echo $user['digests'];?>
+            </span>
+            <small>
+                <?php echo lang('digests');?>
+            </small>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>

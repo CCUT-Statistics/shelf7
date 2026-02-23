@@ -1,0 +1,11 @@
+{
+    "name": "用户等级图标显示1.0",
+    "brief": "腾悦网用户组图标1.0版本<br>1.支持用户组图标显示<br>2.个人中心等级详情页",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

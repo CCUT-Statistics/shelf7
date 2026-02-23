@@ -1,0 +1,61 @@
+<li class="my-1 thread <?= $_thread['top_class'];?>" data-tid="<?= $_thread['tid'];?>">
+    <div class="media align-items-center style-qa_v1">
+        <?php if(
+            (isset($haya_post_like_config['open_thread']) && $haya_post_like_config['open_thread'] == 1)
+            && ( (isset($haya_post_like_config['list_show_likes']) && $haya_post_like_config['list_show_likes'] == 1) || ($route == 'my' || $route == 'user') )
+        ): ?>
+        <div class="rounded text-center py-1 px-2 mr-1 bg-label-warning">
+            <strong class="d-block">
+                <?= intval($_thread['likes']); ?>
+            </strong>
+            <?= lang('haya_post_like_like') ?>
+        </div>
+        <?php endif; ?>
+        <div class="rounded text-center py-1 px-2 mr-1 bg-label-primary">
+            <strong class="d-block">
+                <?= $_thread['posts'];?>
+            </strong>
+            <?= lang('reply') ?>
+        </div>
+        <div class="rounded text-center py-1 px-2 mr-1 badge-light d-none d-md-block">
+            <strong class="d-block">
+                <?= $_thread['views'];?>
+            </strong>
+            <?= lang('views') ?>
+        </div>
+        <div class="media-body ml-1">
+            <h3 class="my-2 h5">
+                <!--{hook stately_threadlist_subject.htm}-->
+            </h3>
+            <div class="card-text m-0">
+                <?= $_post_message_excerpt ?>
+            </div>
+            <div class="d-flex flex-wrap justify-content-between">
+                <div class="mt-2 small">
+                    <a href="<?= url('user-'.$_thread['uid']);?>">
+                        <span class="v_avatar v_avatar-post">
+                            <img loading="lazy" decoding="async" class="img-fluid rounded-circle w-px-20" src="<?= $_thread['user_avatar_url'];?>">
+                            <!--{hook thread_list_inc_avatar_after.htm}-->
+                        </span>
+                        <!--{hook stately_threadlist_username.htm}-->
+                    </a>
+                    <time class="date mr-2">
+                        <i class="las la-clock"></i>
+                        <?= $_thread['create_date_fmt'];?>
+                    </time>
+                    <span class="mr-2 badge-group">
+                        <?php if($fid == 0): ?>
+                        <a class="badge bg-label-secondary" href="<?= url('forum-'.$_thread['fid']);?>">
+                            <?= $_thread['forumname'] ?>
+                        </a>
+                        <?php endif; ?>
+                    </span>
+                    <!--{hook stately_threadlist_lastuid.htm}-->
+                </div>
+                <div class="mb-0">
+                    <!--{hook stately_threadlist_checkbox.htm}-->
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

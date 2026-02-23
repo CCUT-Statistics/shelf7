@@ -1,0 +1,29 @@
+<?php include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/view/htm/header.inc.htm');?>
+
+<!--{hook website_index_flat_start.htm}-->
+
+        <div class="card-message card text-center my-4 mx-auto" >
+            <!--{hook website_index_flat_main_start.htm}-->
+            <div class="card-body">
+                <span class="badge rounded-pill bg-label-info fs-xlarge mb-4">
+                    <i class="las la-clock fs-1"></i>
+                </span>
+                <div class="lead">
+                    <?php if(intval($gid) == 1 || DEBUG > 1): ?>
+                    <h2>请开发自己的主页 <small>Please develop your own homepage</small></h2>
+                    <p class="lead">本页面位置：<code>plugin/abs_theme_stately/overwrite/wellcms/index.htm</code></p>
+                    <?php else: ?>
+                    <?= $conf['runlevel_reason'] ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+<!--{hook website_index_flat_end.htm}-->
+
+<?php include _include(APP_PATH . 'plugin/abs_theme_stately/overwrite/view/htm/footer.inc.htm');?>
+
+<script>
+    $('#nav li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+</script>
+<!--{hook website_index_flat_js.htm}-->

@@ -1,0 +1,487 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<div class="row">
+    <div class = "col-12">
+        <div class="card">
+            <div class="card-body">
+                <form action="<?php echo url('plugin-setting-nciaer_pushbaidu');?>" method="post" id="form">
+                <div class="form-group row">
+                    <div class="col-sm-12"><h4>设置</h4></div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 form-control-label">网站token</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="text" name="token" value="<?php echo $token;?>"/>
+                        <p class="mt-2 text-grey small">配置教程：http://www.nciaer.com/thread-493-1-1.html</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 form-control-label">启用的用户组：</label>
+                    <div class="col-sm-10">
+                        <select name = "gids[]" class = "form-control" multiple="multiple" style = "height: 150px;">
+                            <?php foreach($grouplist as $k=>$v):?>
+                            <option value = '<?php echo $k;?>' <?php echo in_array($k, $gids) ? 'selected="selected"':''; ?>><?php echo $v['name'];?></option>
+                            <?php endforeach;?>
+                        </select>
+                        <p class="mt-2 text-grey small">按住Ctrl多选</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 form-control-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>...">提交</button>
+                    </div>
+                </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 form-control-label"></label>
+                        <div class="col-sm-10" style = "font-size: 14px; ">
+                            <b>有任何疑问请联系客服QQ：1069971363，更多插件请访问：http://www.nciaer.com</b>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+<script>
+    var jform = $("#form");
+    var jsubmit = $("#submit");
+    var referer = '<?php echo url("plugin-setting-nciaer_pushbaidu");?>';
+    jform.on('submit', function () {
+        jform.reset();
+        jsubmit.button('loading');
+        var postdata = jform.serialize();
+        $.xpost(jform.attr('action'), postdata, function (code, message) {
+            if (code == 0) {
+                $.alert(message);
+                jsubmit.text(message).delay(1000).button('reset').location(referer);
+            } else {
+                console.log(message);
+                $.alert('提交失败！');
+                jsubmit.button('reset');
+            }
+        });
+        return false;
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

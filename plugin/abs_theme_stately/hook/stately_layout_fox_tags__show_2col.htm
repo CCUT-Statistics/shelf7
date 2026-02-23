@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col-lg-9 main">
+        <?php if($abs_theme_stately_setting['ui_tweek']['global']['breadcrumb_position'] === 'default'): ?>
+        <!--{hook stately_breadcrumb.htm}-->
+        <?php endif; ?>
+        <div class="card-threadlist">
+            <div class="mb-3 d-flex justify-content-between">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="<?php echo url('tag-'.$tagid); ?>">
+                            <?= lang('new_thread');?>
+                        </a>
+                    </li>
+                </ul>
+                <!--{hook stately_fox_tags_show_threadlist_dropdown_menu.htm}-->
+            </div>
+            <!--{hook stately_threadlist_before.htm}-->
+            <div class="<?= $stately_threadlist_class_add ?>">
+                <ul class="list-unstyled threadlist row g-0 mb-0" data-style="<?= $stately_threadlist_style ?>">
+                    <!--{hook index_threadlist_before.htm}-->
+                    <?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+                    <!--{hook index_threadlist_after.htm}-->
+                </ul>
+            </div>
+        </div>
+        <?php include _include(APP_PATH.'view/htm/thread_list_mod.inc.htm');?>
+        <!--{hook forum_page_before.htm}-->
+        <nav class="my-3">
+            <ul class="pagination justify-content-center flex-wrap">
+                <?= $pagination; ?>
+            </ul>
+        </nav>
+        <!--{hook forum_page_after.htm}-->
+    </div>
+    <div class="col-lg-3 aside">
+        
+        <?php if($abs_theme_stately_setting['ui_style']['forum']['style_forum_info'] === 'side_classic'): ?>
+<div class="card card-forum-info mb-3">
+    <div class="card-body text-center">
+        <img loading="lazy" decoding="async" class="img-fluid w-px-100 mb-2" src="<?= $this_tag_cover_url ?>">
+        <h5 class="h4">
+            <?= $tagname ?>
+        </h5>
+        <div class="follow_tag text-center mb-3">
+            <a role="button" href="javascript:;" id="follow_tag" onclick="follow_tag('<?=  $query['tagid']; ?>')" class="btn <?=  !$is_follow ? 'btn-primary' : 'btn-secondary'; ?> btn-sm">
+                <?= $is_follow ? '已关注' : '关注标签'; ?>
+            </a>
+        </div>
+        <div class="text-left line-height-2">
+            <?= $this_tag_brief ?>
+        </div>
+        <?php if (!empty($group['allowtags2'])) { ?>
+            <div class="text-center">
+                <a href="<?=  url('tag-edit-'.$tagid); ?>" role="button" class="btn btn-secondary btn-sm">
+                    <i class="la la-edit"></i>
+                    <?= lang('edit') ?>
+                </a>
+            </div>
+            <?php } ?>
+    </div>
+    <div class="card-footer p-2">
+        <table class="w-100 small">
+            <tr align="center">
+                <td>
+                    <span class="text-muted">
+                        成员数
+                    </span><br>
+                    <b>
+                        <?=  $query['fans']; ?>
+                    </b>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<?php endif; ?>
+
+        <?php $tag_show_new = fox_tag_show_new(20);
+            if (!empty($tag_show_new)) { ?>
+        <div class="card">
+            <div class="card-header">最新帖子</div>
+            <div class="card-body ">
+                <ul class="list-unstyled p-0 m-0 w-100">
+                    <?php foreach ($tag_show_new as $_new) { ?>
+                    <li class="text-truncate w-100 py-1"><i class="la la-caret-right mr-1"></i> <a href="<?php echo url('thread-'.$_new['tid']); ?>">
+                            <?php echo $_new['subject']; ?>
+                        </a></li>
+                    <?php } /* endforeach */ ?>
+                </ul>
+            </div>
+        </div>
+        <?php 
+    unset($tag_show_new);
+    } /* endif; */ ?>
+        <!--{hook widget_slot_forum.htm}-->
+    </div>
+</div>

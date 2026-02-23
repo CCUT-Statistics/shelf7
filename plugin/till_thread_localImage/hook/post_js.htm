@@ -1,0 +1,235 @@
+<div id="e_bbar" class="bbar" hidden>
+  <a id='localimg' href="javascript:;" onclick="localimg();return false;" id="e_chck">本地化图片</a>
+  <a id='fromwx' href="javascript:;" onclick="fromwx();return false;" id="e_chck">一键获取公众号文章</a>
+</div>
+<script id="zz_iqismart_editplus_js">
+  /*=============================================
+    =                   工具函数                   =
+    =============================================*/
+
+
+
+  if (window.tinymce) {
+    $('#e_resize').hide();
+  }
+
+  function isUndefined(variable) {
+    return typeof variable == 'undefined' ? true : false;
+  }
+
+  function setTitle(title) {
+    $("#subject").val(title.trim());
+  }
+
+  function setContent(content) {
+    try {
+      $('#message').val(content);
+      tinyMCE.editors['message'].setContent(content);
+      localimg_tiny();
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  function doane(event, preventDefault, stopPropagation) {
+    // 阻止默认行为和事件传播
+    var preventDefault = isUndefined(preventDefault) ? 1 : preventDefault;
+    var stopPropagation = isUndefined(stopPropagation) ? 1 : stopPropagation;
+    e = event ? event : window.event;
+    if (!e) {
+      e = getEvent();
+    }
+    if (!e) {
+      return null;
+    }
+    if (preventDefault) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      } else {
+        e.returnValue = false;
+      }
+    }
+    if (stopPropagation) {
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      } else {
+        e.cancelBubble = true;
+      }
+    }
+    return e;
+  }
+
+  /*============  End of 工具函数  =============*/
+
+  /*=============================================
+  =                   业务函数                   =
+  =============================================*/
+
+  function localimg_tiny() {
+    var localimg_tiny_have_error = false;
+
+
+    var count = 1;
+    $('#message_ifr').contents().find('.mce-content-body').find('img').each(function() {
+      var img = $(this);
+      var src = img.attr('src');
+
+      if (src.startsWith('http') || src.startsWith('//')) {
+
+        console.log('本地化图片 正在本地化第' + count + '张图片，请稍后...');
+
+        $.ajax({
+          url: xn.url('iqismart_localimg'), //请求路径
+          async: false,
+          data: {
+            url: src
+          },
+          type: "POST", //GET
+          dataType: "JSON", //需要返回JSON对象(如果Ajax返回的是手动拼接的JSON字符串,需要Key,Value都有引号)
+          success: function(res) {
+            //处理 resp.responseText;
+            console.log(res);
+            //var val = $('#message').val();
+            var val = tinyMCE.editors['message'].getContent();
+            for (i = 0; i < 100; i++) {
+              val = val.replace(img.attr('src'), res.message);
+            }
+
+            tinyMCE.editors['message'].setContent(val);
+            img.attr('src', res.message);
+
+            if (typeof $.toast === 'function') {
+              $.toast({
+                title: '本地化图片',
+                content: '第' + count + '张图片，本地化完成!',
+                type: 'success',
+                pause_on_hover: false,
+                delay: 1000
+              });
+            } else {
+              console.info('本地化图片 第' + count + '张图片，本地化完成!');
+            }
+
+
+
+
+            count++;
+
+          },
+          error: function(a, b, c) {
+            //a 表示错误对象，b 表示错误的状态码，c 表示错误的详细信息
+            localimg_tiny_have_error = true;
+            console.error('Error ' + b + ' : ' + c + ' ( ' + a + ' ) ');
+            if (typeof $.toast === 'function') {
+              $.toast({
+                title: '本地化图片',
+                subtitle: b,
+                content: c,
+                type: 'danger',
+                pause_on_hover: false,
+                delay: 5000
+              });
+            }
+          }
+        });
+
+        if (localimg_tiny_have_error === false) {
+          if (typeof $.toast === 'function') {
+            $.toast({
+              title: '本地化图片',
+              content: '全部完成!!',
+              type: 'success',
+              pause_on_hover: false,
+              delay: 2000
+            });
+          } else {
+            console.info('本地化图片 全部完成!!');
+          }
+        }
+      }
+    })
+  }
+
+  function fromwx() {
+    var pro = prompt("请填写公众号文章URL:");
+    if (pro && pro.length > 0) {
+      console.log(pro);
+      toastr["info"]("正在抓取请稍后");
+      $.post('//cloud.iqismart.com/crawler', {
+        'url': pro,
+      }, function(res) {
+        if (res.code == 0) {
+          toastr["success"]("抓取成功");
+          setTitle(res.data.title);
+          setContent(res.data.content);
+        } else {
+          alert(res.message);
+        }
+      }, 'json');
+    }
+  }
+
+  /*============  End of 业务函数  =============*/
+
+
+
+  /*=============================================
+  =                   Init                   =
+  =============================================*/
+
+  $(function() {
+    var inte = setInterval(function() {
+      if ($('.tox-statusbar').length > 0) {
+        console.log("$('.tox-statusbar').length>0");
+
+        if ($('.tox-statusbar').find('#localimg').length > 0) {
+          clearInterval(inte);
+        } else {
+          $('#localimg').css('padding', '0px 5px');
+          $('#localimg').attr('onclick', 'localimg_tiny()');
+          $('.tox-statusbar__text-container').append($('#localimg'));
+
+          $('#fromwx').css('padding', '0px 5px');
+          $('.tox-statusbar__text-container').append($('#fromwx'));
+
+
+          $('#message_ifr').contents().find('.mce-content-body').bind('paste', function() {
+            if (typeof $.toast === 'function') {
+              $.toast({
+                title: '本地化图片',
+                content: '正在处理...',
+                type: 'info',
+                pause_on_hover: true,
+                delay: 1000
+              });
+            } else {
+              console.info('本地化图片 正在处理');
+            }
+            setTimeout(function() {
+              localimg_tiny();
+            }, 2000);
+          })
+          $('#message').bind('paste', function() {
+            if (typeof $.toast === 'function') {
+              $.toast({
+                title: '本地化图片',
+                content: '正在处理...',
+                type: 'info',
+                pause_on_hover: true,
+                delay: 1000
+              });
+            } else {
+              console.info('本地化图片 正在处理');
+            }
+            setTimeout(function() {
+              localimg_tiny();
+            }, 2000);
+          })
+
+        }
+      }
+    }, 1000);
+    console.log('编辑器增强启动成功');
+  });
+  /*============  End of Init  =============*/
+</script>

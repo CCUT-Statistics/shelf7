@@ -1,0 +1,45 @@
+<?php if( function_exists("xn_nav_menu") ): ?>
+<div class="row">
+    <div class="col-lg-12 main">
+        <!--{hook slider_slot_1.htm}-->
+        <!--{hook widget_sitestats_v4.htm}-->
+        <!--{hook mobile_index_main_start.htm}-->
+        <!--{hook index_main_start.htm}-->
+        <div class="row">
+            <?php 
+            xn_nav_menu(array(
+                'menu'            => 'portalpage',
+                'container'       => false,
+                'no_ul'           => true,
+                'no_li'           => true,
+                ));
+                ?>
+        </div>
+        <!--{hook mobile_index_page_end.htm}-->
+        <!--{hook index_page_end.htm}-->
+
+        <?php if($route === 'index' && $abs_theme_stately_setting['ui_style']['homepage']['still_show_threadlist']): ?>
+        <!--{hook stately_layout_homepage__classic_2col.htm}-->
+        <?php endif; ?>
+    </div>
+</div>
+<?php else: ?>
+<div class="card-message card text-center my-4 mx-auto">
+    <div class="card-body">
+        <span class="badge rounded-pill bg-label-info fs-xlarge mb-4">
+            <i class="las la-pencil-ruler fs-1"></i>
+        </span>
+        <div class="lead">
+            <?php if($gid === 1): ?>
+            <p>请安装“菜单”插件，才能使用本页面。</p>
+            <p>Please install the "Menu" plugin to use this page.</p>
+            <a href="admin/" class="btn btn-primary">进入后台 Go to admin</a>
+            <?php else: ?>
+            <p>本页面正在施工，请稍后过来看看吧。</p>
+            <p>The page is under construction, please come and see it later.</p>
+            
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

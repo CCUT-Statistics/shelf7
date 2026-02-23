@@ -1,0 +1,532 @@
+<?php
+
+/**
+ * @param int $group_number 帖子组的编号
+ * @param array $conditions 查询的条件
+ * @param array $order 排序方式
+ * @param int $pagesize 每页显示的帖子数量
+ * @param string $cache_key_prefix 缓存键的前缀
+ * @param int $cache_time 缓存的有效期（秒）
+ * @return array 帖子数组
+ */
+
+function stately_process_thread_group($group_number, $conditions, $order, $pagesize, $cache_key_prefix, $cache_time) {
+    global $abs_theme_stately_setting;
+    if (empty($pagesize) || is_null($pagesize)) {
+        $pagesize = 20;
+    } else {
+        $pagesize = intval($pagesize);
+    }
+    $_post_excerpt_length = $abs_theme_stately_setting['ui_tweek']['threadlist']['thread_excerpt_length'];
+    $cache_key = $cache_key_prefix . $group_number;
+    $stately_portal_v3_threadlist_group = cache_get($cache_key);
+
+    if (is_null($stately_portal_v3_threadlist_group)) {
+        $stately_portal_v3_threadlist_group = db_find('thread', $conditions, $order, 1, $pagesize);
+
+        foreach ($stately_portal_v3_threadlist_group as &$_thread) {
+            thread_format($_thread);
+            $_thread['user'] = user_format($_thread['user']);
+            $_post_message = post_read_cache($_thread['firstpid']);
+
+            $_post_message_full = isset($_post_message['message_fmt']) ? $_post_message['message_fmt'] : (isset($_post_message['message']) ? $_post_message['message'] : '');
+            $_post_message_image = stately_catch_post_imgs($_post_message_full, true);
+
+            if (!isset($_thread['cover']) || (isset($_thread['cover']) && empty($_thread['cover']))) {
+                if (!empty($_post_message_image)) {
+                    $_thread['cover'] = $_post_message_image;
+                } else {
+                    $_thread['cover'] = $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/img/' . (intval($_thread['tid']) % 10) . '.jpg';
+                }
+            }
+
+            $_post_message_full = str_replace(PHP_EOL, "", $_post_message_full);
+            $_post_message_full = preg_replace("/\[(music|netdisk|thread=(.*)|url)\]/i", "[…]", $_post_message_full);
+            $_post_message_full = preg_replace("/\[(login|reply|ttlogin|ttreply|tabs|tabs_pane(.*)|url)\](.*)\[\/(login|reply|ttlogin|ttreply|tabs|tabs_pane(.*)|url)\]/i", "[…]", $_post_message_full);
+
+            $_post_message_full = preg_replace_callback("/\[img\](.*?)\[\/img\]/is", function ($match) {
+                $file_name = "";
+                if (!empty($match[1])) {
+                    $start = strrpos($match[1], '/') + 1;
+                    $end = strrpos($match[1], '.') - (strrpos($match[1], '/') + 1);
+                    $file_name = substr($match[1], $start, $end);
+                }
+                return '<img loading="lazy" decoding="async" src="' . $match[1] . '" class="img-fluid" alt="' . $file_name . '" loading="lazy">';
+            }, $_post_message_full);
+
+            $_post_message_full = preg_replace_callback("/\[img width=(\d+),height=(\d+)\](.*?)\[\/img\]/is", function ($match) {
+                $file_name = "";
+                if (!empty($match[3])) {
+                    $start = strrpos($match[3], '/') + 1;
+                    $end = strrpos($match[3], '.') - (strrpos($match[1], '/') + 1);
+                    $file_name = substr($match[3], $start, $end);
+                }
+                return '<img loading="lazy" decoding="async" src="' . $match[3] . '" class="img-fluid" alt="' . $file_name . '" loading="lazy">';
+            }, $_post_message_full);
+
+            if (class_exists('BBCode')) {
+                $_Shortcode = new BBCode();
+                $_post_message_full = htmlspecialchars_decode($_Shortcode->toHTML(html_entity_decode($_post_message_full)));
+            }
+
+            if (isset($_thread['editornote']) && !empty($_thread['editornote'])) {
+                $_post_message_excerpt = $_thread['editornote'];
+            } elseif (isset($_thread['metadesc']) && !empty($_thread['metadesc'])) {
+                $_post_message_excerpt = $_thread['metadesc'];
+            } else {
+                $_post_message_excerpt = strip_tags(mb_substr($_post_message_full, 0, $_post_excerpt_length));
+            }
+
+            if (mb_strlen($_post_message_excerpt) >= $_post_excerpt_length) {
+                $_post_message_excerpt .= '&hellip;';
+            }
+
+            $_thread['excerpt'] = $_post_message_excerpt;
+        }
+
+        cache_set($cache_key, $stately_portal_v3_threadlist_group, $cache_time);
+    }
+    return $stately_portal_v3_threadlist_group;
+}
+$stately_portal_v3_threadlist_group_2_time_span = strtotime("-1 month");
+switch ($abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['time_span_p2']) {
+    case 'daily':
+        $stately_portal_v3_threadlist_group_2_time_span = strtotime('-1 day');
+        break;
+    case 'weekly':
+        $stately_portal_v3_threadlist_group_2_time_span = strtotime('-7 days');
+        break;
+    case 'quarterly':
+        $stately_portal_v3_threadlist_group_2_time_span = strtotime('-3 months');
+        break;
+    case 'yearly':
+        $stately_portal_v3_threadlist_group_2_time_span = strtotime('-1 year');
+        break;
+    case 'monthly':
+    default:
+        $stately_portal_v3_threadlist_group_2_time_span = strtotime('-1 month');
+        break;
+}
+
+$stately_portal_v3_threadlist_group_1 = stately_process_thread_group(1, array(), array('tid' => -1), 20, 's_portalv3_threads_g', 3600);
+
+$stately_portal_v3_threadlist_group_2 = stately_process_thread_group(2, array('create_date' => array('>' => $stately_portal_v3_threadlist_group_2_time_span)), array('views' => -1), 6, 's_portalv3_threads_g', 7200);
+
+$stately_portal_v3_threadlist_group_4 = stately_process_thread_group(4, array('fid' => max(1, intval($abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_p4']))), array('tid' => -1), 2, 's_portalv3_threads_g', 43200);
+
+$stately_portal_v3_threadlist_group_5 = stately_process_thread_group(5, array('fid' => max(1, intval($abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_p5']))), array('tid' => -1), 3, 's_portalv3_threads_g', 43200);
+
+$stately_portal_v3_threadlist_group_6 = stately_process_thread_group(6, array('fid' => max(1, intval($abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_p6']))), array('tid' => -1), 5, 's_portalv3_threads_g', 43200);
+
+$stately_portal_v3_threadlist_group_7 = stately_process_thread_group(7, array('fid' => max(1, intval($abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_p7']))), array('tid' => -1), 3, 's_portalv3_threads_g', 43200);
+
+?>
+
+<!--{hook mobile_index_main_start.htm}-->
+<!--{hook index_main_start.htm}-->
+
+<style scoped>
+    .news-push-item:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+
+    .news-push-item figure {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.375rem;
+        height: 195px;
+        margin-bottom: 0.75rem;
+
+    }
+
+    .news-push-item figure img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .news-push-item figure figcaption {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0px 20px 15px;
+        font-size: 0.8em;
+        color: var(--bs-white);
+        font-weight: 400;
+        background: linear-gradient(0deg, rgba(0, 0, 0, .9) 0%, transparent 100%);
+        opacity: 0.8;
+    }
+
+    .news-push-item:hover figure figcaption,
+    .news-push-item:focus-within figure figcaption {
+        opacity: 1;
+
+    }
+
+    .recommended-forum-item {
+        text-align: center;
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0.5rem 0 0.5rem 0;
+    }
+
+    .recommended-forum-item-icon {
+        padding: 10px;
+        background: rgba(128, 128, 128, 0.1);
+        border-radius: 0.375rem;
+        margin-bottom: 0.33rem;
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .recommended-forum-item-icon:hover,
+    .recommended-forum-item-icon:focus {
+        opacity: 0.9;
+    }
+
+    .recommended-forum-item-icon img {
+        height: 32px;
+        width: auto;
+    }
+
+    .headline ul {
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    .headline ul li {
+        list-style: inside;
+    }
+
+    .headline ul ::marker,
+    .headline ul li::marker {
+        color: var(--bs-primary);
+    }
+
+    .news-carousel-section #newsCarousel .carousel-item a {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: column;
+
+    }
+
+    .news-carousel-section #newsCarousel .carousel-item img {
+        display: block;
+        width: 100%;
+        height: 314px;
+        object-fit: cover;
+        object-position: top left;
+        border-radius: 0.375rem;
+    }
+
+    .news-carousel-section #newsCarousel .carousel-caption {
+        right: 0;
+        left: 0;
+        bottom: 0;
+        color: var(--bs-body-color) !important;
+        background-color: rgb(var(--card-background-rgb));
+        text-align: initial;
+        padding: 1.25rem 0 0 0;
+        position: static;
+    }
+
+    .news-carousel-section #newsCarousel .carousel-caption .h5 {
+        color: var(--bs-body-color) !important;
+    }
+
+    .news-carousel-section #newsCarousel .carousel-control-prev,
+    .news-carousel-section #newsCarousel .carousel-control-next {
+        bottom: unset;
+        top: 35%;
+        border-radius: 0.375rem;
+    }
+
+    .news-carousel-section:hover #newsCarousel .carousel-control-prev,
+    .news-carousel-section:hover #newsCarousel .carousel-control-next,
+    .news-carousel-section:focus-within #newsCarousel .carousel-control-prev,
+    .news-carousel-section:focus-within #newsCarousel .carousel-control-next {
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+
+    .aside-widget-text-list ul {
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    .aside-widget-text-list ul li {
+        list-style: inside;
+    }
+</style>
+
+<section id="hero_section" class="row">
+    <div class="col-lg-4">
+        <section class="card card-body news-carousel-section">
+            <section id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- 轮播项 -->
+                <div class="carousel-inner">
+                    <?php $news_carousel = array_splice($stately_portal_v3_threadlist_group_1, 0, 3); ?>
+                    <?php foreach ($news_carousel as $key => $news_carousel_item) : ?>
+                        <figure class="carousel-item <?= $key == 0 ? 'active' : '' ?>">
+                            <a href="<?= url('thread-' . $news_carousel_item['tid']) ?>">
+                                <img loading="lazy" decoding="async" src="<?= $news_carousel_item['cover'] ?>" alt="<?= $news_carousel_item['subject'] ?>" class="d-block w-100">
+                                <figcaption class="carousel-caption">
+                                    <h2 class="h5 mb-2 text-truncate"><?= $news_carousel_item['subject'] ?></h2>
+                                    <p class="m-0">...</p>
+                                </figcaption>
+                            </a>
+                        </figure>
+                    <?php endforeach;
+                    unset($news_carousel_item); ?>
+                </div>
+
+                <!-- 轮播控制按钮 -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </section>
+
+            <div class="row gx-2">
+                <div class="col-6">
+                        <a href="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn1_link_href_p1'] ?>" class="btn btn-<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn1_style_p1'] ?> btn-block btn-lg">
+                        <i class="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn1_icon_p1'] ?>"></i> <?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn1_link_text_p1'] ?></a>
+                </div>
+                <div class="col-6">
+                <a href="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn2_link_href_p1'] ?>" class="btn btn-<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn2_style_p1'] ?> btn-block btn-lg">
+                        <i class="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn2_icon_p1'] ?>"></i> <?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['btn2_link_text_p1'] ?></a>
+                </div>
+            </div>
+        </section>
+        <section class="card card-body site-stats text-center d-none d-lg-block">
+            <div class="row">
+                <div class="col-3">
+                    <p class="text-muted small mt-0 mb-1">
+                        <?= lang('threads'); ?>
+                    </p>
+                    <data class="text-primary lead m-0">
+                        <?= $runtime['threads']; ?>
+                    </data>
+                </div>
+                <div class="col-3">
+                    <p class="text-muted small mt-0 mb-1">
+                        <?= lang('posts'); ?>
+                    </p>
+                    <data class="text-primary lead m-0">
+                        <?= $runtime['posts']; ?>
+                    </data>
+                </div>
+                <div class="col-3">
+                    <p class="text-muted small mt-0 mb-1">
+                        <?= lang('users'); ?>
+                    </p>
+                    <data class="text-primary lead m-0">
+                        <?= $runtime['users']; ?>
+                    </data>
+                </div>
+                <div class="col-3">
+                    <p class="text-muted small mt-0 mb-1">
+                        <?= lang('online'); ?>
+                    </p>
+                    <data class="text-primary lead m-0">
+                        <?= $runtime['onlines']; ?>
+                    </data>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-4">
+        <section class="card card-body headline">
+            <h2 class="sr-only"><?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['title_p2'] ?></h2>
+            <?php
+            $headline_list = array_splice($stately_portal_v3_threadlist_group_2, 0, 6);
+            if (empty($headline_list)) {
+                $headline_list = array_splice($stately_portal_v3_threadlist_group_1, 0, 6);
+            }
+            $headline_list_item = array_shift($headline_list);
+            ?>
+            <div>
+                <a href="<?= url('thread-' . $headline_list_item['tid'])  ?>">
+                    <h2 class="h5 text-truncate mb-2 fw-bolder">
+                        <?= $headline_list_item['subject'] ?>
+                    </h2>
+                    <p class="text-muted mb-0" style="height: 3em;overflow:hidden"><?= $headline_list_item['excerpt']  ?></p>
+                </a>
+            </div>
+            <hr class="my-4">
+            <ul class="line-height-3">
+                <?php foreach ($headline_list as $key => $headline_list_item) : ?>
+                    <li class="text-truncate">
+                        <a class="text-muted" href="<?= url('forum-' . $headline_list_item['fid'])  ?>"><?= $headline_list_item['forumname'] ?></a>
+                        <a href="<?= url('thread-' . $headline_list_item['tid'])  ?>" class="text-body"><?= $headline_list_item['subject'] ?></a>
+                    </li>
+                <?php endforeach;
+                unset($headline_list_item); ?>
+            </ul>
+
+        </section>
+        <section class="card card-body recommended-forums">
+            <h2 class="h5"><?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['title_p3'] ?></h2>
+            <div class="row gx-3">
+                <?php
+                foreach (
+                    [
+                        $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_1_p3'],
+                        $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_2_p3'],
+                        $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_3_p3'],
+                        $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_4_p3'],
+                        $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_5_p3'],
+                        $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['forum_6_p3']
+                    ] as $value
+                ) :
+                    if (intval($value) !== 0 /*&& ($user && count(forum_list_access_filter([$value], $gid)) !== 0)*/):
+                        $this_forum = forum_read($value); ?>
+                        <div class="col-4">
+                            <a href="<?= url('forum-' . $value) ?>" class="recommended-forum-item">
+                                <span class="recommended-forum-item-icon">
+                                    <img loading="lazy" decoding="async" src="<?= $this_forum['icon_url'] ?>" alt="<?= $this_forum['name'] ?>" loading="lazy">
+                                </span>
+                                <span class="text-body"><?= $this_forum['name'] ?></span>
+                            </a>
+                        </div>
+                <?php endif;
+                endforeach; ?>
+
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-4">
+        <section class="card card-body news-push">
+            <h2 class="h5">
+                <span class="section-title-icon badge bg-label-<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_color_p4'] ?>"><i class="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_p4'] ?>"></i>
+            </span>
+                <?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['title_p4'] ?></h2>
+            <div class="row">
+                <?php $news_flash_list = array_splice($stately_portal_v3_threadlist_group_4, 0, 2); ?>
+                <?php foreach ($news_flash_list as $key => $news_flash_list_item) : ?>
+                    <article class="col-6 col-lg-12 news-push-item">
+                        <a href="#">
+                            <figure>
+                                <img loading="lazy" decoding="async" src="<?= $news_flash_list_item['cover'] ?>" alt="<?= $news_flash_list_item['subject'] ?>" loading="lazy">
+                                <figcaption>
+                                    <span><i class="la la-eye"></i> <?= $news_flash_list_item['views'] ?></span>
+                                    <span><i class="la la-clock"></i> <?= date($abs_theme_stately_setting['global']['datetime_format']['date_only'], $news_flash_list_item['create_date']) ?></span>
+                                </figcaption>
+                            </figure>
+                        </a>
+                        <a href="<?= url('thread-' . $news_flash_list_item['tid']) ?>" class="text-body mb-2 d-block text-truncate"><?= $news_flash_list_item['subject'] ?></a>
+                        <p class="mb-0 small text-truncate"><?= $news_flash_list_item['excerpt'] ?></p>
+                    </article>
+                <?php endforeach;
+                unset($news_flash_list_item); ?>
+            </div>
+
+        </section>
+    </div>
+</section>
+<section id="main_section" class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-threadlist card-body p-0">
+
+                <!--{hook stately_threadlist_before.htm}-->
+                <div class="<?= $stately_threadlist_class_add ?>">
+
+                    <ul class="list-unstyled threadlist row g-0 mb-0" data-style="<?= $stately_threadlist_style ?>">
+                        <!--{hook index_threadlist_before.htm}-->
+                        <?php include _include(APP_PATH . 'view/htm/thread_list.inc.htm'); ?>
+                        <!--{hook index_threadlist_after.htm}-->
+                    </ul>
+                </div>
+
+                <!--{hook stately_threadlist_pagination.htm}-->
+            </div>
+        </div>
+        <?php include _include(APP_PATH . 'view/htm/thread_list_mod.inc.htm'); ?>
+
+    </div>
+    <aside class="col-lg-4">
+
+        <!--{hook index_site_brief_before.htm}-->
+
+
+        <section class="card card-body aside-widget-small-pic-list">
+            <h2 class="h5">
+                <span class="section-title-icon badge bg-label-<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_color_p5'] ?>"><i class="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_p5'] ?>"></i>
+            </span>
+            <?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['title_p5'] ?></h2>
+            <?php foreach ($stately_portal_v3_threadlist_group_5 as $key => $popular_articles_list_item) : ?>
+                <a href="<?= url('thread-' . $popular_articles_list_item['tid']) ?>" class="text-body mb-2">
+                    <article class="row gx-3 gy-3 align-items-center ">
+                        <div class="col-4 col-sm-3 col-lg-4">
+                            <img loading="lazy" decoding="async" src="<?= $popular_articles_list_item['cover'] ?>" alt="<?= $popular_articles_list_item['subject'] ?>" class="rounded img-fluid ">
+                        </div>
+                        <div class="col-8 col-sm-9 col-lg-8">
+                            <p class="recommended-reading-title fw-bolder mb-1 text-truncate"><?= $popular_articles_list_item['subject'] ?></p>
+                            <p class="text-muted small m-0">
+                                <?= mb_substr($popular_articles_list_item['excerpt'],0,50) ?></p>
+                        </div>
+                    </article>
+                </a>
+            <?php endforeach;
+            unset($popular_articles_list_item); ?>
+
+
+        </section>
+        <section class="card card-body aside-widget-text-list">
+            <h2 class="h5">
+            <span class="section-title-icon badge bg-label-<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_color_p6'] ?>"><i class="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_p6'] ?>"></i>
+        </span>
+                <?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['title_p6'] ?>
+            </h2>
+            <ul class="line-height-3">
+                <?php foreach ($stately_portal_v3_threadlist_group_6 as $key => $popular_articles_list_item) : ?>
+                    <li class="text-truncate"><a href="<?= url('thread-' . $popular_articles_list_item['tid']) ?>"><?= $popular_articles_list_item['subject'] ?></a></li>
+                <?php endforeach;
+                unset($popular_articles_list_item); ?>
+            </ul>
+        </section>
+        <section class="card card-body aside-widget-large-pic-list">
+            <h2 class="h5">
+            <span class="section-title-icon badge bg-label-<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_color_p7'] ?>"><i class="<?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['icon_p7'] ?>"></i>
+            </span>
+            <?= $abs_theme_stately_setting['ui_tweek']['homepage_portal_v3']['title_p7'] ?>
+            </h2>
+            <div class="row">
+                <?php foreach ($stately_portal_v3_threadlist_group_7 as $key => $popular_articles_list_item) : ?>
+                    <article class="col-6 col-lg-12 news-push-item">
+                        <a href="<?= url('thread-' . $popular_articles_list_item['tid']) ?>">
+                            <figure>
+                                <img loading="lazy" decoding="async" src="<?= $popular_articles_list_item['cover'] ?>" alt="<?= $popular_articles_list_item['subject'] ?>" loading="lazy">
+                            </figure>
+                        </a>
+                        <a href="<?= url('thread-' . $popular_articles_list_item['tid']) ?>" class="text-body mb-2 d-block text-truncate"><?= $popular_articles_list_item['subject'] ?></a>
+                        <p class="mb-0 small text-truncate"><?= mb_substr($popular_articles_list_item['excerpt'],0,50) ?></p>
+                    </article>
+                <?php endforeach;
+                unset($popular_articles_list_item); ?>
+
+            </div>
+
+        </section>
+        <!--{hook widget_sitestats.htm}-->
+        
+        <!--{hook index_site_brief_after.htm}-->
+        
+    </aside>
+</section>
+
+
+<!--{hook mobile_index_page_end.htm}-->
+<!--{hook index_page_end.htm}-->

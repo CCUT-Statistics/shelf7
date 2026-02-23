@@ -1,0 +1,21 @@
+<div class="card card-site-info overflow-hidden" data-style="v2">
+    <?php switch($abs_theme_stately_setting['ui_tweek']['homepage_sitebrief']['v2_background_style']){ case 'logo':  ?>
+    <div class="user-profile-header-banner rounded-top h-px-100 " style='background:<?= kumquat_css_background_image_assemble(array("background-url" => $abs_theme_stately_setting["global"]["icon"]["logo"],"background-position" => "center center","background-size" => "cover","background-repeat" => "no-repeat","background-attachment" => "initial"));?>'></div>
+    <?php break; case 'image': ?>
+    <div class="user-profile-header-banner rounded-top h-px-100 " style='background:<?= kumquat_css_background_image_assemble($abs_theme_stately_setting["ui_tweek"]["homepage_sitebrief"]["v2_background_image"]);?>'></div>
+    <?php break; default: /* none */ ?>
+    <div class="h-px-50 dummy"></div>
+    <?php break; } /* endswitch */ ?>
+    <div class="user-profile-header">
+        <img loading="lazy" decoding="async" class="w-px-50 card mb-0 p-2 ml-3" src="<?= $abs_theme_stately_setting['global']['icon']['logo'] ?>">
+    </div>
+    <div class="card-body pt-2">
+        <!--{hook index_site_brief_start.htm}-->
+        <h2 class="h5"><?= $conf['sitename']; ?></h2>
+        <div>
+            <?= $conf['sitebrief']; ?>
+        </div>
+        <!--{hook index_site_brief_end.htm}-->
+
+    </div>
+</div>

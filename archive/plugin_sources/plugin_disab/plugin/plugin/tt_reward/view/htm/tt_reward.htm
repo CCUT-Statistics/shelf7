@@ -1,0 +1,66 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');
+$tid = param(2, 0); $set_reward= setting_get('tt_reward');
+$_thread = thread_read($tid);
+if(!$_thread) die();
+$is_have_reward = tt_have_reward($group);
+$is_rewarded = db_count('reward',array('tid'=>$tid,'uid'=>$uid));
+$reward_count =db_count('reward',array('tid'=>$tid)); ?>
+<div style="margin-bottom:8px;text-align:center;width:100%;"><a href="<?php echo url("user-$_thread[uid]");?>" class="mr-3" tabindex="-1"><img class="avatar-2" src="<?php echo $_thread['user']['avatar_url'];?>">&nbsp;<?php echo $_thread['user']['username'];?></a><br>该主题共收到 <span style="color:darkorange;font-weight:bold;"><?php echo $reward_count;?></span>笔 打赏。<a href="<?php echo url('thread-sReward-'.$tid.'-1');?>">查看记录</a>。
+</div>
+<?php if($is_have_reward && !$is_rewarded && $uid!=$_thread['uid']){?>
+<form id="reward_form" method="post" action="<?php echo url('thread-reward-'.$tid);?>">
+<?php if($group['reward_from1']!='0' || $group['reward_to1']!='0') {?><div class="input-group mb-3">
+    <div class="input-group-prepend" style="width:25%"><span class="input-group-text" style="width:100%"><?php echo lang('credits1'); ?></span></div>
+    <input type="text" class="form-control" name="credits1" id="credits1" placeholder="<?php echo $group['reward_from1'].' ~ '.$group['reward_to1'];?>"/>
+</div><?php }?>
+<?php if($group['reward_from2']!='0' || $group['reward_to2']!='0') {?><div class="input-group mb-3">
+    <div class="input-group-prepend" style="width:25%"><span class="input-group-text" style="width:100%"><?php echo lang('credits2'); ?></span></div>
+    <input type="text" class="form-control" name="credits2" id="credits2" placeholder="<?php echo $group['reward_from2'].' ~ '.$group['reward_to2'];?>"/>
+</div><?php }?>
+<?php if($group['reward_from3']!='0' || $group['reward_to3']!='0') {?><div class="input-group mb-3">
+    <div class="input-group-prepend" style="width:25%"><span class="input-group-text" style="width:100%"><?php echo lang('credits3'); ?> (分)</span></div>
+    <input type="text" class="form-control" name="credits3" id="credits3" placeholder="<?php echo $group['reward_from3'].' ~ '.$group['reward_to3'];?>"/>
+</div><?php }?>
+<div style="width:100%;text-align:center;"><button type="button" class="btn btn-outline-primary" id="reward_submit"><?php echo lang('reward');?></button></div>
+</form><?php }?>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script ajax-eval="true">
+    var jbutton=$("#reward_submit"); var jform=$("#reward_form");
+    jbutton.on('click',function(){
+        if(confirm('您确定要打赏作者吗?')){
+            jbutton.button('loading');
+            var postdata=jform.serialize();
+            jform.reset();
+            $.xpost(jform.attr('action'),postdata,function(code,message){
+                if(code==0) {alert(message);location.reload();}
+                else alert(message);
+                jbutton.button('reset');
+            });
+        }
+    });
+    <?php if($group['reward_from1']!='0' || $group['reward_to1']!='0') {?>
+    $("#credits1").keyup(function () {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    }).bind("paste", function () {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    }).css("ime-mode", "disabled").blur(function() {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    });
+    <?php }?><?php if($group['reward_from1']!='0' || $group['reward_to1']!='0') {?>
+    $("#credits2").keyup(function () {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    }).bind("paste", function () {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    }).css("ime-mode", "disabled").blur(function() {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    });
+    <?php }?><?php if($group['reward_from1']!='0' || $group['reward_to1']!='0') {?>
+    $("#credits3").keyup(function () {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    }).bind("paste", function () {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    }).css("ime-mode", "disabled").blur(function() {
+        $(this).val($(this).val().replace(/[^0-9-]/g, ''));
+    });
+    <?php }?>
+</script>

@@ -1,0 +1,6 @@
+<?php empty($sg_sign_kv['sign10']) AND $sg_sign_kv = kv_get('sg_sign'); ?>
+<style>
+    .sg_sign .mibbs_signpanel {
+        background-color: <?='#' . $sg_sign_kv['sign10'] ?>;
+    }
+</style>

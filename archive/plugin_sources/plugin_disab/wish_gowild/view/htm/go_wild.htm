@@ -1,0 +1,66 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<style type="text/css">
+.wrapper {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.logo, .wrapper {
+    margin: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    max-width: 540px;
+}
+.actions {
+    margin-top: 15px;
+    padding-top: 30px;
+    text-align: right;
+    border-top: 1px solid #d8d8d8;
+}
+.button {
+    display: inline-block;
+    padding: 10px 16px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1;
+    background-color: #0077d9;
+    border-radius: 3px;
+}
+h1 {
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+}
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+.button {
+    font-size: 16px;
+}
+.link {
+    margin-top: 12px;
+    word-wrap: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+</style>
+<div class="wrapper">
+    <div class="content">
+        <h1><?php echo !empty($wish_gowild['main_title'])?$wish_gowild['main_title']:'即将离开柒月笔记';?></h1>
+        <p class="info"><?php echo !empty($wish_gowild['sub_title'])?$wish_gowild['sub_title']:'您即将离开七月笔记，请注意您的帐号和财产安全。';?></p>
+        <p class="link"><?php echo $wish_url;?></p>
+    </div>
+    <div class="actions">
+        <a class="button" href="<?php echo $wish_url;?>"><?php echo !empty($wish_gowild['btn_text'])?$wish_gowild['btn_text']:'继续访问';?></a>
+    </div>
+</div>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>

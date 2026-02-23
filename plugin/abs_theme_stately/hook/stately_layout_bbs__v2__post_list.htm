@@ -1,0 +1,162 @@
+<?php
+function stately_process_thread_group($group_number, $conditions, $order, $pagesize, $cache_key_prefix, $cache_time) {
+    global $abs_theme_stately_setting;
+
+    $_post_excerpt_length = $abs_theme_stately_setting['ui_tweek']['threadlist']['thread_excerpt_length'];
+    $cache_key = $cache_key_prefix . $group_number;
+    $stately_portal_v2_threadlist_group = cache_get($cache_key);
+
+    if (is_null($stately_portal_v2_threadlist_group)) {
+        $stately_portal_v2_threadlist_group = db_find('thread', $conditions, $order, 1, 20);
+
+        foreach ($stately_portal_v2_threadlist_group as $key => &$_thread) {
+            thread_format($_thread);
+            $_thread['user'] = user_format($_thread['user']);
+            $_post_message = post_read_cache($_thread['firstpid']);
+
+            $_post_message_full = isset($_post_message['message_fmt']) ? $_post_message['message_fmt'] : (isset($_post_message['message']) ? $_post_message['message'] : '');
+            $_post_message_image = stately_catch_post_imgs($_post_message_full, true);
+
+            if (!isset($_thread['cover']) || (isset($_thread['cover']) && empty($_thread['cover']))) {
+                if (!empty($_post_message_image)) {
+                    $_thread['cover'] = $_post_message_image;
+                } else {
+                    $_thread['cover'] = $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] . 'view/img/' . (intval($_thread['tid']) % 10) . '.jpg';
+                }
+            }
+
+            $_post_message_full = str_replace(PHP_EOL, "", $_post_message_full);
+            $_post_message_full = preg_replace("/\[(music|netdisk|thread=(.*)|url)\]/i", "[…]", $_post_message_full);
+            $_post_message_full = preg_replace("/\[(login|reply|ttlogin|ttreply|tabs|tabs_pane(.*)|url)\](.*)\[\/(login|reply|ttlogin|ttreply|tabs|tabs_pane(.*)|url)\]/i", "[…]", $_post_message_full);
+
+            $_post_message_full = preg_replace_callback("/\[img\](.*?)\[\/img\]/is", function ($match) {
+                $file_name = "";
+                if (!empty($match[1])) {
+                    $start = strrpos($match[1], '/') + 1;
+                    $end = strrpos($match[1], '.') - (strrpos($match[1], '/') + 1);
+                    $file_name = substr($match[1], $start, $end);
+                }
+                return '<img loading="lazy" decoding="async" src="' . $match[1] . '" class="img-fluid" alt="' . $file_name . '" loading="lazy">';
+            }, $_post_message_full);
+
+            $_post_message_full = preg_replace_callback("/\[img width=(\d+),height=(\d+)\](.*?)\[\/img\]/is", function ($match) {
+                $file_name = "";
+                if (!empty($match[3])) {
+                    $start = strrpos($match[3], '/') + 1;
+                    $end = strrpos($match[3], '.') - (strrpos($match[1], '/') + 1);
+                    $file_name = substr($match[3], $start, $end);
+                }
+                return '<img loading="lazy" decoding="async" src="' . $match[3] . '" class="img-fluid" alt="' . $file_name . '" loading="lazy">';
+            }, $_post_message_full);
+
+            if (class_exists('BBCode')) {
+                $_Shortcode = new BBCode();
+                $_post_message_full = htmlspecialchars_decode($_Shortcode->toHTML(html_entity_decode($_post_message_full)));
+            }
+
+            if (isset($_thread['editornote']) && !empty($_thread['editornote'])) {
+                $_post_message_excerpt = $_thread['editornote'];
+            } elseif (isset($_thread['metadesc']) && !empty($_thread['metadesc'])) {
+                $_post_message_excerpt = $_thread['metadesc'];
+            } else {
+                $_post_message_excerpt = strip_tags(mb_substr($_post_message_full, 0, $_post_excerpt_length));
+            }
+
+            if (mb_strlen($_post_message_excerpt) >= $_post_excerpt_length) {
+                $_post_message_excerpt .= '&hellip;';
+            }
+
+            $_thread['excerpt'] = $_post_message_excerpt;
+        }
+
+        cache_set($cache_key, $stately_portal_v2_threadlist_group, $cache_time);
+    }
+    return $stately_portal_v2_threadlist_group;
+}
+$stately_portal_v2_threadlist_group_2_time_span = strtotime("-1 month");
+switch($abs_theme_stately_setting['ui_tweek']['homepage_portal_v2']['time_span_p2']) {
+    case 'daily': 
+    $stately_portal_v2_threadlist_group_2_time_span = strtotime('-1 day');
+    break;
+    case 'weekly': 
+    $stately_portal_v2_threadlist_group_2_time_span = strtotime('-7 days');
+    break;
+    case 'quarterly': 
+    $stately_portal_v2_threadlist_group_2_time_span = strtotime('-3 months');
+    break;
+    case 'yearly': 
+    $stately_portal_v2_threadlist_group_2_time_span = strtotime('-1 year');
+    break;
+    case 'monthly': 
+    default:
+    $stately_portal_v2_threadlist_group_2_time_span = strtotime('-1 month');
+    break;
+}
+
+$stately_portal_v2_threadlist_group_1 = stately_process_thread_group(1, array(), array('tid' => -1), 20, 's_portal_threads_g', 3600);
+?>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        <section class="card mb-4">
+            <div class="news-carousel card overflow-hidden" title="轮播图">
+                <?php $news_carousel = array_splice($stately_portal_v2_threadlist_group_1, 0, 5); ?>
+                <div id="news_carousel" class="carousel slide " data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php foreach ($news_carousel as $key => $news_carousel_item) : ?>
+                            <div class="carousel-item <?= $key == 0 ? 'active' : '' ?>">
+                                <a href="<?= url('thread-' . $news_carousel_item['tid']) ?>">
+                                    <img loading="lazy" decoding="async" src="<?= $news_carousel_item['cover'] ?>" alt="<?= $news_carousel_item['subject'] ?>" class="d-block w-100">
+                                    <div class="carousel-caption">
+                                        <p class="lead"><?= $news_carousel_item['subject'] ?></p>
+                                    </div>
+                                </a>
+                            </div>
+                        <?php endforeach;
+                        unset($news_carousel_item); ?>
+                    </div>
+    
+                    <button class="carousel-control-prev" type="button" data-bs-target="#news_carousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#news_carousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-6">
+        <div class="nav-align-top">
+            <ul class="nav nav-tabs nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tab_homepaage_1">
+                        <?= lang('news_list');?>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab_homepaage_2">
+                        <?= lang('post_list');?>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab_homepaage_3">
+                        <?= lang('digest_list');?>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab_homepaage_1">
+                    <!--{hook stately_layout_bbs__v1__news_list.htm}-->
+                </div>
+                <div class="tab-pane fade" id="tab_homepaage_2">
+                    <!--{hook stately_layout_bbs__v1__post_list.htm}-->
+                </div>
+                <div class="tab-pane fade" id="tab_homepaage_3">
+                    <!--{hook stately_layout_bbs__v1__digest_list.htm}-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

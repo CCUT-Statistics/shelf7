@@ -1,0 +1,11 @@
+<div class="card card-body mb-3" data-style="foruminfo-compact_v2">
+    <h1 class="h3 m-0 text-center">
+        <?= $forum['name'];?>
+    </h1>
+    <div class="mt-2 text-center">
+        <?= $forum['brief'];?>
+    </div>
+    <button type="button" class="btn btn-link pb-0" data-bs-toggle="modal" data-bs-target="#forumInfoModal"><i class="la la-comment"></i> 关于版块</button>
+</div>
+
+    <!--{hook stately_modal_foruminfo.htm}-->

@@ -1,0 +1,1 @@
+$arr['cover_url'] = param('cover_url','');

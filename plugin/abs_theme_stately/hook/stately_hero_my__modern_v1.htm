@@ -1,0 +1,50 @@
+<div class="card mb-4" data-style="modern_v1">
+    <div class="user-profile-header-banner rounded-top"
+         <?php if(function_exists('cover_get_cover_url_by_uid') && isset($user['cover_url']) && !empty($user['cover_url'])): ?> style="background-image:url(
+        <?= cover_get_cover_url_by_uid($user['uid']) ?>);background-size:cover"
+        <?php endif; ?> >
+    </div>
+    <div class="user-profile-header d-flex flex-column flex-sm-row mb-4">
+        <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
+            <div class="v_avatar v_avatar-user">
+                <!--{hook my_common_avatar_before.htm}-->
+                <img loading="lazy" decoding="async" src="<?= $user['avatar_url'];?>" alt="user image" class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img" loading="lazy">
+                <!--{hook my_common_avatar_after.htm}-->
+                <div class="img-shadow">
+                    <img loading="lazy" decoding="async" src="<?= $user['avatar_url'];?>" loading="lazy">
+                </div>
+            </div>
+        </div>
+        <div class="flex-grow-1 mt-3 mt-sm-5">
+            <div class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-4 flex-md-row flex-column gap-4">
+                <div class="user-profile-info text-sm-start text-center ">
+                    <h1 class="h4">
+                        <!--{hook my_common_username_before.htm}-->
+                        <?= $user['username'];?>
+                        <!--{hook my_common_username_after.htm}-->
+                    </h1>
+                    <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
+                        <?php if($abs_theme_stately_setting['ui_tweek']['user']['show_usergroup_on_hero']): ?>
+                        <li>
+                            <span class="badge bg-label-primary"><?= $user['groupname'];?></span>
+                        </li>
+                        <?php endif; ?>
+                        <?php if($abs_theme_stately_setting['ui_tweek']['user']['show_uid_on_hero']): ?>
+                        <li>
+                            <span class="badge bg-label-secondary">UID: <?= $user['uid'];?></span> 
+                        </li>
+                        <?php endif; ?>
+
+                    </ul>
+                    <?php if(isset($user['signature'])): ?>
+                    <div class="mt-2">
+                        <i class="la la-pen text-info"></i>
+                        <?= !empty($user['signature']) ?htmlspecialchars_decode($user['signature']) : htmlspecialchars_decode($abs_theme_stately_setting['ui_tweek']['user']['default_signature_self']) ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <!--{hook stately_hero_my_stats.htm}-->
+            </div>
+        </div>
+    </div>
+</div>

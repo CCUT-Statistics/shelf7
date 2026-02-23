@@ -1,0 +1,69 @@
+
+	<slot name="user_body">
+	<div class="card " style="margin-left: -8px;margin-right: -8px;margin-top:0.5rem;">
+			<div class="imgbg_top" style="background:url(plugin/zaesky_theme_zhihulan/img/idback.png);background-size:cover;height:100px;">
+			
+			</div>
+			<div class="" style="padding:0px 16px;">
+				<img class="avatar-4" src="<?php echo $_user['avatar_url'];?>" style="border-radius:5px;border: 2px solid rgba(255, 255, 255, 0.5);position:absolute;margin-top:-20px;">
+				<br><span style="position: absolute;
+    left: 85px;
+    margin-top:-20px;"><b><?php echo $_user['username'];?></b>
+	<!--{hook userxx_username_after.htm}-->
+	<br/>
+				<span class="badge" style="color:white;background:#3cbbf4;">UID:<?php echo $_user['uid']; ?></span>&nbsp;<span class="badge" style="color:white;background:#ff6a00;"><?php echo $_user['groupname'];?></span>
+				<!--{hook userxx_profile_after.htm}-->
+				</span>
+				<!--{hook user_profile_username_after.htm}-->
+			
+			<div class="sl_mobile">
+			<ul style="padding-inline-start: 0px;">
+				<li><span class="text-grey">主题</span> <b><?php echo $_user['threads'];?></b></li>
+				<li><span class="text-grey">回帖</span> <b><?php echo $_user['posts'];?></b></li>
+				<li><span class="text-grey">精华</span> <b><?php echo $_user['digests'];?></b></li>
+			</ul>
+			</div>
+			<!--{hook user_mobile_profile_posts_before.htm}-->
+			
+			
+			<!--{hook user_mobile_profile_posts_after.htm}-->
+			
+			
+		
+		
+		<div class="text-grey hidden-lg" style="font-size:12px;margin-bottom:10px">
+			<span ><?php echo lang('create_date');?>：</span><?php echo $_user['create_date_fmt'];?>
+				<span ><?php echo lang('last_login_date');?>：</span><?php echo $_user['login_date_fmt'];?>
+			</div>
+			<div class="user_option hidden-sm hidden-md" >
+			<ul>
+			<?php if(!empty($group['allowdeleteuser'])) { ?>
+			<?php if($_user['uid'] != $user['uid']) { ?>
+			<li><a role="button" class="btn btn-danger confirm btn-block my-3 "   data-confirm-text="<?php echo lang('confirm_delete_user');?>" data-method="post" href="<?php echo url("mod-deleteuser-$_user[uid]");?>"><?php echo lang('delete_user');?></a></li>
+			<?php } ?>
+		<?php } ?>	
+		<?php if(!empty($group['allowbanuser']) && $block_bad_user['mod4'] == '1') { ?><?php if($_user['gid'] == 7) { ?><li><a role="button" class="btn btn-success confirm btn-block my-3" data-confirm-text="确定将用户从禁言用户组移除吗？" data-method="post"href="<?php echo url("mod-unblock-$_user[uid]");?>">解封用户</a></li><?php } elseif ($_user['gid'] > 7 || $_user['gid'] == 0 || $_user['gid'] == 6){ ?><li><a role="button" class="btn btn-info confirm btn-block my-3" data-confirm-text="确定要将用户移至禁言用户组吗？" data-method="post"href="<?php echo url("mod-block-$_user[uid]");?>">屏蔽用户</a></li><?php } }?><?php if($gid == 1) { ?><li><a class="btn btn-primary btn-block my-3" href="admin/<?php echo url("user-update-$_user[uid]"); ?>">编辑用户</a></li><?php }?>
+		</ul>
+			</div>
+			
+			<?php if ($_user['uid'] != $user['uid'] & !empty($uid)) { ?>
+				<a role="button" class="btn btn-outline-secondary" href="javascript:;" data-username="<?php echo $_user['username']; ?>" data-uid="<?php echo $_user['uid']; ?>" data-modal-url="<?php echo url("sx");?>" data-modal-title="给 <?php echo $_user['username']; ?> 发送私信" data-modal-arg="<?php echo $_user['uid']; ?>" title="发送私信" style="position: absolute;
+    top: 110px;
+    right: 15px;"><i class="icon-envelope"></i> <span class="hidden-sm">发消息</span></a>
+				<?php }?>
+			<div class="hidden-lg">	
+			<?php if(!empty($group['allowdeleteuser'])) { ?>
+			<?php if($_user['uid'] != $user['uid']) { ?>
+			<a role="button" class="btn btn-danger confirm btn-block my-3 "   data-confirm-text="<?php echo lang('confirm_delete_user');?>" data-method="post" href="<?php echo url("mod-deleteuser-$_user[uid]");?>"><?php echo lang('delete_user');?></a>
+			<?php } ?>
+		<?php } ?>	
+		<?php if(!empty($group['allowbanuser']) && $block_bad_user['mod4'] == '1') { ?><?php if($_user['gid'] == 7) { ?><a role="button" class="btn btn-success confirm btn-block my-3" data-confirm-text="确定将用户从禁言用户组移除吗？" data-method="post"href="<?php echo url("mod-unblock-$_user[uid]");?>">解封用户</a><?php } elseif ($_user['gid'] > 7 || $_user['gid'] == 0 || $_user['gid'] == 6){ ?><a role="button" class="btn btn-info confirm btn-block my-3" data-confirm-text="确定要将用户移至禁言用户组吗？" data-method="post"href="<?php echo url("mod-block-$_user[uid]");?>">屏蔽用户</a><?php } }?><?php if($gid == 1) { ?><a class="btn btn-primary btn-block my-3" href="admin/<?php echo url("user-update-$_user[uid]"); ?>">编辑用户</a><?php }?>
+		</div>
+		<!--hook user_mobile_index_delete_user_button_after.htm -->
+		</div>
+		</div>
+		
+	
+<script>
+$('a[data-active="user-profile"]').addClass('active');
+</script>

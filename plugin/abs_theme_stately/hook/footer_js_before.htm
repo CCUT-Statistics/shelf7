@@ -1,0 +1,32 @@
+<?php if($abs_theme_stately_setting['global']['settings']['show_back_to_top']): ?>
+<div id="gotop" class="btn-gotop go-top" tabindex="0">
+    <span class="progress-value card m-0 text-body" title="<?= lang('go_to_top') ?>" data-bs-toggle="tooltip">
+        <span class="scrollValue">0</span>
+        <i class="scrollIcon las la-arrow-up"></i>
+    </span>
+</div>
+<script>
+    function calcScrollValue() {
+        let scrollProgress = document.getElementById('gotop');
+        let progressValue = scrollProgress.querySelector(".progress-value");
+        let pos = document.documentElement.scrollTop;
+        let calcHeight =
+            document.documentElement.scrollHeight -
+            document.documentElement.clientHeight;
+        let scrollValue = Math.round((pos * 100) / calcHeight);
+        if (pos > 100) {
+            scrollProgress.style.display = 'grid';
+        } else {
+            scrollProgress.style.display = 'none';
+        }
+
+        scrollProgress.addEventListener("click", () => {
+            document.documentElement.scrollTop = 0;
+        });
+        scrollProgress.querySelector('.scrollValue').textContent = scrollValue;
+        scrollProgress.style.background = `conic-gradient( rgba(var(--bs-primary-rgb),1) ${scrollValue}%, var(--bs-gray) ${scrollValue}%)`;
+    };
+    window.addEventListener('scroll', calcScrollValue);
+</script>
+
+<?php endif; ?>

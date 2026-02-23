@@ -1,0 +1,269 @@
+<?php
+if($abs_theme_stately_setting['ui_tweek']['homepage_stats']['enable']):
+switch($abs_theme_stately_setting['ui_tweek']['homepage_stats']['style']){ ?>
+<?php case 'v2': ?>
+<div class="row g-3 mb-3" data-style="sitestats_v2">
+    <div class="col-6 mb-1">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="badge bg-label-primary">
+                            <i class="las la-comment fs-1"></i>
+                        </span>
+                    </div>
+                </div>
+                <span>
+                    <?= lang('threads'); ?>
+                </span>
+                <span class="card-title h3 d-block mb-1">
+                    <?= $runtime['threads']; ?>
+                </span>
+                <small class="text-success">
+                    <?= lang('today_threads'); ?>：
+                    <?= $runtime['todaythreads']; ?>
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 mb-1">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="badge bg-label-warning">
+                            <i class="las la-comments fs-1"></i>
+                        </span>
+                    </div>
+                </div>
+                <span>
+                    <?= lang('posts'); ?>
+                </span>
+                <span class="card-title h3 d-block mb-1">
+                    <?= $runtime['posts']; ?>
+                </span>
+                <small class="text-success">
+                    <?= lang('today_posts'); ?>：
+                    <?= $runtime['todayposts']; ?>
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 mb-1">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="badge bg-label-info">
+                            <i class="las la-users fs-1"></i>
+                        </span>
+                    </div>
+                </div>
+                <span>
+                    <?= lang('users'); ?>
+                </span>
+                <span class="card-title h3 d-block mb-1">
+                    <?= $runtime['users']; ?>
+                </span>
+            </div>
+        </div>
+    </div>
+    <?php if ($runtime['onlines'] > 0) : ?>
+    <div class="col-6 mb-1">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="badge bg-label-success">
+                            <i class="las la-user-plus fs-1"></i>
+                        </span>
+                    </div>
+                </div>
+                <span>
+                    <?= lang('online'); ?>
+                </span>
+                <span class="card-title h3 d-block mb-1">
+                    <?= $runtime['onlines']; ?>
+                </span>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+<?php break; case 'v3': ?>
+<div class="card mb-3" data-style="sitestats_v3">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="card-title m-0 me-2">
+            <?= lang('site_stat_info'); ?>
+        </h5>
+    </div>
+    <div class="card-body">
+        <ul class="p-0 m-0">
+            <li class="d-flex my-2">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="badge bg-label-primary">
+                        <i class="las la-comment fs-3"></i>
+                    </span>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <small class="d-block text-primary">
+                            <?= lang('threads'); ?>
+                        </small>
+                        <strong>
+                            <?= $runtime['threads']; ?>
+                        </strong>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                        <small class="badge bg-label-primary">+
+                            <?= $runtime['todaythreads']; ?>
+                        </small>
+                    </div>
+                </div>
+            </li>
+            <li class="d-flex my-2">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="badge bg-label-warning">
+                        <i class="las la-comments fs-3"></i>
+                    </span>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <small class="d-block text-warning">
+                            <?= lang('posts'); ?>
+                        </small>
+                        <strong>
+                            <?= $runtime['posts']; ?>
+                        </strong>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                        <small class="badge bg-label-warning">+
+                            <?= $runtime['todayposts']; ?>
+                        </small>
+                    </div>
+                </div>
+            </li>
+            <li class="d-flex my-2">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="badge bg-label-info">
+                        <i class="las la-users fs-3"></i>
+                    </span>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <small class="d-block text-info">
+                            <?= lang('users'); ?>
+                        </small>
+                        <strong>
+                            <?= $runtime['users']; ?>
+                        </strong>
+                    </div>
+                    <?php if ($runtime['onlines'] > 0) : ?>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                        <small class="badge bg-label-success">
+                            <?= lang('online'); ?>：
+                            <?= $runtime['onlines']; ?>
+                        </small>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<?php break; case 'v4': /* @see widget_sitestats_v4.htm */ ?>
+<?php break; case 'v5': ?>
+<div class="card mb-3" data-style="sitestats_v5">
+    <div class="card-header">
+        <h5 class="card-title m-0 me-2">
+            <i class="las la-chart-bar text-info"></i>
+            <?= lang('site_stat_info'); ?>
+        </h5>
+    </div>
+    <div class="card-body">
+        <ul class="list-unstyled line-height-3">
+            <li class="d-flex justify-content-between ">
+                <div class="info_left">
+                    <i class="las la-comment mr-1 text-danger"></i>
+                    <?= lang('threads'); ?>
+                </div>
+                <div class="info_right">
+                    <div class="badge bg-label-danger badge-pill"><?= $runtime['threads']; ?></div>
+                </div>
+            </li>
+            <li class="d-flex justify-content-between ">
+                <div class="info_left">
+                    <i class="las la-comments mr-1 text-warning"></i>
+                    <?= lang('posts'); ?>
+                </div>
+                <div class="info_right">
+                    <div class="badge bg-label-warning badge-pill"><?= $runtime['posts']; ?></div>
+                </div>
+            </li>
+            <li class="d-flex justify-content-between ">
+                <div class="info_left">
+                    <i class="las la-users mr-1 text-primary"></i> 
+                    <?= lang('users'); ?>	
+                </div>
+                <div class="info_right">
+                    <div class="badge bg-label-primary badge-pill"><?= $runtime['users']; ?></div>
+                </div>
+            </li>
+            <?php if ($runtime['onlines'] > 0) : ?>
+            <li class="d-flex justify-content-between ">
+                <div class="info_left">
+                    <i class="las la-user-plus mr-1 text-success"></i>	
+                    <?= lang('online'); ?>：
+                </div>
+                <div class="info_right">
+                    <div class="badge bg-label-success badge-pill"><?= $runtime['onlines']; ?></div>
+                </div>
+            </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+</div>
+<?php break; case 'v6': /* @see widget_sitestats_v6.htm */ ?>
+<?php break; default: /* v1 */ ?>
+<div class="card p-3 mb-3" data-style="sitestats_v1">
+    <table class="w-100">
+        <tr class="text-center">
+            <td>
+                <span class="text-muted">
+                    <?= lang('threads'); ?>
+                </span><br>
+                <b>
+                    <?= $runtime['threads']; ?>
+                </b>
+            </td>
+            <td>
+                <span class="text-muted">
+                    <?= lang('posts'); ?>
+                </span><br>
+                <b>
+                    <?= $runtime['posts']; ?>
+                </b>
+            </td>
+            <td>
+                <span class="text-muted">
+                    <?= lang('users'); ?>
+                </span><br>
+                <b>
+                    <?= $runtime['users']; ?>
+                </b>
+            </td>
+            <?php if ($runtime['onlines'] > 0) : ?>
+            <td>
+                <span class="text-muted">
+                    <?= lang('online'); ?>
+                </span><br>
+                <b>
+                    <?= $runtime['onlines']; ?>
+                </b>
+            </td>
+            <?php endif; ?>
+        </tr>
+    </table>
+</div>
+<?php } /* end switch */
+endif; ?>

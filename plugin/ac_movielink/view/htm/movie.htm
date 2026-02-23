@@ -1,0 +1,330 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm');?>
+<?php
+$uid = user_token_get('', 'uid'); // 获取用户的uid
+
+if(empty($uid)) {
+    // 用户未登录，重定向到登录页面
+    http_location(url('user-login'));
+} else {
+    // 用户已登录，你可以获取用户名
+    $user = user_read($uid);
+    $username = $user['username'];
+}
+
+// 获取当前是周几，周一为1，周日为7
+$dayOfWeek = date("N");
+
+// 创建一个数组来存储周几的中文名称
+$weekdays = array('1' => '周一', '2' => '周二', '3' => '周三', '4' => '周四', '5' => '周五', '6' => '周六', '7' => '周日');
+
+// XiunoBBS的数据库查询
+$link = db_find_one('movielink', array('nametype'=>$dayOfWeek));
+
+// 存储id字段的值
+$id = $link['linkid'];
+$fullUrl = $link['url'];
+$pic = $link['imgurl'];
+$name = $link['name'];
+
+// 分割URL字段
+$parts = explode("$", $fullUrl);
+$definition = $parts[0];  // "中字"
+$url = $parts[1];  // "https://s5.bfbfvip.com/video/moheyinyu/中字/index.m3u8"
+
+// 转为ID唯一性
+$scid  = sprintf("%06u", crc32($url) & 0xFFFFFFFF);
+$missid = 'miss'.$scid;
+
+?>
+<link rel="stylesheet" href="plugin/ac_movielink/view/style/DPlayer.min.css">
+<link rel="stylesheet" href="plugin/ac_movielink/view/style/style.css">
+<section id="movie_container">
+
+    <div class="container-xl ">
+
+        <div class="row">
+            <div class="col-lg-12 p-1">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="word-break: break-all">
+[通知]七天电影，欢乐不停歇！每周更新最新电影
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span id="notich_x" aria-hidden="true" class="icon-remove icon" style="font-size: 18px;"></span></button>
+</div>
+            </div>
+            <div class="col-lg-8 p-1">
+                <div id="dplayer" style="height:500px;"></div>
+                <div id="video-title"></div>
+            </div>
+            <div class="col-lg-4 p-1">
+                <div id="danmu-display" class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-content-center justify-content-between ">
+                            <h2 class="h5 m-0 card-title"><i class="shu iconfont iconshu"></i>弹幕展示区</h2>
+                            <button id="theme-toggle" class="btn btn-outline-secondary btn-sm ">切换观影模式</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="danmu-list"></div>
+                    </div>
+                </div>
+                <div id="danmu-input">
+                    <div class="input-group mb-3">
+                        <input type="text" id="danmu-text" class="form-control" placeholder="快来发送一条弹幕把！">
+                        <div class="form-control form-control-color" style="max-width: 50px; padding: 0;">
+                            <input type="color" id="color-picker" value="#000000"
+                                   style="width: 100%;border: none;height: 100%;">
+                        </div>
+                        <button id="danmu-send" class="btn btn-primary">发送弹幕</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 p-1">
+                <div id="movie_info" class="card mt-3">
+                    <div class="card-body">
+                        <h2 class="h5 card-title text-center ">周一至周日电影播放信息</h2>
+                        <div id="movie_schedule" class="row gx-2 gy-2">
+                            <?php $linklist = db_find('movielink', array(), array(), 1, 140, 'linkid');?>
+                            <?php if($linklist) { foreach ($linklist as $link) { ?>
+                            <div class="col col-1-7">
+                                <div class="card m-0 text-center">
+                                    <img src="<?= $link['imgurl'];?>" alt="<?= $link['name'];?>" class="card-img movie_schedule-poster">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title movie_schedule-title mb-2 "><?= $link['name'];?></h6>
+                                        <p class="card-text movie_schedule-desc small m-0 ">每<?= $weekdays[$link['nametype']] ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php }} ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script src="plugin/ac_movielink/view/style/DPlayer.min.js"></script>
+<script src="plugin/ac_movielink/view/style/hls.js"></script>
+<script src="plugin/ac_movielink/view/style/flv.min.js"></script>
+<script>
+    document.getElementById('video-title').innerText = '今天是' +<?= json_encode($weekdays[$dayOfWeek]); ?> +' 当前正在播放：' +<?= json_encode($name); ?> +'-' + <?= json_encode($definition); ?>;
+    var danmuapi1 = 'https://danmu.gaokei.com/api/dplayer/';
+    var playID = <?= json_encode($url); ?>;
+    var danmuid = <?= json_encode($missid); ?>;
+    var playuser = <?= json_encode($username); ?>;
+    var definition = <?= json_encode($definition); ?>;
+    var dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        screenshot: false,
+        autoplay: true,
+        video: {
+            url: playID, // 您的视频地址，可以是 M3U8、MP4 或 RTMP
+            type: 'auto', // 设置为 'auto'，DPlayer 将自动检测视频类型
+            customType: {
+                'customHls': function (video, player) {
+                    const isHls = /(.m3u8?)$/.test(video.url);
+                    if (isHls) {
+                        const hls = new Hls();
+                        hls.loadSource(video.url);
+                        hls.attachMedia(video);
+                    } else {
+                        // 根据您的需求配置其他格式的播放方式，例如 MP4 和 RTMP
+                        const isMp4 = /(.mp4?)$/.test(video.url);
+                        const isRtmp = /^rtmp:\/\//.test(video.url);
+
+                        if (isMp4) {
+                            // 使用 HTML5 播放器播放 MP4
+                            video.type = 'video/mp4';
+                        } else if (isRtmp) {
+                            // 使用 flv.js 播放 RTMP
+                            const flvPlayer = flvjs.createPlayer({
+                                type: 'rtmp',
+                                url: video.url
+                            });
+                            flvPlayer.attachMediaElement(video);
+                            flvPlayer.load();
+                        }
+                    }
+                }
+            },
+            quality: [
+                { name: definition, url: playID }
+            ],
+            defaultQuality: 0,
+        },
+        danmaku: {
+            id: danmuid,
+            api: danmuapi1,
+            maximum: 1000,
+            user: playuser,
+            unlimited: true,
+            speedRate: 0.7,
+        },
+    });
+
+    // 违禁词数组（包括大小写）
+    var forbiddenWords = ["网站", "网", "菠菜", "赌博", "赌博", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]; // 请将这里的内容替换为你自己的违禁词数组
+
+        // 监听发送弹幕按钮点击事件
+    document.getElementById('danmu-send').addEventListener('click', sendDanmu);
+    
+    // 监听文本输入框的键盘事件
+    document.getElementById('danmu-text').addEventListener('keypress', function(event) {
+        // 判断是否按下了回车键
+        if (event.keyCode === 13) {
+            sendDanmu();
+        }
+    });
+    
+    // 发送弹幕函数
+    function sendDanmu() {
+        // 获取弹幕文本和颜色
+        var text = document.getElementById('danmu-text').value;
+        var colorPicker = document.getElementById('color-picker');
+        var color = colorPicker.value;
+    
+        // 转换弹幕文本和违禁词为小写，以进行大小写不敏感的比较
+        var lowercaseText = text.toLowerCase();
+        var lowercaseForbiddenWords = forbiddenWords.map(function (word) {
+            return word.toLowerCase();
+        });
+    
+        // 检查弹幕文本是否包含违禁词
+        var forbiddenWord = "";
+        var containsForbiddenWord = lowercaseForbiddenWords.some(function (word) {
+            if (lowercaseText.includes(word)) {
+                forbiddenWord = word;
+                return true;
+            }
+            return false;
+        });
+    
+        // 如果包含违禁词，显示弹窗提示，并阻止发送弹幕
+        if (containsForbiddenWord) {
+            alert("弹幕中包含违禁词 '" + forbiddenWord + "'，不能发送！");
+            return;
+        }
+    
+        // 构建弹幕数据并发送至弹幕服务器
+        if (text) {
+            var data = {
+                id: danmuid,
+                author: playuser,
+                time: dp.video.currentTime,
+                text: text,
+                color: parseInt(color.replace('#', '0x')),
+                type: 0
+            };
+    
+            fetch(danmuapi1 + 'v3/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(() => {
+                // 清空输入框
+                document.getElementById('danmu-text').value = '';
+                // 调用 DPlayer API 添加弹幕
+                dp.danmaku.draw(data);
+                // console.log(dp.danmaku);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    }
+
+    window.onload = function () {
+        // 存储上一次获取的弹幕数据
+        var lastDanmuData = [];
+
+        // 标记是否正在获取数据
+        var isFetching = false;
+
+        // 函数用于获取并显示弹幕
+        function getAndDisplayDanmu() {
+            // 如果正在获取数据，则直接返回，避免重复请求
+            if (isFetching) {
+                console.log('Already fetching data, please wait.');
+                return;
+            }
+
+            isFetching = true;
+            fetch(danmuapi1 + 'v3/?id=' + danmuid)
+                .then(response => response.json())
+                .then(data => {
+                    isFetching = false;
+                    if (!data || !data.data) {
+                        console.error('Error: Invalid data');
+                        return;
+                    }
+
+                    var danmuList = document.getElementById('danmu-list');
+                    var newDanmuData = data.data;
+
+                    // 比较新旧弹幕数据，仅添加新增的弹幕
+                    var newDanmus = newDanmuData.filter(danmu => !lastDanmuData.some(d => d[0] === danmu[0] && d[3] === danmu[3] && d[4] === danmu[4]));
+                    newDanmus.forEach(danmu => {
+                        var minutes = Math.floor(danmu[0] / 60);
+                        var seconds = (danmu[0] % 60).toFixed(0);
+                        var time = minutes + "分" + seconds + "秒";
+
+                        var danmuItem = document.createElement('p');
+                        danmuItem.textContent = '[' + danmu[3] + ']' + '发送弹幕:' + danmu[4];
+                        var color = '#' + ('000000' + parseInt(danmu[2], 10).toString(16)).slice(-6);
+                        danmuItem.style.color = color;
+                        danmuList.appendChild(danmuItem);
+                    });
+
+                    // 更新上一次获取的弹幕数据
+                    lastDanmuData = newDanmuData;
+
+                    // 滚动到最底部以显示最新的弹幕
+                    danmuList.scrollTop = danmuList.scrollHeight;
+                })
+                .catch((error) => {
+                    isFetching = false;
+                    console.error('Error:', error);
+                });
+        }
+
+        // 初始加载时获取并显示弹幕
+        getAndDisplayDanmu();
+
+        // 每隔2秒更新一次弹幕
+        setInterval(getAndDisplayDanmu, 2000); // 2000毫秒等于2秒
+    };
+    
+    // 加载深色模式
+    function theme() {
+        Theme = $.cookie('Theme');
+        if (Theme == "" || Theme == "null" || Theme == null || Theme == undefined) {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                $.cookie("Theme", "1", { expires: 365 });
+            }
+        }
+
+        if (Theme != "1") {
+            //loadjscssfile("/plugin/xiunobbs_cn_dark/css/darktheme.css", "css"); // 加载暗色主题
+            $('#movie_container').addClass('lights-out');
+            $.cookie("Theme", "1", { expires: 365 }); // 设置主题为暗色
+        } else {
+            //removejscssfile("/plugin/xiunobbs_cn_dark/css/darktheme.css", "css"); // 移除暗色主题
+            $('#movie_container').removeClass('lights-out');
+            $.cookie("Theme", "0", { expires: 365 }); // 设置主题为浅色
+        }
+    }
+
+    // 添加按钮点击事件的监听器
+    $('#theme-toggle').click(function () {
+        theme(); // 调用 theme() 函数切换主题
+
+        // 检查当前主题状态并设置按钮文本
+        var themeText = ($.cookie('Theme') == "1") ? "开启观影模式" : "关闭观影模式";
+        $(this).text(themeText);
+    });
+</script>

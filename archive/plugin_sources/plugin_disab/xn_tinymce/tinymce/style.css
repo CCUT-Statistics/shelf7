@@ -1,0 +1,111 @@
+@charset "utf-8";
+
+/* 统一引用样式 兼容bbs引用 */
+.card.card-thread blockquote,
+.card.card-postlist blockquote:not(.blockquote),
+.mce-content-body blockquote:not(.blockquote) {
+        color: #999;
+        font-weight: 400;
+        border-left: 2px solid #1abc9c;
+        padding: 1em;
+        margin: 1em 0em;
+		background-color: #f8f8f8;
+}
+
+/* 编辑器内容-默认字体 */
+.mce-content-body {
+    font-family: Microsoft YaHei, 微软雅黑, SimHei;
+}
+
+/* 编辑器内容-防止图片超宽溢出 */
+.mce-content-body img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 编辑器对bbs评论引用内容做处理，实际项目中删除这些 */
+.mce-content-body blockquote.blockquote {
+    font-size: 0.8rem;
+    background-color: #e9ecef;
+    padding: 0.5rem 1rem !important;
+    margin: 0;
+}
+
+.mce-content-body blockquote.blockquote .avatar-1 {
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 1.3rem;
+}
+
+.mce-content-body blockquote.blockquote .user {
+    text-decoration: none;
+    color: #868e96 !important;
+    font-size: 12px;
+}
+
+/* 编辑器按钮 */
+.tox .tox-tbtn--bespoke .tox-tbtn__select-label {
+    width: 2.8rem !important;
+}
+
+/* 内容 */
+.message img {
+    border-color: transparent;
+}
+
+/* 内容 */
+.message h1::before {
+	font-family: "fontawesome";
+	content: "\f0da";
+	margin-right: 5px;
+	color: var(--danger);
+}
+
+.message h2::before {
+	font-family: "fontawesome";
+	content: "\f0da";
+	margin-right: 5px;
+	color: var(--warning);
+}
+
+.message h3::before {
+	font-family: "fontawesome";
+	content: "\f0da";
+	margin-right: 5px;
+	color: var(--primary);
+}
+
+.message h4::before {
+	font-family: "fontawesome";
+	content: "\f0da";
+	margin-right: 5px;
+	color: var(--success);
+}
+
+.message h5::before {
+	font-family: "fontawesome";
+	content: "\f0da";
+	margin-right: 5px;
+	color: var(--info);
+}
+
+.message h6::before {
+	font-family: "fontawesome";
+	content: "\f0da";
+	margin-right: 5px;
+	color: var(--dark);
+}
+
+
+
+
+.card-thread .message p a::after {
+    font-family: 'fontawesome';
+    content: "\f08e";
+	margin-left: 5px;
+	color: var(--success);
+}
+
+.card-thread .message p a {
+	color: var(--primary);
+}

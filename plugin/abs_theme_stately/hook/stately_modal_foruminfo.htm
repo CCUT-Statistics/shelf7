@@ -1,0 +1,63 @@
+<div class="modal fade" id="forumInfoModal" tabindex="-1" aria-labelledby="forumInfoModalTitle">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forumInfoModalTitle">关于板块</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <section class="d-flex align-items-center ">
+                    <img loading="lazy" decoding="async" class="avatar-4 mr-3 rounded" src="<?= $forum['icon_url'];?>">
+                    <div class="">
+                        <strong class="d-block h5 mb-3"><?= $forum['name'];?></strong>
+                        <ul class="list-inline small mb-0">
+                            <li class="list-inline-item">
+                                <span class="text-muted"><?= lang('threads');?></span>
+                                <span class="badge bg-label-primary"><?= $forum['threads'];?></span>
+                            </li>
+                            <li class="list-inline-item">
+                                <span class="text-muted"><?= lang('today_threads');?></span>
+                                <span class="badge bg-label-info"><?= $forum['todaythreads'];?></span>
+                            </li>
+                            <li class="list-inline-item">
+                                <span class="text-muted"><?= lang('today_posts');?></span>
+                                <span class="badge bg-label-secondary"><?= $forum['todayposts'];?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <?php if($forum['brief']) : ?>
+                <!--{hook forum_brief_before.htm}-->
+                <section class="my-3"><?= $forum['brief'];?></section>
+                <!--{hook forum_brief_after.htm}-->
+                <?php endif; ?>
+                <?php if($forum['announcement']): ?>
+                <section class="mt-3">
+                    <h6><i class="la la-comments text-info "></i> <?= lang('forum_anouncement');?></h6>
+                    <div class="mt-2 text-muted">
+                        <?= $forum['announcement'];?>
+                    </div>
+                </section>
+                <?php endif; ?>
+
+                <?php if($forum['modlist']): ?>
+                <section class="my-3">
+                    <h6><i class="la la-user text-secondary "></i> <?= lang('forum_moderator');?></h6>
+                    <div class="row">
+                        <?php foreach ($forum['modlist'] as $mod) : ?>
+                        <div class="col-6 col-md-4 pb-1">
+                            <a href="<?= url('user-'.$mod['uid']);?>">
+                                <img loading="lazy" decoding="async" src="<?= $mod['avatar_url'];?>" class="avatar-2 me-1" alt="<?= $mod['username'];?>">
+                                <?= $mod['username'];?>
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
+
+                    </div>
+                </section>
+                <?php endif; ?>
+
+            </div>
+        </div>
+    </div>
+</div>

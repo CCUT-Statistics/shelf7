@@ -1,0 +1,20 @@
+<?php include _include(APP_PATH . 'view/htm/header.inc.htm'); ?>
+<!--{hook stately_hero_forum.htm}-->
+<!--{hook forum_start.htm}-->
+<?php
+switch ($abs_theme_stately_setting['ui_style']['forum']['layout']) { case 'classic_1col': ?>
+<!--{hook stately_layout_forum__classic_1col.htm}-->
+<?php break; case 'classic_3col': ?>
+<!--{hook stately_layout_forum__classic_3col.htm}-->
+<?php break; default: ?>
+<!--{hook stately_layout_forum__classic_2col.htm}-->
+<?php break; } /* end switch */ ?>
+<!--{hook forum_end.htm}-->
+<?php include _include(APP_PATH . 'view/htm/footer.inc.htm'); ?>
+<script>
+	$('li[data-active="fid-<?= $fid; ?>"]').addClass('active');
+	if ( $('li[data-active="fid-<?= $fid; ?>"]').parents("li.menu-item.dropdown").length !== 0 ) {
+		$('li[data-active="fid-<?= $fid; ?>"]').parents("li.menu-item.dropdown").addClass("active open");
+	}
+</script>
+<!--{hook forum_js.htm}-->

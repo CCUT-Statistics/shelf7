@@ -1,0 +1,71 @@
+<?php
+	$kv = kv_cache_get('renamesetting');
+	$type = $kv['type'];
+	$count = $kv['count'];
+	$typeString = '';
+	$shezhis = '';
+  	if($type == 'golds') $typeString = '金币';
+	if($type == 'rmbs') $typeString = '人民币';
+	if($type == 'rmbs') $count = $count/100.0;
+	if($count == '0') $shezhis = '修改昵称（限时免费）';
+	if($count != '0') $shezhis = '修改昵称（消耗'.$count.$typeString.'）';
+?>
+<template include="./view/htm/my.template.htm">
+	<slot name="my_body">
+<div class="row">
+	<div class="col-lg-6 offset-lg-3">
+		<div class="card card-block m-t-1">
+		    <form action="username" method="post" id="form">
+		<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="icon icon-user icon-fw"></i>当前昵称： </span>
+						</div>
+					<span class="form-control"><?php echo $user['username'];?></span>
+						<div class="invalid-feedback"></div>
+					</div>
+			</form>
+			<form action="<?php echo url('my-name');?>" method="post" id="form">
+		<div class="form-group input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="icon icon-user icon-fw"></i>修改昵称： </span>
+						</div>
+						<input type="text" class="form-control" placeholder="新昵称" name="username_new" id="username_new">
+						<div class="invalid-feedback"></div>
+					</div>
+				<p>
+					<button type="submit" class="btn btn-primary btn-block" id="submit" data-loading-text="<?php echo lang('submiting');?>..."><?php echo $shezhis;?></button>
+				</p>
+			</form>
+		</div>
+	</div>
+</div>
+</slot>
+</template>
+<script>
+
+var jform = $('#form');
+var jsubmit = $('#submit');
+jform.on('submit', function() {
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serializeObject();
+	postdata.username_new = postdata.username_new ;
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.button(message).delay(3000).button('reset');
+			setTimeout("history.go(-1);location.reload()",3000);
+		} else if(code < 0) {
+			$.alert(message);
+			jsubmit.button('reset');
+		} else {
+			jform.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+</script>
+<script>
+$('a[data-active="my-name"]').addClass('active');
+</script>

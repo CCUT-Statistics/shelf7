@@ -1,0 +1,13 @@
+<div class="mb-3 <?= $stately_homepage_thread_list_nav_extra_class ?> <?= $abs_theme_stately_setting['ui_tweek']['global']['threadlist_tabs_position'] === 'inner' ? 'card-header-pills' : '' ?>">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link <?= $active == 'default' ? 'active' : ''; ?>" href="./<?= url($route); ?>">
+                <?= lang('new_thread'); ?>
+            </a>
+        </li>
+        <!--{hook index_thread_list_nav_item_after.htm}-->
+        <li class="nav-item ml-auto">
+            <!--{hook index_thread_list_nav_item_end.htm}-->
+        </li>
+    </ul>
+</div>

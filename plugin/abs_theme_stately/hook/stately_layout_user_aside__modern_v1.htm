@@ -1,0 +1,10 @@
+<div class="card mb-4" id="user_aside" data-style="modern_v1">
+    <nav class="list-group list-group-horizontal text-center" id="user_nav">
+        <!--{hook user_common_user_before.htm}-->
+        <a href="<?= url('user-'.$_uid);?>" class="list-group-item list-group-item-action" data-active="menu-user"><?= lang('user_profile') ?></a>
+        <!--{hook user_common_user_after.htm}-->
+        <!--{hook user_common_thread_before.htm}-->
+        <a href="<?= url('user-thread-'.$_uid);?>" class="list-group-item list-group-item-action" data-active="menu-user-thread">论坛帖子</a>
+        <!--{hook user_common_thread_after.htm}-->
+    </nav>
+</div>

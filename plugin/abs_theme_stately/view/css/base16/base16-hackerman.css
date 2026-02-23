@@ -1,0 +1,20 @@
+/* hackerman by Michele "Ubik" De Simoni (https://github.com/mr-ubik/vim-hackerman-syntax) */
+
+:root {
+  --base00: #080808;
+  --base01: #1c1c1c;
+  --base02: #1c1c1c;
+  --base03: #969896;
+  --base04: #969896;
+  --base05: #00d7ff;
+  --base06: #FFFFFF;
+  --base07: #FFFFFF;
+  --base08: #800000;
+  --base09: #ffaa00;
+  --base0A: #ffff00;
+  --base0B: #00d700;
+  --base0C: #00d7ff;
+  --base0D: #d700af;
+  --base0E: #6f00ff;
+  --base0F: #99d1ce;
+}

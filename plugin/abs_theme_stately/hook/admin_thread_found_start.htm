@@ -1,0 +1,65 @@
+<?php 
+if(!isset($abs_theme_stately_setting)) {
+    $abs_theme_stately_setting = setting_get('abs_theme_stately_setting');
+    }
+
+    
+if (!function_exists('stately_format_number')) {
+    /**
+     * 将数字转换为k(kilo),m(million),b(billion),t(trillion)等的形式
+     * @param int $number
+     * @param int $precision 准确度（保留小数后几位）
+     * @param bool $chinese_alter 使用中文单位？
+     * @return string
+     */
+    function stately_format_number($number = 0, $precision = 2, $chinese_alter = false) {
+        $number = intval($number);
+        $suffix = '';
+        if ($chinese_alter) {
+            if(PHP_INT_SIZE === 4 && $number >= 10000 and $number < 100000000){
+                # 一万到一亿 32位 
+                $number = round(number / 10000, precision);
+                $suffix = '万';
+            }elseif(PHP_INT_SIZE === 4 && ($number >= 100000000 && $number < 1000000000000) || $number >= 100000000 && $number < 2147483646){
+                # 一亿到一兆(一万亿) 32位 从这个数量级开始就没什么实用价值了
+                $number = round(number / 100000000, precision);
+                $suffix = '亿';
+            }elseif(PHP_INT_SIZE === 8 && $number >= 1000000000000 && $number < 1000000000000000){
+                # 一兆到一京(一万兆) 64位
+                $number = round(number / 1000000000000, precision);
+                $suffix = '兆';
+            }elseif(PHP_INT_SIZE === 8 && $number >= 1000000000000000 && $number < 1000000000000000000){
+                # 一京到一垓(一万京) 64位
+                $number = round(number / 1000000000000000, precision);
+                $suffix = '京';
+            }elseif(PHP_INT_SIZE === 8 && $number >= 1000000000000000000 && $number < PHP_INT_MAX){
+                # 一垓到一秭(一万秭) 64位
+                $number = round(number / 1000000000000000000, precision);
+                $suffix = '秭';
+            }
+
+        } else {
+            if ($number >= 1000 && $number < 1000000) {
+                // 一千到一百万
+                $number = round($number / 1000, $precision);
+                $suffix = 'k';
+            } elseif ($number >= 1000000 && $number < 1000000000) {
+                // 一百万到十亿
+                $number = round($number / 1000000, $precision);
+                $suffix = 'm';
+            } elseif (PHP_INT_SIZE === 8 && $number >= 1000000000 && $number < 1000000000000) {
+                // 十亿到一兆(一万亿)
+                $number = round($number / 1000000000, $precision);
+                $suffix = 'b';
+            } elseif (PHP_INT_SIZE === 8 && $number >= 1000000000000) {
+                // 一兆以上
+                $number = round($number / 1000000000000, $precision);
+                $suffix = 't';
+            }
+        }
+
+        return $number . $suffix;
+    }
+}
+$stately_threadlist_style = 'classic_v1';
+?>

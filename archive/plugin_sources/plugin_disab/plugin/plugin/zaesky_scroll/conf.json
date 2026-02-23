@@ -1,0 +1,11 @@
+{
+    "name": "页面滚动进度",
+    "brief": "可视化页面滚动进度。design by <a class='badge badge-primary' href='https://www.noteweb.top'>NOTEWEB</a>",
+    "version": "1.0",
+    "bbs_version": "4.0.4",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,1 @@
+<?php exit;$block_bad_user = kv_get('block_bad_user');?>

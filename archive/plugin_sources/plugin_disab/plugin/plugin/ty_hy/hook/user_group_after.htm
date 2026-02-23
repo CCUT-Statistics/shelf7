@@ -1,0 +1,75 @@
+<style>.table>tbody>tr>td{
+	border:0px;
+	}
+.table>thead>tr>th{
+	border:0px;
+	}
+</style>
+<?php $no_cache_user = user_read($uid);
+$progress=100; $max=1; $now=$no_cache_user['credits'];
+if($no_cache_user['gid']>100){
+	foreach($grouplist as $group) {
+		if($group['gid'] < 100) continue;
+		$n = $no_cache_user['credits'] ;
+		if($n > $group['creditsfrom'] && $n <= $group['creditsto']) {
+			$max=$group['creditsto'];
+			if($no_cache_user['groupname']!=$group['name']) {
+				$no_cache_user['groupname']=$group['name'];
+				user_update_group($uid);
+			}
+			break;
+		}
+	}
+	$progress = (int)($now/$max * 100.0);
+}
+
+?>
+<p class="d-inline">
+<a class="badge badge-secondary font-weight-normal" data-toggle="modal" data-target="#myModal">
+<i class="icon-exclamation-circle" aria-hidden="true"></i> 详情</a>
+</p>
+<div class="modal fade" id="myModal">
+<div class="modal-dialog">
+<div class="modal-content">
+<!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">经验等级</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+         <table class="table">
+    <thead width="100%" align="center">
+      <tr>
+        <th>等级/称号</th>
+        <th>起始经验</th>
+        <th>结束经验</th>
+      </tr>
+    </thead>
+    <tbody width="100%" align="center">
+        	<?php foreach($grouplist as $_gid => $_group) { ?>
+      <tr>
+        <td><img style="width:12px;vertical-align: text-bottom;" src="<?php echo "./plugin/ty_hy/img/" . $_group['gid'] . ".png"; ?> "><?php echo $_group['name']; ?></td>
+        <td><?php echo $_group['creditsfrom']; ?></td>
+        <td><?php echo $_group['creditsto']; ?></td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+<p>当前经验值：
+<em style="color: #6495ed;font-style: normal;font-weight: bolder;"><?php echo $no_cache_user['credits'];?></em>
+   </p>
+			
+ <hr>
+<p>距离下次升级还剩：</p>
+<div class="progress">
+<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <?php echo $progress;?>%;" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100"><?php if($progress>=20) echo $progress,'%';?>
+</div><?php if($progress<20) echo $progress,'%';?>
+</div>
+</div>
+<!-- 模态框底部 -->
+	</div>
+	 </div>
+	 </div>
+	

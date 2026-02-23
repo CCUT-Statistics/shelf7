@@ -1,0 +1,73 @@
+<?php if($abs_theme_stately_setting['ui_tweek']['user']['show_stats_on_hero']): ?>
+<div class="d-flex align-items-center justify-content-center text-center flex-shrink-0">
+    <div class="d-inline-flex flex-wrap justify-content-center mx-2">
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted">
+                <?= lang('threads');?>
+            </small>
+            <span>
+                <?= $_user['threads'];?>
+            </span>
+        </div>
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted">
+                <?= lang('posts');?>
+            </small>
+            <span>
+                <?= $_user['posts'];?>
+            </span>
+        </div>
+        <?php if(isset($_user['digests'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted">
+                <?= lang('digests');?>
+            </small>
+            <span>
+                <?= $_user['digests'];?>
+            </span>
+        </div>
+        <?php endif; ?>
+        <?php if(isset($_user['follows'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted"> 关注数 </small>
+            <span>
+                <?= $_user['follows'];?>
+            </span>
+        </div>
+        <?php endif; ?>
+        <?php if(isset($_user['followeds'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted"> 粉丝数 </small>
+            <span>
+                <?= $_user['followeds'];?>
+            </span>
+        </div>
+        <?php endif; ?>
+
+<?php if(isset($_user['credits'])): ?>
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted"> <?= lang('credits1') ?> </small>
+            <span>
+                <?= $_user['credits'] ?>
+            </span>
+        </div>
+<?php endif; ?>
+<?php if(false /*isset($_user['golds']) && intval($gid) === 1*/): ?>
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted"> <?= lang('credits2') ?> </small>
+            <span>
+                <?= $_user['golds'] ?>
+            </span>
+        </div>
+<?php endif; ?>
+<?php if(false /*isset($_user['rmbs']) && intval($gid) === 1*/): ?>
+        <div class="d-flex flex-column mr-2">
+            <small class="text-muted"> <?= lang('credits3') ?> </small>
+            <span>
+                <?= $_user['rmbs'] ?>
+            </span>
+        </div>
+<?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>

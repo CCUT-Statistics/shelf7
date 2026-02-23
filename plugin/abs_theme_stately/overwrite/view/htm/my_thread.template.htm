@@ -1,0 +1,16 @@
+<template include="./plugin/abs_theme_stately/overwrite/view/htm/my.common.template.htm">
+	<slot name="my_nav">
+		<ul class="nav nav-pills  ">
+			<!--{hook my_nav_thread_before.htm}-->
+			<li class="nav-item">
+				<a class="nav-link" href="<?= url('my-thread');?>" data-active="my-thread">
+					<?= lang('my_thread');?>
+				</a>
+			</li>
+			<!--{hook my_nav_thread_after.htm}-->
+		</ul>
+	</slot>
+</template>
+<script>
+	$('a[data-active="menu-my-thread"]').addClass('active');
+</script>

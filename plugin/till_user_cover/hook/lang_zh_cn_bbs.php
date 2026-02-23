@@ -1,0 +1,8 @@
+'select_cover_image' => '选择封面图',
+'cover_way_preset'=>'预设图',
+'cover_way_custom'=>'自定义',
+'cover_update' => '更新封面图',
+'cover_image_url_placeholder' => 'https://输入封面图网址',
+'cover_remove_title' => '删除封面图',
+'cover_remove_text' => '如果不想要封面图了，请点击以下按钮删除。',
+'cover_remove' => '删除封面图',

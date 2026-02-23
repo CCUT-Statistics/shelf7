@@ -1,0 +1,22 @@
+<?php 
+if(function_exists("thread_digest_find_by_fid")):
+
+$_threadlist = thread_digest_find_by_fid($fid,0,10);thread_list_access_filter($_threadlist, $gid);?>
+<ul class="list-unstyled threadlist threadlist-digests">
+    <?php foreach($_threadlist as $_thread) { ?>
+    <li class="media thread  <?= $_thread['top_class'];?> " data-href="<?= url('thread-'.$_thread['tid']);?>" data-tid="<?= $_thread['tid'];?>">
+        <span class="col">
+            <i class="icon-caret-right thread-ico text-black-50"></i><a href="<?= url('thread-'.$_thread['tid']);?>">
+                <?php if(!empty($_thread['taglist'])) { foreach($_thread['taglist'] as $tag) { ?>
+                <?= '['.$tag['name'].']';?>
+                <?php  }} ?>
+                <?= $_thread['subject'];?>
+            </a>
+        </span>
+        <span class="text-muted">
+            <?= $_thread['create_date_fmt'];?>
+        </span>
+    </li>
+    <?php } ?>
+</ul>
+<?php endif; ?>

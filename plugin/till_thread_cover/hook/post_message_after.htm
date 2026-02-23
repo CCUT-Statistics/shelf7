@@ -1,0 +1,25 @@
+<?php 
+if($isfirst):
+    $form_cover = isset($thread['cover']) && !empty($thread['cover']) ? $thread['cover'] : '';
+?>
+<div class="card card-body">
+    <h4 class="h5">封面图设置</h4>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="cover" class="form-label">封面图网址</label>
+                <input type="text" class="form-control" placeholder="https://封面图网址.png" id="cover" name="cover" value="<?php echo $form_cover;?>">
+            </div>
+            <div class="form-group">
+                <label for="cover_upload" class="form-label">上传封面图</label>
+                <input class="form-control" type="file" accept="image/gif,image/jpeg,image/png,image/jpg" id="cover_upload">
+                <p class="small text-muted help-block">支持PNG格式的图片，文件大小在<?= $till_thread_cover_setting['max_size_mb'] ?>MB以下。</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label for="cover_preview" class="form-label">预览</label>
+            <img id="cover_preview" src="<?php echo $form_cover;?>" class="img-fluid img-thumbnail" />
+        </div>
+    </div>
+</div>
+<?php endif; ?>

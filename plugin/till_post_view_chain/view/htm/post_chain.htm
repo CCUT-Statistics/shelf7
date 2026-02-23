@@ -1,0 +1,12 @@
+<?php include _include(APP_PATH.'view/htm/header.inc.htm'); ?>
+
+<section class="card">
+    <div class="card-header"><a href="<?= url('thread-'.$this_post['tid']) ?>" class="btn btn-sm btn-link" data-toggle="tooltip" title="返回"><i class="icon-chevron-left"></i></a> <?= lang('view_reply_chain') ?></div>
+    <div class="card-body ajax-body">
+        <ul class="list-unstyled postlist">
+            <?php include _include(APP_PATH.'/plugin/till_post_view_chain/view/htm/post_list_chain.inc.htm');?>
+        </ul>
+    </div>
+</section>
+
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>

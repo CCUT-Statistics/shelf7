@@ -1,0 +1,23 @@
+<?php
+if(!isset($abs_theme_stately_setting)) {
+	$abs_theme_stately_setting = ( !is_null(setting_get('abs_theme_stately_setting')) ? setting_get('abs_theme_stately_setting') : kv_get('setting')["abs_theme_stately_setting"] );
+	//var_dump($abs_theme_stately_setting);
+	if(empty($abs_theme_stately_setting['THIS_LOCATION_FRONTEND'])) {
+		$abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] = 'plugin/abs_theme_stately/';
+	}
+}
+
+switch(intval($abs_theme_stately_setting['special']['new_notice_page']['enable'])) {
+	case 1:
+	include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/plugin/huux_notice/view/htm/my_notice_new.htm');
+	break;
+	case 0:
+	include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/plugin/huux_notice/view/htm/my_notice_old.htm');
+	break;
+	default:
+	include _include(APP_PATH.'plugin/abs_theme_stately/overwrite/plugin/huux_notice/view/htm/my_notice_vintage.htm');
+	break;
+}
+
+
+?>

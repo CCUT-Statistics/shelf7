@@ -1,0 +1,114 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/sg_invite_vip/htm/my_sg_invite_vip.template.htm">
+	<slot name="my_body">
+		<div class="p-3">
+			<?php if($kv_invite['purchase'] == '1') { ?>
+			<form action="<?= url('my-sg_invite');?>" method="post" id="formcreate">
+				<div class="form-group row">
+					<div class="col-sm-5 input-group">
+						<input type="text" class="form-control" id="number" name="number" placeholder="<?= lang('sg_quantity_purchase');?>" />
+						<div class="input-group-append">
+							<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>...">
+								<?= lang('sg_invite_create');?>
+							</button>
+						</div>
+					</div>
+					<label class="col-sm-7 text-info">
+						<?= lang('sg_invite_create_tips', array('price'=>$kv_invite['price'].$resources, 'resources'=>$resources, 'user_resources'=>$user[$kv_invite['resources']].$resources));?>
+					</label>
+				</div>
+			</form>
+			<?php } ?>
+			<div class="nav-align-top">
+				<ul class="nav nav-tabs nav-fill" role="tablist">
+					<li class="nav-item">
+						<a role="button" class="nav-link <?= ($f == '1') ? '' : 'active' ?>" data-active="my-sg_invite__not_used" href="<?= url('my-sg_invite');?>">
+							<?= lang('sg_not_used');?>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a role="button" class="nav-link <?= ($f == '1') ? 'active' : '' ?>" data-active="my-sg_invite__used" href="<?= url('my-sg_invite-1-1');?>">
+							<?= lang('sg_already_used');?>
+						</a>
+					</li>
+				</ul>
+				<div class="tab-content p-0">
+					<div class="tab-pane fade show active" role="tabpanel">
+						<div class="table-responsive text-nowrap create">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>
+											<?= lang('sg_invite');?>
+										</th>
+										<?php if($f == '1') { ?>
+										<th>
+											<?= lang('sg_use_username');?>
+										</th>
+										<th class="d-sm-hide">
+											<?= lang('sg_use_date');?>
+										</th>
+										<?php }else{ ?>
+										<th>
+											<?= lang('sg_expiry_date');?>
+										</th>
+										<?php } ?>
+									</tr>
+									<thead>
+									<tbody id="invitelist">
+										<?php foreach($invitelist as $arr) { ?>
+										<tr>
+											<td><samp>
+													<?= $arr['invitcode']; ?>
+												</samp></td>
+											<?php if($f == '1') { ?>
+											<td>
+												<?= $arr['use_username']; ?>
+											</td>
+											<td class="d-sm-hide"><time datetime="<?= $arr['use_date'] ?>">
+													<?= date("Y-m-d H:i:s",$arr['use_date']); ?>
+												</time>
+											</td>
+											<?php }else{ ?>
+											<td <?php if($arr['expiry_date'] - $time < 0) { echo "class='text-danger'" ; } ?>>
+												<?php  if($arr['expiry_date'] - $time < 0) { echo lang('sg_expiry'); } else { echo  '<time datetime="'. $arr['expiry_date'] .'">' . date("Y-m-d H:i:s",$arr['expiry_date']) . '</time>';} ?>
+											</td>
+											<?php } ?>
+										</tr>
+										<?php } ?>
+									</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<nav class="my-3">
+					<ul class="pagination justify-content-center">
+						<?= $pagination; ?>
+					</ul>
+				</nav>
+			</div>
+	</slot>
+</template>
+<script>
+	var jform = $('#formcreate');
+	var jsubmit = $('#submit');
+	var juserlist = $('#invitelist');
+	var jconfirm = $("#confirm");
+
+	jform.on('submit', function () {
+		jform.reset();
+		jsubmit.button('loading');
+		var postdata = jform.serialize();
+		$.xpost(jform.attr('action'), postdata, function (code, message) {
+			if (code == 0) {
+				$.alert(message).delay(1000).location(xn.url('my-sg_invite'));
+			} else {
+				jform.find('[name="' + code + '"]').alert(message).focus();
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+
+
+	$('a[data-active="my-sg_invite"]').addClass('active');
+</script>

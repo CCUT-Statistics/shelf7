@@ -1,0 +1,13 @@
+{
+    "name": "奇狐网 · 帖子列表显示封面免费版(原白色主题)",
+    "brief": "白色主题，列表页加缩略图，并显示帖子查看数量。本次修复默认图片路径问题及稍作优化。<a href='https://bbs.oddfox.cn' target='_blank' class='text-danger'>更多精品插件请访问奇狐官网</a>",
+    "version": "1.3",
+    "bbs_version": "4.0",
+    "installed": 0,
+    "enable": 0,
+    "uid": "20394",
+    "username": "༺凨影༻",
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

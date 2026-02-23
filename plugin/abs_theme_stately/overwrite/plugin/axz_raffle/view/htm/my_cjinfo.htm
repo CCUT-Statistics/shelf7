@@ -1,0 +1,32 @@
+<template include="./plugin/abs_theme_stately/overwrite/plugin/axz_raffle/view/htm/my_xzraffle.template.htm">
+	<slot name="my_body">
+		<div class="card-body">
+			
+			<div class="table-responsive ">
+				<table class="table">
+					<thead>
+						<tr> 
+							<th>时间</th>
+							<th>类型</th>
+							<th>奖品</th>
+						</tr>
+					<thead>
+					<tbody id="invitelist">
+						<?php foreach($cjinfo as $arr) { ?>
+						<tr>
+							
+							<td><?php echo $arr['addtime']; ?></td>
+							<td><?php echo ($arr['cjtype']=='mf')? '<span style="color:green">免费</span>': '抽奖码'; ?></td>
+							<td><?php echo $arr['jpname']; ?></td>
+						</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+			</div>
+			</div>
+			<nav class="my-3"><ul class="pagination justify-content-center"><?php echo $pagination; ?></ul></nav>
+	</slot>
+</template>
+<script>
+	$('a[data-active="my-cjinfo"]').addClass('active');
+</script>

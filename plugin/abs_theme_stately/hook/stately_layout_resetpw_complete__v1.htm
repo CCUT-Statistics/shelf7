@@ -1,0 +1,55 @@
+<style id="stately_page_auth_style">
+    body {
+        background-image: url(<?= $abs_theme_stately_setting['page']['user_forgetpw']['background_image'] ?>);
+        background-position: center;
+        background-size: cover;
+    }
+</style>
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Logo -->
+                    <div class="d-flex justify-content-center">
+                        <!--{hook stately_navlogo_top.htm}-->
+                    </div>
+                    <!-- /Logo -->
+                    <h1 class="mb-2 h4"> <?= $abs_theme_stately_setting['page']['user_forgetpw']['title'] ?> </h1>
+                    <p class="mb-4"> <?= $abs_theme_stately_setting['page']['user_forgetpw']['subtitle'] ?> </p>
+                    <form action="<?= url('user-resetpw_complete');?>" method="post" id="form">
+                        <div class="mb-3">
+                            <label for="email" class="form-label"> <?= lang('email');?> </label>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="<?= lang('email');?>" value="<?= $email;?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password"> <?= lang('password_new');?> </label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password"> <?= lang('password_new_repeat');?> </label>
+                            <input type="password" class="form-control" name="password2" id="password2" placeholder="">
+                        </div>
+                        <?php if($abs_theme_stately_setting['page']['password_requirements']['show']): ?>
+                        <div class="mb-3">
+                            <p class="fw-semibold mt-2"><?= $abs_theme_stately_setting['page']['password_requirements']['title'] ?></p>
+                            <ul class="ps-3 mb-0 line-height-3">
+                                <?php
+                                foreach(explode(PHP_EOL,$abs_theme_stately_setting['page']['password_requirements']['content']) as $password_requirement_item) {
+                                    echo '<li>' . $password_requirement_item . '</li>';
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                        <?php endif; ?>
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit" id="submit" data-loading-text="<?= lang('submiting');?>..."> <?= lang('next_step');?> </button>
+                        </div>
+                    </form>
+                    <p class="text-center"> <?= sprintf(htmlspecialchars_decode($abs_theme_stately_setting['page']['user_forgetpw']['goto_login_text']), '<a href="' . url('user-login') . '">' . lang('user_login') . '</a>') ?> </p>
+                </div>
+            </div>
+        </div>
+        <!-- /ResetPw -->
+    </div>
+</div>

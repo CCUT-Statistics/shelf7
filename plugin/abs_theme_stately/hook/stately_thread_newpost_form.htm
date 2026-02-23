@@ -1,0 +1,17 @@
+<?php if( $abs_theme_stately_setting['special']['quickpost_modal']['style'] !== 'default' ): ?>
+<li hidden class=" post placeholder"></li>
+<?php endif; ?>
+<?php switch($abs_theme_stately_setting['special']['quickpost_modal']['style']) { ?>
+<?php case 'button': ?>
+<!--{hook stately_thread_newpost_form__button_v1.htm}-->
+<?php break; 
+case 'fixed': ?>
+<!--{hook stately_thread_newpost_form__fixed_v1.htm}-->
+<?php break; 
+default: /* default */ ?>
+<?php if($stately_thread_style === 'vintage_v1') : ?>
+<!--{hook stately_thread_newpost_form__vintage_v1.htm}-->
+<?php else: ?>
+<!--{hook stately_thread_newpost_form__classic_v1.htm}-->
+<?php endif; ?>
+<?php } /* end switch */ ?>

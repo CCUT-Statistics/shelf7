@@ -1,0 +1,11 @@
+{
+    "name": "卡密充值转账系统",
+    "brief": "找到view目录下的chongzhi.htm自己改下充值链接",
+    "version": "1.0",
+    "bbs_version": "4.0",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

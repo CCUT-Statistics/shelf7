@@ -1,0 +1,216 @@
+<?php 
+		$progress=100; 
+		$max=1; 
+		$now=$user['credits'];
+		if($user['gid']>100){
+			foreach($grouplist as $group) {
+				if($group['gid'] < 100) continue;
+				$n = $user['credits'] ;
+				if($n > $group['creditsfrom'] && $n <= $group['creditsto']) {
+					$max=$group['creditsto'];
+					break;
+				}
+			}
+			$progress = intval($now) === 0 ? 0 : (int)($now/$max * 100.0);
+		}
+?>
+<div class="row gx-3" data-style="cards_v1">
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-info">
+                            <i class="las la-comments fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('threads'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $user['threads'];?>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-success">
+                            <i class="las la-comment fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('posts'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $user['posts'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php if(isset($user['follows'])): ?>
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-danger">
+                            <i class="las la-user-plus fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('follows'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $user['follows'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+    <?php if(isset($user['followeds'])): ?>
+    <div class="col-6 col-lg">
+        <div class="card">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-danger">
+                            <i class="las la-users fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('followeds'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $user['followeds'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+    <?php if(isset($user['favorites'])): ?>
+    <div class="col-6 col-lg">
+        <div class="card d-none d-lg-block">
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="order-2">
+                        <span class="badge bg-label-warning">
+                            <i class="las la-star fs-3"></i>
+                        </span>
+                    </div>
+                    <div class="order-1 card-text">
+                        <span class="font-weight-normal">
+                            <?= lang('haya_favorite_name'); ?>
+                        </span>
+                        <span class="h3 d-block mb-1">
+                            <?= $user['favorites'];?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card border-primary ">
+            <div class="card-body">
+                <span class="fs-3 float-end">
+                    <span class="badge bg-label-primary p-2">
+                        <?= $progress.'%' ?>
+                    </span>
+                </span>
+                <p class="fs-3 mb-2"><?= $user['groupname'];?></p>
+                <p><i class="la la-flask text-primary " aria-hidden="true"></i> <?= $credits1_name; ?>：<data><?= $user['credits'];?></data></p>
+                <!--{hook my_credits_display_credits_after.htm}-->
+                <div class="progress flex-grow-1 ml-1">
+                    <div class="progress-bar" role="progressbar" style="width: <?= $progress;?>%" aria-valuenow="<?= $progress;?>" aria-valuemin="0" aria-valuemax="100"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="card border-warning">
+            <div class="card-body">
+                <span class="fs-1 float-end">
+                    <span class="badge bg-label-warning p-2">
+                        <i class="la la-coins"></i>
+                    </span>
+                </span>
+                <p class="fs-5 mb-1"><?= $credits2_name; ?></p>
+                <p class="mb-1"><data class="fs-3"><?= $user['golds'];?></data></p>
+                <p class="m-0">
+                    <a href="<?= url('my-trade');?>" class="btn btn-outline-warning"><?= lang('exchange');?></a>
+                </p>
+                <!--{hook my_credits_display_golds_after.htm}-->
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="card border-info">
+            <div class="card-body">
+                <span class="fs-1 float-end">
+                    <span class="badge bg-label-info p-2">
+                        <i class="la la-money-bill-alt"></i>
+                    </span>
+                </span>
+                <p class="fs-5 mb-1"><?= $credits3_name; ?></p>
+                <p class="mb-1"><data class="fs-3"><?= $user['rmbs']/100.0;?></data></p>
+                <!--{hook my_credits_display_rmbs_after.htm}-->
+            </div>
+        </div>
+    </div>
+</div>
+<?php if($abs_theme_stately_setting['ui_tweek']['user']['lv2_menu_location'] !== 'side'): ?>
+</div>
+<?php endif;?>
+</div>
+<div class="card">
+    <details class="accordion-item ">
+        <summary class="accordion-button collapsed">
+            <?= lang('viewmore') . ' ' . lang('my_basic_profile');?>
+        </summary>
+        <div class="card-body">
+            <div class="row line-height-4">
+                <div class="col-md-6">
+                    <span class="text-muted">
+                        <?= lang('user_group');?>：
+                    </span>
+                    <?= $user['groupname'];?>
+                    <!--{hook my_profile_posts_after.htm}-->
+                </div>
+                <div class="col-md-6">
+                    <span class="text-muted">
+                        <?= lang('create_date');?>：
+                    </span>
+                    <?= $user['create_date_fmt'];?>
+                    <br><span class="text-muted">
+                        <?= lang('last_login_date');?>：
+                    </span>
+                    <?= $user['login_date_fmt'];?>
+                    <br><span class="text-danger">
+                        <?= lang('email');?>：
+                    </span>
+                    <?= $user['email'];?>
+                    <!--{hook my_profile_login_date_after.htm}-->
+                </div>
+            </div>
+    </details>

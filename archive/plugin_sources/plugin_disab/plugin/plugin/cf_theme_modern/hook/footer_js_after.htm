@@ -1,0 +1,36 @@
+<?php
+$cf_theme_modern=setting_get('cf_theme_modern');
+if(isset($cf_theme_modern['back_top']) && $cf_theme_modern['back_top']){
+echo '<!-- BackTop -->';
+echo '<script src="plugin/cf_theme_modern/js/backtop.js"></script>';
+echo '<a href="javascript:void(0);" class="scroll-up" style="display: none;"><i class="fa fa-chevron-up"></i></a>';
+echo '<!-- BackTop -->';
+}
+if(isset($cf_theme_modern['footer_html']) && $cf_theme_modern['footer_html']){
+echo $cf_theme_modern["footer_html"];
+}
+?>
+
+<script>
+$(window).scroll(function() {
+	if ($(window).scrollTop() > 52) {
+    $("#app").addClass("scrolled");
+	} else {
+    $("#app").removeClass("scrolled");
+	}
+});
+
+$(function(){
+	$("#nav-bars").on("click",function(){
+		//$(".be-dropdown-menu").slideDown();
+		var t = this;
+		$("#app").addClass("drawerOpen");
+		this.$backdrop = $("<div/>").addClass("drawer-backdrop fade").appendTo("body").click((function() {
+      return $("#app").removeClass("drawerOpen"),$(".drawer-backdrop").remove();
+    })),
+    setTimeout((function() {
+      return t.$backdrop.addClass("in")
+    }));
+	});
+});
+</script>

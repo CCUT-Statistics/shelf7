@@ -1,0 +1,77 @@
+<!--{hook stately_masthead.htm}-->
+<?php switch($abs_theme_stately_setting['ui_style']['resetpw']['style']){ ?>
+<?php case 'v2_left': ?>
+<!--{hook stately_layout_resetpw_complete__v2_left.htm}-->
+<?php break; case 'v2_right': ?>
+<!--{hook stately_layout_resetpw_complete__v2_right.htm}-->
+<?php break; default: ?>
+<!--{hook stately_layout_resetpw_complete__v1.htm}-->
+<?php break; } /* endswitch */ ?>
+<!--{hook stately_mastfoot.htm}-->
+<script src="<?= $conf['view_url'];?>js/md5.js"></script>
+<script id="resetpw_js">
+	var jform = $('#form');
+	var jsubmit = $('#submit');
+	var jpassword = $('#password');
+	var jpassword2 = $('#password2');
+	jform.on('submit', function () {
+		jform.reset();
+		jsubmit.button('loading');
+
+		if (!jpassword.val()) {
+			jpassword.focus();
+			$.toast({
+				title: lang.tips_title,
+				content: '<?= lang("please_input_password") ?> ',
+				type: 'danger',
+				pause_on_hover: true,
+				delay: 5000
+			});
+			jsubmit.button('reset');
+			return false;
+		}
+
+		if (jpassword.val() != jpassword2.val()) {
+			jpassword2.focus();
+			$.toast({
+				title: lang.tips_title,
+				content: '<?= lang("repeat_password_incorrect") ?> ',
+				type: 'warning',
+				pause_on_hover: true,
+				delay: 5000
+			});
+			jsubmit.button('reset');
+			return false;
+		}
+
+		var postdata = jform.serializeObject();
+		postdata.password = $.md5(postdata.password);
+		$.xpost(jform.attr('action'), postdata, function (code, message) {
+			if (code == 0) {
+				$.alert(message);
+				jsubmit.button(message).delay(1000).location(xn.url('user-login'));
+			} else if (xn.is_number(code)) {
+				$.toast({
+					title: lang.tips_title,
+					content: message,
+					type: 'warning',
+					pause_on_hover: true,
+					delay: 5000
+				});
+				jsubmit.button('reset');
+			} else {
+				$.toast({
+					title: lang.tips_title,
+					content: message,
+					type: 'info',
+					pause_on_hover: true,
+					delay: 5000
+				});
+				//jform.find('[name="' + code + '"]').alert(message).focus();
+				jsubmit.button('reset');
+			}
+		});
+		return false;
+	});
+
+</script>

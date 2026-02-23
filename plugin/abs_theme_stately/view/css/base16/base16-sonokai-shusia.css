@@ -1,0 +1,20 @@
+/* Sonokai shusia by Sainnhe Park (https://github.com/sainnhe/sonokai/) */
+
+:root {
+  --base00: #2d2a2e;/* bg0 */
+  --base01: #37343a;/* bg1 */
+  --base02: #423f46;/* bg3 */
+  --base03: #49464e;/* bg4 */
+  --base04: #848089;/* grey */
+  --base05: #e3e1e4;/* fg */
+  --base06: #e3e1e4;/* fg */
+  --base07: #e3e1e4;/* fg */
+  --base08: #f85e84;/* red */
+  --base09: #ef9062;/* orange */
+  --base0A: #e5c463;/* yellow */
+  --base0B: #9ecd6f;/* green */
+  --base0C: #78dce8;/* bg_blue */
+  --base0D: #7accd7;/* blue */
+  --base0E: #ab9df2;/* purple */
+  --base0F: #605d68;/* grey_dim */
+}

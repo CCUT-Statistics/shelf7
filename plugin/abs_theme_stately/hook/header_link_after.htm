@@ -1,0 +1,25 @@
+<?php if($abs_theme_stately_setting['global']['settings']['show_pace']): ?>
+<style id="pace_css">
+    .pace {
+        pointer-events: none;
+        user-select: none
+    }
+
+    .pace-inactive {
+        display: none
+    }
+
+    .pace .pace-progress {
+        background: var(--bs-primary);
+        position: fixed;
+        z-index: 2000;
+        top: 0;
+        right: 100%;
+        width: 100%;
+        height: 2px
+    }
+</style>
+<script src="<?= $abs_theme_stately_setting['THIS_LOCATION_FRONTEND'] ?>view/js/pace.min.js"></script>
+<?php endif; ?>
+<!--{hook stately_switch_theme_color_mode_js_header.htm}-->
+<?= htmlspecialchars_decode($abs_theme_stately_setting['custom_code']['javascript']['before_body']) ?>

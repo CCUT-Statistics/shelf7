@@ -1,0 +1,11 @@
+{
+    "name": "大白TinyMCE编辑器",
+    "brief": "你唯一需要的富文本编辑器；支持发帖编辑器和快速回帖编辑器；支持截图粘贴和多图片上传；不含Prism.js，方便独立搭配代码高亮库使用；拓展十分简单方便，详见<code>网站根目录/plugin/huux_tinymce/hook/huux_tinymce_post_js_before.htm</code>与<code>网站根目录/plugin/huux_tinymce/tinymce/plugins/customPluginDemo/plugin.js</code>；使用的版本为TinyMCE v5.10.3；由Tillreetree维护",
+    "version": "3.0.2",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

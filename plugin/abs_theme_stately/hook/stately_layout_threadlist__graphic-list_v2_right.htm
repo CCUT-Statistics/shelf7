@@ -1,0 +1,71 @@
+<li class="thread gx-3 <?= 'col-lg-' . $stately_threadlist_cols_count; ?> <?= $_thread['top_class'];?>" data-href="<?= url('thread-'.$_thread['tid']);?>" data-tid="<?= $_thread['tid'];?>">
+    <article class="card mb-3 style-graphic-list_v2-right">
+        <div class="row g-0">
+            <div class="col-<?= !is_null($_post_message_image) ? 'content' : '12 col-content' ?>">
+                <div class="card-body h-100 d-flex flex-wrap flex-column p-3 p-md-4">
+                    <h3 class="h5 card-title mb-2 fw-normal">
+                        <!--{hook stately_threadlist_checkbox.htm}-->
+                        <!--{hook stately_threadlist_subject.htm}-->
+                    </h3>
+
+                    <ul class="list-inline mb-0 text-muted">
+                        <li class="d-none d-md-inline-block list-inline-item">
+                            <a href="<?= url('user-'.$_thread['uid']);?>">
+                                <span class="v_avatar v_avatar-post">
+                                    <img loading="lazy" decoding="async" src="<?= $_thread['user_avatar_url'];?>" class="rounded-circle" style="height: 1.25em;width: auto;">
+                                    <!--{hook thread_list_inc_avatar_after.htm}-->
+                                </span>
+                                <!--{hook stately_threadlist_username.htm}-->
+                            </a>
+                        </li>
+
+                        <?php if($fid == 0): ?>
+                        <li class="d-md-none list-inline-item">
+                            <a href="<?= url('forum-'.$_thread['fid']);?>">
+                                <?= $_thread['forumname'] ?>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <li class="list-inline-item">
+                            <time>
+                                <?= $_thread['create_date_fmt'];?>
+                            </time>
+                        </li>
+
+                        <?php if(is_null($_post_message_image) && $fid == 0): ?>
+                        <li class="d-none d-md-inline-block list-inline-item">
+                            <a href="<?= url('forum-'.$_thread['fid']);?>">
+                                <i class="las la-comment"></i>
+                                <?= $_thread['forumname'] ?>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <li class="d-none d-md-inline-block list-inline-item">
+                            <!--{hook stately_threadlist_views_count.htm}-->
+                        </li>
+                        <li class="list-inline-item">
+                            <!--{hook stately_threadlist_posts_count_with_lastuid.htm}-->
+                        </li>
+                    </ul>
+                    <div class="d-none d-md-block card-text mt-3">
+                        <?= $_post_message_excerpt ?>
+                    </div>
+                </div>
+            </div>
+            <?php if(!is_null($_post_message_image)): ?>
+            <div class="col-image">
+                <?php if($fid == 0): ?>
+                <a href="<?= url('forum-'.$_thread['fid']);?>" class="d-none d-md-inline-block forumname small">
+                    <?= $_thread['forumname'] ?>
+                </a>
+                <?php endif; ?>
+                <a href="<?= url('thread-'.$_thread['tid']);?>" class="d-block h-100">
+                    <img loading="lazy" decoding="async" class="card-img card-img-left" src="<?= $_post_message_image ?>">
+                </a>
+            </div>
+            <?php endif; ?>
+        </div>
+    </article>
+</li>

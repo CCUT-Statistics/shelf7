@@ -1,0 +1,60 @@
+<?php if($noticelist) { foreach($noticelist as &$_notice) { 
+  ?>
+    <li class="chat-message <?= isset($_notice['from_myself']) && $_notice['from_myself'] ? ' chat-message-right ' : '' ?>">
+        <div class="d-flex overflow-hidden">
+          <div class="user-avatar flex-shrink-0 me-3">
+            <div class="avatar avatar-sm <?= $_notice['isread'] == 0 ? 'avatar-busy' : '' ?>">
+              <img loading="lazy" decoding="async" src="<?php echo $_notice['from_user_avatar_url'];?>" alt="Avatar" class="rounded-circle">
+            </div>
+          </div>
+          <div class="chat-message-wrapper notice flex-grow-1">
+            <?php if($_notice['type'] == 1 || $_notice['type'] == 3 || $_notice['type'] == 99){?>
+                <div>
+                     <span class="username"><?php echo $_notice['name'];?></span>
+                </div>
+           <?php }else{?>
+                <div>
+                     <span class="username"><a class="text-body" href="<?php echo url("user-$_notice[fromuid]");?>"><?php echo $_notice['from_username'];?></a></span>
+                </div>
+           <?php }?>
+            <div class="chat-message-text message">
+                <?php echo $_notice['message'];?>
+            </div>
+            <div class="chat-message-meta small mt-1">
+            
+              <div class="chat-message-action d-inline-block">
+
+                <!--{hook my_notice_readbtn_before.htm}-->
+                <?php if($_notice['isread'] == 0) : ?>
+                <button type="button" data-bs-toggle="tooltip" title="<?= lang('notice_my_marked_read') ?>" class="readbtn btn btn-xs badge-center bg-label-success mr-2" data-nid="<?= $_notice['nid'] ?>">
+                  <i class="las la-check-double"></i>
+                </button>
+                <?php else: ?>
+                <button type="button" data-bs-toggle="tooltip" title="<?= lang('notice_my_update_readed') ?>" class="readbtn btn btn-xs badge-center text-muted mr-2" disabled data-nid="<?= $_notice['nid'] ?>">
+                  <i class="las la-check-double"></i>
+                </button>
+                <?php endif; ?>
+                <button type="button" data-bs-toggle="tooltip" title="<?= lang('delete');?>" class="deletebtn btn btn-xs badge-center bg-label-danger mr-2" data-nid="<?= $_notice['nid']?>">
+                  <i class="la la-trash"></i>
+                </button>
+              </div>
+                <time class="text-muted" datetime="<?= $_notice['create_date'] ?>">
+                <?php echo $_notice['create_date_fmt'];?>
+                </time>
+              
+            </div>
+          </div>
+        </div>
+      </li>
+<?php }} else { ?>
+    <div class="card-message text-center my-4 mx-auto" >
+        <div class="card-body">
+            <span class="badge rounded-pill bg-label-secondary fs-xlarge mb-4">
+                <i class="las la-bell fs-1"></i>
+            </span>
+            <div class="lead">
+                <?php echo lang('none');?>
+            </div>
+        </div>
+    </div>
+<?php } ?>

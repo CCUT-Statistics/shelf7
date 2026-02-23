@@ -1,0 +1,13 @@
+<?php 
+$header['title'] = lang('all_forums') . ' - ' . $conf['sitename'];
+$header['mobile_title'] = lang('all_forums');
+include _include(APP_PATH.'view/htm/header.inc.htm');
+?>
+<?php switch($abs_theme_stately_setting['ui_style']['bbs']['layout']) { ?>
+<?php case 'bbs_v2': ?>
+<!--{hook stately_layout_bbs__v2.htm}-->
+<?php break; default: /* v1 */ ?>
+<!--{hook stately_layout_bbs__v1.htm}-->
+<?php } /* end switch */ ?>
+<?php include _include(APP_PATH.'view/htm/footer.inc.htm');?>
+<script>$('[data-active="bbs"]').addClass('active');</script>

@@ -1,0 +1,7 @@
+<!--{hook post_list_inc_username_before.htm}-->
+<span class="username">
+    <a href="<?= url('user-'.$_post['uid']);?>">
+        <?= $_post['username'];?>
+    </a>
+</span>
+<!--{hook post_list_inc_username_after.htm}-->

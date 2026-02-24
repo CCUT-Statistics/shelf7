@@ -248,6 +248,7 @@ if ($method == 'POST') {
 
     switch (param('palette_theme', 'default')) {
         case 'default':
+        case 'Default':
             // ikunkun.icu / gggmusic.com / xxedm.com / yunshimc.com style
             $setting['ui']['color']['theme'] = '#696cff';
             $setting['ui']['color']['color_body_light'] = '#697a8d';
@@ -592,7 +593,7 @@ if ($method == 'POST') {
         <h4>选择配色风格</h4>
         <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic radio toggle button group">
             <div class="w-25">
-                <input type="radio" class="btn-check" name="palette_theme" value="Default" id="palette_theme1" checked="">
+                <input type="radio" class="btn-check" name="palette_theme" value="default" id="palette_theme1" checked="">
                 <label class="card border" for="palette_theme1">
                     <img class="card-img-top" src="../plugin/abs_theme_stately/view/img/_admin/install_palette_Default.png" alt="默认风格 示意图">
                     <div class="card-footer">
@@ -659,7 +660,7 @@ if ($method == 'POST') {
                     </div>
                 </label>
             </div><div class="w-25">
-                <input type="radio" class="btn-check" name="palette_theme" value="Pastel " id="palette_theme6">
+                <input type="radio" class="btn-check" name="palette_theme" value="Pastel" id="palette_theme6">
                 <label class="card border" for="palette_theme6">
                     <img class="card-img-top" src="../plugin/abs_theme_stately/view/img/_admin/install_palette_Pastel.png" alt="珊瑚礁影 示意图">
                     <div class="card-footer">
@@ -817,27 +818,58 @@ if ($method == 'POST') {
         )
     );
 
-    $inst_page_js = "<script defer>
-$('.btnNext').on('click', function() {
-  const current = $('.nav.nav-pills .nav-link.active').closest('.nav-item');
-  const nextBtn = current.next('.nav-item').find('button.nav-link')[0];
-  if (nextBtn) {
-    nextBtn.click();
-  }
-});
+    $inst_page_js = <<<'EOT'
+<script defer>
+(function () {
+  function activateStep(targetSelector) {
+    if (!targetSelector) return;
+    var $targetPane = $(targetSelector);
+    if (!$targetPane.length) return;
 
-$('.btnPrevious').on('click', function() {
-  const current = $('.nav.nav-pills .nav-link.active').closest('.nav-item');
-  const prevBtn = current.prev('.nav-item').find('button.nav-link')[0];
-  if (prevBtn) {
-    prevBtn.click();
-  }
-});
+    $('.nav.nav-pills .nav-link').removeClass('active').attr('aria-selected', 'false');
+    var $targetTab = $('.nav.nav-pills .nav-link[data-bs-target="' + targetSelector + '"], .nav.nav-pills .nav-link[data-target="' + targetSelector + '"]').first();
+    $targetTab.addClass('active').attr('aria-selected', 'true');
 
-function getSelectedInputValue() {
-    var inputs = document.querySelectorAll(\"#template-customizer-color input[name='template-customizer-color']\");
+    $('.tab-content .tab-pane').removeClass('show active');
+    $targetPane.addClass('show active');
+  }
+
+  $('.nav.nav-pills .nav-link').on('click', function (e) {
+    var target = $(this).attr('data-bs-target') || $(this).attr('data-target');
+    if (!target) return;
+    e.preventDefault();
+    activateStep(target);
+  });
+
+  $('.btnNext').on('click', function (e) {
+    e.preventDefault();
+    var $currentPane = $('.tab-content .tab-pane.show.active');
+    if (!$currentPane.length) $currentPane = $('.tab-content .tab-pane.active').first();
+    if (!$currentPane.length) return false;
+
+    var $nextPane = $currentPane.nextAll('.tab-pane').first();
+    if ($nextPane.length) {
+      activateStep('#' + $nextPane.attr('id'));
+    }
+    return false;
+  });
+
+  $('.btnPrevious').on('click', function (e) {
+    e.preventDefault();
+    var $currentPane = $('.tab-content .tab-pane.show.active');
+    if (!$currentPane.length) $currentPane = $('.tab-content .tab-pane.active').first();
+    if (!$currentPane.length) return false;
+
+    var $prevPane = $currentPane.prevAll('.tab-pane').first();
+    if ($prevPane.length) {
+      activateStep('#' + $prevPane.attr('id'));
+    }
+    return false;
+  });
+
+  function getSelectedInputValue() {
+    var inputs = document.querySelectorAll("#template-customizer-color input[name='template-customizer-color']");
     var selectedValue = null;
-  
     for (var i = 0; i < inputs.length; i++) {
       if (inputs[i].checked) {
         selectedValue = inputs[i].value;
@@ -847,7 +879,10 @@ function getSelectedInputValue() {
     return selectedValue;
   }
 
-</script>";
+  window.getSelectedInputValue = getSelectedInputValue;
+})();
+</script>
+EOT;
 
     $inst_page_flatten = $inst_page_init
         . '<div class="nav-align-top col-md-10 mx-auto mb-4">'
@@ -855,7 +890,7 @@ function getSelectedInputValue() {
 
     foreach ($inst_page_steps as $step_count => $step) {
         $inst_page_flatten .= '<li class="nav-item" role="presentation">
-    <button type="button" class="nav-link ' . ($step_count === 0 ? 'active' : '') . '" role="tab" data-toggle="tab" data-target="#step_' . ($step_count + 1) . '" aria-controls="step_' . ($step_count + 1) . '" aria-selected="true">
+    <button type="button" class="nav-link ' . ($step_count === 0 ? 'active' : '') . '" role="tab" data-toggle="tab" data-target="#step_' . ($step_count + 1) . '" data-bs-toggle="tab" data-bs-target="#step_' . ($step_count + 1) . '" aria-controls="step_' . ($step_count + 1) . '" aria-selected="true">
         <span class="d-block fs-3 badge rounded-circle bg-label-primary"><i class="' . $step['icon'] . '"></i></span> ' . $step['title'] . ' </button>
 </li>';
     }

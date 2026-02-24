@@ -1,4 +1,16 @@
-
+<?php
+$submit_button_position = 'top';
+if (
+	isset($abs_theme_stately_setting['ui_tweek']) &&
+	isset($abs_theme_stately_setting['ui_tweek']['thread_create']) &&
+	isset($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'])
+) {
+	$submit_button_position = $abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'];
+}
+if ($submit_button_position !== 'top' && $submit_button_position !== 'bottom') {
+	$submit_button_position = 'top';
+}
+?>
 <div class="row">
 	<div class="col-lg-10 mx-auto">
 		<form action="<?= $form_action;?>" method="post" id="form">
@@ -7,7 +19,7 @@
 					<?= $form_title; ?>
 				</h2>
 				<div>
-					<?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'top'): ?>
+					<?php if($submit_button_position === 'top'): ?>
 					<!--{hook post_bottom_left.htm}-->
 					<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>...">
 						<i class="las la-paper-plane"></i>
@@ -53,12 +65,12 @@
 						</a>
 						<?= post_file_list_html($filelist, TRUE);?>
 
-						<?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'top'): ?>
+						<?php if($submit_button_position === 'top'): ?>
 						<!--{hook post_bottom_right.htm}-->
 						<?php endif; ?>
 					</div>
 					<div class="text-right">
-						<?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'bottom'): ?>
+						<?php if($submit_button_position === 'bottom'): ?>
 						<!--{hook post_bottom_left.htm}-->
 						<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>...">
 							<i class="las la-paper-plane"></i>

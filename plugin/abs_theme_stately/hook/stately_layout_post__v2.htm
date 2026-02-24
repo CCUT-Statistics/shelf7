@@ -1,3 +1,16 @@
+<?php
+$submit_button_position = 'top';
+if (
+    isset($abs_theme_stately_setting['ui_tweek']) &&
+    isset($abs_theme_stately_setting['ui_tweek']['thread_create']) &&
+    isset($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'])
+) {
+    $submit_button_position = $abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'];
+}
+if ($submit_button_position !== 'top' && $submit_button_position !== 'bottom') {
+    $submit_button_position = 'top';
+}
+?>
 <form action="<?= $form_action;?>" method="post" id="form">
     <div class="row">
         <div class="col-lg-8">
@@ -6,7 +19,7 @@
                     <?= $form_title; ?>
                 </h2>
                 <div>
-                    <?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'top'): ?>
+                    <?php if($submit_button_position === 'top'): ?>
                     <button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>...">
                         <i class="las la-paper-plane"></i>
                         <?= $form_submit_txt;?>
@@ -38,7 +51,7 @@
                 <textarea class="form-control" placeholder="<?= lang('message');?>" name="message" id="message" rows="25" autofocus><?= $form_message;?></textarea>
             </div>
 
-            <?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'bottom'): ?>
+            <?php if($submit_button_position === 'bottom'): ?>
             <div class="text-right">
                 <button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>...">
                     <i class="las la-paper-plane"></i>
@@ -76,7 +89,7 @@
                             </a>
                             <?= post_file_list_html($filelist, TRUE);?>
 
-                            <?php if($abs_theme_stately_setting['ui_tweek']['thread_create']['submit_button_position'] === 'top'): ?>
+                            <?php if($submit_button_position === 'top'): ?>
                             <!--{hook post_bottom_right.htm}-->
                             <?php endif; ?>
                         </div>

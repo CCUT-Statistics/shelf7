@@ -63,7 +63,9 @@ $PluginAllowlist = @(
     "till_post_replies",
     "xn_ipaccess",
     "qt_sensitive_word",
-    "ob_feedback"
+    "ob_feedback",
+    "till_users_widget",
+    "ac_movielink"
 )
 
 Write-Host "SourceRoot: $SourceRoot"

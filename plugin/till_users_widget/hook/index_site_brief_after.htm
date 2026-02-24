@@ -1,92 +1,154 @@
-<!---->
-
-
-
-
-
 <?php
-if(!function_exists('get_site_new_user')) {
+if (!function_exists('till_users_widget_latest_users')) {
+	function till_users_widget_latest_users($limit = 8)
+	{
+		$limit = max(1, intval($limit));
+		$cache_key = 'till_users_widget_latest_users_' . $limit;
+		$userlist = cache_get($cache_key);
+		if ($userlist !== NULL) {
+			return is_array($userlist) ? $userlist : array();
+		}
 
-function get_site_new_user($num=20){
-    //先获取用户列表
-    $userlist = cache_get('get_site_new_user');
-    if(empty($userlist)){
-        $userlist = db_find('user', array(), array('uid'=>-1), 1, $num, 'uid');
-        /*
-        foreach ($userlist as &$user) {
-            $username = $user['username'];
-            $create = $user['create_date_fmt'];
-            xn_strlen($username)>4 && $username = xn_substr($username, 0, 4);
-            $user['dname'] = $username;
-            $user['create'] = $create;
-        }
-        */
-        cache_set('get_site_new_user',$userlist,86400);//有效期1天
-    }
-    return $userlist;
+		$result = array();
+		$raw_list = db_find('user', array(), array('uid' => -1), 1, $limit * 2, 'uid');
+		if (!empty($raw_list)) {
+			foreach ($raw_list as $raw_user) {
+				$uid = intval($raw_user['uid']);
+				if ($uid <= 0) continue;
+				$user = user_read_cache($uid);
+				if (empty($user)) continue;
+
+				$result[] = array(
+					'uid' => $uid,
+					'username' => $user['username'],
+					'avatar_url' => $user['avatar_url'],
+					'create_date_fmt' => !empty($user['create_date']) ? humandate(intval($user['create_date'])) : '-',
+				);
+
+				if (count($result) >= $limit) break;
+			}
+		}
+
+		cache_set($cache_key, $result, 300);
+		return $result;
+	}
 }
+
+if (!function_exists('till_users_widget_online_users')) {
+	function till_users_widget_online_users($limit = 8)
+	{
+		$limit = max(1, intval($limit));
+		$result = array();
+		$seen = array();
+		$online_user_list = online_list_cache();
+
+		if (!empty($online_user_list)) {
+			foreach ($online_user_list as $online_user) {
+				$uid = intval($online_user['uid']);
+				if ($uid <= 0 || isset($seen[$uid])) continue;
+				$seen[$uid] = 1;
+
+				$user = user_read_cache($uid);
+				if (empty($user)) continue;
+
+				$last_date = intval($online_user['last_date']);
+				$result[] = array(
+					'uid' => $uid,
+					'username' => $user['username'],
+					'avatar_url' => $user['avatar_url'],
+					'last_date_fmt' => $last_date > 0 ? humandate($last_date) : '-',
+				);
+
+				if (count($result) >= $limit) break;
+			}
+		}
+
+		return $result;
+	}
 }
-?> 
-<div class="card">
-    <div class="card-header">
-        <div class="d-flex justify-content-between">
-            <div>
-                <h5 class="card-title m-0 me-2"><i class="la la-users text-primary"></i> 最新成员</h5>
-            </div>
-        </div>
-    </div>
-    <div class="card-body">
-        <ul class="list-inline m-0"> 
-            <?php 
-        $new_user_list = get_site_new_user(16);
-        foreach ($new_user_list as $new_user) {
-            $new_user_avatar_url = 'view/img/avatar.png';
-            $new_user['avatar']!=0 && $new_user_avatar_url = $conf['upload_url'].'avatar/000/'.$new_user['uid'].'.png';
-        ?> 
-            <li class="list-inline-item mr-2 mb-2" data-bs-toggle="tooltip" title="<?php echo $new_user['username']; ?>">
-                <a href="<?php echo url('user-'.$new_user['uid']);?>">
-                    <img src="<?php echo $new_user_avatar_url; ?>" class="img-fluid w-px-40" alt="<?php echo $new_user['username'];?>">
-                </a>
-            </li> 
-            <?php } /* endforeach */ ?> 
-        </ul>
-    </div>
+
+$widget_latest_users = till_users_widget_latest_users(8);
+$widget_online_users = till_users_widget_online_users(8);
+$widget_online_total = isset($runtime['onlines']) ? intval($runtime['onlines']) : count($widget_online_users);
+?>
+<style>
+.till-users-widget .card-header {
+	padding: 0.75rem 1rem;
+}
+.till-users-widget .list-group-item {
+	padding: 0.6rem 1rem;
+	border-left: 0;
+	border-right: 0;
+}
+.till-users-widget .list-group-item:first-child {
+	border-top: 0;
+}
+.till-users-widget-row {
+	display: flex;
+	align-items: center;
+	min-width: 0;
+}
+.till-users-widget-meta {
+	min-width: 0;
+}
+.till-users-widget-name {
+	display: block;
+	font-weight: 600;
+	line-height: 1.2;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.till-users-widget-desc {
+	display: block;
+	line-height: 1.25;
+}
+</style>
+
+<div class="card till-users-widget mb-3">
+	<div class="card-header d-flex align-items-center justify-content-between">
+		<h5 class="card-title m-0"><i class="icon-user-plus text-primary mr-1"></i>最新注册</h5>
+		<span class="badge badge-pill badge-light"><?= count($widget_latest_users) ?></span>
+	</div>
+	<?php if (!empty($widget_latest_users)) { ?>
+	<div class="list-group list-group-flush">
+		<?php foreach ($widget_latest_users as $item) { ?>
+		<a class="list-group-item" href="<?= url('user-' . $item['uid']) ?>">
+			<div class="till-users-widget-row">
+				<img class="avatar-2 mr-2" src="<?= $item['avatar_url'] ?>" alt="<?= htmlspecialchars($item['username'], ENT_QUOTES, 'UTF-8') ?>" onerror="this.src='view/img/avatar.png'">
+				<span class="till-users-widget-meta">
+					<span class="till-users-widget-name"><?= htmlspecialchars($item['username'], ENT_QUOTES, 'UTF-8') ?></span>
+					<small class="text-muted till-users-widget-desc">注册于 <?= $item['create_date_fmt'] ?></small>
+				</span>
+			</div>
+		</a>
+		<?php } ?>
+	</div>
+	<?php } else { ?>
+	<div class="card-body text-muted small">暂无用户数据</div>
+	<?php } ?>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <div class="d-flex justify-content-between">
-            <div>
-                <h5 class="card-title m-0 me-2"><i class="la la-user-plus text-primary"></i> 在线成员 (<?php echo $runtime['onlines'];?>)</h5>
-            </div>
-        </div>
-    </div>
-    <div class="card-body">
-        <ul class="list-inline m-0"> 
-            <?php 
-        $online_user_list = online_list_cache();
-        $online_user_last_username = '';
-        foreach ($online_user_list as $online_user_key => $online_user_tmp) {
-            if($online_user_key > (16 + 1)) {
-                break;
-            }
-            
-            if($online_user_tmp['username'] === $online_user_last_username){
-                continue;
-            } else {
-                $online_user_last_username = $online_user_tmp['username'];
-            }
-            
-            $online_user = user_read_cache($online_user_tmp['uid']);
-            $online_user_avatar_url = 'view/img/avatar.png';
-            $online_user['avatar']!=0 && $online_user_avatar_url = $conf['upload_url'].'avatar/000/'.$online_user['uid'].'.png';
-        ?> 
-            <li class="list-inline-item mr-2 mb-2" data-bs-toggle="tooltip" title="<?php echo $online_user['username']; ?>">
-                <a href="<?php echo url('user-'.$online_user['uid']);?>">
-                    <img src="<?php echo $online_user_avatar_url; ?>" class="img-fluid w-px-40" alt="<?php echo $online_user['username'];?>">
-                </a>
-            </li> 
-            <?php } /* endforeach */ ?> 
-        </ul>
-    </div>
+<div class="card till-users-widget">
+	<div class="card-header d-flex align-items-center justify-content-between">
+		<h5 class="card-title m-0"><i class="icon-signal text-primary mr-1"></i>在线成员</h5>
+		<span class="badge badge-pill badge-light"><?= $widget_online_total ?></span>
+	</div>
+	<?php if (!empty($widget_online_users)) { ?>
+	<div class="list-group list-group-flush">
+		<?php foreach ($widget_online_users as $item) { ?>
+		<a class="list-group-item" href="<?= url('user-' . $item['uid']) ?>">
+			<div class="till-users-widget-row">
+				<img class="avatar-2 mr-2" src="<?= $item['avatar_url'] ?>" alt="<?= htmlspecialchars($item['username'], ENT_QUOTES, 'UTF-8') ?>" onerror="this.src='view/img/avatar.png'">
+				<span class="till-users-widget-meta">
+					<span class="till-users-widget-name"><?= htmlspecialchars($item['username'], ENT_QUOTES, 'UTF-8') ?></span>
+					<small class="text-muted till-users-widget-desc">最近活跃：<?= $item['last_date_fmt'] ?></small>
+				</span>
+			</div>
+		</a>
+		<?php } ?>
+	</div>
+	<?php } else { ?>
+	<div class="card-body text-muted small">当前暂无在线成员</div>
+	<?php } ?>
 </div>

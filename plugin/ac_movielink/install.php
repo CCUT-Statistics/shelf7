@@ -16,6 +16,10 @@ $sql = "CREATE TABLE IF NOT EXISTS {$tablepre}movielink (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 ";
 $r = db_exec($sql);
-$sql = "INSERT INTO {$tablepre}movielink SET name='电影名称', url='视频地址', imgurl='图片地址', nametype='1', start_time='00', end_time='00'";
-$r = db_exec($sql);
+
+$count = db_count('movielink');
+if (intval($count) === 0) {
+	$sql = "INSERT INTO {$tablepre}movielink SET type='0', name='示例影片', url='正片\$https://example.com/index.m3u8', imgurl='view/img/logo.png', nametype='1', start_time='00:00', end_time='00:00'";
+	$r = db_exec($sql);
+}
 ?>

@@ -4,9 +4,32 @@
 
 $tablepre = $db->tablepre;
 
-$sql = "ALTER TABLE {$tablepre}post ADD COLUMN `repeat_follow` LONGTEXT NOT NULL, ADD COLUMN `r_f_c` SMALLINT(6) UNSIGNED DEFAULT 0 NOT NULL, ADD COLUMN `r_f_a` SMALLINT(6) UNSIGNED DEFAULT 0 NOT NULL";
-$r = db_exec($sql);
-$r === FALSE and message(-1, '创建表结构失败');
+if (!function_exists('till_post_replies_column_exists')) {
+	function till_post_replies_column_exists($table, $column)
+	{
+		$r = db_sql_find_one("SHOW COLUMNS FROM `$table` LIKE '$column'");
+		return !empty($r);
+	}
+}
+
+$post_table = $tablepre . 'post';
+$alter_parts = array();
+
+if (!till_post_replies_column_exists($post_table, 'repeat_follow')) {
+	$alter_parts[] = "ADD COLUMN `repeat_follow` LONGTEXT NOT NULL";
+}
+if (!till_post_replies_column_exists($post_table, 'r_f_c')) {
+	$alter_parts[] = "ADD COLUMN `r_f_c` SMALLINT(6) UNSIGNED NOT NULL DEFAULT 0";
+}
+if (!till_post_replies_column_exists($post_table, 'r_f_a')) {
+	$alter_parts[] = "ADD COLUMN `r_f_a` SMALLINT(6) UNSIGNED NOT NULL DEFAULT 0";
+}
+
+if (!empty($alter_parts)) {
+	$sql = "ALTER TABLE `$post_table` " . implode(', ', $alter_parts);
+	$r = db_exec($sql);
+	$r === FALSE and message(-1, '创建表结构失败');
+}
 
 $setting = setting_get('till_post_replies_setting');
 if (empty($setting)) {

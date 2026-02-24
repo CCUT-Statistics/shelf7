@@ -1,0 +1,108 @@
+<?php include _include(ADMIN_PATH . 'view/htm/header.inc.htm'); ?>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title mb-3"><?php echo $header['title']; ?></h4>
+        <p class="text-muted">
+          用于“补齐前置 + 一键启用”关键插件。主要解决：楼中楼建表失败后重装、123 盘插件前置缺失。
+        </p>
+        <p class="text-danger">
+          执行前请先备份数据库和 `plugin/` 目录。执行动作需要输入确认词 <code>ENABLE</code>。
+        </p>
+
+        <form action="<?php echo url('plugin-setting-ai_bootstrap'); ?>" method="post" id="ai_bootstrap_form">
+          <input type="hidden" name="action" id="ai_action" value="">
+
+          <div class="form-group row">
+            <label class="col-md-2 form-control-label text-md-right pr-0">确认词</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="confirm_word" placeholder="请输入 ENABLE">
+              <div class="figure-caption mt-2">必须输入 <code>ENABLE</code> 才会执行写操作。</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+              <button type="button" class="btn btn-primary js-ai-action" data-action="repair_prerequisites">① 修复基础前置（菜单/主题/通知）</button>
+              <button type="button" class="btn btn-success js-ai-action ml-2" data-action="repair_pan123_stack">② 修复 123 盘与楼中楼</button>
+            </div>
+          </div>
+        </form>
+
+        <hr class="my-4">
+
+        <h5 class="mb-3">当前状态</h5>
+        <?php foreach ($state_groups as $group_name => $rows) { ?>
+        <h6 class="mt-3"><?php echo htmlspecialchars($group_name); ?></h6>
+        <div class="table-responsive mb-3">
+          <table class="table table-bordered table-sm mb-0">
+            <thead>
+              <tr>
+                <th style="width: 220px;">插件</th>
+                <th style="width: 160px;">目录</th>
+                <th style="width: 120px;">目录存在</th>
+                <th style="width: 120px;">已安装</th>
+                <th style="width: 120px;">已启用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($rows as $row) { ?>
+              <tr>
+                <td><?php echo htmlspecialchars($row['name']); ?></td>
+                <td><code><?php echo htmlspecialchars($row['dir']); ?></code></td>
+                <td>
+                  <?php if ($row['exists']) { ?>
+                    <span class="badge badge-success">是</span>
+                  <?php } else { ?>
+                    <span class="badge badge-danger">否</span>
+                  <?php } ?>
+                </td>
+                <td>
+                  <?php if ($row['installed']) { ?>
+                    <span class="badge badge-success">是</span>
+                  <?php } else { ?>
+                    <span class="badge badge-warning">否</span>
+                  <?php } ?>
+                </td>
+                <td>
+                  <?php if ($row['enabled']) { ?>
+                    <span class="badge badge-success">是</span>
+                  <?php } else { ?>
+                    <span class="badge badge-warning">否</span>
+                  <?php } ?>
+                </td>
+              </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </div>
+        <?php } ?>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var form = document.getElementById('ai_bootstrap_form');
+  var actionInput = document.getElementById('ai_action');
+  var buttons = document.querySelectorAll('.js-ai-action');
+
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function () {
+      var action = this.getAttribute('data-action');
+      actionInput.value = action || '';
+      if (!actionInput.value) return;
+
+      if (!window.confirm('将执行插件安装/启用操作，是否继续？')) return;
+      form.submit();
+    });
+  }
+})();
+</script>
+
+<?php include _include(ADMIN_PATH . 'view/htm/footer.inc.htm'); ?>
+

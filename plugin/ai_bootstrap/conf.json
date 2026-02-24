@@ -1,0 +1,10 @@
+{
+  "name": "站点启动器",
+  "brief": "补齐前置并一键启用关键插件（含 123 盘与楼中楼）",
+  "version": "0.3.0",
+  "bbs_version": "4.0.7",
+  "installed": 0,
+  "enable": 0,
+  "hooks_rank": {},
+  "dependencies": []
+}

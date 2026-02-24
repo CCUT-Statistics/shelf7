@@ -725,7 +725,7 @@ if ($method == 'POST') {
                     </div>
                 </label>
             </div><div class="w-25">
-                <input type="radio" class="btn-check" name="palette_theme" value="Pastel " id="palette_theme6">
+                <input type="radio" class="btn-check" name="palette_theme" value="Pastel" id="palette_theme6">
                 <label class="card border" for="palette_theme6">
                     <img class="card-img-top" src="../plugin/abs_theme_stately/view/img/_admin/install_palette_Pastel.png" alt="珊瑚礁影 示意图">
                     <div class="card-footer">
@@ -917,7 +917,7 @@ function getSelectedInputValue() {
 
     foreach ($inst_page_steps as $step_count => $step) {
         $inst_page_flatten .= '<li class="nav-item" role="presentation">
-    <button type="button" class="nav-link ' . ($step_count === 0 ? 'active' : '') . '" role="tab" data-toggle="tab" data-target="#step_' . ($step_count + 1) . '" aria-controls="step_' . ($step_count + 1) . '" aria-selected="true">
+    <button type="button" class="nav-link ' . ($step_count === 0 ? 'active' : '') . '" role="tab" data-toggle="tab" data-target="#step_' . ($step_count + 1) . '" data-bs-toggle="tab" data-bs-target="#step_' . ($step_count + 1) . '" aria-controls="step_' . ($step_count + 1) . '" aria-selected="true">
         <span class="d-block fs-3 badge rounded-circle bg-label-primary"><i class="' . $step['icon'] . '"></i></span> ' . $step['title'] . ' </button>
 </li>';
     }

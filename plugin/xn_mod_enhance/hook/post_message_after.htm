@@ -3,7 +3,7 @@
 					<?php if($action == 'update') { ?>
 					
 					<?php
-						$reason = $uid == $post['last_update_uid'] ? $post['last_update_reason'] : '';
+						$reason = $uid == intval(array_value($post, 'last_update_uid', 0)) ? array_value($post, 'last_update_reason', '') : '';
 					?>
 					
 					<div class="form-group">

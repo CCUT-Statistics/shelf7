@@ -1,11 +1,14 @@
 
 
-<?php if($first['last_update_date']) { ?>
-	<?php $first['last_update_user'] = user_read_cache($first['last_update_uid']);?>
+<?php if(!empty($first['last_update_date'])) { ?>
+	<?php
+	$first['last_update_user'] = user_read_cache(intval(array_value($first, 'last_update_uid', 0)));
+	empty($first['last_update_user']) AND $first['last_update_user'] = array('username' => '[deleted]');
+	?>
 	<div class="text-right text-muted my-3 small font-italic">
 		最后于 <span class="icon-clock-o ml-2"> </span><?php echo humandate($first['last_update_date']);?>
 		
-		<?php if($gid < 5 && $allowdelete) { ?>
+		<?php if($gid < 5 && !empty($allowdelete)) { ?>
 		<a href="javascript:void(0);" data-modal-url="<?php echo url("post-update_log_list-".$first['pid']);?>" data-modal-title="编辑历史" data-modal-size="lg">被<?php echo $first['last_update_user']['username'];?>编辑</a>
 		<?php } else { ?>
 		被<?php echo $first['last_update_user']['username'];?>编辑

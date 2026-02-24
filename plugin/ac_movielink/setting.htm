@@ -1,241 +1,236 @@
 <?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<?php
+$weekday_options = array(
+	1 => '周一',
+	2 => '周二',
+	3 => '周三',
+	4 => '周四',
+	5 => '周五',
+	6 => '周六',
+	7 => '周日',
+);
+$source_options = array(
+	0 => '直链 URL',
+	1 => '123盘文件ID',
+	2 => 'Google 存储桶(GCS)',
+);
+$gcs_base_url_value = isset($movielink_setting['gcs_base_url']) ? $movielink_setting['gcs_base_url'] : '';
 
-<style>
-.table td {
-        padding: 0;
-    }
-</style>
+if (!function_exists('ac_movielink_render_time_options')) {
+	function ac_movielink_render_time_options($selected)
+	{
+		$selected = strval($selected);
+		for ($h = 0; $h < 24; $h++) {
+			for ($m = 0; $m < 60; $m += 15) {
+				$time = sprintf('%02d:%02d', $h, $m);
+				$is_selected = ($selected === $time) ? ' selected' : '';
+				echo '<option value="' . $time . '"' . $is_selected . '>' . $time . '</option>';
+			}
+		}
+	}
+}
+?>
 
 <section class="card">
-    <div class="card-header">
-        <h4 class="card-title m-0">放映室设置</h4>
-    </div>
-    <div class="card-body">
-        <div class="alert alert-info" role="alert">
-            官方网站：<a href="https://bbs.05pan.com" target="_blank">bbs.05pan.com</a> QQ：1319188427
-        </div>
-        <ol>
-            <li>视频地址格式：<code>HD国语$https://baidu.com/index.m3u8</code>，其中美元符号为分隔符</li>
-            <li>视频地址可写 m3u8、mp4。</li>
-            <li>暂不支持解析,需要可定制。</li>
-        </ol>
-    </div>
-    <ul class="nav nav-tabs" id="weekTabs">
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#mondayTab">周一</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tuesdayTab">周二</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#wednesdayTab">周三</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#thursdayTab">周四</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#fridayTab">周五</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#saturdayTab">周六</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#sundayTab">周日</a>
-        </li>
-    </ul>
-    <div class="card-body">
-        <form action="<?= url('plugin-setting-ac_movielink');?>" method="post" id="form">
-            <div class="table-responsive arrlist">
-                <table class="table" style="min-width: 800px">
-                    <thead>
-                        <tr align="center">
-                            <th style="width:6em">ID</th>
-                            <th>名称</th>
-                            <th>视频地址</th>
-                            <th>图片地址</th>
-                            <th style="width:6em">开始时间</th>
-                            <th style="width:6em">结束时间</th>
-                            <th style="width:6em">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataBody">
-                        <?php foreach($movielink_linklist as $arr) {?>
-                            <?php $rowid = $arr['linkid'];?>
-                            <tr align="center" rowid="<?= $rowid;?>" data-day="<?= $arr['nametype'];?>">
-                                <td><input type="text" class="form-control" name="rowid[<?= $rowid;?>]" value="<?= $rowid;?>" placeholder="" /></td>
-                                <td><input type="text" class="form-control" name="name[<?= $rowid;?>]" value="<?= $arr['name'];?>" placeholder="" /></td>
-                                <td><input type="text" class="form-control" name="url[<?= $rowid;?>]" value="<?= $arr['url'];?>" placeholder="正片$https://" /></td>
-                                <td><input type="text" class="form-control" name="imgurl[<?= $rowid;?>]" value="<?= $arr['imgurl'];?>" placeholder="https://" /></td>
-                                <td>
-                                    <select class="form-control start-time" name="start_time[<?= $rowid;?>]">
-                                        <?php for ($h = 0; $h < 24; $h++) {
-                                            for ($m = 0; $m < 60; $m += 15) {
-                                                $time = sprintf('%02d:%02d', $h, $m);
-                                               $selected = ($arr['start_time'] === $time)? 'selected' : '';
-                                                echo "<option value='$time' $selected>$time</option>";
-                                            }
-                                        }?>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="form-control end-time" name="end_time[<?= $rowid;?>]">
-                                        <?php for ($h = 0; $h < 24; $h++) {
-                                            for ($m = 0; $m < 60; $m += 15) {
-                                                $time = sprintf('%02d:%02d', $h, $m);
-                                                $selected = ($arr['end_time'] === $time)? 'selected' : '';
-                                                echo "<option value='$time' $selected>$time</option>";
-                                            }
-                                        }?>
-                                    </select>
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm btn-link text-danger row_delete" role="btn">删除</a>
-                                </td>
-                            </tr>
-                        <?php }?>
-                        <tr align="center" rowid="<?=!empty($rowid)? $rowid : 0;?>" class="d-none">
-                            <td><input type="text" class="form-control" name="rowid[0]" value="" placeholder="" /></td>
-                            <td><input type="text" class="form-control" name="name[0]" value="" placeholder="" /></td>
-                            <td><input type="text" class="form-control" name="url[0]" value="" placeholder="正片$https://" /></td>
-                            <td><input type="text" class="form-control" name="imgurl[0]" value="" placeholder="https://" /></td>
-                            <td>
-                                <select class="form-control start-time" name="start_time[0]">
-                                    <?php for ($h = 0; $h < 24; $h++) {
-                                        for ($m = 0; $m < 60; $m += 15) {
-                                            echo "<option value='".sprintf('%02d:%02d', $h, $m)."'>".sprintf('%02d:%02d', $h, $m)."</option>";
-                                        }
-                                    }?>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control end-time" name="end_time[0]">
-                                    <?php for ($h = 0; $h < 24; $h++) {
-                                        for ($m = 0; $m < 60; $m += 15) {
-                                            echo "<option value='".sprintf('%02d:%02d', $h, $m)."'>".sprintf('%02d:%02d', $h, $m)."</option>";
-                                        }
-                                    }?>
-                                </select>
-                            </td>
-                            <td>
-                                <a class="btn row_delete" role="btn">删除</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="d-flex align-items-center justify-content-between ">
-                <p>
-                    <button role="button" class="btn btn-success row_add">+ 增加一行</button>
-                </p>
-                <p>
-                    <button type="submit" class="btn btn-primary" id="submit"
-                            data-loading-text="<?= lang('submiting');?>...">
-                        <?= lang('save');?>
-                    </button>
-                </p>
-            </div>
-        </form>
-    </div>
+	<div class="card-header">
+		<h4 class="card-title m-0">放映室设置</h4>
+	</div>
+	<div class="card-body">
+		<div class="alert alert-info mb-3" role="alert">
+			<div class="mb-2"><strong>来源对接说明</strong></div>
+			<ul class="mb-0 pl-3">
+				<li>直链 URL：填写 <code>清晰度$https://example.com/video.m3u8</code>。</li>
+				<li>123盘文件ID：填写 <code>清晰度$123456789</code>（需安装并配置 <code>pan123_storage</code>）。</li>
+				<li>GCS：填写 <code>清晰度$folder/video.m3u8</code>，再在下方配置 GCS 基础地址。</li>
+			</ul>
+		</div>
+
+		<form action="<?= url('plugin-setting-ac_movielink');?>" method="post" id="form">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">GCS 基础地址</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="gcs_base_url" value="<?= htmlspecialchars($gcs_base_url_value, ENT_QUOTES, 'UTF-8') ?>" placeholder="https://storage.googleapis.com/your-bucket">
+					<small class="form-text text-muted">当来源类型选择 GCS 且链接不是完整 URL 时，系统会自动拼接这个基础地址。</small>
+				</div>
+			</div>
+
+			<div class="table-responsive arrlist">
+				<table class="table table-bordered table-hover mb-0" style="min-width: 1180px;">
+					<thead>
+					<tr align="center">
+						<th style="width: 84px;">ID</th>
+						<th style="width: 92px;">周几</th>
+						<th style="width: 170px;">来源类型</th>
+						<th style="min-width: 160px;">名称</th>
+						<th style="min-width: 260px;">播放源</th>
+						<th style="min-width: 220px;">封面地址</th>
+						<th style="width: 96px;">开始</th>
+						<th style="width: 96px;">结束</th>
+						<th style="width: 88px;">操作</th>
+					</tr>
+					</thead>
+					<tbody id="movie-link-body">
+					<?php foreach ($movielink_linklist as $arr) { ?>
+						<?php $rowid = intval($arr['linkid']); ?>
+						<tr rowid="<?= $rowid; ?>">
+							<td><input type="text" class="form-control text-center" name="rowid[<?= $rowid;?>]" value="<?= $rowid;?>" readonly></td>
+							<td>
+								<select class="form-control" name="nametype[<?= $rowid;?>]">
+									<?php foreach ($weekday_options as $day_key => $day_name) { ?>
+										<option value="<?= $day_key ?>" <?= intval($arr['nametype']) === intval($day_key) ? 'selected' : '' ?>><?= $day_name ?></option>
+									<?php } ?>
+								</select>
+							</td>
+							<td>
+								<select class="form-control" name="source_type[<?= $rowid;?>]">
+									<?php foreach ($source_options as $source_key => $source_name) { ?>
+										<option value="<?= $source_key ?>" <?= intval($arr['type']) === intval($source_key) ? 'selected' : '' ?>><?= $source_name ?></option>
+									<?php } ?>
+								</select>
+							</td>
+							<td><input type="text" class="form-control" name="name[<?= $rowid;?>]" value="<?= htmlspecialchars($arr['name'], ENT_QUOTES, 'UTF-8') ?>" placeholder="电影名称"></td>
+							<td><input type="text" class="form-control" name="url[<?= $rowid;?>]" value="<?= htmlspecialchars($arr['url'], ENT_QUOTES, 'UTF-8') ?>" placeholder="清晰度$源地址"></td>
+							<td><input type="text" class="form-control" name="imgurl[<?= $rowid;?>]" value="<?= htmlspecialchars($arr['imgurl'], ENT_QUOTES, 'UTF-8') ?>" placeholder="https://..."></td>
+							<td>
+								<select class="form-control" name="start_time[<?= $rowid;?>]">
+									<?php ac_movielink_render_time_options($arr['start_time']); ?>
+								</select>
+							</td>
+							<td>
+								<select class="form-control" name="end_time[<?= $rowid;?>]">
+									<?php ac_movielink_render_time_options($arr['end_time']); ?>
+								</select>
+							</td>
+							<td align="center">
+								<a class="btn btn-sm btn-outline-danger row_delete" href="javascript:void(0);">删除</a>
+							</td>
+						</tr>
+					<?php } ?>
+
+					<tr rowid="0" class="d-none row-template">
+						<td><input type="text" class="form-control text-center" name="rowid[0]" value="0" readonly></td>
+						<td>
+							<select class="form-control" name="nametype[0]">
+								<?php foreach ($weekday_options as $day_key => $day_name) { ?>
+									<option value="<?= $day_key ?>" <?= intval($day_key) === 1 ? 'selected' : '' ?>><?= $day_name ?></option>
+								<?php } ?>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" name="source_type[0]">
+								<?php foreach ($source_options as $source_key => $source_name) { ?>
+									<option value="<?= $source_key ?>" <?= intval($source_key) === 0 ? 'selected' : '' ?>><?= $source_name ?></option>
+								<?php } ?>
+							</select>
+						</td>
+						<td><input type="text" class="form-control" name="name[0]" value="" placeholder="电影名称"></td>
+						<td><input type="text" class="form-control" name="url[0]" value="" placeholder="清晰度$源地址"></td>
+						<td><input type="text" class="form-control" name="imgurl[0]" value="" placeholder="https://..."></td>
+						<td>
+							<select class="form-control" name="start_time[0]">
+								<?php ac_movielink_render_time_options('00:00'); ?>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" name="end_time[0]">
+								<?php ac_movielink_render_time_options('00:00'); ?>
+							</select>
+						</td>
+						<td align="center">
+							<a class="btn btn-sm btn-outline-danger row_delete" href="javascript:void(0);">删除</a>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="d-flex align-items-center justify-content-between mt-3">
+				<button type="button" class="btn btn-success row_add">+ 增加一行</button>
+				<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?= lang('submiting');?>..."><?= lang('save');?></button>
+			</div>
+		</form>
+	</div>
 </section>
 
 <?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
 
 <script>
-    var maxid = <?= $maxid? $maxid : 0?>;
+var maxid = <?= intval($maxid ? $maxid : 0) ?>;
 
-    $(document).ready(function () {
-        $('#form').on('submit', function (e) {
-            e.preventDefault();
-            var postdata = $(this).serialize();
-            $('#submit').button('loading');
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: postdata,
-                success: function (response) {
-                    if (response.code === 0) {
-                        $.alert(response.message);
-                        $('#submit').text(response.message).delay(3000).location();
-                        return;
-                    } else {
-                        alert(response.message);
-                        $('#submit').button('reset');
-                    }
-                },
-                error: function (error) {
-                    console.error('Error submitting form:', error);
-                    alert('An error occurred while submitting the form.');
-                    $('#submit').button('reset');
-                }
-            });
-            return false;
-        });
+function show_message(text) {
+	if (typeof $.alert === 'function') {
+		$.alert(text);
+	} else {
+		alert(text);
+	}
+}
 
-        $('.arrlist').on('click', 'a.row_delete', function () {
-            var jthis = $(this);
-            var jtr = jthis.parents('tr');
-            var rowid = jtr.attr('rowid');
-            if ($('tbody tr').length <= 2) {
-                $.alert('不能删除系统保留的版块。');
-                return false;
-            }
-            jtr.remove();
-        });
+function reset_row_names($row, rowid) {
+	$row.attr('rowid', rowid);
+	$row.find('input,select').each(function () {
+		var $field = $(this);
+		var name = $field.attr('name') || '';
+		if (!name) return;
+		$field.attr('name', name.replace(/\[\d+\]/, '[' + rowid + ']'));
+	});
+	$row.find('input[name^="rowid"]').val(rowid);
+}
 
-        // 添加调试输出
-        $('.row_add').on('click', function () {
-            console.log('点击了增加一行按钮');
-            var jclone = $('.arrlist').find('tr').last().clone();
-            jclone.insertAfter($('.arrlist').find('tr').last()).removeClass('d-none');
-            var jrowid = jclone.find('input[name^="rowid"]');
-            var rowid = ++maxid;
-            jrowid.val(rowid);
-            jclone.attr('rowid', rowid);
-            jclone.find('input').not('[name^="rowid"]').val('');
-            jclone.find('select.start-time, select.end-time').html('');
-            for ($h = 0; $h < 24; $h++) {
-                for ($m = 0; $m < 60; $m += 15) {
-                    jclone.find('select.start-time').append('<option value="<?= sprintf('%02d:%02d', $h, $m);?>"><?= sprintf('%02d:%02d', $h, $m);?></option>');
-                    jclone.find('select.end-time').append('<option value="<?= sprintf('%02d:%02d', $h, $m);?>"><?= sprintf('%02d:%02d', $h, $m);?></option>');
-                }
-            }
-            return false;
-        });
+$(function () {
+	var $tbody = $('#movie-link-body');
+	var $form = $('#form');
+	var $submit = $('#submit');
 
-        $('#nav_pc li.plugin, #nav_mobile li.plugin').addClass('active');
+	$('.row_add').on('click', function () {
+		maxid += 1;
+		var $template = $tbody.find('tr.row-template').first();
+		var $clone = $template.clone();
+		$clone.removeClass('d-none row-template');
+		reset_row_names($clone, maxid);
+		$clone.find('input[type="text"]').not('input[name^="rowid"]').val('');
+		$clone.find('select[name^="nametype"]').val('1');
+		$clone.find('select[name^="source_type"]').val('0');
+		$clone.find('select[name^="start_time"], select[name^="end_time"]').val('00:00');
+		$tbody.append($clone);
+	});
 
-        $('#weekTabs a.nav-link').on('click', function () {
-            var selectedDay = $(this).text();
-            $('input[name^="nametype"]').val(selectedDay);
-            $('#weekTabs a.nav-link').removeClass('active');
-            $(this).addClass('active');
-        
-            // 显示对应的数据
-            var dayData = selectedDay === '周一'? '1' : selectedDay === '周二'? '2' : selectedDay === '周三'? '3' : selectedDay === '周四'? '4' : selectedDay === '周五'? '5' : selectedDay === '周六'? '6' : '7';
-            $('#dataBody tr').hide();
-            $('#dataBody tr[data-day="' + dayData + '"]').show();
-        
-            // 重新绑定添加按钮的点击事件
-            $('.row_add').off('click').on('click', function () {
-                   console.log('点击了增加一行按钮');
-                var jclone = $('.arrlist').find('tr').last().clone();
-                console.log('克隆的元素：', jclone);
-                jclone.insertAfter($('.arrlist').find('tr').last()).removeClass('d-none');
-                console.log('插入后的表格体元素：', $('#dataBody'));
-                var jrowid = jclone.find('input[name^="rowid"]');
-                var rowid = ++maxid;
-                jrowid.val(rowid);
-                jclone.attr('rowid', rowid);
-                jclone.find('input').not('[name^="rowid"]').val('');
-                jclone.find('select.start-time, select.end-time').html('');
-                for ($h = 0; $h < 24; $h++) {
-                    for ($m = 0; $m < 60; $m += 15) {
-                        jclone.find('select.start-time').append('<option value="<?= sprintf('%02d:%02d', $h, $m);?>"><?= sprintf('%02d:%02d', $h, $m);?></option>');
-                        jclone.find('select.end-time').append('<option value="<?= sprintf('%02d:%02d', $h, $m);?>"><?= sprintf('%02d:%02d', $h, $m);?></option>');
-                    }
-                }
-                return false;
-            });
-        });
-    });
+	$tbody.on('click', '.row_delete', function () {
+		$(this).closest('tr').remove();
+	});
+
+	$form.on('submit', function (e) {
+		e.preventDefault();
+		$submit.prop('disabled', true);
+		$.ajax({
+			type: 'POST',
+			url: $form.attr('action'),
+			data: $form.serialize(),
+			success: function (response) {
+				var payload = response;
+				if (typeof payload !== 'object') {
+					try {
+						payload = JSON.parse(payload);
+					} catch (e) {
+						payload = { code: -1, message: '返回数据格式错误' };
+					}
+				}
+
+				if (payload.code === 0) {
+					show_message(payload.message || '保存成功');
+					setTimeout(function () { window.location.reload(); }, 600);
+					return;
+				}
+
+				show_message(payload.message || '保存失败');
+				$submit.prop('disabled', false);
+			},
+			error: function () {
+				show_message('请求失败，请稍后重试');
+				$submit.prop('disabled', false);
+			}
+		});
+	});
+
+	$('#nav_pc li.plugin, #nav_mobile li.plugin').addClass('active');
+});
 </script>

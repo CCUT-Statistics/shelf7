@@ -1,10 +1,10 @@
 {
     "name": "最新用户与在线用户小工具",
-    "brief": "在首页展示最新最新用户列表与在线用户列表。基于“谷豆社区”的“首页最新用户排行”插件改进。",
-    "version": "1.0.0",
+    "brief": "在首页展示最新用户与在线用户列表，优化样式与加载逻辑。",
+    "version": "1.1.0",
     "bbs_version": "4.0.4",
-    "installed": 1,
-    "enable": 1,
+    "installed": 0,
+    "enable": 0,
     "hooks_rank": [],
     "overwrites_rank": [],
     "dependencies": []

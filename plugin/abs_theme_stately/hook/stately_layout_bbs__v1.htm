@@ -2,42 +2,28 @@
 	<!--{hook stately_layout_bbs__v1__main_start.htm}-->
 	<?php if($abs_theme_stately_setting['ui_tweek']['bbs']['show_newthread_list']): ?>
 	<section id="threads_list">
-		<div class="card mb-2">
-			<div class="card-body p-0">
-				<div class="row g-0">
-					<div class="col-lg-4 d-none d-lg-block" style="border-right:1px solid var(--forum-border,#e5e7eb);">
-						<div style="padding:0.6rem 0.85rem 0.3rem;">
-							<h2 style="font-size:13px;font-weight:700;margin:0 0 0.5rem 0;padding-bottom:0.4rem;border-bottom:2px solid #1e6fff;display:inline-block;">
-								<i class="la la-newspaper mr-1" style="color:#1e6fff;"></i><?= lang('news_list');?>
-							</h2>
-						</div>
-						<div style="padding:0 0.85rem 0.6rem;">
-							<!--{hook stately_layout_bbs__v1__news_list.htm}-->
-						</div>
-					</div>
-					<div class="col-lg-4" style="border-right:1px solid var(--forum-border,#e5e7eb);">
-						<div style="padding:0.6rem 0.85rem 0.3rem;">
-							<h2 style="font-size:13px;font-weight:700;margin:0 0 0.5rem 0;padding-bottom:0.4rem;border-bottom:2px solid #ff6b35;display:inline-block;">
-								<i class="la la-comments mr-1" style="color:#ff6b35;"></i><?= lang('post_list');?>
-							</h2>
-						</div>
-						<div style="padding:0 0.85rem 0.6rem;">
-							<!--{hook stately_layout_bbs__v1__post_list.htm}-->
-						</div>
-					</div>
-					<?php if(function_exists("thread_digest_find_by_fid")): ?>
-					<div class="col-lg-4 d-none d-lg-block">
-						<div style="padding:0.6rem 0.85rem 0.3rem;">
-							<h2 style="font-size:13px;font-weight:700;margin:0 0 0.5rem 0;padding-bottom:0.4rem;border-bottom:2px solid #22c55e;display:inline-block;">
-								<i class="la la-star mr-1" style="color:#22c55e;"></i><?= lang('digest_list');?>
-							</h2>
-						</div>
-						<div style="padding:0 0.85rem 0.6rem;">
-							<!--{hook stately_layout_bbs__v1__digest_list.htm}-->
-						</div>
-					</div>
-					<?php endif; ?>
+		<div class="card card-body mb-3">
+			<div class="row">
+				<div class="col-lg-4 d-none d-lg-block">
+					<h2 class="h5">
+						<?= lang('news_list');?>
+					</h2>
+					<!--{hook stately_layout_bbs__v1__news_list.htm}-->
 				</div>
+				<div class="col-lg-4">
+					<h2 class="h5">
+						<?= lang('post_list');?>
+					</h2>
+					<!--{hook stately_layout_bbs__v1__post_list.htm}-->
+				</div>
+				<?php if(function_exists("thread_digest_find_by_fid")): ?>
+				<div class="col-lg-4 d-none d-lg-block">
+					<h2 class="h5">
+						<?= lang('digest_list');?>
+					</h2>
+					<!--{hook stately_layout_bbs__v1__digest_list.htm}-->
+				</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</section>

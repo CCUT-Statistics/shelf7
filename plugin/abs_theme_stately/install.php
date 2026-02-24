@@ -46,59 +46,6 @@ include_once(APP_PATH . PLUGIN_DIR . 'conf.php');
 
 /* 【结束】金桔框架——常量定义 */
 
-if (!function_exists('abs_theme_stately_probe_rewrite_local')) {
-    function abs_theme_stately_probe_rewrite_local()
-    {
-        $htaccess = APP_PATH . '.htaccess';
-        if (is_file($htaccess)) {
-            $txt = @file_get_contents($htaccess);
-            if (is_string($txt) && stripos($txt, 'RewriteEngine') !== false && stripos($txt, 'RewriteRule') !== false) {
-                return array('ok' => true, 'source' => 'htaccess');
-            }
-        }
-
-        if (function_exists('apache_get_modules') && in_array('mod_rewrite', apache_get_modules())) {
-            return array('ok' => true, 'source' => 'apache_mod');
-        }
-
-        $server_software = isset($_SERVER['SERVER_SOFTWARE']) ? strtolower($_SERVER['SERVER_SOFTWARE']) : '';
-        if (strpos($server_software, 'nginx') !== false || strpos($server_software, 'openresty') !== false || strpos($server_software, 'caddy') !== false) {
-            return array('ok' => true, 'source' => 'server_software');
-        }
-
-        return array('ok' => false, 'source' => 'none');
-    }
-}
-if (!function_exists('abs_theme_stately_rewrite_state')) {
-    function abs_theme_stately_rewrite_state()
-    {
-        global $conf;
-
-        $raw = isset($conf['url_rewrite_on']) ? $conf['url_rewrite_on'] : null;
-        $value = intval($raw);
-        if ($value > 0) {
-            return array('enabled' => true, 'value' => $value, 'source' => 'runtime_conf', 'probe' => array());
-        }
-
-        $conf_file = APP_PATH . 'conf/conf.php';
-        $txt = @file_get_contents($conf_file);
-        if (is_string($txt) && preg_match('/[\'"]url_rewrite_on[\'"]\s*=>\s*[\'"]?([0-9]+)[\'"]?/', $txt, $m)) {
-            $file_value = intval($m[1]);
-            if ($file_value > 0) {
-                return array('enabled' => true, 'value' => $file_value, 'source' => 'conf_file', 'probe' => array());
-            }
-            $value = $file_value;
-        }
-
-        $probe = abs_theme_stately_probe_rewrite_local();
-        if (!empty($probe['ok'])) {
-            return array('enabled' => true, 'value' => $value, 'source' => 'local_probe', 'probe' => $probe);
-        }
-
-        return array('enabled' => false, 'value' => $value, 'source' => 'runtime_conf', 'probe' => $probe);
-    }
-}
-
 /**
  * 金桔框架——初始化设置
  * @param array $data 要导入的设置数组。
@@ -247,124 +194,251 @@ if ($method == 'POST') {
     }
 
     switch (param('palette_theme', 'default')) {
-        case 'default':
-        case 'Default':
-            // ikunkun.icu / gggmusic.com / xxedm.com / yunshimc.com style
+/*
+        case 'Pastel':
+            $setting['ui']['color']['theme'] = '#ff6a6a';
+            $setting['ui']['color']['color_body_light'] = '#34495e';
+            $setting['ui']['color']['color_body_bright_light'] = '#34495e';
+            $setting['ui']['color']['color_card_light'] = '#f6f7ff';
+            $setting['ui']['color']['color_body_dark'] = '#f6f7ff';
+            $setting['ui']['color']['color_body_bright_dark'] = '#f6f7ff';
+            $setting['ui']['color']['color_card_dark'] = '#2b2c40';
+            $setting['ui']['background']['style'] = 'image';
+            $setting['ui']['background']['image']['background-url'] = 'https://templates.iqonic.design/glare/html/assets/images/background.png';
+            $setting['ui']['background']['image']['background-repeat'] = 'no-repeat';
+            $setting['ui']['background']['image']['background-position'] = 'center center';
+            $setting['ui']['background']['image']['background-size'] = 'cover';
+            $setting['ui']['background']['image']['background-attachment'] = 'fixed';
+            //$setting['custom_code']['css']['header']='body{background: linear-gradient(90deg,rgba(247,149,51,.1),rgba(243,112,85,.1) 15%,rgba(239,78,123,.1) 30%,rgba(161,102,171,.1) 44%,rgba(80,115,184,.1) 58%,rgba(16,152,173,.1) 72%,rgba(7,179,155,.1) 86%,rgba(109,186,130,.1));}';
+            break;
+        case 'MorningDawn':
+            $setting['ui']['background']['style'] = 'color';
+            $setting['ui']['color']['theme'] = '#e9a25e';
+            $setting['ui']['color']['color_body_light'] = '#657B83';
+            $setting['ui']['color']['color_body_bright_light'] = '#333333';
+            $setting['ui']['color']['color_card_light'] = '#ffe6cc';
+            $setting['ui']['background']['color_light'] = '#ffdab7';
+            $setting['ui']['color']['color_body_dark'] = '#AFA790';
+            $setting['ui']['color']['color_body_bright_dark'] = '#F3EACB';
+            $setting['ui']['color']['color_card_dark'] = '#222222';
+            $setting['ui']['background']['color_dark'] = '#111111';
+            break;
+        case 'CustomBackground':
+            $setting['ui']['background']['style'] = 'image';
             $setting['ui']['color']['theme'] = '#696cff';
             $setting['ui']['color']['color_body_light'] = '#697a8d';
             $setting['ui']['color']['color_body_bright_light'] = '#566a7f';
             $setting['ui']['color']['color_card_light'] = '#ffffff';
             $setting['ui']['color']['color_body_dark'] = '#a3a4cc';
-            $setting['ui']['color']['color_body_bright_dark'] = '#cfcce6';
+            $setting['ui']['color']['color_body_bright_dark'] = '#566a7f';
             $setting['ui']['color']['color_card_dark'] = '#2b2c40';
-            $setting['ui']['background']['style'] = 'default';
-            break;
-        case 'Ocean':
-            // duanao.com / lianghuaba.net style
-            $setting['ui']['color']['theme'] = '#00BCD4';
-            $setting['ui']['color']['color_body_light'] = '#546e7a';
-            $setting['ui']['color']['color_body_bright_light'] = '#37474f';
-            $setting['ui']['color']['color_card_light'] = '#ffffff';
-            $setting['ui']['color']['color_body_dark'] = '#80cbc4';
-            $setting['ui']['color']['color_body_bright_dark'] = '#b2dfdb';
-            $setting['ui']['color']['color_card_dark'] = '#1a2327';
-            $setting['ui']['background']['style'] = 'default';
-            break;
-        case 'Tangerine':
-            // xxedm.com alternate warm style
-            $setting['ui']['color']['theme'] = '#FF6F61';
-            $setting['ui']['color']['color_body_light'] = '#667791';
-            $setting['ui']['color']['color_body_bright_light'] = '#37474f';
-            $setting['ui']['color']['color_card_light'] = '#fff8f6';
-            $setting['ui']['color']['color_body_dark'] = '#ffab91';
-            $setting['ui']['color']['color_body_bright_dark'] = '#ffccbc';
-            $setting['ui']['color']['color_card_dark'] = '#2c1a14';
-            $setting['ui']['background']['style'] = 'default';
-            break;
-        case 'Meadow':
-            // 9ioldgame.com retro-green style
-            $setting['ui']['color']['theme'] = '#00A968';
-            $setting['ui']['color']['color_body_light'] = '#4a635a';
-            $setting['ui']['color']['color_body_bright_light'] = '#2e473c';
-            $setting['ui']['color']['color_card_light'] = '#f5faf7';
-            $setting['ui']['color']['color_body_dark'] = '#81c784';
-            $setting['ui']['color']['color_body_bright_dark'] = '#a5d6a7';
-            $setting['ui']['color']['color_card_dark'] = '#1b2e1f';
-            $setting['ui']['background']['style'] = 'default';
-            break;
-        case 'Twilight':
-            // caigamer.cn gaming purple style
-            $setting['ui']['color']['theme'] = '#7C4DFF';
-            $setting['ui']['color']['color_body_light'] = '#667791';
-            $setting['ui']['color']['color_body_bright_light'] = '#4a4a6a';
-            $setting['ui']['color']['color_card_light'] = '#f8f7ff';
-            $setting['ui']['color']['color_body_dark'] = '#b39ddb';
-            $setting['ui']['color']['color_body_bright_dark'] = '#d1c4e9';
-            $setting['ui']['color']['color_card_dark'] = '#1a1533';
-            $setting['ui']['background']['style'] = 'default';
-            break;
-        case 'Autumn':
-            // bbs.liguozheng.site blue professional style
-            $setting['ui']['color']['theme'] = '#0078D7';
-            $setting['ui']['color']['color_body_light'] = '#546e7a';
-            $setting['ui']['color']['color_body_bright_light'] = '#263238';
-            $setting['ui']['color']['color_card_light'] = '#ffffff';
-            $setting['ui']['color']['color_body_dark'] = '#90caf9';
-            $setting['ui']['color']['color_body_bright_dark'] = '#bbdefb';
-            $setting['ui']['color']['color_card_dark'] = '#0d1b2a';
-            $setting['ui']['background']['style'] = 'default';
-            break;
-        case 'Peach':
-            // qz.lq.mba warm pink style
-            $setting['ui']['color']['theme'] = '#ff8599';
-            $setting['ui']['color']['color_body_light'] = '#78666b';
-            $setting['ui']['color']['color_body_bright_light'] = '#5a4045';
-            $setting['ui']['color']['color_card_light'] = '#fff5f7';
-            $setting['ui']['color']['color_body_dark'] = '#f48fb1';
-            $setting['ui']['color']['color_body_bright_dark'] = '#f8bbd0';
-            $setting['ui']['color']['color_card_dark'] = '#2a1520';
-            $setting['ui']['background']['style'] = 'default';
-            break;
-        case 'Garden':
-            $setting['ui']['color']['theme'] = '#4A90E2';
-            $setting['ui']['color']['color_body_light'] = '#667791';
-            $setting['ui']['color']['color_body_bright_light'] = '#222222';
-            $setting['ui']['color']['color_body_dark'] = '#8a94ad';
-            $setting['ui']['color']['color_body_bright_dark'] = '#ffffff';
-            $setting['ui']['color']['color_card_dark'] = '#1a0017';
-            $setting['ui']['background']['style'] = 'gradient_Garden';
             $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = true;
+            $setting['ui']['color']['mode'] = 'dark';
+
             break;
-        case 'Fairy':
-            $setting['ui']['color']['theme'] = '#673AB7';
-            $setting['ui']['color']['color_body_light'] = '#667791';
-            $setting['ui']['color']['color_body_bright_light'] = '#222222';
-            $setting['ui']['color']['color_body_dark'] = '#8a94ad';
-            $setting['ui']['color']['color_body_bright_dark'] = '#ffffff';
-            $setting['ui']['color']['color_card_dark'] = '#001d0d';
-            $setting['ui']['background']['style'] = 'gradient_Fairy';
+        case 'StarryNight':
+            $setting['ui']['background']['style'] = 'color';
+            $setting['ui']['color']['theme'] = '#2aa198';
+            $setting['ui']['color']['color_body_light'] = '#203568';
+            $setting['ui']['color']['color_body_bright_light'] = '#256fa1';
+            $setting['ui']['color']['color_card_light'] = '#e8f3ff';
+            $setting['ui']['color']['color_body_dark'] = '#e8f3ff';
+            $setting['ui']['color']['color_body_bright_dark'] = '#e8f3ff';
+            $setting['ui']['color']['color_card_dark'] = '#203568';
+            $setting['ui']['background']['style'] = 'special_StarryNight';
             $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = true;
+            $setting['ui']['color']['mode'] = 'dark';
             break;
-        case 'Pastel':
-            $setting['ui']['color']['theme'] = '#AB47BC';
-            $setting['ui']['color']['color_body_light'] = '#667791';
-            $setting['ui']['color']['color_body_bright_light'] = '#222222';
-            $setting['ui']['color']['color_body_dark'] = '#8a94ad';
-            $setting['ui']['color']['color_body_bright_dark'] = '#ffffff';
-            $setting['ui']['color']['color_card_dark'] = '#002e2e';
-            $setting['ui']['background']['style'] = 'gradient_Pastel';
+        case 'Sunset':
+            $setting['ui']['background']['style'] = 'color';
+            $setting['ui']['color']['theme'] = '#7775eb';
+            $setting['ui']['color']['color_body_light'] = '#1B2947';
+            $setting['ui']['color']['color_body_bright_light'] = '#1B2947';
+            $setting['ui']['color']['color_card_light'] = '#e8f3ff';
+            
+            $setting['ui']['color']['color_body_dark'] = '#1B2947';
+            $setting['ui']['color']['color_body_bright_dark'] = '#1B2947';
+            $setting['ui']['color']['color_card_dark'] = '#f8beff';
             $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['custom_code']['css']['header']='body{background: radial-gradient(220% 105% at top center, #ac70cb 0%, #7775eb 100%)}';
+            $setting['ui']['color']['mode'] = 'dark';
+
             break;
-        case 'Book':
-            $setting['ui']['color']['theme'] = '#EF5350';
-            $setting['ui']['color']['color_body_light'] = '#667791';
-            $setting['ui']['color']['color_body_bright_light'] = '#222222';
-            $setting['ui']['color']['color_body_dark'] = '#8a94ad';
-            $setting['ui']['color']['color_body_bright_dark'] = '#ffffff';
-            $setting['ui']['color']['color_card_dark'] = '#140a00';
-            $setting['ui']['background']['style'] = 'gradient_Book';
+        case 'DeepDark':
+            $setting['ui']['background']['style'] = 'color';
+            $setting['ui']['color']['theme'] = '#a29bfe';
+            $setting['ui']['color']['color_body_light'] = '#47494e';
+            $setting['ui']['color']['color_body_bright_light'] = '#47494e';
+            $setting['ui']['color']['color_card_light'] = '#e8f3ff';
+            $setting['ui']['background']['color_light'] = '#fafcfd';
+            $setting['ui']['color']['color_body_dark'] = '#e8f3ff';
+            $setting['ui']['color']['color_body_bright_dark'] = '#e8f3ff';
+            $setting['ui']['color']['color_card_dark'] = '#47494e';
+            $setting['ui']['background']['color_dark'] = '#000000';
+            $setting['ui']['color']['mode'] = 'dark';
+
+            break;
+        case 'Grassland':
+            $setting['ui']['background']['style'] = 'color';
+            $setting['ui']['color']['theme'] = '#8cc63f';
+            $setting['ui']['color']['color_body_light'] = '#3d403d';
+            $setting['ui']['color']['color_body_bright_light'] = '#333333';
+            $setting['ui']['color']['color_card_light'] = '#ebf5ec';
+            $setting['ui']['background']['color_light'] = '#ebf5ec';
+            $setting['ui']['color']['color_body_dark'] = '#cce8cf';
+            $setting['ui']['color']['color_body_bright_dark'] = '#c7eece';
+            $setting['ui']['color']['color_card_dark'] = '#333333';
+            $setting['ui']['background']['color_dark'] = '#111111';
+
+            break;
+        case 'VibrantYellow':
+            $setting['ui']['background']['style'] = 'color';
+            $setting['ui']['color']['theme'] = '#ffd700';
+            $setting['ui']['color']['color_body_light'] = '#333333';
+            $setting['ui']['color']['color_body_bright_light'] = '#333333';
+            $setting['ui']['color']['color_card_light'] = '#f2f2f2';
+            $setting['ui']['background']['color_light'] = '#ffffff';
+            $setting['ui']['color']['color_body_dark'] = '#e8f3ff';
+            $setting['ui']['color']['color_body_bright_dark'] = '#e8f3ff';
+            $setting['ui']['color']['color_card_dark'] = '#041235';
+            $setting['ui']['background']['color_dark'] = '#221f3a';
+            break;
+        case 'FreshCyan':
+            $setting['ui']['background']['style'] = 'color';
+            $setting['ui']['color']['theme'] = '#8CD5CC';
+            $setting['ui']['color']['color_body_light'] = '#333333';
+            $setting['ui']['color']['color_body_bright_light'] = '#327C97';
+            $setting['ui']['color']['color_card_light'] = '#f2f2f2';
+            $setting['ui']['background']['color_light'] = '#ffffff';
+            $setting['ui']['color']['color_body_dark'] = '#DFFAF5';
+            $setting['ui']['color']['color_body_bright_dark'] = '#CBF3F3';
+            $setting['ui']['color']['color_card_dark'] = '#222222';
+            $setting['ui']['background']['color_dark'] = '#222222';
+            break;
+            */
+        default:
+            if (param('template-customizer-color', 'default') === 'default') {
+                $setting['ui']['color']['theme'] = param('template-customizer-color', '#696cff');
+            } else {
+                $setting['ui']['color']['theme'] = param('color_theme', '#696cff');
+            }
+            break;
+        
+        case "Garden":
+            $setting['ui']['color']['theme'] = "#4A90E2";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#1a0017";
+            $setting['ui']['background']['style'] = "gradient_Garden";
             $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
             break;
+        case "Peach":
+            $setting['ui']['color']['theme'] = "#ff8599";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#19001a";
+            $setting['ui']['background']['style'] = "gradient_Peach";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Ocean":
+            $setting['ui']['color']['theme'] = "#00BCD4";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#001816";
+            $setting['ui']['background']['style'] = "gradient_Ocean";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Tangerine":
+            $setting['ui']['color']['theme'] = "#FF6F61";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#130800";
+            $setting['ui']['background']['style'] = "gradient_Tangerine";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Pastel":
+            $setting['ui']['color']['theme'] = "#AB47BC";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#002e2e";
+            $setting['ui']['background']['style'] = "gradient_Pastel";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Autumn":
+            $setting['ui']['color']['theme'] = "#0078D7";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#001522";
+            $setting['ui']['background']['style'] = "gradient_Autumn";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Meadow":
+            $setting['ui']['color']['theme'] = "#00A968";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#002c18";
+            $setting['ui']['background']['style'] = "gradient_Meadow";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Twilight":
+            $setting['ui']['color']['theme'] = "#7C4DFF";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#000b18";
+            $setting['ui']['background']['style'] = "gradient_Twilight";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Book":
+            $setting['ui']['color']['theme'] = "#EF5350";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#140a00";
+            $setting['ui']['background']['style'] = "gradient_Book";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+        case "Fairy":
+            $setting['ui']['color']['theme'] = "#673AB7";
+            $setting['ui']['color']['color_body_light'] = "#667791";
+            $setting['ui']['color']['color_body_bright_light'] = "#222222";
+            $setting['ui']['color']['color_body_dark'] = "#8a94ad";
+            $setting['ui']['color']['color_body_bright_dark'] = "#ffffff";
+            $setting['ui']['color']['color_card_dark'] = "#001d0d";
+            $setting['ui']['background']['style'] = "gradient_Fairy";
+            $setting['ui']['global']['semitransparent_card'] = true;
+            $setting['ui']['global']['blurred_card'] = false;
+            break;
+
+
+
     }
 
 
@@ -433,15 +507,6 @@ if ($method == 'POST') {
     message(0,jump('安装成功，即将进入主题设置', url('plugin-setting-abs_theme_stately'), 3));
 } else {
     //*/
-    $rewrite_state = abs_theme_stately_rewrite_state();
-    $rewrite_ok = !empty($rewrite_state['enabled']);
-    $rewrite_note = '';
-    if ($rewrite_ok && $rewrite_state['source'] === 'local_probe') {
-        $rewrite_note = '<p><span class="badge badge-warning">!</span> 后台配置读取到 url_rewrite_on=0，但探测到伪静态可用，已按可用处理。建议到“后台 -> 设置 -> 站点设置”保存一次伪静态开关。</p>';
-    } elseif ($rewrite_ok && $rewrite_state['source'] === 'conf_file') {
-        $rewrite_note = '<p><span class="badge badge-warning">!</span> 运行时配置与 conf/conf.php 不一致，当前按 conf/conf.php 的伪静态配置继续。</p>';
-    }
-
     $inst_page_init = '</h4></div></div></div></div><style>
     @import "../plugin/abs_theme_stately/view/css/core.css"; 
     @import "../plugin/abs_theme_stately/view/css/theme-default.css"; 
@@ -449,19 +514,19 @@ if ($method == 'POST') {
     header#header,footer#footer,.col-lg-8.mx-auto>.card{display:none}.nav-pills .nav-link.active .badge.bg-label-primary{background-color:rgba(var(--bs-white-rgb),.1) !important;color:var(--bs-white) !important}.nav-pills .nav-link .badge.bg-label-primary{width:4.5rem;height:4.5rem;line-height:1.666}.btn-check:checked~label{border-color:var(--bs-primary,var(--primary)) !important;cursor:pointer}.btn-check:checked~label h4{color:var(--bs-primary,var(--primary))}.w-50{width:calc(50% - 1em) !important;margin: 0 .5em}.nav-align-top .nav-link {flex-direction: column;}</style>';
     $inst_page_steps = array(
         array(
-            'title' => '环境检查与安装顺序',
+            'title' => '设置前准备',
             'icon' => 'icon-edit',
             'content' => '<section class="text-center">
         <h3>感谢您选择 Stately 主题!</h3>
-        <p class="lead">先完成环境检查，再按推荐顺序安装，能显著降低冲突风险。</p>
+        <p class="lead">请确认以下项无误后再继续安装.</p>
     </section>
     <section>'
                 . ( version_compare(PHP_VERSION, '7.2.0', '<') ? '<p><span class="badge badge-warning">ⓘ</span> 您的PHP版本：' . PHP_VERSION . '。请使用至少7.2版的PHP才能使用本主题。</p>'
                 : (version_compare(PHP_VERSION, '8.0.0', '<') ? '<p><span class="badge badge-success">√</span> 您的PHP版本：' . PHP_VERSION . '，真棒！如果条件允许，可以使用8.0.0以上版本的PHP获得更大的性能提升。</p>' :
                 ((ini_get('opcache.jit') !== false && ini_get('opcache.jit') !== '0' && ini_get('opcache.jit') !== '') ? '<p><span class="badge badge-success">√</span> 您的PHP版本：' . PHP_VERSION . '，并启用了JIT，太棒了！</p>' : '<p><span class="badge badge-success">√</span> 您的PHP版本：' . PHP_VERSION . '，真棒！如果条件允许，可以启用JIT功能获得更大的性能提升。</p>')) )
-                . ($rewrite_ok == false
+                . (boolval($conf['url_rewrite_on']) == false
                     ? '<p><span class="badge badge-danger">×</span> 请启用伪静态功能，再使用本主题！<b>如遇到部分链接失灵，请在启用伪静态功能后卸载本主题，再重新安装。</b></p>'
-                    : '<p><span class="badge badge-success">√</span> 伪静态功能已开启。</p>' . $rewrite_note)
+                    : '<p><span class="badge badge-success">√</span> 伪静态功能已开启。</p>')
                 . (boolval($conf['cache']['enable']) == false
                     ? '<p><span class="badge badge-warning">×</span> 建议启用缓存功能！</p>'
                     : '<p><span class="badge badge-success">√</span> 缓存功能已开启。</p>')
@@ -473,18 +538,18 @@ if ($method == 'POST') {
                     : '<p><span class="badge badge-success">√</span> 菜单插件已启用，真棒！</p>')
                 . '<p><span class="badge badge-info">ⓘ</span> <strong>不要启用</strong>菜单插件附带的“默认头部（abs_nav_menu_1row）”、“双行导航头部（abs_nav_menu_2row）”、“APP底部栏（abs_nav_menu_appbar）”、“侧边菜单（abs_nav_menu_side）”定制菜单，启用任何一个都会导致排版故障。若已经启用了，请在安装完成后禁用或卸载它们。</p>'
                 . '<p><span class="badge badge-info">ⓘ</span> 本主题<strong>不保证兼容</strong>您拥有的所有插件，可能会因为不兼容或冲突导致网站无法打开。若该情况发生了，请尝试逐个卸载插件来排查是哪个插件导致的问题。</p>'
-                . '<div class="alert alert-info mb-2"><strong>推荐安装顺序（按官方原文）：</strong><ol class="mb-2 pl-3"><li>将菜单插件放在 <code>plugin/</code> 目录（建议：<code>abs_menu</code>）。</li><li>将 Stately 主题放在 <code>plugin/</code> 目录（<code>abs_theme_stately</code>）。</li><li>再放入其余需要的插件。</li><li>进入后台插件页，如发现已有启用项，先卸载到全部显示“安装”。</li><li>先安装菜单插件，再安装主题，最后安装其他插件。</li></ol><p class="mb-0">如果你使用一键启动器，它会按“菜单 → 主题 → 其他插件”的顺序执行，并在每个插件后等待 0.5 秒。</p></div>'
+                . '<p><span class="badge badge-info">ⓘ</span> 若其他人认为贵站使用的Stately主题很棒的话，请将作者（ＱＱ １１３６６７８４７１）推荐给对方，不胜感激。</p>'
                 .'</section>
     <section>
-        <button type="button" class="btn btn-primary btn-block btnNext">下一步：选择风格</button> 
+        <button type="button" class="btn btn-primary btn-block btnNext" onclick="document.querySelector(\'.nav.nav-pills .nav-item:nth-child(2) button\').click()">下一步</button> 
     </section>'
         ),
         array(
-            'title' => '选择预设风格',
+            'title' => '选择风格',
             'icon' => 'icon-magic',
             'content' => '<section class="text-center">
-        <h3>选择风格与配色</h3>
-        <p class="lead">这里只是初始化预设，安装完成后可在主题设置中随时调整。</p>
+        <h3>选择风格</h3>
+        <p class="lead">选择一种适合贵站讨论主题的风格和颜色.</p>
     </section>
     <section>
         <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic radio toggle button group">
@@ -593,7 +658,7 @@ if ($method == 'POST') {
         <h4>选择配色风格</h4>
         <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic radio toggle button group">
             <div class="w-25">
-                <input type="radio" class="btn-check" name="palette_theme" value="default" id="palette_theme1" checked="">
+                <input type="radio" class="btn-check" name="palette_theme" value="Default" id="palette_theme1" checked="">
                 <label class="card border" for="palette_theme1">
                     <img class="card-img-top" src="../plugin/abs_theme_stately/view/img/_admin/install_palette_Default.png" alt="默认风格 示意图">
                     <div class="card-footer">
@@ -660,7 +725,7 @@ if ($method == 'POST') {
                     </div>
                 </label>
             </div><div class="w-25">
-                <input type="radio" class="btn-check" name="palette_theme" value="Pastel" id="palette_theme6">
+                <input type="radio" class="btn-check" name="palette_theme" value="Pastel " id="palette_theme6">
                 <label class="card border" for="palette_theme6">
                     <img class="card-img-top" src="../plugin/abs_theme_stately/view/img/_admin/install_palette_Pastel.png" alt="珊瑚礁影 示意图">
                     <div class="card-footer">
@@ -759,18 +824,18 @@ if ($method == 'POST') {
         </div>
     </section>')
     . '<section> 
-        <button type="button" class="btn btn-primary btn-block btnNext">下一步：确认并初始化</button> 
+        <button type="button" class="btn btn-primary btn-block btnNext" onclick="document.querySelector(\'.nav.nav-pills .nav-item:nth-child(3) button\').click()">下一步</button> 
     </section>'
         ),
         array(
-            'title' => '确认并初始化',
+            'title' => '完成',
             'icon' => 'icon-check',
             'content' => '<section class="text-center">
-        <h3>准备就绪</h3>
-        <p class="lead">点击下方按钮开始初始化，完成后将自动进入主题设置页。</p>
+        <h3>谢谢!</h3>
+        <p class="lead">点击下方按钮开始初始化,稍后将会进入主题设置,以便您调整其他设置项.</p>
     </section>
-    <section>
-        <button type="submit" class="btn btn-block btn-primary bg-gradient" id="stately_continue">确认并开始初始化</button>
+    <section onmouseover="document.getElementById(\'stately_continue\').classList.remove(\'disabled\')">
+        <button type="submit" class="btn btn-block btn-primary bg-gradient disabled" id="stately_continue">好,开始设置</button>
     </section>
     <hr>
     <section>
@@ -818,58 +883,23 @@ if ($method == 'POST') {
         )
     );
 
-    $inst_page_js = <<<'EOT'
-<script defer>
-(function () {
-  function activateStep(targetSelector) {
-    if (!targetSelector) return;
-    var $targetPane = $(targetSelector);
-    if (!$targetPane.length) return;
+    $inst_page_js = "<script defer>
+$('.btnNext').click(function() {
+  const nextTabLinkEl = $('.nav-tabs .active').closest('li').next('li').find('a')[0];
+  const nextTab = new bootstrap.Tab(nextTabLinkEl);
+  nextTab.show();
+});
 
-    $('.nav.nav-pills .nav-link').removeClass('active').attr('aria-selected', 'false');
-    var $targetTab = $('.nav.nav-pills .nav-link[data-bs-target="' + targetSelector + '"], .nav.nav-pills .nav-link[data-target="' + targetSelector + '"]').first();
-    $targetTab.addClass('active').attr('aria-selected', 'true');
+$('.btnPrevious').click(function() {
+  const prevTabLinkEl = $('.nav-tabs .active').closest('li').prev('li').find('a')[0];
+  const prevTab = new bootstrap.Tab(prevTabLinkEl);
+  prevTab.show();
+});
 
-    $('.tab-content .tab-pane').removeClass('show active');
-    $targetPane.addClass('show active');
-  }
-
-  $('.nav.nav-pills .nav-link').on('click', function (e) {
-    var target = $(this).attr('data-bs-target') || $(this).attr('data-target');
-    if (!target) return;
-    e.preventDefault();
-    activateStep(target);
-  });
-
-  $('.btnNext').on('click', function (e) {
-    e.preventDefault();
-    var $currentPane = $('.tab-content .tab-pane.show.active');
-    if (!$currentPane.length) $currentPane = $('.tab-content .tab-pane.active').first();
-    if (!$currentPane.length) return false;
-
-    var $nextPane = $currentPane.nextAll('.tab-pane').first();
-    if ($nextPane.length) {
-      activateStep('#' + $nextPane.attr('id'));
-    }
-    return false;
-  });
-
-  $('.btnPrevious').on('click', function (e) {
-    e.preventDefault();
-    var $currentPane = $('.tab-content .tab-pane.show.active');
-    if (!$currentPane.length) $currentPane = $('.tab-content .tab-pane.active').first();
-    if (!$currentPane.length) return false;
-
-    var $prevPane = $currentPane.prevAll('.tab-pane').first();
-    if ($prevPane.length) {
-      activateStep('#' + $prevPane.attr('id'));
-    }
-    return false;
-  });
-
-  function getSelectedInputValue() {
-    var inputs = document.querySelectorAll("#template-customizer-color input[name='template-customizer-color']");
+function getSelectedInputValue() {
+    var inputs = document.querySelectorAll(\"#template-customizer-color input[name='template-customizer-color']\");
     var selectedValue = null;
+  
     for (var i = 0; i < inputs.length; i++) {
       if (inputs[i].checked) {
         selectedValue = inputs[i].value;
@@ -879,10 +909,7 @@ if ($method == 'POST') {
     return selectedValue;
   }
 
-  window.getSelectedInputValue = getSelectedInputValue;
-})();
-</script>
-EOT;
+</script>";
 
     $inst_page_flatten = $inst_page_init
         . '<div class="nav-align-top col-md-10 mx-auto mb-4">'
@@ -890,7 +917,7 @@ EOT;
 
     foreach ($inst_page_steps as $step_count => $step) {
         $inst_page_flatten .= '<li class="nav-item" role="presentation">
-    <button type="button" class="nav-link ' . ($step_count === 0 ? 'active' : '') . '" role="tab" data-toggle="tab" data-target="#step_' . ($step_count + 1) . '" data-bs-toggle="tab" data-bs-target="#step_' . ($step_count + 1) . '" aria-controls="step_' . ($step_count + 1) . '" aria-selected="true">
+    <button type="button" class="nav-link ' . ($step_count === 0 ? 'active' : '') . '" role="tab" data-toggle="tab" data-target="#step_' . ($step_count + 1) . '" aria-controls="step_' . ($step_count + 1) . '" aria-selected="true">
         <span class="d-block fs-3 badge rounded-circle bg-label-primary"><i class="' . $step['icon'] . '"></i></span> ' . $step['title'] . ' </button>
 </li>';
     }

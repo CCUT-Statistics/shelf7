@@ -78,17 +78,19 @@ if(empty($action)) {
 	if($method == 'GET') {
 		
 		$succeed = 1;
-		$mysql_support = function_exists('mysql_connect');
 		$pdo_mysql_support = extension_loaded('pdo_mysql');
 		$myisam_support = extension_loaded('pdo_mysql');
 		$innodb_support = extension_loaded('pdo_mysql');
 		
-		(!$mysql_support && !$pdo_mysql_support) AND message(-1, lang('evn_not_support_php_mysql'));
+		!$pdo_mysql_support AND message(-1, lang('evn_not_support_php_mysql'));
 
 		include INSTALL_PATH."view/htm/db.htm";
 		
 	} else {
 		
+		$pdo_mysql_support = extension_loaded('pdo_mysql');
+		!$pdo_mysql_support AND message(-1, lang('evn_not_support_php_mysql'));
+
 		$type = param('type');	
 		$engine = param('engine');	
 		$host = param('host');	
@@ -104,8 +106,12 @@ if(empty($action)) {
 		empty($host) AND message('host', lang('dbhost_is_empty'));
 		empty($name) AND message('name', lang('dbname_is_empty'));
 		empty($user) AND message('user', lang('dbuser_is_empty'));
-		empty($adminpass) AND message('adminpass', lang('adminuser_is_empty'));
-		empty($adminemail) AND message('adminemail', lang('adminpass_is_empty'));
+		$type != 'pdo_mysql' AND message('type', lang('evn_not_support_php_mysql'));
+		empty($adminuser) AND message('adminuser', lang('adminuser_is_empty'));
+		empty($adminemail) AND message('adminemail', lang('email_is_empty'));
+		empty($adminpass) AND message('adminpass', lang('adminpass_is_empty'));
+		!is_username($adminuser, $err) AND message('adminuser', $err);
+		!is_email($adminemail, $err) AND message('adminemail', $err);
 		
 		
 		
@@ -127,6 +133,7 @@ if(empty($action)) {
 		$conf['db']['pdo_mysql']['master']['engine'] = $engine;
 		
 		$_SERVER['db'] = $db = db_new($conf['db']);
+		!$db AND message('type', $errstr ? $errstr : lang('evn_not_support_php_mysql'));
 		// 此处可能报错
 		$r = db_connect($db);
 		if($r === FALSE) {
@@ -135,8 +142,8 @@ if(empty($action)) {
 					mysql_query("CREATE DATABASE $name");
 					$r = db_connect($db);
 				} elseif($type == 'pdo_mysql') {
-					if(strpos(':', $host) !== FALSE) {
-						$arr = explode(':', $host);
+					if(strpos($host, ':') !== FALSE) {
+						$arr = explode(':', $host, 2);
 						$host = $arr[0];
 						$port = $arr[1];
 					} else {

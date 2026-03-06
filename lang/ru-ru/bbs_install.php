@@ -3,7 +3,7 @@
 return array(
 	'installed_tips' => 'Форум уже установлен, если вы хотите переустановить, удалите conf/conf.php',
 	'please_set_conf_file_writable' => 'Установите права чтения/запси для conf/conf.php !',
-	'evn_not_support_php_mysql' => 'Текущая версия PHP,mysql и pdo_mysql driver не соответствует минимальным системным требованиям, не могу установить',
+	'evn_not_support_php_mysql' => 'В текущей среде PHP отсутствует расширение pdo_mysql, установка не может быть продолжена.',
 	'dbhost_is_empty' => 'Введите имя сервера',
 	'dbname_is_empty' => 'Введите имя базы данных',
 	'dbuser_is_empty' => 'Укажите пользователя БД',

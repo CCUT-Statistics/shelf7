@@ -3,7 +3,7 @@
 return array(
 	'installed_tips' => '程序已經安裝過了，如需重新安裝，請刪除 conf/conf.php ！',
 	'please_set_conf_file_writable' => '請設置 conf/conf.php 文件為可寫！',
-	'evn_not_support_php_mysql' => '當前 PHP 環境不支持 mysql 和 pdo_mysql，無法繼續安裝。',
+	'evn_not_support_php_mysql' => '當前 PHP 環境缺少 pdo_mysql 擴展，無法繼續安裝。',
 	'dbhost_is_empty' => '數據庫主機不能為空',
 	'dbname_is_empty' => '數據庫名不能為空',
 	'dbuser_is_empty' => '用戶名不能為空',

@@ -3,7 +3,7 @@
 return array(
 	'installed_tips' => 'You have been installed, and if you need to re install, please delete the conf/conf.php!',
 	'please_set_conf_file_writable' => 'Please set the conf/conf.php file to write!',
-	'evn_not_support_php_mysql' => 'The current PHP environment does not support mysql and pdo_mysql driver, can not continue to install.',
+	'evn_not_support_php_mysql' => 'The current PHP environment is missing the pdo_mysql extension, can not continue to install.',
 	'dbhost_is_empty' => 'Database host cannot be empty',
 	'dbname_is_empty' => 'Database name cannot be empty',
 	'dbuser_is_empty' => 'User name cannot be empty',

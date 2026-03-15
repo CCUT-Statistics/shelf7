@@ -46,7 +46,51 @@ powershell -ExecutionPolicy Bypass -File .\devkit\release\build-vps-test-release
    - `log/`
 5. 浏览器访问站点，完成 Xiuno 安装向导。
 6. 安装完成后删除 `install/` 目录（安全要求）。
-7. 配置 Nginx/Apache 伪静态（Xiuno 必需）。
+7. 配置 Nginx/Apache 伪静态（Xiuno 必需），参考下方 Nginx 配置示例。
+
+### Nginx 伪静态配置要点
+
+Stately 主题会将合并后的 CSS/JS 输出到 `tmp/` 目录（如 `tmp/stately_h.min.css`）。
+默认的安全规则 `deny all` 会阻止浏览器加载这些文件，导致主题样式不完整。
+
+```nginx
+# 允许 ACME 证书验证（SSL 必需）
+location ^~ /.well-known/ {
+    allow all;
+}
+
+# 后台伪静态（必须在 / 之前）
+location /admin/ {
+    try_files $uri $uri/ /admin/index.php?$query_string;
+}
+
+# 前台伪静态
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+
+# 允许 Stately 主题的编译产物被浏览器请求
+location ~ ^/tmp/.*\.(css|js)$ {
+    expires 1d;
+    access_log off;
+}
+
+# 禁止访问敏感目录（注意 tmp 的 css/js 已在上方放行）
+location ~ ^/(conf|log)/ {
+    deny all;
+}
+location ~ ^/tmp/ {
+    deny all;
+}
+
+# 隐藏点文件
+location ~ /\. {
+    deny all;
+}
+```
+
+> **注意**：如果缺少 `location /admin/` 规则，后台的伪静态地址（如插件安装）会走错路由。
+> 如果缺少 `location ~ ^/tmp/.*\.(css|js)$` 规则，Stately 主题的核心样式和脚本会被拦截返回 403。
 
 ## 4. 首次启用建议（降低冲突风险）
 

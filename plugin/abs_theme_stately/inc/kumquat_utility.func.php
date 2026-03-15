@@ -75,6 +75,7 @@ function hexrgba($color, $opacity = false) {
  */
 
 function hexToHsl($hex) {
+    $hex = ltrim((string)$hex, '#');
     $red = hexdec(substr($hex, 0, 2)) / 255;
     $green = hexdec(substr($hex, 2, 2)) / 255;
     $blue = hexdec(substr($hex, 4, 2)) / 255;
@@ -86,7 +87,7 @@ function hexToHsl($hex) {
     if ($delta === 0) {
         $hue = 0;
     } elseif ($cmax === $red) {
-        $hue = (($green - $blue) / $delta) % 6;
+        $hue = fmod(($green - $blue) / $delta, 6);
     } elseif ($cmax === $green) {
         $hue = ($blue - $red) / $delta + 2;
     } else {
@@ -98,8 +99,10 @@ function hexToHsl($hex) {
         $hue += 360;
     }
 
-    $lightness = (($cmax + $cmin) / 2) * 100;
-    $saturation = $delta === 0 ? 0 : ($delta / (1 - abs(2 * $lightness - 1))) * 100;
+    $lightness = ($cmax + $cmin) / 2;
+    $saturation = $delta === 0 ? 0 : ($delta / (1 - abs(2 * $lightness - 1)));
+    $lightness *= 100;
+    $saturation *= 100;
     if ($saturation < 0) {
         $saturation += 100;
     }
